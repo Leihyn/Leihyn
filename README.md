@@ -167,8 +167,8 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 ---
 
 ### 🏢 TerraCred - RWA Stablecoin Protocol
-https://terracred2025.vercel.app/
-https://github.com/terracred2025/TerraCred
+**https://terracred2025.vercel.app/
+ | https://github.com/terracred2025/TerraCred**
 **Hedera Hashgraph | Testnet | Real-World Asset Tokenization**
 
 <details>
