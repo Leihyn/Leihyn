@@ -6,8 +6,8 @@
 **Protocol Integration Engineer | DeFi | Full-Stack Blockchain Developer**
 
 [![GitHub followers](https://img.shields.io/github/followers/Leihyn?style=social)](https://github.com/Leihyn)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/yourprofile)
-[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:your.email@example.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](www.linkedin.com/in/onatola-faruq-459b7327b)
+[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](onatolafaruq@gmail.com)
 
 *Building programmable money infrastructure and decentralized applications*
 
@@ -227,7 +227,7 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 - Composable architecture for strategy stacking
 
 **Skills Demonstrated:**
-- Extension framework architecture (directly applicable to M0's $M Extensions)
+- Extension framework architecture 
 - Protocol adaptation for custom use cases
 - Security patterns for modular systems
 - DeFi composability and integration
