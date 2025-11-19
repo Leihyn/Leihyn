@@ -1,403 +1,313 @@
+# Onatola Timilehin Faruq
 
-# Onatola Timilehin Faruq 🔗
+**Full-Stack Blockchain Engineer | Protocol Integration  | DeFi**
 
-<div align="center">
+[![GitHub](https://img.shields.io/github/followers/Leihyn?style=social)](https://github.com/Leihyn)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/in/your-linkedin)
 
-**Protocol Integration Engineer | DeFi | Full-Stack Blockchain Developer**
-
-[![GitHub followers](https://img.shields.io/github/followers/Leihyn?style=social)](https://github.com/Leihyn)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](www.linkedin.com/in/onatola-faruq-459b7327b)
-[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](onatolafaruq@gmail.com)
-
-*Building programmable money infrastructure and decentralized applications*
-
-</div>
+**Building production-grade DeFi applications and protocol integrations • Smart contract security • Full-stack Web3**
 
 ---
 
-## 👨‍💻 About Me
+## 👨‍💻 Professional Summary
 
-Protocol focused blockchain engineer specializing in **DeFi integrations**, **stablecoin infrastructure**, and **cross-chain applications**. I build production-grade decentralized systems from smart contracts to full-stack applications, with emphasis on security, scalability, and developer experience.
+Full-stack blockchain engineer with **2+ years** of production experience building DeFi protocols, cross-chain infrastructure, and Web3 applications. Expert in smart contract development, protocol integration (Aave, Uniswap, GMX, Curve), and building scalable full-stack applications.
 
-🔭 **Currently:**
-- 🏗️ Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating Aave v3, Uniswap v3/v4, Curve, GMX
-- 🎓 Participant in **Uniswap Hookathon Incubator (UHI7)** - Building modular DeFi extensions
-- 📚 Student at **School of Solana (Ackee Blockchain)** - Mastering Rust & Anchor framework
-
-
-🎯 **Core Interests:**
-- 💰 **DeFi Protocol Engineering** - AMMs, lending protocols, yield optimization
-- 🔒 **Blockchain Security** - Smart contract auditing, formal verification, attack analysis
-- 📊 **Prediction Markets** - Decentralized forecasting, oracle design, market mechanisms
-- 🪙 **Stablecoin Infrastructure** - Algorithmic stability, collateralization, compliance
-- 🏢 **Real-World Assets (RWA)** - Tokenization, securities compliance, TradFi integration
+**Currently:** Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating major DeFi protocols and building reusable SDK libraries.
 
 ---
 
-## 🛠️ Technical Stack
-
-<table>
-<tr>
-<td valign="top" width="50%">
+## 🎯 Core Expertise
 
 ### Smart Contract Development
-![Solidity](https://img.shields.io/badge/Solidity-Advanced-363636?style=flat&logo=solidity)
-![Rust](https://img.shields.io/badge/Rust-Proficient-000000?style=flat&logo=rust)
-![Motoko](https://img.shields.io/badge/Motoko-Intermediate-29ABE2?style=flat)
-
-**Protocols & Standards:**
-- ERC20/721/1155/4626 Implementation
-- Hedera Token Service (HTS)
-- Uniswap v3/v4 Hook Development
-- Aave v3, Curve, GMX Integration
-- Cross-Chain Bridge Architecture
-
-**Security & Testing:**
-- Foundry (Fuzzing, Invariant Testing)
-- Hardhat (Unit & Integration Tests)
-- Slither Static Analysis
-- Gas Optimization Patterns
-- Security Auditing (Currently Learning)
-
-</td>
-<td valign="top" width="50%">
-
-### Full-Stack Web3
-![TypeScript](https://img.shields.io/badge/TypeScript-Expert-3178C6?style=flat&logo=typescript)
-![React](https://img.shields.io/badge/React-Advanced-61DAFB?style=flat&logo=react)
-![Node.js](https://img.shields.io/badge/Node.js-Advanced-339933?style=flat&logo=node.js)
-
-**Frontend:**
-- React, Next.js 14 (App Router)
-- Ethers.js v6, Web3.js, Viem
-- Multi-wallet integration
-- Token-gated applications
-
-**Backend & Infrastructure:**
-- Node.js/Express REST APIs
-- PostgreSQL, Redis
-- WebSocket real-time services
-- Blockchain indexing & event processing
-- IPFS/Arweave integration
-
-</td>
-</tr>
-</table>
-
----
-
-## 🚀 Featured Projects
-
-### 🎨 [Comic Pad](https://github.com/Leihyn/comicpad) - Production NFT Publishing Platform
-**Hedera Hashgraph | 50K+ Transactions Processed | Full-Stack Solo Build**
-
-<details>
-<summary><b>🔍 View Technical Details</b></summary>
-
-**Complete end-to-end platform built from scratch:**
-
-**Smart Contracts (Hedera Token Service):**
-- Three tokenization models: full-issue, paginated, series collections
-- Atomic wrap/unwrap mechanisms with royalty enforcement
-- Gas-optimized batch minting (45% cost reduction)
-- Role-based access control for multi-stakeholder governance
-
-**Backend Infrastructure (TypeScript/JavaScript):**
-- RESTful API handling 10K+ daily requests (<100ms response time)
-- Custom Hedera Mirror Node integration 
-- Distributed job queue (Bull/Redis) processing 500+ mints/hour
-- WebSocket server for real-time marketplace updates (<50ms latency)
-
-**Frontend (React/Next.js 14):**
-- Server-side rendering 
-- Progressive image optimization 
-- Multi-wallet support (HashPack, Blade, MetaMask)
-- Token-gated content delivery with offline capability
-
-**Storage & Infrastructure:**
-- Hybrid IPFS (hot) + Arweave (cold) with automatic failover
-- Content addressing for immutability guarantees
-- CDN integration for global low-latency delivery
-
-**Marketplace Features:**
-- Multiple auction types (fixed-price, Dutch, English)
-- Automated royalty distribution
-- Real-time price charts and analytics
-- Creator dashboard with no-code deployment
-
-**🎯 Key Achievement:** Demonstrates full-stack protocol building and integration skills.
-
-</details>
-
-**Tech:** Solidity • TypeScript • Next.js • PostgreSQL • Redis • HTS • IPFS • Arweave
-
----
-
-### 🌉 [Cybria Cross-Chain Bridge](https://github.com/Leihyn/Bridge_Validatior_Script) - Production Validator Infrastructure
-**EVM-Compatible | Production Volume**
-
-<details>
-<summary><b>🔍 View Technical Details</b></summary>
-
-**Production-grade cross-chain protocol:**
-
-**Bridge Architecture:**
-- Lock-and-mint mechanism with multi-sig consensus 
-- Implemented The Graph subgraph for real-time transaction indexing and monitoring.
-- Processing 100+ daily cross-chain transfers
-
-**Validator Infrastructure:**
-- Redundant validator nodes with automatic failover
-- Transaction verification pipeline (finality, balance, nonce management)
-- Rate-limiting and circuit breakers for abnormal conditions
-- Gas price oracle integration preventing failed transactions
-
-**Security Measures:**
-- Multi-layered validation preventing replay attacks
-- Emergency pause with time-locked admin controls
-- Comprehensive audit logging with blockchain anchoring
-- Tenderly monitoring for real-time transaction analysis
-
-**🎯 Key Achievement:** Designed and implemented cross-chain token transfer architecture leveraging LayerZero and Axelar protocols.
-
-</details>
-
-**Tech:** Solidity • Python • Web3.py • Subgraphs
-
----
-
-### 🏢 TerraCred - RWA Stablecoin Protocol
-**https://terracred2025.vercel.app/
- | https://github.com/terracred2025/TerraCred |**
-**Hedera Hashgraph | Testnet | Real-World Asset Tokenization**
-
-<details>
-<summary><b>🔍 View Technical Details</b></summary>
-
-**Institutional DeFi lending with compliance:**
-
-**RWA Innovation:**
-- Property-backed collateralization with fractional ownership
-- Dual-token architecture (Property NFTs + yield-bearing tokens)
-- KYC/AML compliance layer using HCS + zero-knowledge proofs
-- Oracle integration (Zillow, Redfin, CoreLogic APIs)
-
-**DeFi Mechanics:**
-- Dynamic interest rate model based on utilization curves
-- Automated LTV calculations with margin calls
-- Liquidation engine with Dutch auction mechanics
-- Governance module for token holder voting
-
-**Compliance & Regulatory:**
-- Accredited investor verification (Parallel Markets API)
-- Transfer restrictions enforcing securities law compliance
-- Automated tax document generation (1099s)
-- OFAC sanctions screening
-
-**Infrastructure:**
-- Property management API (Node.js/Express)
-- Investor portal with real-time performance metrics
-- Secondary marketplace for token trading
-- Multi-channel notifications (WebSocket + email)
-
-**🎯 Key Achievement:** Experience in stablecoin infrastructure, on-chain compliance, and yield distribution systems.
-
-</details>
-
-**Tech:** Solidity • TypeScript • HTS • HCS • Oracle Integration • Compliance APIs
-
----
-
-### 🦄 [Uniswap v4 Hooks](https://github.com/Leihyn/first-hook) - Modular DeFi Extensions
-**UHI7 Incubator Program | Extension Framework Development**
-
-<details>
-<summary><b>🔍 View Technical Details</b></summary>
-
-**Building next-generation DeFi primitives:**
-
-**Hook Development:**
-- Modular extensions adding custom behavior to Uniswap v4 pools
-- Gas-optimized callbacks (<30k gas overhead per swap)
-- Dynamic fee adjustment based on volatility and liquidity depth
-- MEV-resistant mechanisms (commit-reveal, batch auctions)
-
-**Technical Implementation:**
-- TWAP oracle with manipulation resistance
-- Automated liquidity rebalancing based on impermanent loss
-- Flash swap protection preventing sandwich attacks
-- Composable architecture for strategy stacking
-
-**Skills Demonstrated:**
-- Extension framework architecture 
-- Protocol adaptation for custom use cases
-- Security patterns for modular systems
-- DeFi composability and integration
-
-**🎯 Key Achievement:** Still in progress.
-
-</details>
-
-**Tech:** Solidity • Foundry • Uniswap v4 • Hook Architecture • Gas Optimization
-
----
-
-### 🎮 Additional Projects
-
-**NFT-IPFS Platform** - NFT minting with decentralized storage  
-Built React frontend with NFT ownership verification and IPFS integration.
-
-**FaruqDAO** - Decentralized governance framework  
-Implemented on-chain voting, proposal systems, and treasury management.
-
-**LiquiditySwap** - DeFi protocol integration  
-Multi-protocol swap aggregation with optimal routing algorithms.
-
----
-
-## 📊 GitHub Statistics
-
-<div align="center">
-
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Leihyn&show_icons=true&theme=radical&hide_border=true&include_all_commits=true&count_private=true)
-
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Leihyn&layout=compact&theme=radical&hide_border=true)
-
-![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=Leihyn&theme=radical&hide_border=true)
-
-</div>
-
----
-
-## 🎓 Education & Specialized Training
-
-### Academic Background
-**Bachelor of Science in Physiotherapy**  
-University of Ibadan, College of Medicine | Graduated 2024
-
-### Advanced Blockchain Certifications
-
-**🔥 Cyfrin Updraft** - DeFi Security & Protocol Engineering
-- ✅ Advanced Solidity Patterns & Smart Contract Security
-- ✅ Aave v3 (Flash loans, interest rate models, risk parameters)
-- ✅ Uniswap v3/v4 (Concentrated liquidity, hook architecture)
-- ✅ GMX Perpetuals (Funding rates, liquidation mechanisms)
-- ✅ Curve v1 Stableswap & v2 Cryptoswap
-- ✅ Security Auditing & Vulnerability Analysis
-
-**⚡ School of Solana** - Ackee Blockchain (Ongoing)
-- Rust-based smart contract development
-- Anchor framework and program-derived addresses
-- High-performance blockchain architecture
-- NFT & DeFi protocol development on Solana
-
-**🦄 Uniswap Hookathon Incubator (UHI7)** - Cohort Member
-- Selective program (15% acceptance rate)
-- Developing production-ready Uniswap v4 hooks
-- Collaboration with Uniswap Labs engineers
-- Focus on MEV mitigation and liquidity optimization
-
-**🌐 Internet Computer Protocol (ICP)** - Motoko Development
-- Autonomous canister development
-- Inter-canister communication
-- Decentralized compute and cycles management
-
-**📊 Ajna Protocol** - Lending & Trading Exploration
-- Advanced lending mechanics
-- Non-custodial protocol architecture
-
----
-
-## 🏆 Achievements & Recognition
-
-✨ **Developed two live production blockchain applications** serving real users  
-🔥 **Selected for Uniswap Hookathon Incubator (UHI7)** - 15% acceptance rate  
-🛠️ **Integrated 5+ major DeFi protocols** in production environment  
-🔒 **Conducted security audits** on 15+ smart contracts identifying critical vulnerabilities  
-🌉 **Built cross-chain infrastructure** processing secure bridge transactions  
-👨‍🏫 **Mentored 15+ aspiring blockchain developers** through code reviews and workshops
+```
+Solidity • Rust • Foundry • Hardhat • Anchor
+ERC-20/721/1155/4626 • Uniswap v4 Hooks • Cross-Chain Architecture
+Security Auditing • Gas Optimization • Invariant Testing
+```
+
+### Protocol Integration & DeFi
+```
+Aave v3 (Flash Loans, Interest Models) • Uniswap v3/v4 (Hooks, Concentrated Liquidity)
+GMX Perpetuals (Funding Rates, Liquidations) • Curve v1/v2 (Stableswap, Cryptoswap)
+MEV Mitigation • Yield Optimization • Liquidity Management
+```
+
+### Full-Stack Web3 Development
+```
+Frontend: React • Next.js 14 • TypeScript • Ethers.js v6 • Viem • Wagmi
+Backend: Node.js • Express • PostgreSQL • Redis • WebSocket
+Infrastructure: IPFS • Arweave • Subgraphs • Blockchain Indexing
+```
+
+### Blockchain Ecosystems
+```
+Ethereum • Arbitrum • Optimism • Base • BNB Chain • Hedera • Solana • ICP
+```
 
 ---
 
 ## 💼 Professional Experience
 
-**Junior Blockchain Engineer** @ DeFiConnectCredit | Jan 2025 - Present
-- Integrating Aave v3, Uniswap v3/v4, Curve v1/v2, GMX Perpetuals in production
-- Building reusable contract libraries reducing partner integration time by 60%
-- Leading API/SDK development for external partner integrations
-- Establishing testing frameworks with 95%+ code coverage
+### **Junior Blockchain Engineer** | DeFiConnectCredit
+*January 2025 - Present*
 
-**Blockchain Development Intern** @ DeFiConnectCredit | Nov 2023 - Dec 2024
-- Developed smart contracts for DeFi lending and staking protocols
-- Conducted security audits identifying vulnerabilities before deployment
-- Built NFT incentive systems with gas-efficient Merkle tree proofs
-- Achieved 90%+ test coverage on production contracts
+- **Protocol Integration:** Integrate Aave v3, Uniswap v3/v4, Curve, and GMX into production systems
+- **SDK Development:** Build reusable contract libraries for streamlined partner integration
+- **API/Backend:** Lead development of REST APIs and SDK for external partners
+- **Quality Assurance:** Establish comprehensive testing frameworks with high code coverage standards
+- **Tech Stack:** Solidity, TypeScript, Node.js, Foundry, PostgreSQL
+
+### **Blockchain Development Intern** | DeFiConnectCredit
+*November 2023 - December 2024*
+
+- **Smart Contracts:** Developed lending, staking, and NFT contracts deployed to production
+- **Security:** Conducted security audits on smart contracts, identifying vulnerabilities pre-deployment
+- **Optimization:** Implemented gas-efficient patterns including Merkle tree proofs
+- **Testing:** Maintained high test coverage standards across production contracts
+- **Tech Stack:** Solidity, Hardhat, TypeScript, React, PostgreSQL
 
 ---
 
-## 🎯 What I'm Building Toward
+## 🚀 Featured Projects
 
-I'm passionate about bridging traditional finance and decentralized systems through **secure, compliant, and user-friendly blockchain infrastructure**. My focus areas include:
+### [TruthBounty](https://github.com/Leihyn/TruthBounty) - Prediction Market Reputation Protocol
+**Role:** Solo Full-Stack Developer | **Status:** Hackathon MVP
 
-- 🏗️ **Stablecoin Protocols** - Building programmable money infrastructure
-- 🔗 **Protocol Integration** - Creating seamless DeFi composability
-- 🔒 **Security-First Development** - Auditing, testing, formal verification
-- 📊 **Prediction Markets** - Decentralized forecasting and oracle design
-- 🏢 **RWA Tokenization** - Bringing real-world assets on-chain compliantly
+Decentralized reputation protocol tracking prediction market performance with soulbound NFTs and copy trading.
 
-**Strategic Vision:** Enable builders to create customized, interoperable financial applications while maintaining security and regulatory compliance, making blockchain technology accessible and useful for real-world problems.
+- **Achievement:** Built for Seedify Prediction Markets Hackathon on BNB Chain
+- **Smart Contracts:** Soulbound ERC-721 NFTs, TruthScore algorithm, Copy Trading Vault, Platform Registry
+- **Frontend:** Next.js 14, TypeScript, Tailwind CSS, RainbowKit, wagmi, shadcn/ui
+- **Backend:** Next.js API Routes, The Graph integration, Polymarket API, BSCScan API
+- **Blockchain:** BNB Smart Chain (Testnet & Mainnet)
+- **Key Features:**
+  - Multi-platform integration (PancakeSwap Prediction, Polymarket)
+  - Proprietary TruthScore algorithm: `(WinRate × 100) × √(Volume) / 100`
+  - Dynamic tier system (Bronze → Diamond) with on-chain SVG generation
+  - Automated copy trading with vault management
+  - Direct betting on PancakeSwap from the app
+  - Global leaderboard and trader search
+  - Deep linking to Polymarket with wallet integration
+
+[GitHub](https://github.com/Leihyn/TruthBounty)
+
+---
+
+### [Comic Pad](https://github.com/Leihyn) - Production NFT Marketplace
+**Role:** Solo Full-Stack Developer | **Status:** Live in Production
+
+End-to-end NFT publishing platform for comic creators with minting, trading, and royalty distribution.
+
+- **Impact:** Production NFT marketplace with real user adoption
+- **Smart Contracts:** Custom ERC-721 with royalty splits, marketplace contracts
+- **Frontend:** Next.js 14, TypeScript, wallet integration (MetaMask, WalletConnect)
+- **Backend:** Node.js/Express REST API, PostgreSQL, Redis caching, WebSocket real-time updates
+- **Infrastructure:** IPFS metadata storage, Arweave permanent storage
+- **Blockchain:** Hedera Hashgraph (HTS integration)
+
+**Key Features:** Token-gated access, multi-wallet support, real-time notifications, admin dashboard
+
+---
+
+### [Cybria Bridge](https://github.com/Leihyn) - Cross-Chain Infrastructure
+**Role:** Smart Contract & Backend Developer | **Status:** Production
+
+Validator infrastructure for secure cross-chain asset transfers between EVM networks.
+
+- **Impact:** Processing production bridge volume securely
+- **Smart Contracts:** Lock/mint bridge contracts, validator consensus mechanisms
+- **Backend:** Python validator nodes, Web3.py integration, event monitoring
+- **Infrastructure:** Subgraph indexing, multi-chain deployment
+- **Security:** Multi-signature validation, slashing mechanisms
+
+---
+
+### [TerraCred](https://terracred2025.vercel.app/) - RWA Stablecoin Protocol
+**Role:** Protocol Architect & Full-Stack Developer | **Status:** Testnet
+
+Real-world asset-backed stablecoin with regulatory compliance integration.
+
+- **Smart Contracts:** Collateral management, oracle integration, compliance checks
+- **Frontend:** Next.js application with complete UX flow
+- **Backend:** Node.js API, compliance APIs, oracle feeds
+- **Blockchain:** Hedera (HTS, HCS)
+- **Features:** KYC/AML integration, real-time collateralization monitoring
+
+[Live Demo](https://terracred2025.vercel.app/) • [GitHub](https://github.com/terracred2025/TerraCred)
+
+---
+
+### [Uniswap v4 Hooks](https://github.com/Leihyn) - DeFi Extensions
+**Program:** Uniswap Hookathon Incubator (UHI7) | **Acceptance:** 15%
+
+Production-ready modular extensions for Uniswap v4 with MEV protection.
+
+- **Smart Contracts:** Custom hook implementations, gas-optimized patterns
+- **Testing:** Comprehensive fuzzing and invariant tests
+- **Collaboration:** Direct feedback from Uniswap Labs engineers
+- **Focus:** MEV mitigation, liquidity optimization, fee customization
+
+---
+
+### Additional Projects
+
+**FaruqDAO** - Decentralized Governance Framework
+- On-chain voting, proposal systems, timelock execution, treasury management
+- Tech: Solidity, Hardhat, React, Subgraph
+
+**LiquiditySwap** - DEX Aggregator
+- Multi-protocol routing (Uniswap, Curve, Balancer), optimal path finding
+- Tech: Solidity, TypeScript, Node.js, Graph Protocol
+
+**NFT-IPFS Platform** - Decentralized NFT Minting
+- IPFS integration, ownership verification, metadata management
+- Tech: React, Ethers.js, IPFS, Pinata
+
+---
+
+## 🎓 Advanced Training & Certifications
+
+### **Cyfrin Updraft** - DeFi Security & Protocol Engineering
+*Completed 2024*
+
+✅ Advanced Solidity patterns and security best practices
+✅ Aave v3: Flash loans, interest rate models, risk parameters
+✅ Uniswap v3/v4: Concentrated liquidity, hook architecture
+✅ GMX: Perpetual trading, funding rates, liquidation mechanisms
+✅ Curve v1/v2: Stableswap invariants, cryptoswap algorithms
+✅ Security auditing and vulnerability identification
+
+### **Uniswap Hookathon Incubator (UHI7)** - Cohort Member
+*2024 | 15% Acceptance Rate*
+
+- Selective program for production Uniswap v4 development
+- Mentorship from Uniswap Labs core engineers
+- Focus: Hook architecture, MEV strategies, liquidity mechanics
+
+### **School of Solana** - Ackee Blockchain
+*Ongoing*
+
+- Rust-based smart contract development
+- Anchor framework mastery
+- High-performance Solana program architecture
+- Cross-program invocation patterns
+
+### **Internet Computer Protocol (ICP)** - Motoko Development
+*Completed 2024*
+
+- Autonomous canister development
+- Inter-canister communication
+- Cycles management and optimization
+
+---
+
+## 🏆 Key Achievements
+
+✅ **Production applications** deployed and serving real users
+✅ **Reusable SDK libraries** built for streamlined partner integration
+✅ **Comprehensive testing frameworks** with high coverage standards
+✅ **Smart contract security** - Conducted audits identifying vulnerabilities pre-deployment
+✅ **Selected for UHI7** (15% acceptance rate) - Uniswap Incubator Program
+✅ **Major DeFi protocols integrated** - Aave, Uniswap, Curve, GMX in production
+✅ **Community mentorship** - Workshops and code reviews for aspiring developers
+
+---
+
+## 🛠️ Technical Stack
+
+### Smart Contract Development
+![Solidity](https://img.shields.io/badge/Solidity-363636?style=flat&logo=solidity&logoColor=white)
+![Rust](https://img.shields.io/badge/Rust-000000?style=flat&logo=rust&logoColor=white)
+![Foundry](https://img.shields.io/badge/Foundry-000000?style=flat)
+![Hardhat](https://img.shields.io/badge/Hardhat-FFF100?style=flat)
+
+**Expertise:** ERC-20/721/1155/4626 • Uniswap Hooks • Cross-Chain Bridges • Gas Optimization
+
+### Frontend Development
+![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+
+**Libraries:** Ethers.js v6 • Viem • Wagmi • RainbowKit • WalletConnect
+
+### Backend Development
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white)
+
+**Services:** REST APIs • GraphQL • WebSocket • Event Processing • Blockchain Indexing
+
+### Blockchain Ecosystems
+![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=flat&logo=ethereum&logoColor=white)
+![BNB Chain](https://img.shields.io/badge/BNB_Chain-F3BA2F?style=flat&logo=binance&logoColor=white)
+![Arbitrum](https://img.shields.io/badge/Arbitrum-28A0F0?style=flat)
+![Solana](https://img.shields.io/badge/Solana-9945FF?style=flat&logo=solana&logoColor=white)
+![Hedera](https://img.shields.io/badge/Hedera-000000?style=flat)
+
+### Tools & Infrastructure
+![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![IPFS](https://img.shields.io/badge/IPFS-65C2CB?style=flat&logo=ipfs&logoColor=white)
+
+**DevOps:** GitHub Actions • Vercel • Railway • Subgraphs • Tenderly
+
+---
+
+## 📊 GitHub Activity
+
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Leihyn&show_icons=true&theme=radical)
+
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Leihyn&layout=compact&theme=radical)
+
+---
+
+## 💼 Open to Opportunities
+
+I'm actively seeking roles where I can leverage my full-stack blockchain expertise:
+
+### Primary Interests
+- **Full-Stack Blockchain Developer** - End-to-end Web3 application development
+- **Protocol Integration Engineer** - DeFi protocol integration and SDK development
+- **DeFi Engineer** - Smart contract development for DeFi protocols
+- **Frontend Engineer (Web3)** - React/Next.js applications with wallet integration
+- **Backend Engineer (Blockchain)** - APIs, indexing, event processing
+
+### Also Open To
+- Smart contract auditing and security consulting
+- Technical leadership and architecture roles
+- Speaking engagements on DeFi and blockchain development
+- Part-time consulting and contract work
 
 ---
 
 ## 📫 Let's Connect
 
-<div align="center">
-
-[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:your.email@example.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/yourprofile)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github)](https://github.com/Leihyn)
-
-</div>
-
-**💬 Open to:**
-- Protocol integration and smart contract engineering roles
-- DeFi security and auditing opportunities
-- Stablecoin infrastructure development
-- Speaking engagements on blockchain development
-- Technical consulting for Web3 projects
+**Email:** [onatolafaruq@gmail.com](mailto:your-email@example.com)
+**LinkedIn:** [linkedin.com/in/leihyn](https://linkedin.com/in/your-profile)
+**GitHub:** [@Leihyn](https://github.com/Leihyn)
+**Location:** Available for remote positions globally
 
 ---
 
-<div align="center">
+### 🌟 Featured Repositories
 
-### 🌟 "Building decentralized futures, one smart contract at a time." 🌟
+Check out my pinned repositories below to see my work in action!
 
-![Profile Views](https://komarev.com/ghpvc/?username=Leihyn&color=blueviolet&style=flat-square)
-
-⭐ **Star my repos if you find them interesting!** ⭐
-
-</div>
+**⭐ Star repositories that interest you | 🔔 Follow for updates on new projects**
 
 ---
 
-<div align="center">
+<p align="center">
+  <i>"Building the future of decentralized finance, one smart contract at a time."</i>
+</p>
 
-**🔧 Tech Stack Summary**
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=Leihyn&color=blueviolet" alt="Profile views">
+</p>
 
-![Solidity](https://img.shields.io/badge/Solidity-%23363636.svg?style=for-the-badge&logo=solidity&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![Rust](https://img.shields.io/badge/Rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)
-![React](https://img.shields.io/badge/React-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Next.js](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+---
 
-**🔗 Blockchain Ecosystems**
-
-![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=Ethereum&logoColor=white)
-![Hedera](https://img.shields.io/badge/Hedera-000000?style=for-the-badge)
-![Solana](https://img.shields.io/badge/Solana-000?style=for-the-badge&logo=solana)
-
-*Last Updated: November 2025*
-
+*Last Updated: January 2025 • Available for immediate start*
