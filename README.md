@@ -1,4 +1,4 @@
-=======
+
 # Onatola Timilehin Faruq 🔗
 
 <div align="center">
