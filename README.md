@@ -310,4 +310,4 @@ Check out my pinned repositories below to see my work in action!
 
 ---
 
-*Last Updated: January 2025 • Available for immediate start*
+*Last Updated: November 2025 • Available for immediate start*
