@@ -13,7 +13,7 @@
 
 Full-stack blockchain engineer with **2+ years** of production experience building DeFi protocols, cross-chain infrastructure, and Web3 applications. Expert in smart contract development, protocol integration (Aave, Uniswap, GMX, Curve), and building scalable full-stack applications.
 
-**Currently:** Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating major DeFi protocols and building reusable SDK libraries.
+**Currently:** Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating major DeFi protocols, building reusable SDK libraries, and exploring cross-chain DApp development.
 
 ---
 
@@ -22,7 +22,7 @@ Full-stack blockchain engineer with **2+ years** of production experience buildi
 ### Smart Contract Development
 ```
 Solidity • Rust • Foundry • Hardhat • Anchor
-ERC-20/721/1155/4626 • Uniswap v4 Hooks • Cross-Chain Architecture
+Token Standards (Fungible, NFT, Multi-Token, Tokenized Vaults) • Uniswap v4 Hooks • Cross-Chain Architecture
 Security Auditing • Gas Optimization • Invariant Testing
 ```
 
@@ -222,7 +222,7 @@ Production-ready modular extensions for Uniswap v4 with MEV protection.
 ![Foundry](https://img.shields.io/badge/Foundry-000000?style=flat)
 ![Hardhat](https://img.shields.io/badge/Hardhat-FFF100?style=flat)
 
-**Expertise:** ERC-20/721/1155/4626 • Uniswap Hooks • Cross-Chain Bridges • Gas Optimization
+**Expertise:** Token Standards (Fungible, NFT, Multi-Token, Vaults) • Uniswap Hooks • Cross-Chain Bridges • Gas Optimization
 
 ### Frontend Development
 ![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
