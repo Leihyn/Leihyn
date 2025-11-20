@@ -11,7 +11,7 @@
 
 ## 👨‍💻 Professional Summary
 
-Full-stack blockchain engineer with **2+ years** of production experience building DeFi protocols, cross-chain infrastructure, and Web3 applications. Expert in smart contract development, protocol integration (Aave, Uniswap, GMX, Curve), and building scalable full-stack applications.
+Full-stack blockchain engineer with **3+ years** of production experience building DeFi protocols, cross-chain infrastructure, and Web3 applications. Expert in smart contract development, protocol integration (Aave, Uniswap, GMX, Curve), and building scalable full-stack applications.
 
 **Currently:** Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating major DeFi protocols, building reusable SDK libraries, and exploring cross-chain DApp development.
 
