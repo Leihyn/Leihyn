@@ -94,7 +94,7 @@ Decentralized reputation protocol tracking prediction market performance with so
 
 ---
 
-### [Comic Pad](https://github.com/Leihyn) - Production NFT Marketplace
+### [Comic Pad](https://github.com/Leihyn/comicPad) - Production NFT Marketplace
 **Role:** Solo Full-Stack Developer | **Status:** Live in Production
 
 End-to-end NFT publishing platform for comic creators with minting, trading, and royalty distribution.
