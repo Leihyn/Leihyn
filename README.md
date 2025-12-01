@@ -164,8 +164,9 @@ I regularly publish in-depth technical articles on blockchain architecture, DeFi
 
 ### Featured Articles
 
-**[The Atomic Schlep: The Architecture of the Unstoppable Swap](https://faruukku.medium.com/the-atomic-schlep-the-architecture-of-the-unstoppable-swap-5f51ec1c6a54)**  
-*Deep dive into atomic swap mechanics, cross-chain transaction architecture, and the technical challenges of building trustless exchange protocols*
+**[The Atomic Schlep: The Architecture of the Unstoppable Swap](https://paragraph.com/@faruukku/the-atomic-schlep-the-architecture-of-the-unstoppable-swap)**  
+*Deep dive into atomic swap mechanics, cross-chain transaction architecture, and the technical challenges of building trustless exchange protocols*  
+📖 Also on [Medium](https://faruukku.medium.com/the-atomic-schlep-the-architecture-of-the-unstoppable-swap-5f51ec1c6a54)
 
 **[Sub-100ms Event Detection: Real-Time Blockchain Monitoring](https://www.notion.so/sub-100ms-event-detection-notion-2b1a2b19e095807da70fd5bd80c7817c)**  
 *Building high-performance event detection systems for blockchain applications with WebSocket subscriptions and optimized indexing strategies*
