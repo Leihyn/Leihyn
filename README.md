@@ -5,8 +5,9 @@
 **Protocol Integration Engineer | DeFi | Full-Stack Blockchain Developer**
 
 [![GitHub followers](https://img.shields.io/github/followers/Leihyn?style=social)](https://github.com/Leihyn)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/yourprofile)
-[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:your.email@example.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/leihyn)
+[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:onatolafaruq@gmail.com)
+[![Medium](https://img.shields.io/badge/Medium-Blog-black?style=for-the-badge&logo=medium)](https://medium.com/@faruukku)
 
 *Building programmable money infrastructure and decentralized applications*
 
@@ -20,7 +21,7 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 🔭 **Currently:**
 - 🏗️ Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating Aave v3, Uniswap v3/v4, Curve, GMX
-- 🎓 Participant in **Uniswap Hookathon Incubator (UHI7)** - Building modular DeFi extensions
+- 🎓 Graduate of **Uniswap Hook Incubator (UHI7)** - Built modular DeFi extensions
 - 📚 Student at **School of Solana (Ackee Blockchain)** - Mastering Rust & Anchor framework
 
 
@@ -68,15 +69,15 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 **Frontend:**
 - React, Next.js 14 (App Router)
-- Ethers.js v6, Web3.js, Viem
-- Multi-wallet integration
+- Ethers.js v6, Viem, Wagmi
+- RainbowKit, Multi-wallet integration
 - Token-gated applications
 
 **Backend & Infrastructure:**
 - Node.js/Express REST APIs
-- PostgreSQL, Redis
-- WebSocket real-time services
-- Blockchain indexing & event processing
+- PostgreSQL, Redis, WebSocket
+- The Graph, Blockchain indexing
+- Docker, Tenderly
 - IPFS/Arweave integration
 
 </td>
@@ -103,13 +104,13 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 **Backend Infrastructure (TypeScript/JavaScript):**
 - RESTful API handling 10K+ daily requests (<100ms response time)
-- Custom Hedera Mirror Node integration 
+- Custom Hedera Mirror Node integration
 - Distributed job queue (Bull/Redis) processing 500+ mints/hour
 - WebSocket server for real-time marketplace updates (<50ms latency)
 
 **Frontend (React/Next.js 14):**
-- Server-side rendering 
-- Progressive image optimization 
+- Server-side rendering
+- Progressive image optimization
 - Multi-wallet support (HashPack, Blade, MetaMask)
 - Token-gated content delivery with offline capability
 
@@ -141,7 +142,7 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 **Production-grade cross-chain protocol:**
 
 **Bridge Architecture:**
-- Lock-and-mint mechanism with multi-sig consensus 
+- Lock-and-mint mechanism with multi-sig consensus
 - Implemented The Graph subgraph for real-time transaction indexing and monitoring.
 - Processing 100+ daily cross-chain transfers
 
@@ -205,50 +206,63 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 ---
 
-### 🦄 [Uniswap v4 Hooks](https://github.com/Leihyn/first-hook) - Modular DeFi Extensions
-**UHI7 Incubator Program | Extension Framework Development**
+### 🦄 [Sentiment](https://github.com/Leihyn/sentiment-hook) - Dynamic Fee Hook for Uniswap v4
+**UHI7 Graduate Capstone | Base Sepolia | Production-Ready**
 
 <details>
 <summary><b>🔍 View Technical Details</b></summary>
 
-**Building next-generation DeFi primitives:**
+**Production-ready Uniswap v4 hook implementing counter-cyclical dynamic fees:**
 
-**Hook Development:**
-- Modular extensions adding custom behavior to Uniswap v4 pools
+**Core Mechanism:**
+- Adjusts swap fees (0.25%-0.44%) based on real-time market sentiment
+- Integrates 8 off-chain data sources for sentiment analysis
+- EMA smoothing for stable fee transitions
+- Counter-cyclical design to stabilize liquidity during volatility
+
+**Infrastructure:**
+- Multi-keeper architecture (Chainlink Automation + Gelato)
+- Redundant oracle feeds with fallback mechanisms
 - Gas-optimized callbacks (<30k gas overhead per swap)
-- Dynamic fee adjustment based on volatility and liquidity depth
-- MEV-resistant mechanisms (commit-reveal, batch auctions)
 
-**Technical Implementation:**
-- TWAP oracle with manipulation resistance
-- Automated liquidity rebalancing based on impermanent loss
-- Flash swap protection preventing sandwich attacks
-- Composable architecture for strategy stacking
+**Testing & Security:**
+- Comprehensive test coverage with invariant fuzzing
+- Foundry-based testing framework
+- Edge case handling for extreme market conditions
 
-**Skills Demonstrated:**
-- Extension framework architecture (directly applicable to M0's $M Extensions)
-- Protocol adaptation for custom use cases
-- Security patterns for modular systems
-- DeFi composability and integration
-
-**🎯 Key Achievement:** Still in progress.
+**🎯 Key Achievement:** Successfully graduated from UHI7, demonstrating expertise in Uniswap v4 hook architecture and DeFi protocol extensions.
 
 </details>
 
-**Tech:** Solidity • Foundry • Uniswap v4 • Hook Architecture • Gas Optimization
+**Tech:** Solidity • Foundry • Uniswap v4 • Chainlink • Gelato • Base
 
 ---
 
-### 🎮 Additional Projects
+### 🎯 [TruthBounty](https://github.com/Leihyn/truthbounty) - Prediction Market Reputation Protocol
+**Top 20 Seedify Hackathon | BNB Chain | Ongoing**
 
-**NFT-IPFS Platform** - NFT minting with decentralized storage  
-Built React frontend with NFT ownership verification and IPFS integration.
+<details>
+<summary><b>🔍 View Technical Details</b></summary>
 
-**FaruqDAO** - Decentralized governance framework  
-Implemented on-chain voting, proposal systems, and treasury management.
+**On-chain reputation system for prediction market accuracy:**
 
-**LiquiditySwap** - DeFi protocol integration  
-Multi-protocol swap aggregation with optimal routing algorithms.
+**Core Features:**
+- Tracks prediction accuracy across PancakeSwap Prediction and Polymarket
+- TruthScore algorithm weighing accuracy, consistency, and stake size
+- Soulbound NFTs with dynamic SVG metadata reflecting reputation
+- Copy-trading vault for following top predictors
+
+**Technical Implementation:**
+- The Graph subgraph for indexing prediction outcomes
+- Cross-protocol data aggregation
+- Gas-efficient batch updates for reputation scores
+- ERC-721 with on-chain SVG generation
+
+**🎯 Key Achievement:** Top 20 placement in Seedify Hackathon, demonstrating prediction market expertise.
+
+</details>
+
+**Tech:** Solidity • The Graph • Next.js • Dynamic NFTs • PancakeSwap • Polymarket
 
 ---
 
@@ -269,7 +283,7 @@ Multi-protocol swap aggregation with optimal routing algorithms.
 ## 🎓 Education & Specialized Training
 
 ### Academic Background
-**Bachelor of Science in Physiotherapy**  
+**Bachelor of Science in Physiotherapy**
 University of Ibadan, College of Medicine | Graduated 2024
 
 ### Advanced Blockchain Certifications
@@ -288,10 +302,10 @@ University of Ibadan, College of Medicine | Graduated 2024
 - High-performance blockchain architecture
 - NFT & DeFi protocol development on Solana
 
-**🦄 Uniswap Hookathon Incubator (UHI7)** - Cohort Member
+**🦄 Uniswap Hook Incubator (UHI7)** - Graduate
 - Selective program (15% acceptance rate)
-- Developing production-ready Uniswap v4 hooks
-- Collaboration with Uniswap Labs engineers
+- Developed production-ready Uniswap v4 hooks
+- Collaborated with Uniswap Labs engineers
 - Focus on MEV mitigation and liquidity optimization
 
 **🌐 Internet Computer Protocol (ICP)** - Motoko Development
@@ -299,20 +313,18 @@ University of Ibadan, College of Medicine | Graduated 2024
 - Inter-canister communication
 - Decentralized compute and cycles management
 
-**📊 Ajna Protocol** - Lending & Trading Exploration
-- Advanced lending mechanics
-- Non-custodial protocol architecture
+
 
 ---
 
 ## 🏆 Achievements & Recognition
 
-✨ **Developed two live production blockchain applications** serving real users  
-🎤 **Presenter at Hedera Web3 Africa Hackathon** - Presented to 200+ developers  
-🔥 **Selected for Uniswap Hookathon Incubator (UHI7)** - 15% acceptance rate  
-🛠️ **Integrated 5+ major DeFi protocols** in production environment  
-🔒 **Conducted security audits** on 15+ smart contracts identifying critical vulnerabilities  
-🌉 **Built cross-chain infrastructure** processing secure bridge transactions  
+✨ **Developed two live production blockchain applications** serving real users
+🎤 **Presenter at Hedera Web3 Africa Hackathon** - Presented to 200+ developers
+🎓 **Graduated from Uniswap Hook Incubator (UHI7)** - 15% acceptance rate, built Sentiment dynamic fee hook
+🏅 **Top 20 in Seedify Hackathon** - TruthBounty prediction market reputation protocol
+🛠️ **Integrated 5+ major DeFi protocols** in production environment
+🌉 **Built cross-chain infrastructure** processing secure bridge transactions
 👨‍🏫 **Mentored 15+ aspiring blockchain developers** through code reviews and workshops
 
 ---
@@ -330,6 +342,14 @@ University of Ibadan, College of Medicine | Graduated 2024
 - Conducted security audits identifying vulnerabilities before deployment
 - Built NFT incentive systems with gas-efficient Merkle tree proofs
 - Achieved 90%+ test coverage on production contracts
+
+---
+
+## 📝 Technical Writing & Research
+
+- **[The Atomic Schlep: The Architecture of the Unstoppable Swap](https://medium.com/@faruukku)** - Deep dive into atomic swap mechanics
+- **[Sub-100ms Event Detection: Real-Time Blockchain Monitoring](https://medium.com/@faruukku)** - Building high-performance event listeners
+- **[Closing the Information Gap: Data Availability in DeFi](https://medium.com/@faruukku)** - Data availability layers and DeFi implications
 
 ---
 
@@ -351,9 +371,10 @@ I'm passionate about bridging traditional finance and decentralized systems thro
 
 <div align="center">
 
-[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:your.email@example.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/yourprofile)
+[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:onatolafaruq@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/leihyn)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github)](https://github.com/Leihyn)
+[![Medium](https://img.shields.io/badge/Medium-Blog-black?style=for-the-badge&logo=medium)](https://medium.com/@faruukku)
 
 </div>
 
@@ -394,8 +415,13 @@ I'm passionate about bridging traditional finance and decentralized systems thro
 **🔗 Blockchain Ecosystems**
 
 ![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=Ethereum&logoColor=white)
+![Base](https://img.shields.io/badge/Base-0052FF?style=for-the-badge&logo=coinbase&logoColor=white)
+![Optimism](https://img.shields.io/badge/Optimism-FF0420?style=for-the-badge&logo=optimism&logoColor=white)
+![Arbitrum](https://img.shields.io/badge/Arbitrum-28A0F0?style=for-the-badge&logo=arbitrum&logoColor=white)
+![BNB Chain](https://img.shields.io/badge/BNB_Chain-F0B90B?style=for-the-badge&logo=binance&logoColor=black)
 ![Hedera](https://img.shields.io/badge/Hedera-000000?style=for-the-badge)
 ![Solana](https://img.shields.io/badge/Solana-000?style=for-the-badge&logo=solana)
 
-*Last Updated: November 2025*
+*Last Updated: December 2025*
 
+</div>
