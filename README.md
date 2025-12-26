@@ -1,4 +1,4 @@
-# Onatola Timilehin Faruq 🔗
+# Onatola Timilehin Faruq
 
 <div align="center">
 
@@ -15,26 +15,26 @@
 
 ---
 
-## 👨‍💻 About Me
+## About Me
 
 Protocol focused blockchain engineer specializing in **DeFi integrations**, **stablecoin infrastructure**, and **cross-chain applications**. I build production-grade decentralized systems from smart contracts to full-stack applications, with emphasis on security, scalability, and developer experience.
 
-🔭 **Currently:**
-- 🏗️ Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating Aave v3, Uniswap v3/v4, Curve, GMX
-- 🎓 Graduate of **Uniswap Hook Incubator (UHI7)** - Built modular DeFi extensions
-- 📚 Student at **School of Solana (Ackee Blockchain)** - Mastering Rust & Anchor framework
+**Currently:**
+- Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating Aave v3, Uniswap v3/v4, Curve, GMX
+- Graduate of **Uniswap Hook Incubator (UHI7)** - Built modular DeFi extensions
+- Student at **School of Solana (Ackee Blockchain)** - Mastering Rust & Anchor framework
 
 
-🎯 **Core Interests:**
-- 💰 **DeFi Protocol Engineering** - AMMs, lending protocols, yield optimization
-- 🔒 **Blockchain Security** - Smart contract auditing, formal verification, attack analysis
-- 📊 **Prediction Markets** - Decentralized forecasting, oracle design, market mechanisms
-- 🪙 **Stablecoin Infrastructure** - Algorithmic stability, collateralization, compliance
-- 🏢 **Real-World Assets (RWA)** - Tokenization, securities compliance, TradFi integration
+**Core Interests:**
+- **DeFi Protocol Engineering** - AMMs, lending protocols, yield optimization
+- **Blockchain Security** - Smart contract auditing, formal verification, attack analysis
+- **Prediction Markets** - Decentralized forecasting, oracle design, market mechanisms
+- **Stablecoin Infrastructure** - Algorithmic stability, collateralization, compliance
+- **Real-World Assets (RWA)** - Tokenization, securities compliance, TradFi integration
 
 ---
 
-## 🛠️ Technical Stack
+## Technical Stack
 
 <table>
 <tr>
@@ -86,13 +86,13 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 ---
 
-## 🚀 Featured Projects
+## Featured Projects
 
-### 🎨 [Comic Pad](https://github.com/Leihyn/comicpad) - Production NFT Publishing Platform
+### [Comic Pad](https://github.com/Leihyn/comicpad) - Production NFT Publishing Platform
 **Hedera Hashgraph | 50K+ Transactions Processed | Full-Stack Solo Build**
 
 <details>
-<summary><b>🔍 View Technical Details</b></summary>
+<summary><b>View Technical Details</b></summary>
 
 **Complete end-to-end platform built from scratch:**
 
@@ -125,19 +125,19 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 - Real-time price charts and analytics
 - Creator dashboard with no-code deployment
 
-**🎯 Key Achievement:** Demonstrates full-stack protocol building and integration skills.
+**Key Achievement:** Demonstrates full-stack protocol building and integration skills.
 
 </details>
 
-**Tech:** Solidity • TypeScript • Next.js • PostgreSQL • Redis • HTS • IPFS • Arweave
+**Tech:** Solidity | TypeScript | Next.js | PostgreSQL | Redis | HTS | IPFS | Arweave
 
 ---
 
-### 🌉 [Cybria Cross-Chain Bridge](https://github.com/Leihyn/Bridge_Validatior_Script) - Production Validator Infrastructure
+### [Cybria Cross-Chain Bridge](https://github.com/Leihyn/Bridge_Validatior_Script) - Production Validator Infrastructure
 **EVM-Compatible | Production Volume**
 
 <details>
-<summary><b>🔍 View Technical Details</b></summary>
+<summary><b>View Technical Details</b></summary>
 
 **Production-grade cross-chain protocol:**
 
@@ -158,19 +158,19 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 - Comprehensive audit logging with blockchain anchoring
 - Tenderly monitoring for real-time transaction analysis
 
-**🎯 Key Achievement:** Designed and implemented cross-chain token transfer architecture leveraging LayerZero and Axelar protocols.
+**Key Achievement:** Designed and implemented cross-chain token transfer architecture leveraging LayerZero and Axelar protocols.
 
 </details>
 
-**Tech:** Solidity • Python • Web3.py • Subgraphs
+**Tech:** Solidity | Python | Web3.py | Subgraphs
 
 ---
 
-### 🏢 TerraCred - RWA Stablecoin Protocol
+### TerraCred - RWA Stablecoin Protocol
 **Hedera Hashgraph | Testnet | Real-World Asset Tokenization**
 
 <details>
-<summary><b>🔍 View Technical Details</b></summary>
+<summary><b>View Technical Details</b></summary>
 
 **Institutional DeFi lending with compliance:**
 
@@ -198,19 +198,19 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 - Secondary marketplace for token trading
 - Multi-channel notifications (WebSocket + email)
 
-**🎯 Key Achievement:** Experience in stablecoin infrastructure, on-chain compliance, and yield distribution systems.
+**Key Achievement:** Experience in stablecoin infrastructure, on-chain compliance, and yield distribution systems.
 
 </details>
 
-**Tech:** Solidity • TypeScript • HTS • HCS • Oracle Integration • Compliance APIs
+**Tech:** Solidity | TypeScript | HTS | HCS | Oracle Integration | Compliance APIs
 
 ---
 
-### 🦄 [Sentiment](https://github.com/Leihyn/sentiment-hook) - Dynamic Fee Hook for Uniswap v4
+### [Sentiment](https://github.com/Leihyn/sentiment-hook) - Dynamic Fee Hook for Uniswap v4
 **UHI7 Graduate Capstone | Base Sepolia | Production-Ready**
 
 <details>
-<summary><b>🔍 View Technical Details</b></summary>
+<summary><b>View Technical Details</b></summary>
 
 **Production-ready Uniswap v4 hook implementing counter-cyclical dynamic fees:**
 
@@ -230,19 +230,19 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 - Foundry-based testing framework
 - Edge case handling for extreme market conditions
 
-**🎯 Key Achievement:** Successfully graduated from UHI7, demonstrating expertise in Uniswap v4 hook architecture and DeFi protocol extensions.
+**Key Achievement:** Successfully graduated from UHI7, demonstrating expertise in Uniswap v4 hook architecture and DeFi protocol extensions.
 
 </details>
 
-**Tech:** Solidity • Foundry • Uniswap v4 • Chainlink • Gelato • Base
+**Tech:** Solidity | Foundry | Uniswap v4 | Chainlink | Gelato | Base
 
 ---
 
-### 🎯 [TruthBounty](https://github.com/Leihyn/truthbounty) - Prediction Market Reputation Protocol
+### [TruthBounty](https://github.com/Leihyn/truthbounty) - Prediction Market Reputation Protocol
 **Top 20 Seedify Hackathon | BNB Chain | Ongoing**
 
 <details>
-<summary><b>🔍 View Technical Details</b></summary>
+<summary><b>View Technical Details</b></summary>
 
 **On-chain reputation system for prediction market accuracy:**
 
@@ -258,15 +258,15 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 - Gas-efficient batch updates for reputation scores
 - ERC-721 with on-chain SVG generation
 
-**🎯 Key Achievement:** Top 20 placement in Seedify Hackathon, demonstrating prediction market expertise.
+**Key Achievement:** Top 20 placement in Seedify Hackathon, demonstrating prediction market expertise.
 
 </details>
 
-**Tech:** Solidity • The Graph • Next.js • Dynamic NFTs • PancakeSwap • Polymarket
+**Tech:** Solidity | The Graph | Next.js | Dynamic NFTs | PancakeSwap | Polymarket
 
 ---
 
-## 📊 GitHub Statistics
+## GitHub Statistics
 
 <div align="center">
 
@@ -280,7 +280,7 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 ---
 
-## 🎓 Education & Specialized Training
+## Education & Specialized Training
 
 ### Academic Background
 **Bachelor of Science in Physiotherapy**
@@ -288,48 +288,46 @@ University of Ibadan, College of Medicine | Graduated 2024
 
 ### Advanced Blockchain Certifications
 
-**🔥 Cyfrin Updraft** - DeFi Security & Protocol Engineering
-- ✅ Advanced Solidity Patterns & Smart Contract Security
-- ✅ Aave v3 (Flash loans, interest rate models, risk parameters)
-- ✅ Uniswap v3/v4 (Concentrated liquidity, hook architecture)
-- ✅ GMX Perpetuals (Funding rates, liquidation mechanisms)
-- ✅ Curve v1 Stableswap & v2 Cryptoswap
-- ✅ Security Auditing & Vulnerability Analysis
+**Cyfrin Updraft** - DeFi Security & Protocol Engineering
+- Advanced Solidity Patterns & Smart Contract Security
+- Aave v3 (Flash loans, interest rate models, risk parameters)
+- Uniswap v3/v4 (Concentrated liquidity, hook architecture)
+- GMX Perpetuals (Funding rates, liquidation mechanisms)
+- Curve v1 Stableswap & v2 Cryptoswap
+- Security Auditing & Vulnerability Analysis
 
-**⚡ School of Solana** - Ackee Blockchain (Ongoing)
+**School of Solana** - Ackee Blockchain (Ongoing)
 - Rust-based smart contract development
 - Anchor framework and program-derived addresses
 - High-performance blockchain architecture
 - NFT & DeFi protocol development on Solana
 
-**🦄 Uniswap Hook Incubator (UHI7)** - Graduate
+**Uniswap Hook Incubator (UHI7)** - Graduate
 - Selective program (15% acceptance rate)
 - Developed production-ready Uniswap v4 hooks
 - Collaborated with Uniswap Labs engineers
 - Focus on MEV mitigation and liquidity optimization
 
-**🌐 Internet Computer Protocol (ICP)** - Motoko Development
+**Internet Computer Protocol (ICP)** - Motoko Development
 - Autonomous canister development
 - Inter-canister communication
 - Decentralized compute and cycles management
 
+---
 
+## Achievements & Recognition
+
+- **Developed two live production blockchain applications** serving real users
+- **Presenter at Hedera Web3 Africa Hackathon** - Presented to 200+ developers
+- **Graduated from Uniswap Hook Incubator (UHI7)** - 15% acceptance rate, built Sentiment dynamic fee hook
+- **Top 20 in Seedify Hackathon** - TruthBounty prediction market reputation protocol
+- **Integrated 5+ major DeFi protocols** in production environment
+- **Built cross-chain infrastructure** processing secure bridge transactions
+- **Mentored 15+ aspiring blockchain developers** through code reviews and workshops
 
 ---
 
-## 🏆 Achievements & Recognition
-
-✨ **Developed two live production blockchain applications** serving real users
-🎤 **Presenter at Hedera Web3 Africa Hackathon** - Presented to 200+ developers
-🎓 **Graduated from Uniswap Hook Incubator (UHI7)** - 15% acceptance rate, built Sentiment dynamic fee hook
-🏅 **Top 20 in Seedify Hackathon** - TruthBounty prediction market reputation protocol
-🛠️ **Integrated 5+ major DeFi protocols** in production environment
-🌉 **Built cross-chain infrastructure** processing secure bridge transactions
-👨‍🏫 **Mentored 15+ aspiring blockchain developers** through code reviews and workshops
-
----
-
-## 💼 Professional Experience
+## Professional Experience
 
 **Junior Blockchain Engineer** @ DeFiConnectCredit | Jan 2025 - Present
 - Integrating Aave v3, Uniswap v3/v4, Curve v1/v2, GMX Perpetuals in production
@@ -345,7 +343,7 @@ University of Ibadan, College of Medicine | Graduated 2024
 
 ---
 
-## 📝 Technical Writing & Research
+## Technical Writing & Research
 
 - **[The Atomic Schlep: The Architecture of the Unstoppable Swap](https://medium.com/@faruukku)** - Deep dive into atomic swap mechanics
 - **[Sub-100ms Event Detection: Real-Time Blockchain Monitoring](https://medium.com/@faruukku)** - Building high-performance event listeners
@@ -353,21 +351,21 @@ University of Ibadan, College of Medicine | Graduated 2024
 
 ---
 
-## 🎯 What I'm Building Toward
+## What I'm Building Toward
 
 I'm passionate about bridging traditional finance and decentralized systems through **secure, compliant, and user-friendly blockchain infrastructure**. My focus areas include:
 
-- 🏗️ **Stablecoin Protocols** - Building programmable money infrastructure
-- 🔗 **Protocol Integration** - Creating seamless DeFi composability
-- 🔒 **Security-First Development** - Auditing, testing, formal verification
-- 📊 **Prediction Markets** - Decentralized forecasting and oracle design
-- 🏢 **RWA Tokenization** - Bringing real-world assets on-chain compliantly
+- **Stablecoin Protocols** - Building programmable money infrastructure
+- **Protocol Integration** - Creating seamless DeFi composability
+- **Security-First Development** - Auditing, testing, formal verification
+- **Prediction Markets** - Decentralized forecasting and oracle design
+- **RWA Tokenization** - Bringing real-world assets on-chain compliantly
 
 **Strategic Vision:** Enable builders to create customized, interoperable financial applications while maintaining security and regulatory compliance - making blockchain technology accessible and useful for real-world problems.
 
 ---
 
-## 📫 Let's Connect
+## Let's Connect
 
 <div align="center">
 
@@ -378,7 +376,7 @@ I'm passionate about bridging traditional finance and decentralized systems thro
 
 </div>
 
-**💬 Open to:**
+**Open to:**
 - Protocol integration and smart contract engineering roles
 - DeFi security and auditing opportunities
 - Stablecoin infrastructure development
@@ -389,11 +387,11 @@ I'm passionate about bridging traditional finance and decentralized systems thro
 
 <div align="center">
 
-### 🌟 "Building decentralized futures, one smart contract at a time." 🌟
+### "Building decentralized futures, one smart contract at a time."
 
 ![Profile Views](https://komarev.com/ghpvc/?username=Leihyn&color=blueviolet&style=flat-square)
 
-⭐ **Star my repos if you find them interesting!** ⭐
+**Star my repos if you find them interesting!**
 
 </div>
 
@@ -401,7 +399,7 @@ I'm passionate about bridging traditional finance and decentralized systems thro
 
 <div align="center">
 
-**🔧 Tech Stack Summary**
+**Tech Stack Summary**
 
 ![Solidity](https://img.shields.io/badge/Solidity-%23363636.svg?style=for-the-badge&logo=solidity&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
@@ -412,7 +410,7 @@ I'm passionate about bridging traditional finance and decentralized systems thro
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 
-**🔗 Blockchain Ecosystems**
+**Blockchain Ecosystems**
 
 ![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=Ethereum&logoColor=white)
 ![Base](https://img.shields.io/badge/Base-0052FF?style=for-the-badge&logo=coinbase&logoColor=white)
