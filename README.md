@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**Protocol Integration Engineer | DeFi | Full-Stack Blockchain Developer**
+**Protocol Integration Engineer | Developer Advocate | Full-Stack Blockchain Developer**
 
 [![GitHub followers](https://img.shields.io/github/followers/Leihyn?style=social)](https://github.com/Leihyn)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/leihyn)
@@ -17,7 +17,7 @@
 
 ## About Me
 
-Protocol focused blockchain engineer specializing in **DeFi integrations**, **stablecoin infrastructure**, and **cross-chain applications**. I build production-grade decentralized systems from smart contracts to full-stack applications, with emphasis on security, scalability, and developer experience.
+Protocol focused blockchain engineer and developer advocate specializing in **DeFi integrations**, **technical education**, and **cross-chain applications**. I build production-grade decentralized systems from smart contracts to full-stack applications, and translate complex protocols into accessible content that developers actually use.
 
 **Currently:**
 - Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating Aave v3, Uniswap v3/v4, Curve, GMX
@@ -26,9 +26,10 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 
 **Core Interests:**
+- **Developer Education & Advocacy** - Technical storytelling, making protocols accessible, community building
+- **Privacy Infrastructure** - Zero-knowledge proofs, shielded transactions, Zcash ecosystem
 - **DeFi Protocol Engineering** - AMMs, lending protocols, yield optimization
 - **Blockchain Security** - Smart contract auditing, formal verification, attack analysis
-- **Prediction Markets** - Decentralized forecasting, oracle design, market mechanisms
 - **Stablecoin Infrastructure** - Algorithmic stability, collateralization, compliance
 - **Real-World Assets (RWA)** - Tokenization, securities compliance, TradFi integration
 
@@ -87,6 +88,48 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 ---
 
 ## Featured Projects
+
+### [Privacy Chronicles](https://github.com/Leihyn/cosmic-comics) - Developer Advocacy & Technical Education Platform
+**Content Creation Track Winner | [Zypherpunk Hackathon](https://zypherpunk.xyz/) | Zcash Foundation**
+
+<details>
+<summary><b>View Technical Details</b></summary>
+
+**The problem:** Privacy protocols have excellent documentation. Technical specs. Whitepapers. Almost nobody reads them. You can't document someone into caring.
+
+**The solution:** An immersive comic experience that makes abstract privacy concepts concrete and personal. "Stories are Trojan horses for ideas."
+
+**Technical Content Creation:**
+- 5-episode comic series (70+ illustrated pages) explaining zero-knowledge proofs, shielded transactions, and financial privacy
+- Each episode covers a different social class: daily wage worker, middle class family, tech founder, wealthy elite, activist
+- Demonstrates privacy violations through narrative before introducing solutions (Zcash, Aztec, Miden, Nillion)
+- Narrative architecture designed to make privacy personal, not political
+
+**Immersive 3D Experience (React Three Fiber):**
+- Solar system navigation where each planet represents a comic episode
+- Orbital mechanics, particle systems, and smooth camera animations
+- Custom Three.js integration with responsive design
+- "You're not being handed content. You're finding it."
+
+**Accessibility-First Voice Narration:**
+- Cinematic narration scripts for every page (100+ custom narrations)
+- Morgan Freeman-style audio storytelling layered on visual storytelling
+- Auto-play audio that follows page navigation
+- Designed for visually impaired users, commuters, and educators presenting to groups
+
+**Reader Experience:**
+- Page-flip physics with realistic shadows and sound effects
+- Progress tracking across episodes
+- Controls that get out of the way when not needed
+- "Polish isn't about impressing people. It's about removing friction."
+
+**DevRel Impact:** Translates complex cryptographic concepts into accessible narratives that drive ecosystem awareness without oversimplifying the technology.
+
+</details>
+
+**Tech:** Next.js 16 | React 19 | React Three Fiber | Three.js | TypeScript | Tailwind CSS 4 | Web Audio API
+
+---
 
 ### [Comic Pad](https://github.com/Leihyn/comicpad) - Production NFT Publishing Platform
 **Hedera Hashgraph | 50K+ Transactions Processed | Full-Stack Solo Build**
@@ -317,13 +360,14 @@ University of Ibadan, College of Medicine | Graduated 2024
 
 ## Achievements & Recognition
 
-- **Developed two live production blockchain applications** serving real users
-- **Presenter at Hedera Web3 Africa Hackathon** - Presented to 200+ developers
+- **Content Creation Track Winner** - [Zypherpunk Hackathon](https://zypherpunk.xyz/) for Privacy Chronicles, translating Zcash/privacy protocols into accessible narratives
+- **Technical Speaker** - Presented to 200+ developers at Hedera Web3 Africa Hackathon
+- **Developer Mentorship** - Mentored 15+ aspiring blockchain developers through code reviews and workshops
 - **Graduated from Uniswap Hook Incubator (UHI7)** - 15% acceptance rate, built Sentiment dynamic fee hook
+- **Developed two live production blockchain applications** serving real users
 - **Top 20 in Seedify Hackathon** - TruthBounty prediction market reputation protocol
 - **Integrated 5+ major DeFi protocols** in production environment
 - **Built cross-chain infrastructure** processing secure bridge transactions
-- **Mentored 15+ aspiring blockchain developers** through code reviews and workshops
 
 ---
 
@@ -355,10 +399,11 @@ University of Ibadan, College of Medicine | Graduated 2024
 
 I'm passionate about bridging traditional finance and decentralized systems through **secure, compliant, and user-friendly blockchain infrastructure**. My focus areas include:
 
-- **Stablecoin Protocols** - Building programmable money infrastructure
+- **Developer Education & Advocacy** - Making complex protocols accessible through storytelling, docs, and tooling
+- **Privacy Technology** - Zero-knowledge systems, shielded transactions, financial privacy
 - **Protocol Integration** - Creating seamless DeFi composability
 - **Security-First Development** - Auditing, testing, formal verification
-- **Prediction Markets** - Decentralized forecasting and oracle design
+- **Stablecoin Protocols** - Building programmable money infrastructure
 - **RWA Tokenization** - Bringing real-world assets on-chain compliantly
 
 **Strategic Vision:** Enable builders to create customized, interoperable financial applications while maintaining security and regulatory compliance - making blockchain technology accessible and useful for real-world problems.
@@ -377,11 +422,11 @@ I'm passionate about bridging traditional finance and decentralized systems thro
 </div>
 
 **Open to:**
-- Protocol integration and smart contract engineering roles
-- DeFi security and auditing opportunities
-- Stablecoin infrastructure development
+- Developer Relations / Developer Advocacy roles
+- Protocol integration and smart contract engineering
+- Technical content creation and developer education
 - Speaking engagements on blockchain development
-- Technical consulting for Web3 projects
+- DeFi security and auditing opportunities
 
 ---
 
@@ -417,9 +462,11 @@ I'm passionate about bridging traditional finance and decentralized systems thro
 ![Optimism](https://img.shields.io/badge/Optimism-FF0420?style=for-the-badge&logo=optimism&logoColor=white)
 ![Arbitrum](https://img.shields.io/badge/Arbitrum-28A0F0?style=for-the-badge&logo=arbitrum&logoColor=white)
 ![BNB Chain](https://img.shields.io/badge/BNB_Chain-F0B90B?style=for-the-badge&logo=binance&logoColor=black)
+![Zcash](https://img.shields.io/badge/Zcash-F4B728?style=for-the-badge&logo=zcash&logoColor=black)
+![Mina](https://img.shields.io/badge/Mina_Protocol-8247E5?style=for-the-badge)
 ![Hedera](https://img.shields.io/badge/Hedera-000000?style=for-the-badge)
 ![Solana](https://img.shields.io/badge/Solana-000?style=for-the-badge&logo=solana)
 
-*Last Updated: December 2025*
+*Last Updated: January 2026*
 
 </div>
