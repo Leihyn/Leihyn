@@ -1,0 +1,197 @@
+# Contest and Bug Bounty Report Formats
+# Templates for different platforms: Code4rena, Sherlock, Cantina, Immunefi
+
+platforms:
+  code4rena:
+    name: "Code4rena"
+    severity_levels:
+      - high: "Assets can be stolen/lost/compromised directly"
+      - medium: "Assets not at direct risk, but function/availability affected"
+      - low: "Best practices, minor issues"
+      - qa: "Quality assurance, code style"
+      - gas: "Gas optimizations"
+
+    finding_template: |
+      ## [H-01] Title describing the vulnerability
+
+      ### Summary
+      Brief 1-2 sentence summary of the issue.
+
+      ### Vulnerability Detail
+      Detailed explanation of the vulnerability including:
+      - Root cause
+      - Affected functions/contracts
+      - Attack vector
+
+      ### Impact
+      What can an attacker achieve? Quantify if possible.
+
+      ### Code Snippet
+      ```solidity
+      // Vulnerable code with line numbers
+      ```
+
+      ### Tool Used
+      Manual Review / Slither / Foundry Fuzzing
+
+      ### Recommendation
+      How to fix the vulnerability with code example.
+
+    report_structure:
+      - executive_summary
+      - scope
+      - findings_by_severity
+      - qa_report
+      - gas_optimizations
+
+  sherlock:
+    name: "Sherlock"
+    severity_levels:
+      - high: "Definite loss of funds or critical functionality broken"
+      - medium: "Conditional loss of funds or important functionality broken"
+      - low: "Minor issues"
+
+    finding_template: |
+      ## Title
+
+      **Severity:** High/Medium
+
+      **Summary:**
+      One paragraph explaining the issue clearly.
+
+      **Vulnerability Detail:**
+      Step by step explanation:
+      1. Attacker does X
+      2. This causes Y
+      3. Result is Z
+
+      **Impact:**
+      Specific impact with severity justification.
+
+      **Code Snippet:**
+      https://github.com/repo/blob/commit/file.sol#L100-L120
+
+      **Tool Used:**
+      Manual Review
+
+      **Recommendation:**
+      Specific fix with code.
+
+    judging_criteria:
+      high:
+        - "Direct theft of funds"
+        - "Permanent freezing of funds"
+        - "Protocol insolvency"
+      medium:
+        - "Theft of funds with conditions"
+        - "Temporary freezing of funds"
+        - "Griefing with material impact"
+
+  cantina:
+    name: "Cantina"
+    severity_levels:
+      - critical: "Immediate risk of significant fund loss"
+      - high: "Direct risk to funds or critical functionality"
+      - medium: "Conditional risk or significant functionality impact"
+      - low: "Minor issues, best practices"
+
+    finding_template: |
+      # [SEVERITY-ID] Title
+
+      ## Description
+      Clear explanation of the vulnerability.
+
+      ## Root Cause
+      The fundamental issue in the code.
+
+      ## Impact
+      What an attacker can achieve.
+
+      ## Proof of Concept
+      ```solidity
+      // Foundry test demonstrating the issue
+      function test_exploit() public {
+          // Setup
+          // Attack
+          // Assert impact
+      }
+      ```
+
+      ## Recommended Mitigation
+      Specific fix with implementation.
+
+  immunefi:
+    name: "Immunefi Bug Bounty"
+    severity_levels:
+      - critical: "Direct theft/loss/freeze of funds > $10M or > 10% of funds"
+      - high: "Direct theft/loss/freeze of funds > $1M or > 1% of funds"
+      - medium: "Theft with external conditions, governance attacks"
+      - low: "Minor issues, griefing"
+
+    finding_template: |
+      ## Bug Description
+      Clear, concise description of the vulnerability.
+
+      ## Impact
+      Specific impact including:
+      - What can be stolen/broken
+      - Estimated value at risk
+      - Likelihood of exploitation
+
+      ## Risk Breakdown
+      - **Difficulty:** Easy/Medium/Hard (to exploit)
+      - **Likelihood:** High/Medium/Low
+      - **Impact:** Critical/High/Medium/Low
+
+      ## Proof of Concept
+      Step-by-step reproduction:
+      1. Deploy contract X
+      2. Call function Y with parameters Z
+      3. Observe result
+
+      ```solidity
+      // Working PoC code
+      ```
+
+      ## Recommended Fix
+      Specific mitigation with code.
+
+      ## References
+      - Similar past vulnerabilities
+      - Relevant documentation
+
+    submission_tips:
+      - "Include working PoC - increases payout"
+      - "Quantify impact in dollar terms"
+      - "Reference similar past bugs if applicable"
+      - "Clearly state affected contracts/addresses"
+      - "Include mainnet fork PoC for deployed contracts"
+
+severity_guidelines:
+  critical_indicators:
+    - "Unconditional theft of funds"
+    - "Complete protocol DoS"
+    - "Privilege escalation to owner"
+    - "Drain of liquidity pools"
+    - "Manipulation causing > 10% loss"
+
+  high_indicators:
+    - "Theft with conditions (e.g., timing, specific state)"
+    - "Permanent freezing of funds"
+    - "Bypass of access control"
+    - "Oracle manipulation"
+    - "Flash loan attacks"
+
+  medium_indicators:
+    - "Temporary DoS"
+    - "Griefing attacks"
+    - "Incorrect accounting (no direct loss)"
+    - "Missing input validation"
+    - "Front-running with limited impact"
+
+  low_indicators:
+    - "Informational issues"
+    - "Best practice violations"
+    - "Code quality issues"
+    - "Missing events"
+    - "Inconsistent naming"

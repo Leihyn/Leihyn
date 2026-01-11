@@ -1,0 +1,357 @@
+# Solana/Anchor Deep Knowledge Base
+# Maximum depth vulnerability patterns for world-class auditing
+
+solana:
+  name: "Solana (Anchor)"
+  thinking_budget: 32000  # Maximum for complex Solana analysis
+
+  # ===========================================================================
+  # HISTORICAL EXPLOITS - Learn from the past
+  # ===========================================================================
+  historical_exploits:
+    - name: "Wormhole Bridge Hack"
+      date: "February 2022"
+      loss: "$320M"
+      root_cause: "Missing signer verification on guardian set"
+      vulnerability_type: "Missing Signer Check"
+      lesson: "ALWAYS verify signers for cross-chain messages"
+      code_pattern: |
+        // VULNERABLE: Accepted any account as guardian
+        pub fn verify_signatures(ctx: Context<VerifySigs>) -> Result<()> {
+            // No check that guardian_set was signed by valid guardians
+        }
+
+    - name: "Cashio Hack"
+      date: "March 2022"
+      loss: "$52M"
+      root_cause: "Missing validation on collateral account"
+      vulnerability_type: "Account Validation Bypass"
+      lesson: "Validate ALL account relationships, not just types"
+      code_pattern: |
+        // VULNERABLE: Didn't verify collateral belonged to the bank
+        #[account(constraint = collateral.mint == bank.collateral_mint)]
+        pub collateral: Account<'info, TokenAccount>,
+        // Missing: collateral.owner == bank.key()
+
+    - name: "Mango Markets Exploit"
+      date: "October 2022"
+      loss: "$114M"
+      root_cause: "Oracle price manipulation + leveraged positions"
+      vulnerability_type: "Economic/Oracle Attack"
+      lesson: "Consider manipulation cost vs profit in oracle design"
+
+    - name: "Solend Oracle Manipulation"
+      date: "November 2022"
+      loss: "$1.26M"
+      root_cause: "Pyth oracle price deviation exploit"
+      vulnerability_type: "Oracle Staleness"
+      lesson: "Implement confidence interval checks on oracle prices"
+
+    - name: "Crema Finance Hack"
+      date: "July 2022"
+      loss: "$8.8M"
+      root_cause: "Flash loan + tick manipulation"
+      vulnerability_type: "Flash Loan Attack"
+      lesson: "Consider flash loan scenarios in AMM design"
+
+  # ===========================================================================
+  # CRITICAL INVARIANTS
+  # ===========================================================================
+  invariants:
+    critical:
+      - id: "SOL-INV-001"
+        name: "Signer Authorization"
+        description: "Every privileged operation MUST have a verified Signer"
+        expression: "privileged_action => has_signer_check(authority)"
+        violation_severity: "Critical - Direct fund theft possible"
+
+      - id: "SOL-INV-002"
+        name: "Account Ownership"
+        description: "Account data can only be trusted if owner == expected_program"
+        expression: "account.owner == program_id || account.owner == system_program"
+        violation_severity: "Critical - Attacker can inject malicious data"
+
+      - id: "SOL-INV-003"
+        name: "PDA Derivation"
+        description: "PDAs must be derived with unique, non-controllable seeds"
+        expression: "pda_seeds.contains(unique_identifier) && !user_controlled(seeds)"
+        violation_severity: "Critical - Account hijacking possible"
+
+      - id: "SOL-INV-004"
+        name: "CPI Authority"
+        description: "Cross-program invocations must use proper signer seeds"
+        expression: "cpi_call => invoke_signed(seeds) || has_signer"
+        violation_severity: "Critical - Unauthorized CPI execution"
+
+    high:
+      - id: "SOL-INV-005"
+        name: "Account Initialization"
+        description: "Accounts can only be initialized once"
+        expression: "init_action => !account.is_initialized"
+        violation_severity: "High - State reset attacks"
+
+      - id: "SOL-INV-006"
+        name: "Account Closure"
+        description: "Closed accounts must have data zeroed"
+        expression: "close_action => zero_data && transfer_lamports"
+        violation_severity: "High - Account revival attacks"
+
+      - id: "SOL-INV-007"
+        name: "Arithmetic Safety"
+        description: "All arithmetic must be checked for overflow"
+        expression: "arithmetic_op => checked_math || overflow_impossible"
+        violation_severity: "High - Integer overflow exploits"
+
+    medium:
+      - id: "SOL-INV-008"
+        name: "Rent Exemption"
+        description: "Accounts must maintain rent-exempt balance"
+        expression: "account.lamports >= rent_exempt_minimum"
+        violation_severity: "Medium - Account garbage collection"
+
+      - id: "SOL-INV-009"
+        name: "Data Size Validation"
+        description: "Account data size must match expected structure"
+        expression: "account.data.len() == expected_size"
+        violation_severity: "Medium - Deserialization issues"
+
+  # ===========================================================================
+  # ATTACK PATTERNS (Deep)
+  # ===========================================================================
+  attack_patterns:
+    account_attacks:
+      - name: "Type Cosplay"
+        description: "Pass account of type A when type B expected"
+        severity: "critical"
+        preconditions:
+          - "Uses raw AccountInfo<'info>"
+          - "Manual deserialization without discriminator"
+        attack_flow:
+          - "Create malicious account with crafted data"
+          - "Pass to function expecting different type"
+          - "Malicious data interpreted as valid"
+        detection_pattern: "AccountInfo<'info> without Account<'info, T>"
+        mitigation: "Use Anchor's Account<T> with discriminator checks"
+
+      - name: "PDA Substitution"
+        description: "Use different PDA than intended"
+        severity: "critical"
+        preconditions:
+          - "PDA seeds partially user-controlled"
+          - "Missing has_one or seeds constraint"
+        attack_flow:
+          - "Derive PDA with attacker-controlled seeds"
+          - "Initialize attacker's PDA"
+          - "Pass attacker's PDA to victim's transaction"
+        detection_pattern: "seeds = [user_input] without unique anchor"
+        mitigation: "Include user pubkey or unique ID in seeds"
+
+      - name: "Account Confusion via Remaining Accounts"
+        description: "Exploit ctx.remaining_accounts without validation"
+        severity: "high"
+        preconditions:
+          - "Uses ctx.remaining_accounts"
+          - "No validation on remaining accounts"
+        attack_flow:
+          - "Pass malicious accounts in remaining_accounts"
+          - "Program trusts and uses them"
+        detection_pattern: "ctx.remaining_accounts without owner/type checks"
+        mitigation: "Validate every remaining account explicitly"
+
+    authorization_attacks:
+      - name: "Missing Signer Escalation"
+        description: "Call privileged function without signing"
+        severity: "critical"
+        preconditions:
+          - "Authority account not marked as Signer"
+          - "Or signer check missing in logic"
+        attack_flow:
+          - "Find privileged function"
+          - "Pass authority pubkey without signing"
+          - "Execute privileged operation"
+        detection_pattern: "authority: AccountInfo (not Signer)"
+        mitigation: "Use Signer<'info> for all authorization"
+
+      - name: "Arbitrary CPI"
+        description: "Execute CPI to unintended program"
+        severity: "critical"
+        preconditions:
+          - "Program ID passed as parameter"
+          - "No validation on program ID"
+        attack_flow:
+          - "Pass malicious program ID"
+          - "CPI executes on attacker's program"
+        detection_pattern: "invoke(instruction, accounts) with unchecked program"
+        mitigation: "Hardcode program IDs or use Program<'info, T>"
+
+    economic_attacks:
+      - name: "Flash Loan Price Manipulation"
+        description: "Use flash loan to manipulate on-chain prices"
+        severity: "high"
+        preconditions:
+          - "Protocol uses on-chain AMM for pricing"
+          - "No TWAP or oracle validation"
+        attack_flow:
+          - "Flash borrow large amount"
+          - "Swap to move price"
+          - "Execute at manipulated price"
+          - "Reverse swap and repay"
+        detection_pattern: "Price read from pool.sqrt_price_x64 or similar"
+        mitigation: "Use TWAP, Pyth/Switchboard with confidence checks"
+
+  # ===========================================================================
+  # AUDIT CHECKLIST (Maximum Depth)
+  # ===========================================================================
+  audit_checklist:
+    account_validation:
+      - id: "SOL-CHK-001"
+        check: "Every AccountInfo validated"
+        question: "Is every AccountInfo<'info> properly validated for owner and type?"
+        severity: "critical"
+
+      - id: "SOL-CHK-002"
+        check: "All PDAs verified"
+        question: "Are all PDAs derived with correct seeds and bump?"
+        severity: "critical"
+
+      - id: "SOL-CHK-003"
+        check: "has_one constraints complete"
+        question: "Do all related accounts have has_one constraints?"
+        severity: "high"
+
+      - id: "SOL-CHK-004"
+        check: "Remaining accounts validated"
+        question: "Are ctx.remaining_accounts properly checked?"
+        severity: "high"
+
+    authorization:
+      - id: "SOL-CHK-005"
+        check: "All signers verified"
+        question: "Is every privileged action gated by Signer?"
+        severity: "critical"
+
+      - id: "SOL-CHK-006"
+        check: "Multi-sig if applicable"
+        question: "Do high-value operations require multiple signatures?"
+        severity: "medium"
+
+      - id: "SOL-CHK-007"
+        check: "Timelock for admin actions"
+        question: "Are admin actions time-delayed for transparency?"
+        severity: "medium"
+
+    arithmetic:
+      - id: "SOL-CHK-008"
+        check: "Checked arithmetic everywhere"
+        question: "Is checked_add/checked_sub/checked_mul used for all math?"
+        severity: "high"
+
+      - id: "SOL-CHK-009"
+        check: "Decimal handling correct"
+        question: "Are token decimals handled correctly in calculations?"
+        severity: "high"
+
+    state_management:
+      - id: "SOL-CHK-010"
+        check: "No reinitialization"
+        question: "Can accounts be reinitialized after creation?"
+        severity: "high"
+
+      - id: "SOL-CHK-011"
+        check: "Proper account closure"
+        question: "Is data zeroed and lamports transferred on close?"
+        severity: "high"
+
+      - id: "SOL-CHK-012"
+        check: "State consistency in CPIs"
+        question: "Is state consistent before/after cross-program invocations?"
+        severity: "high"
+
+    oracle_integration:
+      - id: "SOL-CHK-013"
+        check: "Oracle staleness check"
+        question: "Is oracle price age validated?"
+        severity: "critical"
+
+      - id: "SOL-CHK-014"
+        check: "Confidence interval check"
+        question: "Is Pyth confidence interval checked against threshold?"
+        severity: "high"
+
+      - id: "SOL-CHK-015"
+        check: "Multiple oracle sources"
+        question: "Is there fallback if primary oracle fails?"
+        severity: "medium"
+
+  # ===========================================================================
+  # ULTRATHINK PROMPTS
+  # ===========================================================================
+  ultrathink_sections:
+    account_analysis: |
+      ## Deep Account Analysis
+
+      For EVERY account in every instruction:
+
+      1. **Ownership Analysis**
+         - Who should own this account?
+         - Is owner check enforced?
+         - Can attacker pass account owned by different program?
+
+      2. **Type Safety**
+         - Is discriminator validated?
+         - Can type cosplay attack succeed?
+         - Are all fields properly deserialized?
+
+      3. **PDA Security**
+         - What are the seeds?
+         - Are seeds unique per user/context?
+         - Can attacker derive colliding PDA?
+         - Is bump validated?
+
+      4. **Relationship Validation**
+         - Are has_one constraints complete?
+         - Can accounts from different contexts be mixed?
+         - Is constraint = checks sufficient?
+
+    cpi_analysis: |
+      ## Cross-Program Invocation Analysis
+
+      For EVERY CPI:
+
+      1. **Program Validation**
+         - Is target program ID hardcoded?
+         - Can attacker substitute malicious program?
+
+      2. **Signer Seeds**
+         - Are PDA signer seeds correct?
+         - Can seeds be manipulated?
+
+      3. **Account Forwarding**
+         - Which accounts are forwarded?
+         - Can forwarded accounts be manipulated?
+
+      4. **Return Value Handling**
+         - Are CPI results properly handled?
+         - Can CPI failure be exploited?
+
+    economic_analysis: |
+      ## Economic Security Analysis
+
+      1. **Value Flows**
+         - Where do tokens/SOL enter?
+         - Where do they exit?
+         - Can value be redirected?
+
+      2. **Price Dependencies**
+         - What prices are used?
+         - How are prices obtained?
+         - Manipulation cost vs profit?
+
+      3. **Flash Loan Scenarios**
+         - Can flash loans amplify attack?
+         - Is protocol resistant to single-block manipulation?
+
+      4. **MEV Considerations**
+         - Can transactions be front-run?
+         - Is there sandwich attack risk?
+         - Are there profitable reordering opportunities?

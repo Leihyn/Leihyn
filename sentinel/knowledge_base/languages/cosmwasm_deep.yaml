@@ -1,0 +1,384 @@
+# CosmWasm Deep Knowledge Base
+# Maximum depth vulnerability patterns for Cosmos ecosystem
+
+cosmwasm:
+  name: "CosmWasm (Cosmos)"
+  thinking_budget: 32000
+
+  # ===========================================================================
+  # COSMWASM ARCHITECTURE
+  # ===========================================================================
+  architecture:
+    execution_model:
+      - "WebAssembly-based smart contracts on Cosmos SDK chains"
+      - "Message-based execution (Execute, Query, Migrate, Sudo)"
+      - "Submessages enable contract-to-contract calls"
+      - "Reply handlers for async callback patterns"
+
+    unique_features:
+      - name: "Submessages"
+        description: "Async contract calls with reply handling"
+        security_notes:
+          - "State changes before SubMsg can create inconsistencies"
+          - "Reply handlers can have reentrancy-like issues"
+          - "ReplyOn::Always vs ReplyOn::Success vs ReplyOn::Error"
+
+      - name: "Storage Model"
+        description: "Key-value storage with typed wrappers"
+        security_notes:
+          - "Item, Map, SnapshotMap, IndexedMap patterns"
+          - "Iteration can be unbounded and costly"
+          - "Storage key collisions possible"
+
+      - name: "IBC Integration"
+        description: "Inter-Blockchain Communication"
+        security_notes:
+          - "Packet ordering and timeout handling"
+          - "Acknowledgement validation"
+          - "Cross-chain attack surfaces"
+
+  # ===========================================================================
+  # HISTORICAL EXPLOITS
+  # ===========================================================================
+  historical_exploits:
+    - name: "Terra/Luna Collapse"
+      date: "May 2022"
+      loss: "$40B+"
+      type: "Economic/Algorithmic"
+      root_cause: "Algorithmic stablecoin death spiral"
+      lesson: "Economic attacks can exceed technical vulnerabilities"
+
+    - name: "Early CosmWasm Integer Issues"
+      date: "2021-2022"
+      type: "Arithmetic"
+      root_cause: "Uint128/Uint256 overflow handling"
+      lesson: "Use checked_* methods for all arithmetic"
+
+    - name: "Osmosis Rebalancing Bug"
+      date: "2022"
+      loss: "$5M"
+      type: "Logic Error"
+      root_cause: "Incorrect rebalancing calculation"
+      lesson: "Validate economic invariants mathematically"
+
+  # ===========================================================================
+  # INVARIANTS
+  # ===========================================================================
+  invariants:
+    critical:
+      - id: "CW-INV-001"
+        name: "Sender Authorization"
+        expression: "privileged_action => info.sender == authorized"
+        violation: "Unauthorized access to admin functions"
+
+      - id: "CW-INV-002"
+        name: "Fund Conservation"
+        expression: "funds_in == funds_out + fees"
+        violation: "Token creation or destruction"
+
+      - id: "CW-INV-003"
+        name: "Submessage Atomicity"
+        expression: "failed SubMsg => state rollback"
+        violation: "Inconsistent state after partial execution"
+
+    high:
+      - id: "CW-INV-004"
+        name: "Iteration Bounds"
+        expression: "all iterations have explicit limits"
+        violation: "Gas exhaustion, DoS"
+
+      - id: "CW-INV-005"
+        name: "Reply Handler Consistency"
+        expression: "reply handler maintains invariants"
+        violation: "State corruption via reply manipulation"
+
+      - id: "CW-INV-006"
+        name: "Migration Security"
+        expression: "migrate only callable by admin with validation"
+        violation: "Contract takeover via malicious migration"
+
+    medium:
+      - id: "CW-INV-007"
+        name: "Query Safety"
+        expression: "queries are pure, no state modification"
+        violation: "DoS or state leakage"
+
+      - id: "CW-INV-008"
+        name: "Error Handling Completeness"
+        expression: "all error paths handled explicitly"
+        violation: "Silent failures, unexpected behavior"
+
+  # ===========================================================================
+  # ATTACK PATTERNS
+  # ===========================================================================
+  attack_patterns:
+    authorization_attacks:
+      - name: "Missing Sender Check"
+        description: "Execute handler without info.sender validation"
+        severity: "critical"
+        code_pattern: |
+          // VULNERABLE
+          pub fn execute_admin_action(
+              deps: DepsMut,
+              _env: Env,
+              _info: MessageInfo,  // Not checked!
+              action: AdminAction,
+          ) -> Result<Response, ContractError> {
+              // Anyone can call admin actions
+          }
+
+          // SAFE
+          pub fn execute_admin_action(
+              deps: DepsMut,
+              _env: Env,
+              info: MessageInfo,
+              action: AdminAction,
+          ) -> Result<Response, ContractError> {
+              let config = CONFIG.load(deps.storage)?;
+              if info.sender != config.admin {
+                  return Err(ContractError::Unauthorized {});
+              }
+              // Process admin action
+          }
+
+      - name: "Sudo Bypass"
+        description: "Exposing sudo functionality through execute"
+        severity: "critical"
+        mitigation: "Keep sudo handlers separate, validate governance source"
+
+    submessage_attacks:
+      - name: "Submessage Reentrancy"
+        description: "State inconsistency via SubMsg reply"
+        severity: "high"
+        code_pattern: |
+          // VULNERABLE
+          pub fn execute_swap(
+              deps: DepsMut,
+              env: Env,
+              info: MessageInfo,
+          ) -> Result<Response, ContractError> {
+              // Read balance
+              let balance = BALANCES.load(deps.storage, &info.sender)?;
+
+              // Create SubMsg for external call
+              let msg = SubMsg::reply_on_success(
+                  WasmMsg::Execute { ... },
+                  SWAP_REPLY_ID,
+              );
+
+              // State might be read in reply before update!
+              Ok(Response::new().add_submessage(msg))
+          }
+
+          // SAFE - Update state before SubMsg
+          pub fn execute_swap(
+              deps: DepsMut,
+              env: Env,
+              info: MessageInfo,
+          ) -> Result<Response, ContractError> {
+              let balance = BALANCES.load(deps.storage, &info.sender)?;
+
+              // Update state BEFORE SubMsg
+              BALANCES.save(deps.storage, &info.sender, &new_balance)?;
+              PENDING_SWAPS.save(deps.storage, &info.sender, &swap_data)?;
+
+              let msg = SubMsg::reply_on_success(...);
+              Ok(Response::new().add_submessage(msg))
+          }
+
+      - name: "Reply Handler Manipulation"
+        description: "Exploiting reply handler logic"
+        severity: "high"
+        code_pattern: |
+          // VULNERABLE - trusts reply data
+          pub fn reply(
+              deps: DepsMut,
+              _env: Env,
+              msg: Reply,
+          ) -> Result<Response, ContractError> {
+              match msg.id {
+                  TRANSFER_REPLY_ID => {
+                      // Trusting that transfer succeeded based on reply alone
+                      // But reply data can be manipulated in some contexts
+                  }
+              }
+          }
+
+    iteration_attacks:
+      - name: "Unbounded Iteration DoS"
+        description: "Iterate over unbounded storage"
+        severity: "high"
+        code_pattern: |
+          // VULNERABLE
+          pub fn query_all_users(deps: Deps) -> StdResult<Vec<User>> {
+              let users: Vec<User> = USERS
+                  .range(deps.storage, None, None, Order::Ascending)
+                  .collect::<StdResult<Vec<_>>>()?  // Can OOM!
+                  .into_iter()
+                  .map(|(_, user)| user)
+                  .collect();
+              Ok(users)
+          }
+
+          // SAFE - Paginated
+          pub fn query_users(
+              deps: Deps,
+              start_after: Option<String>,
+              limit: Option<u32>,
+          ) -> StdResult<Vec<User>> {
+              let limit = limit.unwrap_or(30).min(100);
+              let start = start_after.map(Bound::exclusive);
+
+              USERS
+                  .range(deps.storage, start, None, Order::Ascending)
+                  .take(limit as usize)
+                  .map(|item| item.map(|(_, user)| user))
+                  .collect()
+          }
+
+    arithmetic_attacks:
+      - name: "Uint Overflow"
+        description: "Arithmetic overflow in Uint128/Uint256"
+        severity: "high"
+        code_pattern: |
+          // VULNERABLE
+          let result = amount_a + amount_b;  // Can panic on overflow!
+
+          // SAFE
+          let result = amount_a.checked_add(amount_b)?;
+
+      - name: "Division Precision"
+        description: "Precision loss in division"
+        severity: "medium"
+        code_pattern: |
+          // VULNERABLE - precision loss
+          let fee = amount / Uint128::from(100u128) * fee_rate;
+
+          // BETTER - multiply first
+          let fee = amount * fee_rate / Uint128::from(100u128);
+
+  # ===========================================================================
+  # AUDIT CHECKLIST
+  # ===========================================================================
+  audit_checklist:
+    authorization:
+      - id: "CW-CHK-001"
+        check: "All execute handlers validate info.sender"
+        severity: "critical"
+
+      - id: "CW-CHK-002"
+        check: "Admin actions require admin sender"
+        severity: "critical"
+
+      - id: "CW-CHK-003"
+        check: "Migrate validates caller and new code"
+        severity: "critical"
+
+    submessages:
+      - id: "CW-CHK-004"
+        check: "State updated before SubMsg dispatch"
+        severity: "high"
+
+      - id: "CW-CHK-005"
+        check: "Reply handlers validate expected state"
+        severity: "high"
+
+      - id: "CW-CHK-006"
+        check: "Failed SubMsg handling is complete"
+        severity: "high"
+
+    storage:
+      - id: "CW-CHK-007"
+        check: "All iterations are bounded"
+        severity: "high"
+
+      - id: "CW-CHK-008"
+        check: "Pagination implemented for queries"
+        severity: "medium"
+
+      - id: "CW-CHK-009"
+        check: "Storage keys are unique and collision-free"
+        severity: "medium"
+
+    arithmetic:
+      - id: "CW-CHK-010"
+        check: "checked_* used for all arithmetic"
+        severity: "high"
+
+      - id: "CW-CHK-011"
+        check: "Decimal precision handled correctly"
+        severity: "medium"
+
+    ibc:
+      - id: "CW-CHK-012"
+        check: "IBC packet validation complete"
+        severity: "high"
+
+      - id: "CW-CHK-013"
+        check: "Timeout handling is secure"
+        severity: "medium"
+
+  # ===========================================================================
+  # ULTRATHINK PROMPTS
+  # ===========================================================================
+  ultrathink_sections:
+    message_flow_analysis: |
+      ## Message Flow Analysis
+
+      For EVERY ExecuteMsg variant:
+
+      1. **Authorization**
+         - Who can send this message?
+         - Is info.sender validated?
+         - Are funds requirements checked?
+
+      2. **State Changes**
+         - What storage is modified?
+         - Order of modifications?
+         - Invariants maintained?
+
+      3. **Submessages**
+         - What SubMsgs are created?
+         - Reply handling complete?
+         - State consistent across async boundary?
+
+      4. **Responses**
+         - What events are emitted?
+         - What data is returned?
+         - What messages are dispatched?
+
+    ibc_analysis: |
+      ## IBC Security Analysis
+
+      For IBC-enabled contracts:
+
+      1. **Packet Handling**
+         - Packet data validated?
+         - Source/destination verified?
+         - Sequence numbers checked?
+
+      2. **Acknowledgements**
+         - Success acks handled?
+         - Error acks handled?
+         - Timeout acks handled?
+
+      3. **Cross-Chain Attacks**
+         - Can malicious chain send bad packets?
+         - Replay protection?
+         - Ordering dependencies?
+
+    migration_analysis: |
+      ## Migration Security
+
+      1. **Authorization**
+         - Who can trigger migration?
+         - Is current admin preserved or changed?
+
+      2. **Data Migration**
+         - Is storage format compatible?
+         - Are all fields migrated?
+         - Backward compatibility?
+
+      3. **State Validation**
+         - Invariants verified post-migration?
+         - Rollback possible if failed?

@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:docs.yearn.fi)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nUpdate profile: add Privacy Chronicles, DevRel focus\n\n- Add Developer Advocate to title\n- Feature Privacy Chronicles \\(Zypherpunk Hackathon winner\\)\n- Add Developer Education & Privacy Infrastructure interests\n- Add Zcash and Mina Protocol badges\n- Update open to roles for DevRel positions\n- Clean formatting \\(remove emojis per style guide\\)\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git push:*)",
+      "WebFetch(domain:jup.ag)",
+      "WebSearch",
+      "WebFetch(domain:www.coingecko.com)",
+      "WebFetch(domain:docs.kalshi.com)",
+      "WebFetch(domain:myriadprotocol.com)",
+      "Bash([ -d \"node_modules\" ])",
+      "Bash(npm install:*)",
+      "Bash(cat:*)",
+      "Bash(npm test)",
+      "Bash(npm test:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm create:*)",
+      "Bash(node dist/api/server.js:*)",
+      "Bash(npm run dev:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill //F //PID 8448)",
+      "Bash(taskkill //F //PID 23032)",
+      "Bash(curl:*)",
+      "Bash(git checkout:*)",
+      "Bash(taskkill //F //PID 29148)",
+      "Bash(taskkill:*)",
+      "Bash(tasklist:*)"
+    ]
+  }
+}

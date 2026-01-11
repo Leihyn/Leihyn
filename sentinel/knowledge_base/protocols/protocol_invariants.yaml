@@ -1,0 +1,390 @@
+# Protocol Invariants Knowledge Base
+# Deep protocol-specific invariants for world-class auditing
+# Use with ultrathink for maximum effectiveness
+
+protocols:
+
+  # ===========================================================================
+  # AAVE V3
+  # ===========================================================================
+  aave_v3:
+    name: "Aave V3"
+    type: "lending"
+    contracts:
+      - Pool
+      - PoolAddressesProvider
+      - AToken
+      - VariableDebtToken
+      - StableDebtToken
+      - DefaultReserveInterestRateStrategy
+
+    invariants:
+      critical:
+        - id: "AAVE-INV-001"
+          description: "Health factor >= 1e18 for non-liquidatable positions"
+          expression: "healthFactor >= 1e18 || isLiquidatable"
+          category: "solvency"
+
+        - id: "AAVE-INV-002"
+          description: "Total debt cannot exceed total supply"
+          expression: "reserve.totalVariableDebt + reserve.totalStableDebt <= reserve.totalLiquidity"
+          category: "solvency"
+
+        - id: "AAVE-INV-003"
+          description: "User cannot borrow if would become liquidatable"
+          expression: "postBorrowHealthFactor >= 1e18"
+          category: "safety"
+
+      high:
+        - id: "AAVE-INV-004"
+          description: "Interest rates increase with utilization"
+          expression: "utilizationA < utilizationB => rateA <= rateB"
+          category: "economics"
+
+        - id: "AAVE-INV-005"
+          description: "eMode LTV <= eMode LT"
+          expression: "eMode.ltv <= eMode.liquidationThreshold"
+          category: "configuration"
+
+        - id: "AAVE-INV-006"
+          description: "Supply cap enforced"
+          expression: "reserve.totalSupply <= reserve.supplyCap || supplyCap == 0"
+          category: "limits"
+
+      medium:
+        - id: "AAVE-INV-007"
+          description: "Isolation mode debt ceiling"
+          expression: "isolationModeDebt <= debtCeiling"
+          category: "limits"
+
+    attack_patterns:
+      - name: "Flash loan + self-liquidation"
+        description: "Flash loan to manipulate health factor, then self-liquidate at profit"
+        severity: "high"
+        mitigation: "Check health factor after all operations"
+
+      - name: "eMode switch attack"
+        description: "Switch eMode to bypass collateral requirements temporarily"
+        severity: "medium"
+        mitigation: "Verify position health across eMode changes"
+
+  # ===========================================================================
+  # UNISWAP V3
+  # ===========================================================================
+  uniswap_v3:
+    name: "Uniswap V3"
+    type: "amm"
+    contracts:
+      - UniswapV3Pool
+      - UniswapV3Factory
+      - NonfungiblePositionManager
+      - SwapRouter
+
+    invariants:
+      critical:
+        - id: "UNI-INV-001"
+          description: "Tick within valid range"
+          expression: "tick >= TickMath.MIN_TICK && tick <= TickMath.MAX_TICK"
+          category: "bounds"
+
+        - id: "UNI-INV-002"
+          description: "sqrtPrice within valid range"
+          expression: "sqrtPriceX96 >= MIN_SQRT_RATIO && sqrtPriceX96 <= MAX_SQRT_RATIO"
+          category: "bounds"
+
+        - id: "UNI-INV-003"
+          description: "Position liquidity non-negative"
+          expression: "position.liquidity >= 0"
+          category: "accounting"
+
+      high:
+        - id: "UNI-INV-004"
+          description: "TWAP harder to manipulate over longer periods"
+          expression: "manipulationCost(window) increases with window"
+          category: "oracle"
+
+        - id: "UNI-INV-005"
+          description: "Flash loan repaid with fee"
+          expression: "balanceAfter >= balanceBefore + fee"
+          category: "flash_loan"
+
+      medium:
+        - id: "UNI-INV-006"
+          description: "Fee growth monotonically increases"
+          expression: "feeGrowthGlobal_new >= feeGrowthGlobal_old"
+          category: "fees"
+
+    attack_patterns:
+      - name: "slot0 manipulation"
+        description: "Use slot0 for pricing (manipulable in single block)"
+        severity: "critical"
+        mitigation: "Use TWAP via observe() with 30+ minute window"
+
+      - name: "Callback reentrancy"
+        description: "Reenter during swap/mint callback"
+        severity: "high"
+        mitigation: "Use reentrancy guard, verify callback caller"
+
+  # ===========================================================================
+  # CURVE
+  # ===========================================================================
+  curve:
+    name: "Curve Finance"
+    type: "amm"
+    contracts:
+      - StableSwap
+      - CryptoSwap
+      - CurvePool
+      - CRV
+      - veCRV
+      - Gauge
+
+    invariants:
+      critical:
+        - id: "CURVE-INV-001"
+          description: "Virtual price only increases (except exploit)"
+          expression: "virtualPrice_new >= virtualPrice_old"
+          category: "economics"
+
+        - id: "CURVE-INV-002"
+          description: "D invariant conserved"
+          expression: "D_before == D_after (within precision)"
+          category: "math"
+
+        - id: "CURVE-INV-003"
+          description: "LP supply matches pool state"
+          expression: "totalSupply reflects underlying values"
+          category: "accounting"
+
+      high:
+        - id: "CURVE-INV-004"
+          description: "Amplification changes gradually"
+          expression: "A changes over ramp_duration"
+          category: "configuration"
+
+        - id: "CURVE-INV-005"
+          description: "Vyper version >= 0.3.1 for reentrancy safety"
+          expression: "vyperVersion >= '0.3.1'"
+          category: "compiler"
+
+    attack_patterns:
+      - name: "Read-only reentrancy via virtual price"
+        description: "Call get_virtual_price during callback, get stale value"
+        severity: "critical"
+        mitigation: "Never read virtual_price during callbacks"
+
+      - name: "Vyper reentrancy lock bug"
+        description: "Vyper 0.2.15-0.3.0 have broken @nonreentrant"
+        severity: "critical"
+        mitigation: "Use Vyper >= 0.3.1"
+
+  # ===========================================================================
+  # GMX
+  # ===========================================================================
+  gmx:
+    name: "GMX"
+    type: "perpetuals"
+    contracts:
+      - ExchangeRouter
+      - OrderHandler
+      - PositionHandler
+      - MarketFactory
+      - Oracle
+
+    invariants:
+      critical:
+        - id: "GMX-INV-001"
+          description: "Open interest within limits"
+          expression: "longOI + shortOI <= maxOpenInterest"
+          category: "limits"
+
+        - id: "GMX-INV-002"
+          description: "Position collateral above minimum"
+          expression: "collateralUsd >= sizeUsd * minCollateralFactor"
+          category: "solvency"
+
+        - id: "GMX-INV-003"
+          description: "Funding payments are zero-sum"
+          expression: "sum(longFunding) + sum(shortFunding) == 0"
+          category: "economics"
+
+      high:
+        - id: "GMX-INV-004"
+          description: "Liquidation only when position unhealthy"
+          expression: "isLiquidatable => healthFactor < threshold"
+          category: "safety"
+
+        - id: "GMX-INV-005"
+          description: "Price impact bounded and predictable"
+          expression: "priceImpact <= maxPriceImpact"
+          category: "economics"
+
+    attack_patterns:
+      - name: "Oracle front-running"
+        description: "Execute order with knowledge of pending price update"
+        severity: "high"
+        mitigation: "Use execution price bounds, keeper selection"
+
+      - name: "Funding rate manipulation"
+        description: "Create OI imbalance to profit from funding"
+        severity: "medium"
+        mitigation: "Rate limits, time-weighted calculations"
+
+  # ===========================================================================
+  # COMPOUND V3
+  # ===========================================================================
+  compound_v3:
+    name: "Compound V3 (Comet)"
+    type: "lending"
+    contracts:
+      - Comet
+      - CometExt
+      - CometFactory
+      - Configurator
+
+    invariants:
+      critical:
+        - id: "COMP-INV-001"
+          description: "Absorption only when liquidatable"
+          expression: "isLiquidatable(account) for absorb to succeed"
+          category: "safety"
+
+        - id: "COMP-INV-002"
+          description: "Base token balance covers borrows"
+          expression: "baseToken.balanceOf(comet) >= totalBorrow"
+          category: "solvency"
+
+      high:
+        - id: "COMP-INV-003"
+          description: "Supply cap enforced per asset"
+          expression: "totalSupply[asset] <= supplyCap[asset]"
+          category: "limits"
+
+        - id: "COMP-INV-004"
+          description: "Utilization <= 100%"
+          expression: "totalBorrow <= totalSupply"
+          category: "solvency"
+
+    attack_patterns:
+      - name: "Interest rate manipulation"
+        description: "Large supply/borrow to manipulate rates"
+        severity: "medium"
+        mitigation: "Rate smoothing, caps"
+
+  # ===========================================================================
+  # BALANCER
+  # ===========================================================================
+  balancer:
+    name: "Balancer V2"
+    type: "amm"
+    contracts:
+      - Vault
+      - WeightedPool
+      - StablePool
+      - LinearPool
+      - RateProvider
+
+    invariants:
+      critical:
+        - id: "BAL-INV-001"
+          description: "Rate providers return consistent values"
+          expression: "getRate() is not manipulable during callbacks"
+          category: "oracle"
+
+        - id: "BAL-INV-002"
+          description: "Flash loans repaid in same tx"
+          expression: "balanceAfter >= balanceBefore (no fee)"
+          category: "flash_loan"
+
+      high:
+        - id: "BAL-INV-003"
+          description: "Pool invariant maintained"
+          expression: "invariant_after == invariant_before (within precision)"
+          category: "math"
+
+        - id: "BAL-INV-004"
+          description: "BPT price reflects underlying"
+          expression: "BPT.price ~= sum(underlying_values) / totalSupply"
+          category: "pricing"
+
+    attack_patterns:
+      - name: "Rate provider read-only reentrancy"
+        description: "getRate() returns stale value during join/exit callback"
+        severity: "critical"
+        mitigation: "Use VaultReentrancyLib, never read rate during callbacks"
+
+      - name: "Zero-fee flash loan amplification"
+        description: "Balancer flash loans are FREE - massive attack amplification"
+        severity: "high"
+        mitigation: "Account for zero-fee flash in threat model"
+
+  # ===========================================================================
+  # LIDO
+  # ===========================================================================
+  lido:
+    name: "Lido"
+    type: "liquid_staking"
+    contracts:
+      - stETH
+      - wstETH
+      - WithdrawalQueue
+      - LidoOracle
+
+    invariants:
+      critical:
+        - id: "LIDO-INV-001"
+          description: "Total shares * rate = total pooled ether"
+          expression: "totalShares * rate == totalPooledEther"
+          category: "accounting"
+
+        - id: "LIDO-INV-002"
+          description: "wstETH balance constant (non-rebasing)"
+          expression: "wstETH.balanceOf(user) constant between transactions"
+          category: "token"
+
+      high:
+        - id: "LIDO-INV-003"
+          description: "stETH can rebase positive or negative"
+          expression: "balanceOf can increase (rewards) or decrease (slashing)"
+          category: "rebasing"
+
+        - id: "LIDO-INV-004"
+          description: "Rate only changes on oracle report"
+          expression: "rate constant between oracle updates"
+          category: "oracle"
+
+    attack_patterns:
+      - name: "Rebasing balance caching"
+        description: "Cache stETH balance, use later (balance changed)"
+        severity: "high"
+        mitigation: "Use shares-based accounting"
+
+      - name: "Transfer amount mismatch"
+        description: "stETH.transfer(amount) may not transfer exact amount"
+        severity: "medium"
+        mitigation: "Use transferShares for precision"
+
+# ===========================================================================
+# CROSS-PROTOCOL INTERACTIONS
+# ===========================================================================
+cross_protocol:
+  dangerous_combinations:
+    - name: "Balancer + Any Protocol Reading Rates"
+      risk: "critical"
+      description: "Any protocol reading Balancer rate providers during callbacks"
+      mitigation: "Use VaultReentrancyLib"
+
+    - name: "Curve + Lending Protocol"
+      risk: "critical"
+      description: "Lending using Curve virtual price as collateral value"
+      mitigation: "Never read virtual_price during callbacks"
+
+    - name: "Lido + Balance-Based Accounting"
+      risk: "high"
+      description: "Protocol tracking stETH by balance instead of shares"
+      mitigation: "Use sharesOf(), not balanceOf()"
+
+    - name: "Uniswap slot0 + Any Pricing"
+      risk: "critical"
+      description: "Using slot0 for any price-sensitive operation"
+      mitigation: "Use TWAP with 30+ minute window"

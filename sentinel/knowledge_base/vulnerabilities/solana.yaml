@@ -1,0 +1,166 @@
+name: Solana/Anchor Vulnerabilities
+language: rust
+blockchain: solana
+
+vulnerabilities:
+  - name: Missing Signer Check
+    id: solana-001
+    severity: Critical
+    description: |
+      Instruction does not verify that a required account is a signer.
+      Allows unauthorized users to perform privileged operations.
+    patterns:
+      - "AccountInfo without is_signer check"
+      - "Signer<'info> not used for privileged accounts"
+    example:
+      vulnerable: |
+        pub fn transfer(ctx: Context<Transfer>, amount: u64) -> Result<()> {
+            // Missing: require!(ctx.accounts.authority.is_signer)
+            let from = &ctx.accounts.from;
+            **from.try_borrow_mut_lamports()? -= amount;
+            Ok(())
+        }
+      fixed: |
+        pub fn transfer(ctx: Context<Transfer>, amount: u64) -> Result<()> {
+            require!(ctx.accounts.authority.is_signer, CustomError::Unauthorized);
+            // ... rest of logic
+        }
+    references:
+      - https://github.com/coral-xyz/sealevel-attacks/blob/master/programs/0-signer-authorization
+
+  - name: Missing Owner Check
+    id: solana-002
+    severity: Critical
+    description: |
+      Program does not verify account ownership. Attacker can pass
+      accounts owned by malicious programs with crafted data.
+    patterns:
+      - "Account deserialization without owner check"
+      - "AccountInfo without owner verification"
+    example:
+      vulnerable: |
+        let account_data = Account::try_from_slice(&account.data.borrow())?;
+        // Never checked: account.owner == program_id
+      fixed: |
+        require!(account.owner == program_id, CustomError::InvalidOwner);
+        let account_data = Account::try_from_slice(&account.data.borrow())?;
+    references:
+      - https://github.com/coral-xyz/sealevel-attacks/blob/master/programs/2-owner-checks
+
+  - name: Account Data Matching
+    id: solana-003
+    severity: High
+    description: |
+      Program doesn't verify that account data matches expected state.
+      Type confusion or stale data attacks possible.
+    detection:
+      - "Discriminator not checked"
+      - "Account type confusion"
+
+  - name: Arithmetic Overflow
+    id: solana-004
+    severity: High
+    description: |
+      Rust's default arithmetic panics on overflow in debug, wraps in release.
+      Use checked_* methods for safety.
+    patterns:
+      - "amount + fee without checked_add"
+      - "balance - amount without checked_sub"
+    example:
+      vulnerable: |
+        let new_balance = user.balance + deposit_amount; // Can overflow
+      fixed: |
+        let new_balance = user.balance.checked_add(deposit_amount)
+            .ok_or(ErrorCode::Overflow)?;
+
+  - name: PDA Bump Seed Canonicalization
+    id: solana-005
+    severity: High
+    description: |
+      Program accepts user-provided bump seed instead of deriving canonical bump.
+      Allows multiple valid PDAs for same seeds.
+    patterns:
+      - "find_program_address"
+      - "create_program_address with user bump"
+    example:
+      vulnerable: |
+        // User provides bump - could use non-canonical bump
+        let pda = Pubkey::create_program_address(&[seed, &[bump]], program_id)?;
+      fixed: |
+        // Always derive canonical bump
+        let (pda, bump) = Pubkey::find_program_address(&[seed], program_id);
+
+  - name: Closing Accounts
+    id: solana-006
+    severity: Medium
+    description: |
+      When closing accounts, data must be zeroed and reinitialization prevented.
+      Otherwise, closed accounts can be "revived" with stale data.
+    patterns:
+      - "close = "
+      - "lamports = 0"
+    example:
+      vulnerable: |
+        **ctx.accounts.account.to_account_info().try_borrow_mut_lamports()? = 0;
+        // Data not zeroed - can be reinitialized
+      fixed: |
+        // Anchor's close constraint handles this properly
+        #[account(mut, close = receiver)]
+        pub account: Account<'info, MyAccount>,
+
+  - name: Type Cosplay
+    id: solana-007
+    severity: High
+    description: |
+      Different account types with same structure can be substituted.
+      Use discriminators to prevent type confusion.
+    detection:
+      - "Account structs without discriminator"
+      - "Manual deserialization"
+
+  - name: CPI Privilege Escalation
+    id: solana-008
+    severity: Critical
+    description: |
+      Cross-Program Invocations can be exploited if signer seeds
+      or privileges are not properly validated.
+    patterns:
+      - "invoke_signed"
+      - "CpiContext::new_with_signer"
+    mitigation: |
+      - Validate all accounts before CPI
+      - Never pass untrusted seeds to invoke_signed
+      - Verify CPI target program
+
+  - name: Duplicate Mutable Accounts
+    id: solana-009
+    severity: High
+    description: |
+      Same account passed multiple times as mutable can cause
+      unexpected behavior or fund theft.
+    patterns:
+      - "Multiple &mut references to same account"
+    detection:
+      - "Anchor: Use #[account(constraint = a.key() != b.key())]"
+
+poc_template: |
+  use anchor_lang::prelude::*;
+  use solana_program_test::*;
+  use solana_sdk::{signature::Keypair, signer::Signer};
+
+  #[tokio::test]
+  async fn test_vulnerability() {
+      let program_id = {{PROGRAM_ID}};
+      let mut context = ProgramTest::new("program", program_id, None)
+          .start_with_context()
+          .await;
+
+      // Setup malicious accounts
+      let attacker = Keypair::new();
+
+      // Execute attack
+      // ...
+
+      // Verify exploitation
+      assert!(/* attack succeeded */);
+  }

@@ -1,0 +1,419 @@
+# Protocol Integration Security Checklists
+# Use these when auditing protocol integrations
+# Each item is a potential vulnerability if not handled correctly
+
+checklists:
+
+  # ===========================================================================
+  # AAVE V3 INTEGRATION
+  # ===========================================================================
+  aave_v3:
+    name: "Aave V3 Integration Checklist"
+    critical:
+      - id: "AAVE-CHK-001"
+        check: "Health factor read timing"
+        question: "Is health factor read AFTER all state changes that affect it?"
+        bad_pattern: "Read health factor, then modify position"
+        good_pattern: "Modify position, then verify health factor >= 1e18"
+        severity: "critical"
+
+      - id: "AAVE-CHK-002"
+        check: "Flash loan callback security"
+        question: "Is executeOperation protected from reentrancy and validates initiator?"
+        bad_pattern: "No initiator check, external calls in callback"
+        good_pattern: "require(initiator == address(this)), reentrancy guard"
+        severity: "critical"
+
+      - id: "AAVE-CHK-003"
+        check: "Liquidation handling"
+        question: "Is the protocol prepared for positions becoming liquidatable?"
+        bad_pattern: "Assume positions always healthy"
+        good_pattern: "Handle liquidation scenarios gracefully"
+        severity: "critical"
+
+    high:
+      - id: "AAVE-CHK-004"
+        check: "eMode dependencies"
+        question: "Does code handle eMode changes correctly?"
+        bad_pattern: "Hardcode LTV/LT values"
+        good_pattern: "Read current eMode config dynamically"
+        severity: "high"
+
+      - id: "AAVE-CHK-005"
+        check: "Interest accrual timing"
+        question: "Is interest accrued before reading balances?"
+        bad_pattern: "Read balance without accruing"
+        good_pattern: "Ensure Pool.accrueInterest() called or use scaled balance"
+        severity: "high"
+
+      - id: "AAVE-CHK-006"
+        check: "Supply/borrow cap handling"
+        question: "Does code handle hitting supply/borrow caps?"
+        bad_pattern: "Assume unlimited supply/borrow"
+        good_pattern: "Check caps before operations, handle failures"
+        severity: "high"
+
+    medium:
+      - id: "AAVE-CHK-007"
+        check: "Oracle price freshness"
+        question: "Is Aave oracle price considered for freshness?"
+        bad_pattern: "Trust any price from Aave"
+        good_pattern: "Consider Aave's own freshness checks sufficient"
+        severity: "medium"
+
+      - id: "AAVE-CHK-008"
+        check: "Isolation mode handling"
+        question: "Is isolation mode correctly considered?"
+        bad_pattern: "Ignore isolation mode restrictions"
+        good_pattern: "Check isolation mode status for asset operations"
+        severity: "medium"
+
+  # ===========================================================================
+  # UNISWAP V3 INTEGRATION
+  # ===========================================================================
+  uniswap_v3:
+    name: "Uniswap V3 Integration Checklist"
+    critical:
+      - id: "UNI-CHK-001"
+        check: "TWAP vs slot0"
+        question: "Is TWAP used instead of slot0 for any pricing?"
+        bad_pattern: "(sqrtPriceX96,,,,,) = pool.slot0()"
+        good_pattern: "pool.observe(secondsAgos) with 30+ min window"
+        severity: "critical"
+
+      - id: "UNI-CHK-002"
+        check: "Callback validation"
+        question: "Are callbacks validated to come from expected pool?"
+        bad_pattern: "Accept callback from any address"
+        good_pattern: "require(msg.sender == computedPoolAddress)"
+        severity: "critical"
+
+      - id: "UNI-CHK-003"
+        check: "Callback reentrancy"
+        question: "Are external calls avoided in swap/mint/flash callbacks?"
+        bad_pattern: "External calls during callback"
+        good_pattern: "Minimal logic in callback, reentrancy guard"
+        severity: "critical"
+
+    high:
+      - id: "UNI-CHK-004"
+        check: "Slippage protection"
+        question: "Is slippage protection implemented with minAmountOut?"
+        bad_pattern: "amountOutMinimum = 0"
+        good_pattern: "Calculate reasonable minimum based on expected price"
+        severity: "high"
+
+      - id: "UNI-CHK-005"
+        check: "Deadline parameter"
+        question: "Is deadline used to prevent stale transactions?"
+        bad_pattern: "deadline = type(uint256).max"
+        good_pattern: "deadline = block.timestamp + reasonable_delay"
+        severity: "high"
+
+      - id: "UNI-CHK-006"
+        check: "Tick math bounds"
+        question: "Are tick values validated within valid range?"
+        bad_pattern: "Accept any tick value from user"
+        good_pattern: "require(tick >= MIN_TICK && tick <= MAX_TICK)"
+        severity: "high"
+
+    medium:
+      - id: "UNI-CHK-007"
+        check: "Fee tier selection"
+        question: "Is the correct fee tier used for the pair?"
+        bad_pattern: "Hardcode single fee tier"
+        good_pattern: "Consider liquidity depth across fee tiers"
+        severity: "medium"
+
+      - id: "UNI-CHK-008"
+        check: "Position NFT ownership"
+        question: "Is NFT ownership verified before operations?"
+        bad_pattern: "Operate on position without ownership check"
+        good_pattern: "Verify caller owns or is approved for position NFT"
+        severity: "medium"
+
+  # ===========================================================================
+  # CURVE INTEGRATION
+  # ===========================================================================
+  curve:
+    name: "Curve Integration Checklist"
+    critical:
+      - id: "CURVE-CHK-001"
+        check: "Virtual price in callbacks"
+        question: "Is get_virtual_price() NEVER called during any callback?"
+        bad_pattern: "Read virtual_price in receive() or any callback"
+        good_pattern: "Cache virtual_price before operations, never during"
+        severity: "critical"
+
+      - id: "CURVE-CHK-002"
+        check: "Vyper version"
+        question: "If Vyper, is version >= 0.3.1?"
+        bad_pattern: "Vyper 0.2.15, 0.2.16, or 0.3.0"
+        good_pattern: "Vyper >= 0.3.1"
+        severity: "critical"
+
+      - id: "CURVE-CHK-003"
+        check: "Read-only reentrancy protection"
+        question: "Is read-only reentrancy impossible in this integration?"
+        bad_pattern: "Any view function reading Curve state during ETH transfer"
+        good_pattern: "No Curve reads during callbacks, or use reentrancy lock"
+        severity: "critical"
+
+    high:
+      - id: "CURVE-CHK-004"
+        check: "Slippage protection"
+        question: "Are Curve operations protected with min_amounts?"
+        bad_pattern: "add_liquidity with min_mint_amount = 0"
+        good_pattern: "Calculate expected output, set reasonable minimum"
+        severity: "high"
+
+      - id: "CURVE-CHK-005"
+        check: "Imbalanced pool handling"
+        question: "Does code handle heavily imbalanced pools?"
+        bad_pattern: "Assume pools always balanced"
+        good_pattern: "Check balance ratios, handle extreme imbalance"
+        severity: "high"
+
+    medium:
+      - id: "CURVE-CHK-006"
+        check: "Amplification factor"
+        question: "Is amplification factor (A) handled dynamically?"
+        bad_pattern: "Hardcode A value"
+        good_pattern: "Read current A, handle A ramping"
+        severity: "medium"
+
+      - id: "CURVE-CHK-007"
+        check: "Metapool base pool"
+        question: "Are metapool base pool interactions correct?"
+        bad_pattern: "Ignore base pool token accounting"
+        good_pattern: "Account for base pool LP token correctly"
+        severity: "medium"
+
+  # ===========================================================================
+  # BALANCER INTEGRATION
+  # ===========================================================================
+  balancer:
+    name: "Balancer Integration Checklist"
+    critical:
+      - id: "BAL-CHK-001"
+        check: "Rate provider during callbacks"
+        question: "Is getRate() NEVER called during any vault callback?"
+        bad_pattern: "Call getRate() in onJoinPool, onExitPool, or during ETH receive"
+        good_pattern: "Cache rate before operations, use VaultReentrancyLib"
+        severity: "critical"
+
+      - id: "BAL-CHK-002"
+        check: "VaultReentrancyLib usage"
+        question: "Is VaultReentrancyLib used when reading pool state?"
+        bad_pattern: "Read pool state without reentrancy check"
+        good_pattern: "VaultReentrancyLib.ensureNotInVaultContext()"
+        severity: "critical"
+
+      - id: "BAL-CHK-003"
+        check: "Flash loan callback security"
+        question: "Is receiveFlashLoan properly validated?"
+        bad_pattern: "Accept flash loan callback from any address"
+        good_pattern: "require(msg.sender == BALANCER_VAULT)"
+        severity: "critical"
+
+    high:
+      - id: "BAL-CHK-004"
+        check: "Zero-fee flash loan consideration"
+        question: "Are attack costs calculated with zero flash loan fee?"
+        bad_pattern: "Assume flash loan fees add attack cost"
+        good_pattern: "Model attacks with unlimited free capital"
+        severity: "high"
+
+      - id: "BAL-CHK-005"
+        check: "BPT price calculation"
+        question: "Is BPT price calculated safely?"
+        bad_pattern: "Use getPoolTokens() during callbacks"
+        good_pattern: "Calculate outside callbacks, verify consistency"
+        severity: "high"
+
+    medium:
+      - id: "BAL-CHK-006"
+        check: "Pool token ordering"
+        question: "Is token ordering handled correctly?"
+        bad_pattern: "Assume token order"
+        good_pattern: "Sort tokens, handle any order"
+        severity: "medium"
+
+  # ===========================================================================
+  # LIDO INTEGRATION
+  # ===========================================================================
+  lido:
+    name: "Lido stETH/wstETH Integration Checklist"
+    critical:
+      - id: "LIDO-CHK-001"
+        check: "Share-based accounting"
+        question: "Is shares used instead of balanceOf for stETH?"
+        bad_pattern: "Track stETH by balanceOf()"
+        good_pattern: "Track by sharesOf(), convert when needed"
+        severity: "critical"
+
+      - id: "LIDO-CHK-002"
+        check: "Rebasing balance caching"
+        question: "Is stETH balance used immediately, never cached?"
+        bad_pattern: "uint balance = stETH.balanceOf(user); ... use later"
+        good_pattern: "Use balance immediately, or use shares"
+        severity: "critical"
+
+    high:
+      - id: "LIDO-CHK-003"
+        check: "Transfer precision"
+        question: "Is transferShares used for precise transfers?"
+        bad_pattern: "stETH.transfer(to, amount) for exact amount"
+        good_pattern: "stETH.transferShares(to, shares) for precision"
+        severity: "high"
+
+      - id: "LIDO-CHK-004"
+        check: "Slashing handling"
+        question: "Is negative rebase (slashing) handled?"
+        bad_pattern: "Assume stETH only increases"
+        good_pattern: "Handle case where stETH value decreases"
+        severity: "high"
+
+      - id: "LIDO-CHK-005"
+        check: "wstETH vs stETH clarity"
+        question: "Is the correct token type used throughout?"
+        bad_pattern: "Confuse wstETH (non-rebasing) with stETH (rebasing)"
+        good_pattern: "Clear documentation, correct type usage"
+        severity: "high"
+
+    medium:
+      - id: "LIDO-CHK-006"
+        check: "Rate staleness"
+        question: "Is stETH/ETH rate staleness considered?"
+        bad_pattern: "Trust any rate from Lido"
+        good_pattern: "Consider rate updates only on oracle reports"
+        severity: "medium"
+
+      - id: "LIDO-CHK-007"
+        check: "Withdrawal queue integration"
+        question: "Is withdrawal queue timing handled?"
+        bad_pattern: "Expect instant withdrawals"
+        good_pattern: "Handle multi-day withdrawal delay"
+        severity: "medium"
+
+  # ===========================================================================
+  # GMX INTEGRATION
+  # ===========================================================================
+  gmx:
+    name: "GMX Integration Checklist"
+    critical:
+      - id: "GMX-CHK-001"
+        check: "Execution price bounds"
+        question: "Are execution prices bounded against oracle manipulation?"
+        bad_pattern: "Accept any execution price"
+        good_pattern: "Set acceptable price bounds, reject outliers"
+        severity: "critical"
+
+      - id: "GMX-CHK-002"
+        check: "Keeper trust model"
+        question: "Is keeper behavior properly constrained?"
+        bad_pattern: "Trust keeper fully"
+        good_pattern: "Bound keeper actions, validate on-chain"
+        severity: "critical"
+
+    high:
+      - id: "GMX-CHK-003"
+        check: "Price impact awareness"
+        question: "Is price impact correctly calculated and bounded?"
+        bad_pattern: "Ignore price impact for large positions"
+        good_pattern: "Calculate and limit max price impact"
+        severity: "high"
+
+      - id: "GMX-CHK-004"
+        check: "Funding rate exposure"
+        question: "Is funding rate exposure managed?"
+        bad_pattern: "Hold positions without funding consideration"
+        good_pattern: "Monitor and manage funding exposure"
+        severity: "high"
+
+      - id: "GMX-CHK-005"
+        check: "Liquidation risk"
+        question: "Is liquidation risk properly managed?"
+        bad_pattern: "Operate near liquidation threshold"
+        good_pattern: "Maintain safety buffer, monitor health"
+        severity: "high"
+
+    medium:
+      - id: "GMX-CHK-006"
+        check: "Order execution timing"
+        question: "Are orders executed within expected timeframe?"
+        bad_pattern: "No timeout on pending orders"
+        good_pattern: "Set execution deadlines, cancel stale orders"
+        severity: "medium"
+
+  # ===========================================================================
+  # CHAINLINK INTEGRATION
+  # ===========================================================================
+  chainlink:
+    name: "Chainlink Oracle Integration Checklist"
+    critical:
+      - id: "CL-CHK-001"
+        check: "Stale price check"
+        question: "Is updatedAt checked against acceptable staleness?"
+        bad_pattern: "Ignore updatedAt from latestRoundData()"
+        good_pattern: "require(block.timestamp - updatedAt <= MAX_STALENESS)"
+        severity: "critical"
+
+      - id: "CL-CHK-002"
+        check: "Round completeness"
+        question: "Is answeredInRound == roundId checked?"
+        bad_pattern: "Ignore round ID fields"
+        good_pattern: "require(answeredInRound >= roundId)"
+        severity: "critical"
+
+      - id: "CL-CHK-003"
+        check: "Zero/negative price"
+        question: "Is price validated to be positive?"
+        bad_pattern: "Use price without validation"
+        good_pattern: "require(price > 0)"
+        severity: "critical"
+
+    high:
+      - id: "CL-CHK-004"
+        check: "Decimal handling"
+        question: "Are feed decimals correctly handled?"
+        bad_pattern: "Assume 8 decimals for all feeds"
+        good_pattern: "Read decimals() from feed, normalize"
+        severity: "high"
+
+      - id: "CL-CHK-005"
+        check: "Sequencer uptime (L2)"
+        question: "On L2s, is sequencer uptime checked?"
+        bad_pattern: "Use L2 oracle without sequencer check"
+        good_pattern: "Check sequencer uptime feed on L2s"
+        severity: "high"
+
+    medium:
+      - id: "CL-CHK-006"
+        check: "Fallback oracle"
+        question: "Is there a fallback if Chainlink fails?"
+        bad_pattern: "Single point of failure on Chainlink"
+        good_pattern: "Secondary oracle or graceful degradation"
+        severity: "medium"
+
+# ===========================================================================
+# META CHECKLIST
+# ===========================================================================
+meta:
+  pre_audit:
+    - "Identify all external protocol integrations"
+    - "Map token types (rebasing, fee-on-transfer, etc.)"
+    - "Document expected invariants"
+    - "List all external calls and callbacks"
+
+  during_audit:
+    - "Run protocol-specific checklist for each integration"
+    - "Trace all value flows"
+    - "Check all callbacks for reentrancy"
+    - "Verify all price/rate sources"
+
+  post_audit:
+    - "Verify all findings with working PoC"
+    - "Challenge findings with Devil's Advocate"
+    - "Calibrate severity against historical judging"
+    - "Generate report in target format"

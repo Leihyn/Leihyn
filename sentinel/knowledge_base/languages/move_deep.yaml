@@ -1,0 +1,360 @@
+# Move (Aptos & Sui) Deep Knowledge Base
+# Maximum depth vulnerability patterns for world-class auditing
+
+move:
+  thinking_budget: 32000
+
+  # ===========================================================================
+  # APTOS MOVE
+  # ===========================================================================
+  aptos:
+    name: "Move (Aptos)"
+
+    historical_exploits:
+      - name: "Pontem Wallet Vulnerability"
+        date: "2023"
+        type: "Capability Extraction"
+        root_cause: "Capability could be extracted and stored"
+        lesson: "Never return capabilities from public functions"
+
+      - name: "Early DEX Integer Overflow"
+        date: "2022"
+        type: "Arithmetic"
+        root_cause: "Unchecked multiplication in swap calculation"
+        lesson: "Always use checked arithmetic for financial math"
+
+      - name: "NFT Marketplace Reentrancy"
+        date: "2023"
+        type: "Callback Reentrancy"
+        root_cause: "External callback before state update"
+        lesson: "Follow CEI pattern even in Move"
+
+    invariants:
+      critical:
+        - id: "APT-INV-001"
+          name: "Signer Verification"
+          expression: "privileged_action => signer::address_of(account) == authorized"
+          violation: "Anyone can execute admin functions"
+
+        - id: "APT-INV-002"
+          name: "Resource Ownership"
+          expression: "borrow_global<T>(addr) => caller_authorized_for(addr)"
+          violation: "Unauthorized resource access"
+
+        - id: "APT-INV-003"
+          name: "Capability Containment"
+          expression: "capability never leaves module as return value"
+          violation: "Capability leak enables persistent unauthorized access"
+
+        - id: "APT-INV-004"
+          name: "Coin Conservation"
+          expression: "coin_in == coin_out + fees (no creation/destruction)"
+          violation: "Inflation/deflation exploit"
+
+      high:
+        - id: "APT-INV-005"
+          name: "Initialization Guard"
+          expression: "init_module called exactly once"
+          violation: "State reset or double initialization"
+
+        - id: "APT-INV-006"
+          name: "Arithmetic Bounds"
+          expression: "all arithmetic checked or provably safe"
+          violation: "Overflow/underflow exploit"
+
+        - id: "APT-INV-007"
+          name: "Resource Existence"
+          expression: "borrow_global<T>(addr) => exists<T>(addr)"
+          violation: "Abort on missing resource (DoS)"
+
+    attack_patterns:
+      capability_attacks:
+        - name: "Capability Extraction"
+          description: "Extract capability struct for later unauthorized use"
+          severity: "critical"
+          code_pattern: |
+            // VULNERABLE
+            public fun get_admin_cap(account: &signer): AdminCap acquires AdminCap {
+                move_from<AdminCap>(signer::address_of(account))
+                // Attacker now owns AdminCap forever!
+            }
+
+            // SAFE
+            public fun admin_action(account: &signer) acquires AdminCap {
+                let cap = borrow_global<AdminCap>(signer::address_of(account));
+                // Use cap inline, never move it out
+            }
+
+        - name: "Capability Duplication via References"
+          description: "Create multiple references to bypass single-use"
+          severity: "high"
+          mitigation: "Use hot potato pattern for single-use capabilities"
+
+      resource_attacks:
+        - name: "Unauthorized Global Borrow"
+          description: "Access other user's resources"
+          severity: "critical"
+          code_pattern: |
+            // VULNERABLE
+            public fun steal(target: address) acquires Vault {
+                let vault = borrow_global_mut<Vault>(target);
+                // Can modify anyone's vault!
+            }
+
+            // SAFE
+            public fun withdraw(account: &signer) acquires Vault {
+                let addr = signer::address_of(account);
+                let vault = borrow_global_mut<Vault>(addr);
+                // Only access own vault
+            }
+
+        - name: "Resource Type Confusion"
+          description: "Confuse resources with same structure"
+          severity: "high"
+          mitigation: "Use phantom types or unique fields"
+
+      flash_loan_attacks:
+        - name: "Flash Loan Receipt Discard"
+          description: "Borrow without repaying"
+          severity: "critical"
+          code_pattern: |
+            // VULNERABLE - Receipt can be discarded
+            public fun flash_loan(): (Coin<APT>, FlashReceipt) { ... }
+
+            // SAFE - Hot potato pattern
+            struct FlashReceipt has drop { } // NO store ability
+            // Must be consumed in same transaction
+
+        - name: "Flash Loan Price Manipulation"
+          description: "Manipulate prices during flash loan"
+          severity: "high"
+          mitigation: "Use TWAP, check price bounds"
+
+    audit_checklist:
+      - id: "APT-CHK-001"
+        check: "Every entry function validates signer"
+        severity: "critical"
+
+      - id: "APT-CHK-002"
+        check: "No public functions return capabilities"
+        severity: "critical"
+
+      - id: "APT-CHK-003"
+        check: "All acquires are necessary and minimal"
+        severity: "high"
+
+      - id: "APT-CHK-004"
+        check: "Arithmetic uses checked operations"
+        severity: "high"
+
+      - id: "APT-CHK-005"
+        check: "exists<T> checked before borrow_global"
+        severity: "medium"
+
+      - id: "APT-CHK-006"
+        check: "Module init is idempotent or guarded"
+        severity: "high"
+
+      - id: "APT-CHK-007"
+        check: "Coin operations preserve total supply"
+        severity: "critical"
+
+      - id: "APT-CHK-008"
+        check: "Events emitted for all state changes"
+        severity: "medium"
+
+  # ===========================================================================
+  # SUI MOVE
+  # ===========================================================================
+  sui:
+    name: "Move (Sui)"
+
+    unique_concepts:
+      - name: "Object Model"
+        description: "Sui uses objects instead of global storage"
+        security_implications:
+          - "Object ownership determines access"
+          - "Shared objects enable concurrency"
+          - "Owned objects are exclusive"
+
+      - name: "Programmable Transaction Blocks (PTBs)"
+        description: "Multiple operations in single transaction"
+        security_implications:
+          - "Flash-loan-like patterns without explicit flash loans"
+          - "Complex transaction composition"
+          - "Atomic multi-step attacks"
+
+      - name: "Dynamic Fields"
+        description: "Attach data to objects dynamically"
+        security_implications:
+          - "Hidden state in dynamic fields"
+          - "Authorization bypass via field manipulation"
+
+    invariants:
+      critical:
+        - id: "SUI-INV-001"
+          name: "Object Ownership Integrity"
+          expression: "object access => caller owns object OR object is shared"
+          violation: "Unauthorized object manipulation"
+
+        - id: "SUI-INV-002"
+          name: "Shared Object Consistency"
+          expression: "shared object mutations are atomic and consistent"
+          violation: "Race condition exploits"
+
+        - id: "SUI-INV-003"
+          name: "Capability Object Security"
+          expression: "AdminCap ownership => admin privileges"
+          violation: "Privilege escalation"
+
+      high:
+        - id: "SUI-INV-004"
+          name: "Transfer Authorization"
+          expression: "transfer => caller is owner OR has transfer capability"
+          violation: "Unauthorized asset transfer"
+
+        - id: "SUI-INV-005"
+          name: "Dynamic Field Access Control"
+          expression: "dynamic_field::borrow_mut => caller authorized"
+          violation: "Hidden state manipulation"
+
+    attack_patterns:
+      object_attacks:
+        - name: "Shared Object Race Condition"
+          description: "Exploit concurrent access to shared objects"
+          severity: "critical"
+          code_pattern: |
+            // VULNERABLE - No mutex on shared object
+            public fun withdraw(pool: &mut SharedPool, amount: u64) {
+                // Multiple txs can read balance concurrently
+                // and all pass the check before any deducts
+                assert!(pool.balance >= amount, E_INSUFFICIENT);
+                pool.balance = pool.balance - amount;
+            }
+
+            // SAFER - Atomic check-and-modify
+            // Or use per-user owned objects
+
+        - name: "Object Ownership Confusion"
+          description: "Manipulate object ownership during transfer"
+          severity: "high"
+          mitigation: "Validate ownership before operations"
+
+      ptb_attacks:
+        - name: "PTB Flash Loan Pattern"
+          description: "Use PTB to create flash-loan-like attacks"
+          severity: "high"
+          attack_flow:
+            - "Borrow asset in PTB step 1"
+            - "Manipulate price/state in step 2"
+            - "Profit in step 3"
+            - "Return asset in step 4"
+          mitigation: "Consider PTB context in security model"
+
+        - name: "PTB State Manipulation"
+          description: "Chain operations to reach invalid state"
+          severity: "high"
+          mitigation: "Ensure invariants hold at transaction boundaries"
+
+      dynamic_field_attacks:
+        - name: "Dynamic Field Injection"
+          description: "Add malicious dynamic fields to objects"
+          severity: "medium"
+          mitigation: "Validate dynamic field existence and type"
+
+        - name: "Hidden State Attack"
+          description: "Hide critical state in dynamic fields"
+          severity: "medium"
+          mitigation: "Document all dynamic field usage"
+
+    audit_checklist:
+      - id: "SUI-CHK-001"
+        check: "Shared object access is race-safe"
+        severity: "critical"
+
+      - id: "SUI-CHK-002"
+        check: "Object ownership verified before mutation"
+        severity: "critical"
+
+      - id: "SUI-CHK-003"
+        check: "PTB attack scenarios considered"
+        severity: "high"
+
+      - id: "SUI-CHK-004"
+        check: "Dynamic fields properly authorized"
+        severity: "high"
+
+      - id: "SUI-CHK-005"
+        check: "Capability objects properly guarded"
+        severity: "critical"
+
+      - id: "SUI-CHK-006"
+        check: "Clock usage is safe (no time manipulation)"
+        severity: "medium"
+
+  # ===========================================================================
+  # ULTRATHINK PROMPTS FOR MOVE
+  # ===========================================================================
+  ultrathink_sections:
+    resource_analysis: |
+      ## Deep Resource/Object Analysis
+
+      For EVERY resource (Aptos) or object (Sui):
+
+      1. **Ownership Model**
+         - Who can create this resource/object?
+         - Who can modify it?
+         - Who can destroy it?
+         - Can ownership be transferred maliciously?
+
+      2. **Capability Security**
+         - What capabilities exist?
+         - Can they be extracted?
+         - Can they be duplicated?
+         - Are they properly gated?
+
+      3. **Global Access Patterns**
+         - Which addresses can be accessed?
+         - Is there unauthorized cross-account access?
+         - Are existence checks in place?
+
+      4. **Lifecycle Security**
+         - Initialization: Can it be repeated?
+         - Modification: Who can modify?
+         - Destruction: Is cleanup complete?
+
+    sui_specific: |
+      ## Sui-Specific Analysis
+
+      1. **Object Type Analysis**
+         - Owned vs Shared vs Immutable?
+         - Is the choice appropriate?
+         - Race condition risk for shared?
+
+      2. **PTB Threat Model**
+         - Can operations be chained maliciously?
+         - Flash-loan patterns possible?
+         - Atomic invariant violations?
+
+      3. **Dynamic Field Security**
+         - What dynamic fields exist?
+         - Who can add/remove them?
+         - Hidden state risks?
+
+    economic_analysis: |
+      ## Move Economic Analysis
+
+      1. **Coin/Token Conservation**
+         - Is total supply conserved?
+         - Can coins be created from nothing?
+         - Can coins be destroyed unexpectedly?
+
+      2. **Price Manipulation**
+         - What prices are used?
+         - Can they be manipulated in single TX?
+         - PTB/flash loan amplification?
+
+      3. **Fee Extraction**
+         - Are fees calculated correctly?
+         - Can fees be bypassed?
+         - Fee recipient validation?
