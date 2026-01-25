@@ -21,6 +21,7 @@ Protocol focused blockchain engineer and developer advocate specializing in **De
 
 **Currently:**
 - Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating Aave v3, Uniswap v3/v4, Curve, GMX
+- Core Protocol Engineer at **[TruthBounty](https://truthbounty.xyz)** - Building prediction market reputation infrastructure
 - Graduate of **Uniswap Hook Incubator (UHI7)** - Built modular DeFi extensions
 - Student at **School of Solana (Ackee Blockchain)** - Mastering Rust & Anchor framework
 
@@ -324,6 +325,37 @@ Protocol focused blockchain engineer and developer advocate specializing in **De
 
 ---
 
+### [RateShield (Bank of Cronos)](https://github.com/Leihyn/BankOfCronos) - Interest Rate Derivatives Protocol
+**Cronos x402 Paytech Hackathon | AI Agentic Finance Track**
+
+<details>
+<summary><b>View Technical Details</b></summary>
+
+**DeFi protocol enabling users to hedge interest rate risk through autonomous smart contract positions:**
+
+**Interest Rate Swap Protocol:**
+- Lock fixed rates or speculate on rate movements through ERC721 position NFTs
+- PositionManager, SettlementEngine (hourly PnL), MarginEngine, LiquidationEngine
+- RateOracle contracts for real-time interest rate feeds
+
+**AI Rate Agent:**
+- Autonomous monitoring of interest rates across DeFi protocols
+- Intelligent position recommendations based on market conditions
+- Automated execution with user-defined parameters
+
+**x402 Monetization Layer:**
+- Programmatic payment model using Cronos x402 Facilitator SDK
+- Premium features: rate forecasts, recommendations, automated execution
+- EIP-3009 support for gasless approvals
+
+**Key Achievement:** Hackathon submission targeting Best AI Agentic Finance Solution ($5k) and Best Cronos Integration ($3k) tracks.
+
+</details>
+
+**Tech:** Solidity | Foundry | Next.js | Viem | RainbowKit | Cronos x402 | AI Agent | OpenZeppelin
+
+---
+
 ## GitHub Statistics
 
 <div align="center">
@@ -393,6 +425,13 @@ University of Ibadan, College of Medicine | Graduated 2024
 - Building reusable contract libraries reducing partner integration time by 60%
 - Leading API/SDK development for external partner integrations
 - Establishing testing frameworks with 95%+ code coverage
+
+**Core Protocol Engineer** @ [TruthBounty](https://truthbounty.xyz) | 2024 - Present
+- Architected multi-platform integration across 13 prediction market protocols (Polymarket, PancakeSwap, Azuro, Thales, etc.)
+- Designed TruthScore algorithm using Wilson Score confidence intervals with anti-gaming mechanics
+- Built soulbound NFT system with dynamic on-chain SVG generation for reputation tiers
+- Developed custom subgraphs for cross-chain bet indexing across BNB Chain, Polygon, Arbitrum
+- Implemented copy-trading vault mechanics enabling users to mirror top forecasters
 
 **Blockchain Development Intern** @ DeFiConnectCredit | Jun 2024 - Dec 2024
 - Developed smart contracts for DeFi lending and staking protocols
