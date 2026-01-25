@@ -5,6 +5,7 @@
 **Protocol Integration Engineer | Developer Advocate | Full-Stack Blockchain Developer**
 
 [![GitHub followers](https://img.shields.io/github/followers/Leihyn?style=social)](https://github.com/Leihyn)
+[![Portfolio](https://img.shields.io/badge/Portfolio-faruukku.vercel.app-orange?style=for-the-badge&logo=vercel)](https://faruukku.vercel.app)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/leihyn)
 [![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:onatolafaruq@gmail.com)
 [![Medium](https://img.shields.io/badge/Medium-Blog-black?style=for-the-badge&logo=medium)](https://medium.com/@faruukku)
