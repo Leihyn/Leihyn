@@ -282,30 +282,45 @@ Protocol focused blockchain engineer and developer advocate specializing in **De
 ---
 
 ### [TruthBounty](https://github.com/Leihyn/truthbounty) - Prediction Market Reputation Protocol
-**Top 20 Seedify Hackathon | BNB Chain | Ongoing**
+**2nd Place Seedify Prediction Markets Hackathon | BNB Chain | Core Protocol Engineer**
 
 <details>
 <summary><b>View Technical Details</b></summary>
 
-**On-chain reputation system for prediction market accuracy:**
+**Role: Core Protocol Engineer** - Architected and implemented the multi-platform reputation infrastructure from smart contracts to indexing layer.
 
-**Core Features:**
-- Tracks prediction accuracy across PancakeSwap Prediction and Polymarket
-- TruthScore algorithm weighing accuracy, consistency, and stake size
-- Soulbound NFTs with dynamic SVG metadata reflecting reputation
-- Copy-trading vault for following top predictors
+**Multi-Platform Integration Architecture:**
+- Designed integration system for 13 prediction market platforms: Polymarket, PancakeSwap Prediction, Limitless, Thales, Azuro, SX Bet, Drift, Hedgehog, Gnosis Conditional Tokens, Myriad, Kalshi, Manifold, and Metaculus
+- Built unified bet normalization layer handling different platform schemas (binary, categorical, scalar markets)
+- Implemented platform-specific adapters for outcome resolution and settlement detection
 
-**Technical Implementation:**
-- The Graph subgraph for indexing prediction outcomes
-- Cross-protocol data aggregation
-- Gas-efficient batch updates for reputation scores
-- ERC-721 with on-chain SVG generation
+**TruthScore Algorithm (Core Innovation):**
+- Designed Wilson Score confidence interval system for statistically robust accuracy calculation
+- Anti-gaming mechanics: decay functions, minimum bet thresholds, streak bonuses with caps
+- Multi-factor scoring: accuracy (40%), consistency (25%), stake-weighted returns (20%), platform diversity (15%)
+- EMA smoothing for stable score transitions during market volatility
 
-**Key Achievement:** Top 20 placement in Seedify Hackathon, demonstrating prediction market expertise.
+**Soulbound NFT System:**
+- Built non-transferable ERC-721 with dynamic on-chain SVG generation
+- Real-time reputation tiers rendered directly in token metadata (no IPFS dependency)
+- Tier progression: Novice → Apprentice → Journeyman → Expert → Master → Grandmaster
+- Visual badges update automatically as TruthScore changes
+
+**Indexing Infrastructure:**
+- Custom subgraphs for cross-chain bet tracking and outcome resolution
+- Real-time aggregation across BNB Chain, Polygon, Arbitrum, Base
+- Efficient batch processing for historical bet migration
+
+**Copy-Trading Vaults:**
+- Vault mechanics allowing users to mirror top forecaster positions
+- Proportional allocation based on vault share and forecaster confidence
+- Fee distribution: 80% to vault depositors, 15% to forecaster, 5% protocol
+
+**Key Achievement:** 2nd place in Seedify Prediction Markets Hackathon. Comprehensive protocol engineering from algorithm design to production deployment.
 
 </details>
 
-**Tech:** Solidity | The Graph | Next.js | Dynamic NFTs | PancakeSwap | Polymarket
+**Tech:** Solidity | The Graph | Next.js | Soulbound NFTs | On-chain SVG | Wilson Score | Multi-Platform Indexing
 
 ---
 
@@ -365,7 +380,7 @@ University of Ibadan, College of Medicine | Graduated 2024
 - **Developer Mentorship** - Mentored 15+ aspiring blockchain developers through code reviews and workshops
 - **Graduated from Uniswap Hook Incubator (UHI7)** - 15% acceptance rate, built Sentiment dynamic fee hook
 - **Developed two live production blockchain applications** serving real users
-- **Top 20 in Seedify Hackathon** - TruthBounty prediction market reputation protocol
+- **2nd Place in Seedify Prediction Markets Hackathon** - TruthBounty: Core Protocol Engineer designing multi-platform reputation infrastructure with TruthScore algorithm and soulbound NFTs
 - **Integrated 5+ major DeFi protocols** in production environment
 - **Built cross-chain infrastructure** processing secure bridge transactions
 
