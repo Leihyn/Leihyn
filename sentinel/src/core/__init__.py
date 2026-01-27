@@ -211,6 +211,13 @@ from .skills import (
     AuditWorkflowEngine,
     AuditWorkflow,
     MoveVulnerabilityScanner,
+    # AI-Assisted Security
+    AgenticHarness,
+    Hypothesis,
+    ResearchSession,
+    DecompilationWorkflow,
+    DecompilationReport,
+    RecoveredFunction,
 )
 
 __all__ = [
@@ -350,4 +357,11 @@ __all__ = [
     "AuditWorkflowEngine",
     "AuditWorkflow",
     "MoveVulnerabilityScanner",
+    # AI-Assisted Security
+    "AgenticHarness",
+    "Hypothesis",
+    "ResearchSession",
+    "DecompilationWorkflow",
+    "DecompilationReport",
+    "RecoveredFunction",
 ]

@@ -94,6 +94,14 @@ Source: [Trail of Bits Skills](https://github.com/trailofbits/skills)
 | `audit_workflow` | [pontifex73/audit-assistant-playbook](https://github.com/pontifex73/audit-assistant-playbook) + [MixBytes](https://mixbytes.io/blog/mastering-effective-test-writing-for-web3-protocol-audits) | 5-phase audit workflow with 3 testing mindsets (Hacker, Invariant, System Architect) |
 | `vulnerability_scanners/move_scanner` | [MoveMaverick/move-vulnerability-database](https://github.com/MoveMaverick/move-vulnerability-database) | 10 Move/Aptos/Sui patterns from 501 findings across 150+ audit reports |
 
+### AI-Assisted Security Skills (`core/skills/`)
+| Module | Source | Description |
+|--------|--------|-------------|
+| `agentic_harness` | [Kritt.ai](https://kritt.ai) | Verification-driven vulnerability research pipeline (hypothesis → evidence → verification) |
+| `decompilation_workflow` | [SavantChat](https://savant.chat) | AI-assisted bytecode decompilation and Solidity recovery (Replay → Decompile → Recover → Verify → Analyze) |
+
+Reference: [AI Security Landscape](./ai-security-landscape.md) - SavantChat, Kritt.ai, Nethermind methodology notes
+
 ### Advanced Modules (`core/advanced/`)
 | Module | Description |
 |--------|-------------|

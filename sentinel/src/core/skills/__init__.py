@@ -44,6 +44,10 @@ Community-Sourced Skills:
 - solcurity_checker: Automated Solcurity checklist (100+ items, 12 categories)
 - audit_workflow: 5-phase LLM-assisted audit workflow (MixBytes + pontifex73)
 - move_scanner: Move/Aptos/Sui vulnerability scanner (MVD v2.0, 501 findings)
+
+AI-Assisted Security (SavantChat + Kritt.ai + Nethermind):
+- agentic_harness: Verification-driven vulnerability research pipeline
+- decompilation_workflow: AI-assisted bytecode decompilation and recovery
 """
 
 # Entry Point Analysis
@@ -188,6 +192,24 @@ from .audit_workflow import (
     create_audit_workflow,
 )
 
+# AI-Assisted Security
+from .agentic_harness import (
+    AgenticHarness,
+    Hypothesis,
+    HypothesisConfidence,
+    ResearchPhase,
+    ResearchSession,
+    create_research_session,
+)
+
+from .decompilation_workflow import (
+    DecompilationWorkflow,
+    DecompilationReport,
+    RecoveredFunction,
+    RecoveryPhase,
+    create_decompilation_workflow,
+)
+
 __all__ = [
     # Entry Point Analysis
     "EntryPointAnalyzer",
@@ -280,4 +302,16 @@ __all__ = [
     "create_audit_workflow",
     "MoveVulnerabilityScanner",
     "scan_move",
+    # AI-Assisted Security
+    "AgenticHarness",
+    "Hypothesis",
+    "HypothesisConfidence",
+    "ResearchPhase",
+    "ResearchSession",
+    "create_research_session",
+    "DecompilationWorkflow",
+    "DecompilationReport",
+    "RecoveredFunction",
+    "RecoveryPhase",
+    "create_decompilation_workflow",
 ]

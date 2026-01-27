@@ -51,6 +51,17 @@ Integrated from open-source audit resources:
 | `audit_workflow.py` | [pontifex73/audit-assistant-playbook](https://github.com/pontifex73/audit-assistant-playbook) + [MixBytes](https://mixbytes.io/blog/mastering-effective-test-writing-for-web3-protocol-audits) | Done |
 | `vulnerability_scanners/move_scanner.py` | [MoveMaverick/move-vulnerability-database](https://github.com/MoveMaverick/move-vulnerability-database) | Done |
 
+### AI-Assisted Security Skills (`src/core/skills/`)
+
+Based on SavantChat, Kritt.ai, and Nethermind methodologies:
+
+| Module | Source | Status |
+|--------|--------|--------|
+| `agentic_harness.py` | [Kritt.ai](https://kritt.ai) - Agentic zero-day research | Done |
+| `decompilation_workflow.py` | [SavantChat](https://savant.chat) - $3.2M WBTC hack analysis | Done |
+
+Reference: `knowledge/ai-security-landscape.md`
+
 Additional implementations in `src/core/`:
 
 | Module | Description | Status |
