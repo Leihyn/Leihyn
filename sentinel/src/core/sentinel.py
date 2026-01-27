@@ -37,6 +37,13 @@ from .test_templates import generate_exploit_test, TestFramework
 from .report_generator import generate_report, Finding, ReportFormat
 from .ultrathink_strict import build_strict_prompt, validate_finding
 from .ultrathink_max import build_max_ultrathink, Language
+from .fuzzing_generator import (
+    ContractAnalyzer,
+    StandardizedCoverageAnalyzer,
+    generate_fuzzing_suite,
+    analyze_standardized_coverage,
+    FuzzingConfig,
+)
 
 
 class AuditMode(Enum):
@@ -57,6 +64,24 @@ class AuditConfig:
     report_format: ReportFormat = ReportFormat.PROFESSIONAL
     thinking_budget: int = 24000
     strict_mode: bool = True  # No slop allowed
+    # Recon Magic: Standardized coverage and fuzzing
+    generate_fuzzing_suite: bool = False
+    use_standardized_coverage: bool = True  # Focus quality on state-changing functions
+
+
+@dataclass
+class StandardizedCoverageMetrics:
+    """
+    Standardized line coverage metrics (Recon Magic methodology).
+
+    Traditional coverage includes view/pure functions which don't contribute
+    to state exploration. Standardized coverage focuses only on functions
+    that can alter contract state.
+    """
+    functions_of_interest: list[str]  # State-changing, external functions
+    excluded_functions: list[str]  # View/pure functions (not counted)
+    total_target_functions: int
+    standardized_ratio: float  # foi / (foi + excluded)
 
 
 @dataclass
@@ -69,6 +94,9 @@ class AuditResult:
     report: str
     prompt_used: str
     quality_score: int
+    # Standardized coverage metrics (Recon Magic)
+    standardized_coverage: Optional[StandardizedCoverageMetrics] = None
+    fuzzing_suite: Optional[str] = None  # Generated Chimera test suite
 
 
 class Sentinel:
@@ -140,8 +168,28 @@ class Sentinel:
             format=config.report_format,
         )
 
-        # Calculate quality score
-        quality_score = self._calculate_quality_score(findings, pocs, tests)
+        # Step 7: Analyze standardized coverage (Recon Magic)
+        standardized_coverage = None
+        fuzzing_suite = None
+
+        if config.use_standardized_coverage:
+            coverage_data = analyze_standardized_coverage(code, contract_name)
+            standardized_coverage = StandardizedCoverageMetrics(
+                functions_of_interest=coverage_data["functions_of_interest"],
+                excluded_functions=coverage_data["excluded_functions"],
+                total_target_functions=coverage_data["total_standardized"],
+                standardized_ratio=coverage_data["standardized_ratio"],
+            )
+
+        # Step 8: Generate Chimera fuzzing suite if requested
+        if config.generate_fuzzing_suite:
+            fuzzing_config = FuzzingConfig(contract_name=contract_name)
+            fuzzing_suite = generate_fuzzing_suite(code, contract_name, fuzzing_config)
+
+        # Calculate quality score (using standardized coverage if enabled)
+        quality_score = self._calculate_quality_score(
+            findings, pocs, tests, standardized_coverage
+        )
 
         return AuditResult(
             bugs_detected=bugs,
@@ -151,6 +199,8 @@ class Sentinel:
             report=report,
             prompt_used=prompt,
             quality_score=quality_score,
+            standardized_coverage=standardized_coverage,
+            fuzzing_suite=fuzzing_suite,
         )
 
     def detect(self, code: str, language: str = "solidity") -> list[DetectedBug]:
@@ -209,6 +259,45 @@ class Sentinel:
             return self._build_deep_prompt(code, contract_name, config)
         else:
             return self._build_standard_prompt(code, contract_name, config)
+
+    def get_standardized_coverage(
+        self,
+        code: str,
+        contract_name: str = "Contract",
+    ) -> dict:
+        """
+        Analyze contract for standardized coverage metrics.
+
+        Based on Recon Magic methodology:
+        - Returns functions of interest (state-changing, external)
+        - Returns excluded functions (view/pure)
+        - Calculates standardized ratio
+
+        This helps identify what should actually be covered by fuzzing.
+        """
+        return analyze_standardized_coverage(code, contract_name)
+
+    def get_fuzzing_suite(
+        self,
+        code: str,
+        contract_name: str = "Contract",
+        actors: Optional[list[str]] = None,
+    ) -> str:
+        """
+        Generate Chimera-compatible fuzzing test suite.
+
+        Based on Recon Magic methodology:
+        - Generates unclamped handlers for full search space
+        - Generates clamped handlers with intelligent input restriction
+        - Generates shortcut functions for deep state exploration
+
+        Output is compatible with Echidna and Medusa fuzzers.
+        """
+        config = FuzzingConfig(
+            contract_name=contract_name,
+            actors=actors or ["actor1", "actor2", "actor3"],
+        )
+        return generate_fuzzing_suite(code, contract_name, config)
 
     # =========================================================================
     # PRIVATE METHODS
@@ -356,8 +445,16 @@ class Sentinel:
         findings: list[Finding],
         pocs: dict[str, str],
         tests: dict[str, str],
+        standardized_coverage: Optional[StandardizedCoverageMetrics] = None,
     ) -> int:
-        """Calculate quality score for the audit."""
+        """
+        Calculate quality score for the audit.
+
+        Uses standardized line coverage methodology (Recon Magic):
+        - Focus on state-changing functions (functions of interest)
+        - Exclude view/pure functions from coverage calculation
+        - Better metric for actual fuzzer efficacy
+        """
         if not findings:
             return 100  # No findings = clean audit
 
@@ -379,7 +476,15 @@ class Sentinel:
             if not is_valid:
                 score -= len(errors) * 2
 
-        return max(0, score)
+        # Bonus for good standardized coverage ratio
+        # High ratio means more state-changing functions = more thorough audit
+        if standardized_coverage:
+            if standardized_coverage.standardized_ratio > 0.5:
+                score += 5  # Good coverage focus
+            if standardized_coverage.total_target_functions > 10:
+                score += 3  # Complex contract thoroughly analyzed
+
+        return max(0, min(100, score))
 
 
 # Convenience function

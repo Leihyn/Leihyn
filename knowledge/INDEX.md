@@ -35,6 +35,53 @@
 
 ---
 
+## My Projects
+
+### Privacy & ZK
+| Project | Description | Docs |
+|---------|-------------|------|
+| Veil (StealthSol) | Privacy payments on Solana (Privacy Cash + Stealth Addresses) | [veil-stealthsol-project.md](./veil-stealthsol-project.md) |
+
+---
+
+## My Guides
+
+### Testing & Fuzzing
+| Guide | Description |
+|-------|-------------|
+| [Stateful Fuzzing](./testing/stateful-fuzzing.md) | Recon Magic methodology for high standardized line coverage |
+
+---
+
+## Sentinel - Smart Contract Audit Tool
+
+Personal audit tool with advanced security analysis capabilities.
+
+### Core Modules
+| Module | Description |
+|--------|-------------|
+| `bug_detection` | Pattern-based vulnerability detection (8 languages) |
+| `semantic_analyzer` | AST-based control/data flow analysis |
+| `symbolic_integration` | Slither/Mythril/Halmos/Echidna integration |
+| `economic_analyzer` | DeFi economic invariant analysis |
+| `fuzzing_generator` | Chimera-compatible stateful fuzzing generation |
+
+### Advanced Modules (`core/advanced/`)
+| Module | Description |
+|--------|-------------|
+| `bridge_analyzer` | Cross-chain bridge security (message validation, replay attacks) |
+| `upgrade_safety` | Proxy upgrade analysis (storage collisions, initializers) |
+| `mev_analyzer` | MEV vulnerability detection (sandwich, frontrun, JIT) |
+| `zk_circuit_analyzer` | ZK circuit security (Circom, Noir, Cairo, Halo2) |
+| `account_abstraction` | ERC-4337 and intent security analysis |
+| `differential_auditor` | Version comparison and regression detection |
+| `attack_graph_visualizer` | Visual attack graphs (Mermaid, DOT, D3.js, ASCII) |
+| `slither_deep` | Deep Slither integration with custom detectors |
+| `severity_predictor` | ML-based severity prediction (C4/Sherlock/Immunefi calibrated) |
+| `collaborative_audit` | Multi-auditor workflow management |
+
+---
+
 ## Battle-Tested Protocol Contracts
 
 ### DEXs
@@ -97,7 +144,10 @@
 | Tool | Purpose | Link |
 |------|---------|------|
 | Slither | Static analysis | [GitHub](https://github.com/crytic/slither) |
-| Echidna | Fuzzing | [GitHub](https://github.com/crytic/echidna) |
+| Echidna | Property-based fuzzing | [GitHub](https://github.com/crytic/echidna) |
+| Medusa | Parallel fuzzing | [GitHub](https://github.com/crytic/medusa) |
+| Chimera | Fuzzing framework | [GitHub](https://github.com/Recon-Fuzz/chimera) |
+| Recon | Stateful fuzzing platform | [Website](https://getrecon.xyz/) |
 | Mythril | Symbolic execution | [GitHub](https://github.com/Consensys/mythril) |
 | Foundry | Testing/Fuzzing | [GitHub](https://github.com/foundry-rs/foundry) |
 | Halmos | Symbolic testing | [GitHub](https://github.com/a16z/halmos) |
@@ -137,6 +187,8 @@
 - [Forge Std](https://github.com/foundry-rs/forge-std)
 - [Foundry Cheatcodes](https://book.getfoundry.sh/cheatcodes/)
 - [Invariant Testing](https://book.getfoundry.sh/invariant-testing)
+- [Recon Book](https://getrecon.xyz/book) - Stateful fuzzing best practices
+- [Chimera Template](https://github.com/Recon-Fuzz/chimera-template) - Fuzzing starter
 
 ### Gas Optimization
 - [Gas Optimization Techniques](https://github.com/0xKitsune/gas-optimization)

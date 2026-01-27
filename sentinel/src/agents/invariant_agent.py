@@ -11,6 +11,15 @@ This agent:
 2. Uses ultrathink to find subtle invariant violations
 3. Generates Foundry tests to prove violations
 4. Synthesizes findings from broken invariants
+5. Generates Chimera-compatible fuzzing suites (Recon Magic methodology)
+
+Recon Magic Integration:
+- Identifies functions of interest (state-changing only)
+- Generates clamping strategies from contract state
+- Builds shortcut functions for multi-step exploit paths
+- Achieves high standardized line coverage (38x efficiency gain)
+
+Reference: https://getrecon.xyz/blog/recon-magic
 """
 
 import asyncio
@@ -32,6 +41,18 @@ from ..knowledge.invariants import (
     InvariantTestGenerator,
     InvariantViolation,
 )
+from ..core.fuzzing_generator import (
+    ContractAnalyzer,
+    ClampingEngine,
+    ShortcutGenerator,
+    ChimeraGenerator,
+    StandardizedCoverageAnalyzer,
+    FuzzingConfig,
+    ClampedHandler,
+    ShortcutFunction,
+    generate_fuzzing_suite,
+    analyze_standardized_coverage,
+)
 
 console = Console()
 
@@ -46,9 +67,18 @@ class InvariantConfig:
     generate_tests: bool = True
     run_fuzzing: bool = False  # Requires Foundry setup
     max_invariants_per_contract: int = 20
+    # Recon Magic: Fuzzing suite generation
+    generate_fuzzing_suite: bool = True
+    include_clamped_handlers: bool = True
+    include_shortcuts: bool = True
+    fuzzing_actors: list[str] = None  # Defaults set in __post_init__
+
+    def __post_init__(self):
+        if self.fuzzing_actors is None:
+            self.fuzzing_actors = ["actor1", "actor2", "actor3"]
 
 
-class InvariantAgent(HunterAgent):
+class InvariantAgent(HunterAgent, ReconMagicMixin):
     """
     World-class invariant analysis agent.
 
@@ -58,11 +88,18 @@ class InvariantAgent(HunterAgent):
     3. Violation Hunting - Try to find sequences that break invariants
     4. Test Generation - Create Foundry tests for violations
     5. Finding Synthesis - Convert violations to structured findings
+    6. Fuzzing Suite Generation - Create Chimera-compatible tests (Recon Magic)
+
+    Recon Magic Integration:
+    - Identifies functions of interest for standardized coverage
+    - Generates clamped handlers with intelligent input restriction
+    - Creates shortcut functions for deep state exploration
+    - Outputs Echidna/Medusa compatible test suites
     """
 
     role = AgentRole.VULNERABILITY_HUNTER
     name = "InvariantHunter"
-    description = "Deep invariant-based vulnerability analysis"
+    description = "Deep invariant-based vulnerability analysis with Recon Magic fuzzing"
 
     def __init__(
         self,
@@ -136,8 +173,39 @@ Focus on CRITICAL invariants - those whose violation leads to loss of funds."""
         if self.config.generate_tests and all_invariants:
             self.generate_tests(all_invariants)
 
+        # Generate Chimera fuzzing suite (Recon Magic)
+        if self.config.generate_fuzzing_suite:
+            self.log("Generating Chimera fuzzing suites (Recon Magic)...", style="bold cyan")
+            for contract in self.state.contracts:
+                fuzzing_result = self.analyze_for_fuzzing(
+                    contract.source, contract.name
+                )
+                self._write_fuzzing_suite(contract.name, fuzzing_result)
+                self.log(
+                    f"  {contract.name}: {fuzzing_result.standardized_coverage_target} "
+                    f"target functions, {len(fuzzing_result.clamped_handlers)} clamped handlers, "
+                    f"{len(fuzzing_result.shortcut_functions)} shortcuts"
+                )
+
         self.log(f"Total: {len(all_findings)} invariant-based findings", style="bold green")
         return all_findings
+
+    def _write_fuzzing_suite(
+        self,
+        contract_name: str,
+        result: FuzzingAnalysisResult,
+    ) -> None:
+        """Write generated fuzzing suite to project."""
+        if self.state.project_path:
+            output_path = (
+                Path(self.state.project_path) / "test" / "fuzzing" /
+                f"{contract_name}.TargetFunctions.sol"
+            )
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(result.chimera_suite)
+            self.log(f"  Wrote fuzzing suite to {output_path}")
+        else:
+            self.log(f"  Generated fuzzing suite for {contract_name} (no project path set)")
 
     async def infer_invariants(self, contract) -> list[Invariant]:
         """Infer all invariants for a contract."""
@@ -415,6 +483,192 @@ Think deeply. Miss nothing."""
 
 # Import re for parsing
 import re
+
+
+# ===========================================================================
+# RECON MAGIC: STATEFUL FUZZING GENERATION
+# ===========================================================================
+
+@dataclass
+class FuzzingAnalysisResult:
+    """Result of fuzzing analysis using Recon Magic methodology."""
+    functions_of_interest: list[str]
+    excluded_functions: list[str]
+    clamped_handlers: list[ClampedHandler]
+    shortcut_functions: list[ShortcutFunction]
+    chimera_suite: str
+    standardized_coverage_target: int
+
+
+class ReconMagicMixin:
+    """
+    Mixin providing Recon Magic fuzzing capabilities.
+
+    Based on methodology from https://getrecon.xyz/blog/recon-magic
+
+    Key concepts:
+    - Standardized Line Coverage: Focus only on state-changing functions
+    - Clamped Handlers: Restrict inputs to reach deeper states faster
+    - Shortcut Functions: Multi-step sequences for complex state transitions
+    """
+
+    def analyze_for_fuzzing(
+        self,
+        contract_source: str,
+        contract_name: str,
+    ) -> FuzzingAnalysisResult:
+        """
+        Analyze a contract using Recon Magic methodology.
+
+        Returns functions of interest, clamping strategies, and shortcuts.
+        """
+        # Analyze contract
+        analyzer = ContractAnalyzer(contract_source, contract_name)
+        config = FuzzingConfig(
+            contract_name=contract_name,
+            actors=self.config.fuzzing_actors if hasattr(self, 'config') else ["actor1", "actor2"],
+            include_shortcuts=self.config.include_shortcuts if hasattr(self, 'config') else True,
+        )
+
+        # Identify functions of interest (state-changing only)
+        foi = analyzer.get_functions_of_interest()
+        excluded = analyzer.get_view_functions()
+
+        self.log(f"Functions of interest: {len(foi)} (state-changing)")
+        self.log(f"Excluded from coverage: {len(excluded)} (view/pure)")
+
+        # Generate clamped handlers
+        clamping_engine = ClampingEngine(analyzer, config)
+        clamped_handlers = [
+            clamping_engine.generate_clamped_handler(f)
+            for f in foi
+        ]
+        self.log(f"Generated {len(clamped_handlers)} clamped handlers")
+
+        # Generate shortcut functions
+        shortcut_gen = ShortcutGenerator(analyzer, config)
+        shortcuts = shortcut_gen.generate_shortcuts()
+        self.log(f"Generated {len(shortcuts)} shortcut functions")
+
+        # Generate complete Chimera suite
+        chimera_gen = ChimeraGenerator(config)
+        chimera_suite = chimera_gen.generate_suite(analyzer, clamped_handlers, shortcuts)
+
+        return FuzzingAnalysisResult(
+            functions_of_interest=[f.name for f in foi],
+            excluded_functions=[f.name for f in excluded],
+            clamped_handlers=clamped_handlers,
+            shortcut_functions=shortcuts,
+            chimera_suite=chimera_suite,
+            standardized_coverage_target=len(foi),
+        )
+
+    def generate_clamping_strategies(
+        self,
+        contract_source: str,
+        contract_name: str,
+    ) -> list[dict]:
+        """
+        Generate intelligent clamping strategies for each function.
+
+        Returns list of dicts with function name, parameters, and clamping rationale.
+        """
+        analyzer = ContractAnalyzer(contract_source, contract_name)
+        config = FuzzingConfig(contract_name=contract_name)
+        clamping_engine = ClampingEngine(analyzer, config)
+
+        strategies = []
+        for func in analyzer.get_functions_of_interest():
+            handler = clamping_engine.generate_clamped_handler(func)
+            strategies.append({
+                "function": func.name,
+                "parameters": [(t, n) for t, n in func.parameters],
+                "clamped_params": handler.clamped_params,
+                "strategy": handler.clamping_strategy.value,
+                "rationale": handler.rationale,
+            })
+
+        return strategies
+
+    def identify_shortcut_opportunities(
+        self,
+        contract_source: str,
+        contract_name: str,
+    ) -> list[dict]:
+        """
+        Identify opportunities for shortcut functions.
+
+        Shortcuts combine multiple handlers to reach deep states faster.
+        """
+        analyzer = ContractAnalyzer(contract_source, contract_name)
+        config = FuzzingConfig(contract_name=contract_name)
+        shortcut_gen = ShortcutGenerator(analyzer, config)
+
+        shortcuts = shortcut_gen.generate_shortcuts()
+        return [
+            {
+                "name": s.name,
+                "handlers_combined": s.handlers_called,
+                "description": s.description,
+                "pattern": self._identify_pattern(s),
+            }
+            for s in shortcuts
+        ]
+
+    def _identify_pattern(self, shortcut: ShortcutFunction) -> str:
+        """Identify the DeFi pattern a shortcut represents."""
+        handlers = shortcut.handlers_called
+
+        if "deposit" in handlers and "borrow" in handlers:
+            return "lending_collateralization"
+        if "approve" in handlers and "transferFrom" in handlers:
+            return "token_allowance"
+        if "stake" in handlers:
+            return "staking_lifecycle"
+        if any("liquidity" in h.lower() for h in handlers):
+            return "amm_liquidity"
+        if any("position" in h.lower() for h in handlers):
+            return "perp_position"
+
+        return "custom_sequence"
+
+    def get_standardized_coverage_report(
+        self,
+        contract_source: str,
+        contract_name: str,
+        covered_functions: set[str] = None,
+    ) -> dict:
+        """
+        Generate standardized coverage report.
+
+        Standardized coverage excludes view/pure functions that don't
+        contribute to state exploration.
+        """
+        analyzer = ContractAnalyzer(contract_source, contract_name)
+        coverage_analyzer = StandardizedCoverageAnalyzer(analyzer)
+
+        foi = coverage_analyzer.get_standardized_functions()
+        excluded = coverage_analyzer.get_excluded_functions()
+
+        coverage = 0.0
+        if covered_functions:
+            coverage = coverage_analyzer.calculate_standardized_coverage(covered_functions)
+
+        return {
+            "contract": contract_name,
+            "standardized_coverage_pct": coverage,
+            "functions_of_interest": {
+                "count": len(foi),
+                "names": [f.name for f in foi],
+            },
+            "excluded_from_coverage": {
+                "count": len(excluded),
+                "names": [f.name for f in excluded],
+                "reason": "view/pure functions do not alter state",
+            },
+            "coverage_formula": "covered_foi / total_foi * 100",
+            "methodology": "Recon Magic - Standardized Line Coverage",
+        }
 
 
 # Convenience function

@@ -1,21 +1,52 @@
 # SENTINEL World-Class Roadmap
 
+## Implemented Enhancement Dimensions
+
+The following advanced modules have been implemented in `src/core/advanced/`:
+
+| Module | Description | Status |
+|--------|-------------|--------|
+| `bridge_analyzer.py` | Cross-chain bridge security (message validation, replay attacks, finality) | Done |
+| `upgrade_safety.py` | Proxy upgrade analysis (storage collisions, initializer protection) | Done |
+| `mev_analyzer.py` | MEV vulnerability detection (sandwich, frontrun, JIT liquidity) | Done |
+| `zk_circuit_analyzer.py` | ZK circuit security (Circom, Noir, Cairo, Halo2) | Done |
+| `account_abstraction.py` | ERC-4337/intent security (bundler, paymaster, solver) | Done |
+| `differential_auditor.py` | Version comparison and regression detection | Done |
+| `attack_graph_visualizer.py` | Visual attack graphs (Mermaid, DOT, D3.js, ASCII) | Done |
+| `slither_deep.py` | Deep Slither integration with custom detectors | Done |
+| `severity_predictor.py` | ML-based severity prediction (C4/Sherlock/Immunefi calibrated) | Done |
+| `collaborative_audit.py` | Multi-auditor workflow management | Done |
+
+Additional implementations in `src/core/`:
+
+| Module | Description | Status |
+|--------|-------------|--------|
+| `fuzzing_generator.py` | Chimera-compatible stateful fuzzing (Recon Magic methodology) | Done |
+| `invariant_agent.py` | Enhanced with ReconMagicMixin for fuzzing capabilities | Done |
+
+---
+
 ## Current State vs World-Class Gap Analysis
 
 ### What Top Auditors Have That SENTINEL Lacks
 
 | Capability | Top Auditors | SENTINEL Current | Gap |
 |------------|--------------|------------------|-----|
-| Historical exploit knowledge | 500+ exploits memorized | None | Critical |
-| Invariant thinking | Intuitive | TODO stub | Critical |
-| Attack path synthesis | Creative combinations | TODO stub | Critical |
-| PoC generation | Working exploits | TODO stub | High |
+| Historical exploit knowledge | 500+ exploits memorized | Basic patterns | High |
+| Invariant thinking | Intuitive | ReconMagic fuzzing | Moderate |
+| Attack path synthesis | Creative combinations | Attack graph visualizer | Moderate |
+| PoC generation | Working exploits | poc_generator + test_templates | Low |
 | Protocol-specific expertise | Deep Aave/Uni/Curve knowledge | Basic | High |
-| Economic/game theory analysis | Incentive modeling | None | High |
-| Differential auditing | Compare to last audit | None | Medium |
-| Formal verification | Certora/Halmos | None | Medium |
-| Cross-contract reasoning | Multi-hop attacks | Basic | High |
-| Competitive intelligence | Learn from winning reports | None | Medium |
+| Economic/game theory analysis | Incentive modeling | economic_analyzer + mev_analyzer | Moderate |
+| Differential auditing | Compare to last audit | differential_auditor | Done |
+| Formal verification | Certora/Halmos | symbolic_integration (Slither/Mythril/Halmos) | Low |
+| Cross-contract reasoning | Multi-hop attacks | semantic_analyzer + bridge_analyzer | Moderate |
+| Competitive intelligence | Learn from winning reports | severity_predictor (judging patterns) | Moderate |
+| Bridge/L2 security | Cross-chain analysis | bridge_analyzer | Done |
+| ZK circuit analysis | Circom/Noir/Cairo | zk_circuit_analyzer | Done |
+| Account abstraction | ERC-4337 security | account_abstraction | Done |
+| Upgrade safety | Proxy pattern analysis | upgrade_safety | Done |
+| Collaborative workflows | Multi-auditor coordination | collaborative_audit | Done |
 
 ---
 

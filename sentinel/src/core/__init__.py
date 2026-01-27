@@ -19,6 +19,18 @@ Advanced Analysis (Beyond Pattern Matching):
 - symbolic_integration: Slither/Mythril/Halmos/Echidna integration
 - economic_analyzer: DeFi economic invariant analysis
 - llm_guided: LLM-powered novel vulnerability discovery
+
+New Enhancement Dimensions (advanced/):
+- bridge_analyzer: Cross-chain bridge security analysis
+- upgrade_safety: Proxy upgrade safety verification
+- mev_analyzer: MEV vulnerability detection
+- zk_circuit_analyzer: ZK circuit security (Circom/Noir/Cairo/Halo2)
+- account_abstraction: ERC-4337 and intent security
+- differential_auditor: Version comparison and regression detection
+- attack_graph_visualizer: Visual attack path mapping
+- slither_deep: Deep Slither integration with custom detectors
+- severity_predictor: ML-based severity prediction
+- collaborative_audit: Multi-auditor workflow management
 """
 
 # Original types
@@ -120,6 +132,51 @@ from .llm_guided import (
     AnalysisDepth,
 )
 
+# New Enhancement Dimensions
+from .advanced import (
+    # Bridge Security
+    BridgeSecurityAnalyzer,
+    BridgeVulnerability,
+    analyze_bridge,
+    # Upgrade Safety
+    UpgradeSafetyAnalyzer,
+    StorageLayoutAnalyzer,
+    check_upgrade_safety,
+    # MEV Analysis
+    MEVAnalyzer as AdvancedMEVAnalyzer,
+    MEVVector,
+    analyze_mev,
+    # ZK Circuit Analysis
+    ZKCircuitAnalyzer,
+    ZKLanguage,
+    analyze_zk_circuit,
+    # Account Abstraction
+    AccountAbstractionAnalyzer,
+    AAComponent,
+    analyze_account_abstraction,
+    # Differential Auditing
+    DifferentialAuditor,
+    ContractDiff,
+    compare_versions,
+    # Attack Graph Visualization
+    AttackGraphVisualizer,
+    AttackGraph,
+    visualize_findings,
+    # Slither Deep Integration
+    SlitherDeepIntegration,
+    TaintPath,
+    run_slither,
+    analyze_taint,
+    # Severity Prediction
+    SeverityPredictor,
+    SeverityPrediction,
+    predict_severity,
+    # Collaborative Audit
+    CollaborativeAudit,
+    AuditSession,
+    AuditorRole,
+)
+
 __all__ = [
     # Original
     "AuditState",
@@ -191,4 +248,45 @@ __all__ = [
     "AdversarialReasoning",
     "ProtocolSpecificReasoning",
     "AnalysisDepth",
+    # Bridge Security
+    "BridgeSecurityAnalyzer",
+    "BridgeVulnerability",
+    "analyze_bridge",
+    # Upgrade Safety
+    "UpgradeSafetyAnalyzer",
+    "StorageLayoutAnalyzer",
+    "check_upgrade_safety",
+    # MEV Analysis (Advanced)
+    "AdvancedMEVAnalyzer",
+    "MEVVector",
+    "analyze_mev",
+    # ZK Circuit Analysis
+    "ZKCircuitAnalyzer",
+    "ZKLanguage",
+    "analyze_zk_circuit",
+    # Account Abstraction
+    "AccountAbstractionAnalyzer",
+    "AAComponent",
+    "analyze_account_abstraction",
+    # Differential Auditing
+    "DifferentialAuditor",
+    "ContractDiff",
+    "compare_versions",
+    # Attack Graph Visualization
+    "AttackGraphVisualizer",
+    "AttackGraph",
+    "visualize_findings",
+    # Slither Deep Integration
+    "SlitherDeepIntegration",
+    "TaintPath",
+    "run_slither",
+    "analyze_taint",
+    # Severity Prediction
+    "SeverityPredictor",
+    "SeverityPrediction",
+    "predict_severity",
+    # Collaborative Audit
+    "CollaborativeAudit",
+    "AuditSession",
+    "AuditorRole",
 ]
