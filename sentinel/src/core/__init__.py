@@ -231,6 +231,10 @@ from .skills import (
     ImmunefiReportsIntel,
     AuditCompetition,
     NotableFinding,
+    # Competitive Audit Intelligence
+    CompetitiveAuditIntel,
+    CrossPlatformPattern,
+    Platform,
 )
 
 __all__ = [
@@ -390,4 +394,8 @@ __all__ = [
     "ImmunefiReportsIntel",
     "AuditCompetition",
     "NotableFinding",
+    # Competitive Audit Intelligence
+    "CompetitiveAuditIntel",
+    "CrossPlatformPattern",
+    "Platform",
 ]

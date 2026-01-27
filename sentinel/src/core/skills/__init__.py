@@ -53,6 +53,7 @@ Vulnerability Intelligence (Immunefi):
 - immunefi_taxonomy: 14-class vulnerability taxonomy with SCSVS standard and exploit DB
 - bug_bounty_rules: Immunefi compliance checker, pre-submission review, severity guide
 - immunefi_reports: Published report intelligence (1,970+ reports, pattern rankings, scan plans)
+- competitive_audit_intel: Cross-platform intel (C4 + Sherlock + Immunefi + Secureum)
 """
 
 # Entry Point Analysis
@@ -241,6 +242,13 @@ from .immunefi_reports import (
     create_reports_intel,
 )
 
+from .competitive_audit_intel import (
+    CompetitiveAuditIntel,
+    CrossPlatformPattern,
+    Platform,
+    create_competitive_intel,
+)
+
 __all__ = [
     # Entry Point Analysis
     "EntryPointAnalyzer",
@@ -364,4 +372,9 @@ __all__ = [
     "NotableFinding",
     "FindingSeverity",
     "create_reports_intel",
+    # Competitive Audit Intelligence
+    "CompetitiveAuditIntel",
+    "CrossPlatformPattern",
+    "Platform",
+    "create_competitive_intel",
 ]

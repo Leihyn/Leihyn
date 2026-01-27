@@ -107,6 +107,7 @@ Reference: [AI Security Landscape](./ai-security-landscape.md) - SavantChat, Kri
 |--------|--------|-------------|
 | `immunefi_taxonomy` | [Immunefi Web3-Security-Library](https://github.com/immunefi-team/Web3-Security-Library) | 14-class vulnerability taxonomy, SCSVS standard, 6 major exploit references, SWC mapping |
 | `immunefi_reports` | [Immunefi Reports](https://reports.immunefi.com/) | 1,970+ published findings intelligence, 12 ranked vulnerability patterns, competition stats |
+| `competitive_audit_intel` | [C4](https://code4rena.com/reports) + [Sherlock](https://github.com/sherlock-audit) + [Secureum](https://github.com/secureum/CARE) | Cross-platform vuln rankings, judging rules, Secureum 201 findings/pitfalls, severity calibration |
 
 ### Advanced Modules (`core/advanced/`)
 | Module | Description |
@@ -206,11 +207,21 @@ Reference: [AI Security Landscape](./ai-security-landscape.md) - SavantChat, Kri
 - [ChainSecurity](https://chainsecurity.com/)
 - [Spearbit](https://spearbit.com/)
 
-### Bug Bounty Platforms
-- [Immunefi](https://immunefi.com/)
-- [Code4rena](https://code4rena.com/)
-- [Sherlock](https://www.sherlock.xyz/)
+### Bug Bounty & Competitive Audit Platforms
+- [Immunefi](https://immunefi.com/) - $100M+ payouts, $25B+ funds saved, 45K+ researchers
+- [Immunefi Reports](https://reports.immunefi.com/) - Published audit competition findings (1,970+ reports)
+- [Immunefi Blog](https://medium.com/immunefi) - Post-mortems: Wormhole ($10M), Aurora ($6M), Polygon ($2.2M)
+- [Code4rena](https://code4rena.com/) - 464 audits, 31,512 submissions (2024), 950+ unique H-severity
+- [Code4rena Reports](https://code4rena.com/reports) - Public audit reports with full findings
+- [Sherlock](https://www.sherlock.xyz/) - 459+ repos, 200-400 Watsons per contest, H/M only rewards
+- [Sherlock Audit Repos](https://github.com/sherlock-audit) - Contest repos with judging issues
 - [Cantina](https://cantina.xyz/)
+
+### Secureum
+- [Secureum Substack](https://secureum.substack.com/) - Audit Findings 101/201, Security Pitfalls 101/201, Solidity/Ethereum 101
+- [Secureum CARE](https://github.com/secureum/CARE) - Comprehensive Audit Readiness Evaluation (pre-audit reviews)
+- [Secureum RACE](https://github.com/secureum/RACE) - Monthly security challenges (CTF-style)
+- [Secureum Book](https://secureum.gitbook.io/secureum-book) - Full bootcamp curriculum
 
 ### Security Checklists
 - [Solcurity Standard](https://github.com/transmissions11/solcurity) - 100+ Solidity security checklist items (12 categories)
