@@ -205,6 +205,12 @@ from .skills import (
     CairoVulnerabilityScanner,
     PlatformScanner,
     ScanReport,
+    # Community-sourced
+    SolcurityChecker,
+    SolcurityReport,
+    AuditWorkflowEngine,
+    AuditWorkflow,
+    MoveVulnerabilityScanner,
 )
 
 __all__ = [
@@ -338,4 +344,10 @@ __all__ = [
     "CairoVulnerabilityScanner",
     "PlatformScanner",
     "ScanReport",
+    # Community-sourced Skills
+    "SolcurityChecker",
+    "SolcurityReport",
+    "AuditWorkflowEngine",
+    "AuditWorkflow",
+    "MoveVulnerabilityScanner",
 ]

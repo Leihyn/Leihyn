@@ -87,6 +87,13 @@ Personal audit tool with advanced security analysis capabilities.
 
 Source: [Trail of Bits Skills](https://github.com/trailofbits/skills)
 
+### Community-Sourced Skills (`core/skills/`)
+| Module | Source | Description |
+|--------|--------|-------------|
+| `solcurity_checker` | [transmissions11/solcurity](https://github.com/transmissions11/solcurity) | 100+ automated checklist items across 12 categories (V, S, F, M, C, X, E, T, P, D) |
+| `audit_workflow` | [pontifex73/audit-assistant-playbook](https://github.com/pontifex73/audit-assistant-playbook) + [MixBytes](https://mixbytes.io/blog/mastering-effective-test-writing-for-web3-protocol-audits) | 5-phase audit workflow with 3 testing mindsets (Hacker, Invariant, System Architect) |
+| `vulnerability_scanners/move_scanner` | [MoveMaverick/move-vulnerability-database](https://github.com/MoveMaverick/move-vulnerability-database) | 10 Move/Aptos/Sui patterns from 501 findings across 150+ audit reports |
+
 ### Advanced Modules (`core/advanced/`)
 | Module | Description |
 |--------|-------------|
@@ -189,9 +196,27 @@ Source: [Trail of Bits Skills](https://github.com/trailofbits/skills)
 - [Cantina](https://cantina.xyz/)
 
 ### Security Checklists
+- [Solcurity Standard](https://github.com/transmissions11/solcurity) - 100+ Solidity security checklist items (12 categories)
+- [Awesome Audits Checklists](https://github.com/TradMod/awesome-audits-checklists) - Aggregated checklists: ERC20/721/4626/4337, bridges, governance, chain-specific
 - [Nascent Security Toolkit](https://github.com/nascentxyz/simple-security-toolkit)
 - [SigP Checklist](https://github.com/sigp/smart-contract-security-checklist)
 - [Consensys Best Practices](https://consensys.github.io/smart-contract-best-practices/)
+
+### Audit Methodology & Playbooks
+- [Audit Assistant Playbook](https://github.com/pontifex73/audit-assistant-playbook) - 5-phase LLM-assisted audit workflow (Exploration, Hypothesis, Validation, Drafting, Review)
+- [MixBytes Three Mindsets](https://mixbytes.io/blog/mastering-effective-test-writing-for-web3-protocol-audits) - Hacker, Invariant, System Architect testing framework
+- [Wake Vibe Fuzzing](https://ackee.xyz/blog/vibe-fuzzing-guide-for-wakes-manually-guided-fuzzing/) - 4-phase manually-guided fuzzing with AI assistance
+- [Pashov Audit Group](https://github.com/pashov/audits) - 235+ audits, Impact x Likelihood severity matrix, standardized report format
+
+### Multi-Chain Audit Resources
+- [Rust Audit Roadmap](https://github.com/goheesheng/Rust-Audit-Roadmap) - CosmWasm, ink!, Substrate audit learning path
+- [Move Audit Resources](https://github.com/0xriazaka/Move-Audit-Resources) - OtterSec, Zellic, SharkTeam, MoveBit tools
+- [Move Vulnerability Database](https://github.com/MoveMaverick/move-vulnerability-database) - 501 findings from 150+ reports (18 vulnerability categories)
+
+### Research & Knowledge Bases
+- [Solodit](https://solodit.cyfrin.io/) - Largest open-source blockchain vulnerability database (by Cyfrin)
+- [Ultimate DeFi Research Base](https://github.com/OffcierCia/ultimate-defi-research-base) - DeFi science, security, MEV, stablecoins, governance research
+- [Synodus Audit Tools](https://synodus.com/blog/blockchain/smart-contract-audit-tools) - 15 free/paid audit tool comparison
 
 ---
 

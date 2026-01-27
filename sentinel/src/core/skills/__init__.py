@@ -39,6 +39,11 @@ Static Analysis Integration:
 Specialized Analysis:
 - constant_time_analyzer: Timing side-channel detection
 - property_based_testing: PBT guidance for smart contracts
+
+Community-Sourced Skills:
+- solcurity_checker: Automated Solcurity checklist (100+ items, 12 categories)
+- audit_workflow: 5-phase LLM-assisted audit workflow (MixBytes + pontifex73)
+- move_scanner: Move/Aptos/Sui vulnerability scanner (MVD v2.0, 501 findings)
 """
 
 # Entry Point Analysis
@@ -163,6 +168,24 @@ from .vulnerability_scanners import (
     scan_ton,
     scan_substrate,
     scan_algorand,
+    MoveVulnerabilityScanner,
+    scan_move,
+)
+
+# Community-Sourced Skills
+from .solcurity_checker import (
+    SolcurityChecker,
+    SolcurityReport,
+    CheckCategory,
+    check_solcurity,
+)
+
+from .audit_workflow import (
+    AuditWorkflowEngine,
+    AuditWorkflow,
+    AuditPhase,
+    TestingMindset,
+    create_audit_workflow,
 )
 
 __all__ = [
@@ -245,4 +268,16 @@ __all__ = [
     "scan_ton",
     "scan_substrate",
     "scan_algorand",
+    # Community-Sourced Skills
+    "SolcurityChecker",
+    "SolcurityReport",
+    "CheckCategory",
+    "check_solcurity",
+    "AuditWorkflowEngine",
+    "AuditWorkflow",
+    "AuditPhase",
+    "TestingMindset",
+    "create_audit_workflow",
+    "MoveVulnerabilityScanner",
+    "scan_move",
 ]

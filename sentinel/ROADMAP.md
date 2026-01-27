@@ -41,6 +41,16 @@ Based on [Trail of Bits Skills Marketplace](https://github.com/trailofbits/skill
 | `vulnerability_scanners/cairo_scanner.py` | building-secure-contracts/cairo | Done |
 | `vulnerability_scanners/` (stubs) | cosmwasm, ton, substrate, algorand | Done |
 
+### Community-Sourced Skills (`src/core/skills/`)
+
+Integrated from open-source audit resources:
+
+| Module | Source | Status |
+|--------|--------|--------|
+| `solcurity_checker.py` | [transmissions11/solcurity](https://github.com/transmissions11/solcurity) | Done |
+| `audit_workflow.py` | [pontifex73/audit-assistant-playbook](https://github.com/pontifex73/audit-assistant-playbook) + [MixBytes](https://mixbytes.io/blog/mastering-effective-test-writing-for-web3-protocol-audits) | Done |
+| `vulnerability_scanners/move_scanner.py` | [MoveMaverick/move-vulnerability-database](https://github.com/MoveMaverick/move-vulnerability-database) | Done |
+
 Additional implementations in `src/core/`:
 
 | Module | Description | Status |
