@@ -106,6 +106,7 @@ Reference: [AI Security Landscape](./ai-security-landscape.md) - SavantChat, Kri
 | Module | Source | Description |
 |--------|--------|-------------|
 | `immunefi_taxonomy` | [Immunefi Web3-Security-Library](https://github.com/immunefi-team/Web3-Security-Library) | 14-class vulnerability taxonomy, SCSVS standard, 6 major exploit references, SWC mapping |
+| `immunefi_reports` | [Immunefi Reports](https://reports.immunefi.com/) | 1,970+ published findings intelligence, 12 ranked vulnerability patterns, competition stats |
 
 ### Advanced Modules (`core/advanced/`)
 | Module | Description |

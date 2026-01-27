@@ -68,6 +68,7 @@ Reference: `knowledge/ai-security-landscape.md`
 |--------|--------|--------|
 | `immunefi_taxonomy.py` | [Immunefi Web3-Security-Library](https://github.com/immunefi-team/Web3-Security-Library) | Done |
 | `bug_bounty_rules.py` | [Immunefi Rules](https://immunefi.com/rules/) | Done |
+| `immunefi_reports.py` | [Immunefi Reports](https://reports.immunefi.com/) | Done |
 
 Additional implementations in `src/core/`:
 

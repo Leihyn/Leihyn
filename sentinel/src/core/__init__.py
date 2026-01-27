@@ -227,6 +227,10 @@ from .skills import (
     BugBountyCompliance,
     SubmissionReview,
     ReportQuality,
+    # Reports Intelligence
+    ImmunefiReportsIntel,
+    AuditCompetition,
+    NotableFinding,
 )
 
 __all__ = [
@@ -382,4 +386,8 @@ __all__ = [
     "BugBountyCompliance",
     "SubmissionReview",
     "ReportQuality",
+    # Reports Intelligence
+    "ImmunefiReportsIntel",
+    "AuditCompetition",
+    "NotableFinding",
 ]
