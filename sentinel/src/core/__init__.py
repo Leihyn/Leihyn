@@ -223,6 +223,10 @@ from .skills import (
     VulnClass,
     VulnPattern,
     ExploitReference,
+    # Bug Bounty Compliance
+    BugBountyCompliance,
+    SubmissionReview,
+    ReportQuality,
 )
 
 __all__ = [
@@ -374,4 +378,8 @@ __all__ = [
     "VulnClass",
     "VulnPattern",
     "ExploitReference",
+    # Bug Bounty Compliance
+    "BugBountyCompliance",
+    "SubmissionReview",
+    "ReportQuality",
 ]

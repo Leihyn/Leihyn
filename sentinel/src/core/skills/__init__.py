@@ -51,6 +51,7 @@ AI-Assisted Security (SavantChat + Kritt.ai + Nethermind):
 
 Vulnerability Intelligence (Immunefi):
 - immunefi_taxonomy: 14-class vulnerability taxonomy with SCSVS standard and exploit DB
+- bug_bounty_rules: Immunefi compliance checker, pre-submission review, severity guide
 """
 
 # Entry Point Analysis
@@ -223,6 +224,14 @@ from .immunefi_taxonomy import (
     create_immunefi_taxonomy,
 )
 
+from .bug_bounty_rules import (
+    BugBountyCompliance,
+    SubmissionReview,
+    ReportQuality,
+    Violation,
+    create_compliance_checker,
+)
+
 __all__ = [
     # Entry Point Analysis
     "EntryPointAnalyzer",
@@ -334,4 +343,10 @@ __all__ = [
     "ExploitReference",
     "SCVSCategory",
     "create_immunefi_taxonomy",
+    # Bug Bounty Compliance
+    "BugBountyCompliance",
+    "SubmissionReview",
+    "ReportQuality",
+    "Violation",
+    "create_compliance_checker",
 ]
