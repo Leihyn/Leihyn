@@ -62,6 +62,12 @@ Based on SavantChat, Kritt.ai, and Nethermind methodologies:
 
 Reference: `knowledge/ai-security-landscape.md`
 
+### Vulnerability Intelligence (`src/core/skills/`)
+
+| Module | Source | Status |
+|--------|--------|--------|
+| `immunefi_taxonomy.py` | [Immunefi Web3-Security-Library](https://github.com/immunefi-team/Web3-Security-Library) | Done |
+
 Additional implementations in `src/core/`:
 
 | Module | Description | Status |

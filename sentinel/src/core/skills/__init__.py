@@ -48,6 +48,9 @@ Community-Sourced Skills:
 AI-Assisted Security (SavantChat + Kritt.ai + Nethermind):
 - agentic_harness: Verification-driven vulnerability research pipeline
 - decompilation_workflow: AI-assisted bytecode decompilation and recovery
+
+Vulnerability Intelligence (Immunefi):
+- immunefi_taxonomy: 14-class vulnerability taxonomy with SCSVS standard and exploit DB
 """
 
 # Entry Point Analysis
@@ -210,6 +213,16 @@ from .decompilation_workflow import (
     create_decompilation_workflow,
 )
 
+# Vulnerability Intelligence
+from .immunefi_taxonomy import (
+    ImmunefiTaxonomy,
+    VulnClass,
+    VulnPattern,
+    ExploitReference,
+    SCVSCategory,
+    create_immunefi_taxonomy,
+)
+
 __all__ = [
     # Entry Point Analysis
     "EntryPointAnalyzer",
@@ -314,4 +327,11 @@ __all__ = [
     "RecoveredFunction",
     "RecoveryPhase",
     "create_decompilation_workflow",
+    # Vulnerability Intelligence
+    "ImmunefiTaxonomy",
+    "VulnClass",
+    "VulnPattern",
+    "ExploitReference",
+    "SCVSCategory",
+    "create_immunefi_taxonomy",
 ]

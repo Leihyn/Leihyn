@@ -218,6 +218,11 @@ from .skills import (
     DecompilationWorkflow,
     DecompilationReport,
     RecoveredFunction,
+    # Vulnerability Intelligence
+    ImmunefiTaxonomy,
+    VulnClass,
+    VulnPattern,
+    ExploitReference,
 )
 
 __all__ = [
@@ -364,4 +369,9 @@ __all__ = [
     "DecompilationWorkflow",
     "DecompilationReport",
     "RecoveredFunction",
+    # Vulnerability Intelligence
+    "ImmunefiTaxonomy",
+    "VulnClass",
+    "VulnPattern",
+    "ExploitReference",
 ]

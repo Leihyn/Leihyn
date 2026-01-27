@@ -102,6 +102,11 @@ Source: [Trail of Bits Skills](https://github.com/trailofbits/skills)
 
 Reference: [AI Security Landscape](./ai-security-landscape.md) - SavantChat, Kritt.ai, Nethermind methodology notes
 
+### Vulnerability Intelligence (`core/skills/`)
+| Module | Source | Description |
+|--------|--------|-------------|
+| `immunefi_taxonomy` | [Immunefi Web3-Security-Library](https://github.com/immunefi-team/Web3-Security-Library) | 14-class vulnerability taxonomy, SCSVS standard, 6 major exploit references, SWC mapping |
+
 ### Advanced Modules (`core/advanced/`)
 | Module | Description |
 |--------|-------------|
@@ -175,6 +180,9 @@ Reference: [AI Security Landscape](./ai-security-landscape.md) - SavantChat, Kri
 - [SWC Registry](https://swcregistry.io/)
 - [Rekt Leaderboard](https://rekt.news/leaderboard/)
 - [DeFi Threat Matrix](https://github.com/0xKitsune/DeFi-Threat-Matrix)
+- [Immunefi Web3 Security Library](https://github.com/immunefi-team/Web3-Security-Library) - 14-class taxonomy, hack analyses (2021-2023), SCSVS standard
+- [DeFiVulnLabs](https://github.com/SunWeb3Sec/DeFiVulnLabs) - Vulnerable Solidity code snippets for practice
+- [Sunsec Root Cause Analyses](https://github.com/SunWeb3Sec/DeFiHackLabs) - 101+ DeFi hack root cause breakdowns
 
 ### Security Tools
 | Tool | Purpose | Link |
