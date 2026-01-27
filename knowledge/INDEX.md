@@ -26,6 +26,9 @@
 - [Secureum](https://secureum.xyz/)
 - [Damn Vulnerable DeFi](https://www.damnvulnerabledefi.xyz/)
 - [Ethernaut](https://ethernaut.openzeppelin.com/)
+- [Capture the Ether](https://capturetheether.com/)
+- [Ciphershastra](https://ciphershastra.com/)
+- [DeFiVulnLabs](https://github.com/SunWeb3Sec/DeFiVulnLabs) - Vulnerable Solidity snippets for practice
 - [SWC Registry](https://swcregistry.io/)
 
 ### Zero Knowledge
@@ -185,6 +188,8 @@ Reference: [AI Security Landscape](./ai-security-landscape.md) - SavantChat, Kri
 - [Immunefi Web3 Security Library](https://github.com/immunefi-team/Web3-Security-Library) - 14-class taxonomy, hack analyses (2021-2023), SCSVS standard
 - [DeFiVulnLabs](https://github.com/SunWeb3Sec/DeFiVulnLabs) - Vulnerable Solidity code snippets for practice
 - [Sunsec Root Cause Analyses](https://github.com/SunWeb3Sec/DeFiHackLabs) - 101+ DeFi hack root cause breakdowns
+- [web3isgoinggreat](https://web3isgoinggreat.com/) - Aggregated database of hacks, rugpulls, and scams
+- [Learn EVM Attacks](https://github.com/coinspect/learn-evm-attacks) - EVM-specific attack analysis and replay
 
 ### Security Tools
 | Tool | Purpose | Link |
@@ -245,6 +250,7 @@ Reference: [AI Security Landscape](./ai-security-landscape.md) - SavantChat, Kri
 - [Solodit](https://solodit.cyfrin.io/) - Largest open-source blockchain vulnerability database (by Cyfrin)
 - [Ultimate DeFi Research Base](https://github.com/OffcierCia/ultimate-defi-research-base) - DeFi science, security, MEV, stablecoins, governance research
 - [Synodus Audit Tools](https://synodus.com/blog/blockchain/smart-contract-audit-tools) - 15 free/paid audit tool comparison
+- [Talent-Web3 Developer Resources](https://github.com/Talent-Web3/Developer-Resources) - Security-focused learning path with real exploit case studies by attack category
 
 ---
 
