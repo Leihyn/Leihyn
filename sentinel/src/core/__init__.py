@@ -177,6 +177,36 @@ from .advanced import (
     AuditorRole,
 )
 
+# Trail of Bits Skills
+from .skills import (
+    # Entry Point Analysis
+    EntryPointAnalyzer,
+    # Audit Context
+    AuditContextBuilder,
+    # Review & Analysis
+    DifferentialReviewer,
+    VariantAnalyzer,
+    FixReviewer,
+    SharpEdgesAnalyzer,
+    # Token Analysis
+    TokenIntegrationAnalyzer,
+    CodeMaturityAssessor,
+    # Static Analysis Integration
+    SemgrepIntegration,
+    CodeQLIntegration,
+    # Specialized Analysis
+    ConstantTimeAnalyzer,
+    PropertyBasedTestingGuide,
+    SpecComplianceChecker,
+    # Audit Lifecycle
+    AuditPrepAssistant,
+    # Vulnerability Scanners
+    SolanaVulnerabilityScanner,
+    CairoVulnerabilityScanner,
+    PlatformScanner,
+    ScanReport,
+)
+
 __all__ = [
     # Original
     "AuditState",
@@ -289,4 +319,23 @@ __all__ = [
     "CollaborativeAudit",
     "AuditSession",
     "AuditorRole",
+    # Trail of Bits Skills
+    "EntryPointAnalyzer",
+    "AuditContextBuilder",
+    "DifferentialReviewer",
+    "VariantAnalyzer",
+    "FixReviewer",
+    "SharpEdgesAnalyzer",
+    "TokenIntegrationAnalyzer",
+    "CodeMaturityAssessor",
+    "SemgrepIntegration",
+    "CodeQLIntegration",
+    "ConstantTimeAnalyzer",
+    "PropertyBasedTestingGuide",
+    "SpecComplianceChecker",
+    "AuditPrepAssistant",
+    "SolanaVulnerabilityScanner",
+    "CairoVulnerabilityScanner",
+    "PlatformScanner",
+    "ScanReport",
 ]

@@ -66,6 +66,27 @@ Personal audit tool with advanced security analysis capabilities.
 | `economic_analyzer` | DeFi economic invariant analysis |
 | `fuzzing_generator` | Chimera-compatible stateful fuzzing generation |
 
+### Trail of Bits Skills (`core/skills/`)
+| Module | Description |
+|--------|-------------|
+| `entry_point_analyzer` | Multi-language entry point mapping with access level classification |
+| `audit_context_builder` | 3-phase context building (orientation, micro, global) |
+| `differential_review` | Git-based differential review with blast radius analysis |
+| `variant_analyzer` | Variant analysis with pattern generalization (ripgrep + Semgrep) |
+| `fix_reviewer` | Audit fix verification against TOB-format findings |
+| `sharp_edges` | API footgun detection (6 categories, 3 adversary models) |
+| `token_integration_analyzer` | 18 weird ERC20 patterns (USDT, fee-on-transfer, rebasing, etc.) |
+| `code_maturity_assessor` | 9-category maturity framework (arithmetic, access control, MEV, etc.) |
+| `semgrep_integration` | Semgrep scanning with taint mode and custom rule generation |
+| `codeql_integration` | CodeQL database analysis with SARIF parsing |
+| `constant_time_analyzer` | Timing side-channel detection for crypto operations |
+| `property_based_testing` | PBT guide with 10 property types (Echidna, Foundry fuzz) |
+| `spec_compliance_checker` | Spec-to-code compliance with divergence classification |
+| `audit_prep_assistant` | 4-step audit prep (static analysis, coverage, dead code, docs) |
+| `vulnerability_scanners/` | Platform-specific scanners: Solana, Cairo, CosmWasm, TON, Substrate, Algorand |
+
+Source: [Trail of Bits Skills](https://github.com/trailofbits/skills)
+
 ### Advanced Modules (`core/advanced/`)
 | Module | Description |
 |--------|-------------|

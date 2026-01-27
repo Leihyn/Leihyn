@@ -17,6 +17,30 @@ The following advanced modules have been implemented in `src/core/advanced/`:
 | `severity_predictor.py` | ML-based severity prediction (C4/Sherlock/Immunefi calibrated) | Done |
 | `collaborative_audit.py` | Multi-auditor workflow management | Done |
 
+### Trail of Bits Skills Integration (`src/core/skills/`)
+
+Based on [Trail of Bits Skills Marketplace](https://github.com/trailofbits/skills):
+
+| Module | Source Skill | Status |
+|--------|-------------|--------|
+| `entry_point_analyzer.py` | entry-point-analyzer | Done |
+| `audit_context_builder.py` | audit-context-building | Done |
+| `differential_review.py` | differential-review | Done |
+| `variant_analyzer.py` | variant-analysis | Done |
+| `fix_reviewer.py` | fix-review | Done |
+| `sharp_edges.py` | sharp-edges | Done |
+| `token_integration_analyzer.py` | building-secure-contracts/token-integration | Done |
+| `code_maturity_assessor.py` | building-secure-contracts/code-maturity | Done |
+| `semgrep_integration.py` | static-analysis/semgrep | Done |
+| `codeql_integration.py` | static-analysis/codeql | Done |
+| `constant_time_analyzer.py` | constant-time-analysis | Done |
+| `property_based_testing.py` | property-based-testing | Done |
+| `spec_compliance_checker.py` | spec-to-code-compliance | Done |
+| `audit_prep_assistant.py` | building-secure-contracts/audit-prep | Done |
+| `vulnerability_scanners/solana_scanner.py` | building-secure-contracts/solana | Done |
+| `vulnerability_scanners/cairo_scanner.py` | building-secure-contracts/cairo | Done |
+| `vulnerability_scanners/` (stubs) | cosmwasm, ton, substrate, algorand | Done |
+
 Additional implementations in `src/core/`:
 
 | Module | Description | Status |
