@@ -52,12 +52,12 @@ Production-ready Uniswap v4 hook implementing counter-cyclical dynamic fees (0.2
 
 ---
 
-### [The Glass Wallet](https://github.com/Leihyn/glass-wallet-comic) — Blockchain Privacy Comic
-**Solana Privacy Hackathon 2025 Submission | [Live Demo](https://glass-wallet-comic.vercel.app)**
+### [Nocturne](https://github.com/Leihyn/nocturne) — Private Payments on Solana
+**ZK Privacy Protocol | Deployed on Devnet**
 
-Interactive 12-page comic exploring how public wallets expose users to MEV attacks, scammers, and surveillance. Follows two characters debating transparency vs anonymity, landing on selective privacy as the solution. Features voiceover narration for accessibility.
+Privacy protocol enabling fully private transactions on Solana. Stealth addresses (DKSAP) for unlinkable receives, fixed-denomination privacy pools with Merkle commitments, ZK proofs (Noir/UltraHonk) for withdrawals, and TEE relay for identity protection. 97% unlinkability score.
 
-`JavaScript` `TypeScript` `Web Audio API` `Solana`
+`Rust` `Anchor` `Solana` `Noir` `Zero-Knowledge`
 
 ---
 
@@ -65,11 +65,11 @@ Interactive 12-page comic exploring how public wallets expose users to MEV attac
 
 | Smart Contracts | Full-Stack | Infrastructure |
 |-----------------|------------|----------------|
-| Solidity, Rust (learning) | TypeScript, React, Next.js | PostgreSQL, Redis |
+| Solidity, Rust, Anchor | TypeScript, React, Next.js | PostgreSQL, Redis |
 | Foundry, Hardhat | Viem, Wagmi, Ethers.js | The Graph, IPFS |
 | ERC standards, Uniswap v4 Hooks | Node.js, Express | Docker, Tenderly |
 
-**Chains:** Ethereum, Base, Arbitrum, Optimism, BNB Chain, Hedera, Solana (learning)
+**Chains:** Ethereum, Base, Arbitrum, Optimism, BNB Chain, Hedera, Solana
 
 ---
 
