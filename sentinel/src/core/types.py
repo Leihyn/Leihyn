@@ -356,7 +356,7 @@ class AuditState:
     pocs: list[PoC] = field(default_factory=list)
 
     # Cross-contract analysis
-    dependency_graph: Optional[ContractDependencyGraph] = None
+    dependency_graph: Optional["ContractDependencyGraph"] = None
 
     # Documentation (if provided)
     documentation: Optional[str] = None

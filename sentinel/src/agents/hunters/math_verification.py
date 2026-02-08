@@ -757,20 +757,19 @@ Format your response as:
 
         return output
 
-    async def _report_finding(
-        self,
-        title: str,
-        severity: str,
-        description: str,
-        location: str,
-        formula: str = "",
-        simplified: str = "",
-        expected: str = "",
-        impact: str = "",
-        recommendation: str = "",
-        vulnerability_type: str = "",
-    ) -> str:
+    def _report_finding(self, params: dict) -> str:
         """Report a mathematical verification finding."""
+        title = params["title"]
+        severity = params["severity"]
+        description = params["description"]
+        location = params["location"]
+        formula = params.get("formula", "")
+        simplified = params.get("simplified", "")
+        expected = params.get("expected", "")
+        impact = params.get("impact", "")
+        recommendation = params.get("recommendation", "")
+        vulnerability_type = params.get("vulnerability_type", "")
+
         severity_map = {
             "Critical": Severity.CRITICAL,
             "High": Severity.HIGH,

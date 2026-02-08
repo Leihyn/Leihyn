@@ -343,7 +343,12 @@ class LLMClient:
 
                 if tool_name in tool_map:
                     try:
-                        result = tool_map[tool_name](tool_input)
+                        # Try kwargs first (handlers with named params like path, file_path)
+                        # Fall back to positional dict (handlers with params: dict)
+                        try:
+                            result = tool_map[tool_name](**tool_input)
+                        except TypeError:
+                            result = tool_map[tool_name](tool_input)
                         # Handle async tool handlers
                         if asyncio.iscoroutine(result):
                             try:

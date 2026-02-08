@@ -1020,18 +1020,17 @@ fn swap(
         except Exception as e:
             return f"Error running MEV analysis: {e}"
 
-    async def _report_finding(
-        self,
-        title: str,
-        severity: str,
-        contract: str,
-        description: str,
-        function: str = "",
-        impact: str = "",
-        recommendation: str = "",
-        confidence: float = 0.8,
-    ) -> str:
+    def _report_finding(self, params: dict) -> str:
         """Report a slippage or MEV finding."""
+        title = params["title"]
+        severity = params["severity"]
+        contract = params["contract"]
+        description = params["description"]
+        function = params.get("function", "")
+        impact = params.get("impact", "")
+        recommendation = params.get("recommendation", "")
+        confidence = params.get("confidence", 0.8)
+
         severity_map = {
             "Critical": Severity.CRITICAL,
             "High": Severity.HIGH,

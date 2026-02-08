@@ -954,17 +954,16 @@ If you find a bug, explain:
 
         return "Decimal Handling Issues:\n" + "\n".join(f"- {issue}" for issue in issues)
 
-    async def _report_finding(
-        self,
-        title: str,
-        severity: str,
-        description: str,
-        location: str,
-        impact: str = "",
-        recommendation: str = "",
-        attack_scenario: str = "",
-    ) -> str:
+    def _report_finding(self, params: dict) -> str:
         """Report an oracle manipulation finding."""
+        title = params["title"]
+        severity = params["severity"]
+        description = params["description"]
+        location = params["location"]
+        impact = params.get("impact", "")
+        recommendation = params.get("recommendation", "")
+        attack_scenario = params.get("attack_scenario", "")
+
         severity_map = {
             "Critical": Severity.CRITICAL,
             "High": Severity.HIGH,

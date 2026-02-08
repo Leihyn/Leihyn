@@ -655,17 +655,16 @@ fn withdraw(ref self: ContractState, amount: u256) {
 
         return "\n".join(analysis)
 
-    async def _report_finding(
-        self,
-        title: str,
-        severity: str,
-        description: str,
-        location: str,
-        attack_flow: str,
-        impact: str = "",
-        recommendation: str = "",
-    ) -> str:
+    def _report_finding(self, params: dict) -> str:
         """Report a flash loan finding."""
+        title = params["title"]
+        severity = params["severity"]
+        description = params["description"]
+        location = params["location"]
+        attack_flow = params.get("attack_flow", "")
+        impact = params.get("impact", "")
+        recommendation = params.get("recommendation", "")
+
         severity_map = {
             "Critical": Severity.CRITICAL,
             "High": Severity.HIGH,
@@ -673,7 +672,9 @@ fn withdraw(ref self: ContractState, amount: u256) {
             "Low": Severity.LOW,
         }
 
-        full_description = f"{description}\n\n**Attack Flow:**\n{attack_flow}"
+        full_description = description
+        if attack_flow:
+            full_description += f"\n\n**Attack Flow:**\n{attack_flow}"
 
         finding = Finding(
             id=f"FLASH-{len(self.findings)+1:03d}",

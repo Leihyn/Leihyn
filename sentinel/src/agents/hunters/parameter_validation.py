@@ -719,18 +719,17 @@ misconfiguration, etc.). Be thorough.
 
         return output
 
-    async def _report_finding(
-        self,
-        title: str,
-        severity: str,
-        description: str,
-        location: str,
-        impact: str = "",
-        recommendation: str = "",
-        missing_check: str = "",
-        vuln_category: str = "missing_bounds",
-    ) -> str:
+    def _report_finding(self, params: dict) -> str:
         """Report a parameter validation finding."""
+        title = params["title"]
+        severity = params["severity"]
+        description = params["description"]
+        location = params["location"]
+        impact = params.get("impact", "")
+        recommendation = params.get("recommendation", "")
+        missing_check = params.get("missing_check", "")
+        vuln_category = params.get("vuln_category", "missing_bounds")
+
         severity_map = {
             "Critical": Severity.CRITICAL,
             "High": Severity.HIGH,
