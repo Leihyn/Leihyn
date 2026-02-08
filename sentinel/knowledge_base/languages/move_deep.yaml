@@ -1,0 +1,561 @@
+# Move (Aptos & Sui) Deep Knowledge Base
+# Maximum depth vulnerability patterns for world-class auditing
+
+move:
+  thinking_budget: 32000
+
+  # ===========================================================================
+  # APTOS MOVE
+  # ===========================================================================
+  aptos:
+    name: "Move (Aptos)"
+
+    historical_exploits:
+      - name: "Pontem Wallet Vulnerability"
+        date: "2023"
+        type: "Capability Extraction"
+        root_cause: "Capability could be extracted and stored"
+        lesson: "Never return capabilities from public functions"
+
+      - name: "Early DEX Integer Overflow"
+        date: "2022"
+        type: "Arithmetic"
+        root_cause: "Unchecked multiplication in swap calculation"
+        lesson: "Always use checked arithmetic for financial math"
+
+      - name: "NFT Marketplace Reentrancy"
+        date: "2023"
+        type: "Callback Reentrancy"
+        root_cause: "External callback before state update"
+        lesson: "Follow CEI pattern even in Move"
+
+    invariants:
+      critical:
+        - id: "APT-INV-001"
+          name: "Signer Verification"
+          expression: "privileged_action => signer::address_of(account) == authorized"
+          violation: "Anyone can execute admin functions"
+
+        - id: "APT-INV-002"
+          name: "Resource Ownership"
+          expression: "borrow_global<T>(addr) => caller_authorized_for(addr)"
+          violation: "Unauthorized resource access"
+
+        - id: "APT-INV-003"
+          name: "Capability Containment"
+          expression: "capability never leaves module as return value"
+          violation: "Capability leak enables persistent unauthorized access"
+
+        - id: "APT-INV-004"
+          name: "Coin Conservation"
+          expression: "coin_in == coin_out + fees (no creation/destruction)"
+          violation: "Inflation/deflation exploit"
+
+      high:
+        - id: "APT-INV-005"
+          name: "Initialization Guard"
+          expression: "init_module called exactly once"
+          violation: "State reset or double initialization"
+
+        - id: "APT-INV-006"
+          name: "Arithmetic Bounds"
+          expression: "all arithmetic checked or provably safe"
+          violation: "Overflow/underflow exploit"
+
+        - id: "APT-INV-007"
+          name: "Resource Existence"
+          expression: "borrow_global<T>(addr) => exists<T>(addr)"
+          violation: "Abort on missing resource (DoS)"
+
+    attack_patterns:
+      capability_attacks:
+        - name: "Capability Extraction"
+          description: "Extract capability struct for later unauthorized use"
+          severity: "critical"
+          code_pattern: |
+            // VULNERABLE
+            public fun get_admin_cap(account: &signer): AdminCap acquires AdminCap {
+                move_from<AdminCap>(signer::address_of(account))
+                // Attacker now owns AdminCap forever!
+            }
+
+            // SAFE
+            public fun admin_action(account: &signer) acquires AdminCap {
+                let cap = borrow_global<AdminCap>(signer::address_of(account));
+                // Use cap inline, never move it out
+            }
+
+        - name: "Capability Duplication via References"
+          description: "Create multiple references to bypass single-use"
+          severity: "high"
+          mitigation: "Use hot potato pattern for single-use capabilities"
+
+      resource_attacks:
+        - name: "Unauthorized Global Borrow"
+          description: "Access other user's resources"
+          severity: "critical"
+          code_pattern: |
+            // VULNERABLE
+            public fun steal(target: address) acquires Vault {
+                let vault = borrow_global_mut<Vault>(target);
+                // Can modify anyone's vault!
+            }
+
+            // SAFE
+            public fun withdraw(account: &signer) acquires Vault {
+                let addr = signer::address_of(account);
+                let vault = borrow_global_mut<Vault>(addr);
+                // Only access own vault
+            }
+
+        - name: "Resource Type Confusion"
+          description: "Confuse resources with same structure"
+          severity: "high"
+          mitigation: "Use phantom types or unique fields"
+
+      flash_loan_attacks:
+        - name: "Flash Loan Receipt Discard"
+          description: "Borrow without repaying"
+          severity: "critical"
+          code_pattern: |
+            // VULNERABLE - Receipt can be discarded
+            public fun flash_loan(): (Coin<APT>, FlashReceipt) { ... }
+
+            // SAFE - Hot potato pattern
+            struct FlashReceipt has drop { } // NO store ability
+            // Must be consumed in same transaction
+
+        - name: "Flash Loan Price Manipulation"
+          description: "Manipulate prices during flash loan"
+          severity: "high"
+          mitigation: "Use TWAP, check price bounds"
+
+    audit_checklist:
+      - id: "APT-CHK-001"
+        check: "Every entry function validates signer"
+        severity: "critical"
+
+      - id: "APT-CHK-002"
+        check: "No public functions return capabilities"
+        severity: "critical"
+
+      - id: "APT-CHK-003"
+        check: "All acquires are necessary and minimal"
+        severity: "high"
+
+      - id: "APT-CHK-004"
+        check: "Arithmetic uses checked operations"
+        severity: "high"
+
+      - id: "APT-CHK-005"
+        check: "exists<T> checked before borrow_global"
+        severity: "medium"
+
+      - id: "APT-CHK-006"
+        check: "Module init is idempotent or guarded"
+        severity: "high"
+
+      - id: "APT-CHK-007"
+        check: "Coin operations preserve total supply"
+        severity: "critical"
+
+      - id: "APT-CHK-008"
+        check: "Events emitted for all state changes"
+        severity: "medium"
+
+  # ===========================================================================
+  # SUI MOVE
+  # ===========================================================================
+  sui:
+    name: "Move (Sui)"
+
+    unique_concepts:
+      - name: "Object Model"
+        description: "Sui uses objects instead of global storage"
+        security_implications:
+          - "Object ownership determines access"
+          - "Shared objects enable concurrency"
+          - "Owned objects are exclusive"
+
+      - name: "Programmable Transaction Blocks (PTBs)"
+        description: "Multiple operations in single transaction"
+        security_implications:
+          - "Flash-loan-like patterns without explicit flash loans"
+          - "Complex transaction composition"
+          - "Atomic multi-step attacks"
+
+      - name: "Dynamic Fields"
+        description: "Attach data to objects dynamically"
+        security_implications:
+          - "Hidden state in dynamic fields"
+          - "Authorization bypass via field manipulation"
+
+    invariants:
+      critical:
+        - id: "SUI-INV-001"
+          name: "Object Ownership Integrity"
+          expression: "object access => caller owns object OR object is shared"
+          violation: "Unauthorized object manipulation"
+
+        - id: "SUI-INV-002"
+          name: "Shared Object Consistency"
+          expression: "shared object mutations are atomic and consistent"
+          violation: "Race condition exploits"
+
+        - id: "SUI-INV-003"
+          name: "Capability Object Security"
+          expression: "AdminCap ownership => admin privileges"
+          violation: "Privilege escalation"
+
+      high:
+        - id: "SUI-INV-004"
+          name: "Transfer Authorization"
+          expression: "transfer => caller is owner OR has transfer capability"
+          violation: "Unauthorized asset transfer"
+
+        - id: "SUI-INV-005"
+          name: "Dynamic Field Access Control"
+          expression: "dynamic_field::borrow_mut => caller authorized"
+          violation: "Hidden state manipulation"
+
+    attack_patterns:
+      object_attacks:
+        - name: "Shared Object Race Condition"
+          description: "Exploit concurrent access to shared objects"
+          severity: "critical"
+          code_pattern: |
+            // VULNERABLE - No mutex on shared object
+            public fun withdraw(pool: &mut SharedPool, amount: u64) {
+                // Multiple txs can read balance concurrently
+                // and all pass the check before any deducts
+                assert!(pool.balance >= amount, E_INSUFFICIENT);
+                pool.balance = pool.balance - amount;
+            }
+
+            // SAFER - Atomic check-and-modify
+            // Or use per-user owned objects
+
+        - name: "Object Ownership Confusion"
+          description: "Manipulate object ownership during transfer"
+          severity: "high"
+          mitigation: "Validate ownership before operations"
+
+      ptb_attacks:
+        - name: "PTB Flash Loan Pattern"
+          description: "Use PTB to create flash-loan-like attacks"
+          severity: "high"
+          attack_flow:
+            - "Borrow asset in PTB step 1"
+            - "Manipulate price/state in step 2"
+            - "Profit in step 3"
+            - "Return asset in step 4"
+          mitigation: "Consider PTB context in security model"
+
+        - name: "PTB State Manipulation"
+          description: "Chain operations to reach invalid state"
+          severity: "high"
+          mitigation: "Ensure invariants hold at transaction boundaries"
+
+      dynamic_field_attacks:
+        - name: "Dynamic Field Injection"
+          description: "Add malicious dynamic fields to objects"
+          severity: "medium"
+          mitigation: "Validate dynamic field existence and type"
+
+        - name: "Hidden State Attack"
+          description: "Hide critical state in dynamic fields"
+          severity: "medium"
+          mitigation: "Document all dynamic field usage"
+
+    audit_checklist:
+      - id: "SUI-CHK-001"
+        check: "Shared object access is race-safe"
+        severity: "critical"
+
+      - id: "SUI-CHK-002"
+        check: "Object ownership verified before mutation"
+        severity: "critical"
+
+      - id: "SUI-CHK-003"
+        check: "PTB attack scenarios considered"
+        severity: "high"
+
+      - id: "SUI-CHK-004"
+        check: "Dynamic fields properly authorized"
+        severity: "high"
+
+      - id: "SUI-CHK-005"
+        check: "Capability objects properly guarded"
+        severity: "critical"
+
+      - id: "SUI-CHK-006"
+        check: "Clock usage is safe (no time manipulation)"
+        severity: "medium"
+
+  # ===========================================================================
+  # ULTRATHINK PROMPTS FOR MOVE
+  # ===========================================================================
+  ultrathink_sections:
+    resource_analysis: |
+      ## Deep Resource/Object Analysis
+
+      For EVERY resource (Aptos) or object (Sui):
+
+      1. **Ownership Model**
+         - Who can create this resource/object?
+         - Who can modify it?
+         - Who can destroy it?
+         - Can ownership be transferred maliciously?
+
+      2. **Capability Security**
+         - What capabilities exist?
+         - Can they be extracted?
+         - Can they be duplicated?
+         - Are they properly gated?
+
+      3. **Global Access Patterns**
+         - Which addresses can be accessed?
+         - Is there unauthorized cross-account access?
+         - Are existence checks in place?
+
+      4. **Lifecycle Security**
+         - Initialization: Can it be repeated?
+         - Modification: Who can modify?
+         - Destruction: Is cleanup complete?
+
+    sui_specific: |
+      ## Sui-Specific Analysis
+
+      1. **Object Type Analysis**
+         - Owned vs Shared vs Immutable?
+         - Is the choice appropriate?
+         - Race condition risk for shared?
+
+      2. **PTB Threat Model**
+         - Can operations be chained maliciously?
+         - Flash-loan patterns possible?
+         - Atomic invariant violations?
+
+      3. **Dynamic Field Security**
+         - What dynamic fields exist?
+         - Who can add/remove them?
+         - Hidden state risks?
+
+    economic_analysis: |
+      ## Move Economic Analysis
+
+      1. **Coin/Token Conservation**
+         - Is total supply conserved?
+         - Can coins be created from nothing?
+         - Can coins be destroyed unexpectedly?
+
+      2. **Price Manipulation**
+         - What prices are used?
+         - Can they be manipulated in single TX?
+         - PTB/flash loan amplification?
+
+      3. **Fee Extraction**
+         - Are fees calculated correctly?
+         - Can fees be bypassed?
+         - Fee recipient validation?
+
+  # ===========================================================================
+  # SECURITY RESOURCES (from Monethic/awesome-move-security)
+  # ===========================================================================
+  resources:
+
+    # -------------------------------------------------------------------------
+    # SUI MOVE SECURITY
+    # -------------------------------------------------------------------------
+    sui_security_articles:
+      - name: "SlowMist: Introduction to Auditing Sui Move Contracts"
+        url: "https://slowmist.medium.com/slowmist-introduction-to-auditing-sui-move-contracts-da005149f6bc"
+        priority: "essential"
+      - name: "MoveBit: Sui Objects Security Principles and Best Practices"
+        url: "https://www.movebit.xyz/blog/post/Sui-Objects-Security-Principles-and-Best-Practices.html"
+        priority: "high"
+      - name: "Monethic: SuiVulnLab Workshop"
+        url: "https://medium.com/@monethic/sui-move-security-workshop-writeup-material-480c5e7d1da3"
+
+    sui_audit_reports:
+      - name: "Cetus Protocol (MoveBit)"
+        url: "https://github.com/CetusProtocol/Audit/blob/main/Cetus%20Sui%20Audit%20Report%20by%20MoveBit.pdf"
+      - name: "Cetus Protocol (OtterSec)"
+        url: "https://github.com/CetusProtocol/Audit/blob/main/Cetus%20Sui%20Audit%20Report%20by%20OtterSec.pdf"
+      - name: "Cetus Protocol (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/CetusProtocol%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Suilend (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Suilend%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Bucket Protocol (OtterSec + MoveBit)"
+        url: "https://github.com/Bucket-Protocol/Audit"
+      - name: "KriyaDEX (MoveBit)"
+        url: "https://github.com/movebit/Sampled-Audit-Reports/blob/main/reports/KriyaDEX-Smart-Contract-Audit-Report.pdf"
+      - name: "Scallop Lend (Zellic + OtterSec + MoveBit)"
+        url: "https://docs.scallop.io/protocol/auditing"
+      - name: "Magma Finance (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Magma%20Finance%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Move and Sui Security Assessment (Zellic for Sui Foundation)"
+        url: "https://github.com/sui-foundation/security-audits/blob/main/docs/Move%20and%20Sui%20Security%20Assessment%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Streamflow on Sui (MoveBit)"
+        url: "http://movebit.xyz/reports/Streamflow-Final-Audit-Report.pdf"
+      - name: "Chirp Network (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Chirp%20Network%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Sui AMM Swap (MoveBit)"
+        url: "https://movebit.xyz/file/Sui-AMM-swap-Contracts-Audit-Report.pdf"
+
+    sui_exploits_incidents:
+      - name: "Cetus Protocol Exploit ($223M)"
+        url: "https://rekt.news/cetus-rekt"
+        description: "Shared library vulnerability exploited"
+      - name: "Cetus Hack - Shared Library Bug Analysis"
+        url: "https://www.merklescience.com/blog/hack-track-how-a-shared-library-bug-triggered-the-223m-cetus-hack"
+      - name: "Typus Permission Validation Vulnerability"
+        url: "https://slowmist.medium.com/is-the-move-language-secure-the-typus-permission-validation-vulnerability-755a5175f7c3"
+      - name: "Bluefin Vulnerabilities"
+        url: "https://www.movebit.xyz/blog/post/Bluefin-vulnerabilities-explanation-1.html"
+      - name: "Sui Cross-Chain Protocol Vulnerability"
+        url: "https://www.movebit.xyz/blog/post/MoveBit-Discovers-and-Helps-Fix-Vulnerability-in-Sui-Cross-Chain-Protocol-20241012.html"
+
+    sui_ctfs:
+      - name: "Numen Cyber 2023 CTF (Move challenges)"
+        url: "https://github.com/numencyber/NumenCTF_2023"
+      - name: "MoveCTF 1st Challenge"
+        url: "https://github.com/movectf/MoveCTF-1st-Challenge"
+      - name: "MoveCTF 2024 Writeup (Amber Group)"
+        url: "https://ambergroup.medium.com/movectf-2024-writeup-f74784e020c4"
+      - name: "MetaTrust Sui CTF 2023"
+        url: "https://leoq7.com/2023/09/MetaTrust-CTF-Sui/"
+      - name: "MoveCTF 2024 Writeup (zan.top)"
+        url: "https://medium.com/@zan.top/move-ctf-2024-writeup-a9baa0c043e7"
+      - name: "MoveCTF 2022 Writeups"
+        url: "https://github.com/saruman9/move_ctf_writeup"
+
+    # -------------------------------------------------------------------------
+    # APTOS MOVE SECURITY
+    # -------------------------------------------------------------------------
+    aptos_security_articles:
+      - name: "Aptos Move Security Guidelines (Official)"
+        url: "https://aptos.dev/build/smart-contracts/move-security-guidelines"
+        priority: "essential"
+      - name: "Zellic: Top 10 Aptos Move Bugs"
+        url: "https://www.zellic.io/blog/top-10-aptos-move-bugs"
+        priority: "essential"
+      - name: "CertiK: Lessons from Aptos Smart Contract Audit"
+        url: "https://www.certik.com/resources/blog/moving-the-immovables-lessons-learned-from-our-aptos-smart-contract-audit"
+        priority: "high"
+      - name: "Monethic: Vulnerabilities in Storage and Access Control"
+        url: "https://medium.com/@monethic/move-demistyfied-part-3-vulnerabilities-in-storage-and-access-control-checks-8634cc1d114d"
+      - name: "Monethic: Structs, Storage, and Capabilities"
+        url: "https://medium.com/@monethic/move-demystified-part-2-structs-storage-and-cap-abilities-a60bf6b0b399"
+      - name: "Monethic: Getting Started with Move Prover"
+        url: "https://medium.com/@monethic/getting-started-with-move-prover-for-aptos-01923d5a1d0f"
+
+    aptos_audit_reports:
+      - name: "Cetus Protocol on Aptos (MoveBit)"
+        url: "https://github.com/CetusProtocol/Audit/blob/main/Cetus%20Aptos%20Audit%20Report%20by%20MoveBit.pdf"
+      - name: "Cetus Protocol on Aptos (OtterSec)"
+        url: "https://github.com/CetusProtocol/Audit/blob/main/Cetus%20Aptos%20Audit%20Report%20by%20OtterSec.pdf"
+      - name: "Pontem Liquidswap (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Pontem%20Liquidswap%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Liquidswap Formal Verification (MoveBit)"
+        url: "https://pontem.network/posts/liquidswap-passes-formal-verification-by-movebit---heres-what-it-means"
+      - name: "Thala Labs Move Dollar (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Thala%20Labs%20Move%20Dollar%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Econia (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Econia%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Echelon (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Echelon%20-%20Zellic%20Audit%20Report%20(January).pdf"
+      - name: "Tortuga Liquid Staking (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Tortuga%20Liquid%20Staking%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Laminar Markets (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Laminar%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "MSafe Wallet (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/MSafe%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "PancakeSwap on Aptos (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/PancakeSwap%20Aptos%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "PancakeSwap Move (SlowMist)"
+        url: "https://github.com/slowmist/Knowledge-Base/blob/master/open-report-V2/smart-contract/SlowMist%20Audit%20Report%20-%20PancakeSwap_MOVE_en-us.pdf"
+      - name: "Wormhole on Aptos (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/Wormhole%20Aptos%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "LayerZero OFT Wrapper (Zellic)"
+        url: "https://github.com/Zellic/publications/blob/master/LayerZero%20OFT%20Wrapper%20Audit%20(January%2019th%202023)%20-%20Zellic%20Audit%20Report.pdf"
+      - name: "Cellana (MoveBit)"
+        url: "https://movebit.xyz/reports/Cellana-Smart-Contract-Final-Audit-Report.pdf"
+      - name: "Amnis Finance (MoveBit + Verichains)"
+        url: "https://docs.amnis.finance/security-audits"
+
+    aptos_exploits_incidents:
+      - name: "Thala Labs Exploit (Nov 2024)"
+        url: "https://thalalabs.medium.com/thala-nov-15-post-mortem-5aea82bb3916"
+        analysis:
+          - "https://www.halborn.com/blog/post/explained-the-thala-hack-november-2024"
+          - "https://www.quillaudits.com/blog/hack-analysis/thala-defi-hack-analysis"
+      - name: "Wormhole Aptos $5M Vulnerability"
+        url: "https://cointelegraph.com/news/certik-discovered-5-million-security-flaw-wormhole-bridge-aptos"
+      - name: "Aptos MoveVM Integer Overflow (Critical)"
+        url: "https://thecyberexpress.com/critical-vulnerability-in-aptos-movevm-patched/"
+
+    aptos_ctfs:
+      - name: "CTF MOVEment 2022 (Amber Group)"
+        url: "https://ambergroup.medium.com/movement-ctf-2022-writeup-4904ff8a82e"
+      - name: "CTF MOVEment Aptos 2022"
+        url: "https://leoq7.com/2022/12/CTF-Movement-Aptos/"
+      - name: "CTF MOVEment Challenge Walkthrough"
+        url: "https://coinsbench.com/draining-tokens-from-a-dex-in-the-movebit-ctfmovement-3-challenge-a-solution-walkthrough-37d8ed737821"
+
+    # -------------------------------------------------------------------------
+    # GENERAL MOVE SECURITY
+    # -------------------------------------------------------------------------
+    general_articles:
+      - name: "OtterSec: Introduction to Move for Auditors"
+        url: "https://osec.io/blog/2022-09-06-move-introduction"
+        priority: "essential"
+      - name: "Zellic: The Billion Dollar Move Bug"
+        url: "https://www.zellic.io/blog/the-billion-dollar-move-bug"
+        priority: "essential"
+      - name: "Zellic: Move Fast and Break Things Pt. 1"
+        url: "https://www.zellic.io/blog/move-fast-and-break-things-pt-1"
+        priority: "high"
+      - name: "Zellic: Move Fast and Break Things Pt. 2"
+        url: "https://www.zellic.io/blog/move-fast-break-things-move-security-part-2"
+        priority: "high"
+      - name: "Numen Cyber: Security Analysis of Move Language"
+        url: "https://www.numencyber.com/security-analysis-of-the-move-language-game-changer-of-smart-contracts/"
+      - name: "SharkTeam: Move Logic Verification Vulnerabilities"
+        url: "https://medium.com/@sharkteam/a-vulnerability-perspective-analysis-of-move-language-security-logic-verification-vulnerability-dfd7a5cafb03"
+      - name: "SharkTeam: Move Proposal Attack Vectors"
+        url: "https://medium.com/@sharkteam/move-language-security-analysis-and-contract-audit-points-proposal-attack-4adaeae2028f"
+      - name: "SharkTeam: Move Contract Upgrade Vulnerabilities"
+        url: "https://medium.com/@sharkteam/move-language-security-analysis-and-contract-audit-contract-upgrade-vulnerability-79ec80dce744"
+      - name: "Movement Labs: Securing Smart Contracts Dev Guide"
+        url: "https://blog.movementlabs.xyz/article/securing-smart-contracts-a-devs-guide-part-i"
+
+    cheatsheets:
+      - name: "MoveMaverick Move Vulnerability Database"
+        url: "https://movemaverick.github.io/move-vulnerability-database/"
+        priority: "essential"
+      - name: "Sui Move Security Cheatsheet"
+        url: "https://github.com/darshan-06/Sui-Move-cheat-sheet/blob/main/sui_move_security_cheatsheet.md"
+        priority: "high"
+      - name: "Move Audit Resources"
+        url: "https://github.com/0xriazaka/Move-Audit-Resources"
+      - name: "Zellic Public Findings Database"
+        url: "https://reports.zellic.io/findings"
+      - name: "MoveBit Sampled Audit Reports"
+        url: "https://github.com/movebit/Sampled-Audit-Reports"
+      - name: "Zellic Public Audit Reports"
+        url: "https://github.com/Zellic/publications"
+      - name: "Sui Foundation Security Audits"
+        url: "https://github.com/sui-foundation/security-audits"
+      - name: "SlowMist Security Knowledge Base"
+        url: "https://github.com/slowmist/Knowledge-Base"
+
+    audit_firms:
+      - name: "Monethic"
+        url: "https://monethic.com"
+      - name: "MoveBit"
+        url: "https://www.movebit.xyz"
+      - name: "OtterSec"
+        url: "https://osec.io"
+      - name: "Zellic"
+        url: "https://www.zellic.io"

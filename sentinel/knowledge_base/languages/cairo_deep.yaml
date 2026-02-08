@@ -1,0 +1,379 @@
+# Cairo (Starknet) Deep Knowledge Base
+# Maximum depth vulnerability patterns for world-class auditing
+
+cairo:
+  name: "Cairo (Starknet)"
+  thinking_budget: 32000
+
+  # ===========================================================================
+  # STARKNET ARCHITECTURE CONTEXT
+  # ===========================================================================
+  architecture:
+    execution_model:
+      - "Cairo runs on StarkNet L2, with L1 Ethereum as data availability"
+      - "Transactions are batched and proven via STARKs"
+      - "State is stored in contract storage slots"
+      - "L1-L2 messaging enables cross-layer communication"
+
+    unique_features:
+      - name: "felt252 Type"
+        description: "Field element modulo prime ~2^252"
+        security_notes:
+          - "Wraps at prime, NOT at 2^256"
+          - "Different overflow behavior than EVM"
+          - "Can cause unexpected results in arithmetic"
+
+      - name: "Account Abstraction"
+        description: "Native account abstraction, all accounts are contracts"
+        security_notes:
+          - "Signature validation is customizable"
+          - "Gas payment is flexible"
+          - "Account contracts can have vulnerabilities"
+
+      - name: "L1-L2 Messaging"
+        description: "Asynchronous messaging between L1 and L2"
+        security_notes:
+          - "Messages can be spoofed if sender not validated"
+          - "Timing assumptions can be violated"
+          - "Replay attacks possible without nonces"
+
+  # ===========================================================================
+  # HISTORICAL EXPLOITS
+  # ===========================================================================
+  historical_exploits:
+    - name: "Early StarkNet Bridge Issues"
+      date: "2022-2023"
+      type: "L1-L2 Message Validation"
+      root_cause: "Insufficient validation of L1 message sender"
+      lesson: "Always validate from_address in L1 handlers"
+
+    - name: "Cairo 0 Reentrancy Patterns"
+      date: "2022"
+      type: "Reentrancy"
+      root_cause: "External calls before state updates"
+      lesson: "CEI pattern applies to Cairo too"
+
+    - name: "Felt Arithmetic Issues"
+      date: "Various"
+      type: "Overflow/Underflow"
+      root_cause: "Treating felt252 like u256"
+      lesson: "Use u256 for amounts, understand felt252 behavior"
+
+  # ===========================================================================
+  # INVARIANTS
+  # ===========================================================================
+  invariants:
+    critical:
+      - id: "CAIRO-INV-001"
+        name: "Caller Authorization"
+        expression: "privileged_action => get_caller_address() == authorized_address"
+        violation: "Unauthorized access to admin functions"
+        starknet_specific: "get_caller_address() returns 0 for L1 handlers!"
+
+      - id: "CAIRO-INV-002"
+        name: "L1 Handler Sender Validation"
+        expression: "l1_handler => from_address == trusted_l1_contract"
+        violation: "L1 message spoofing"
+        note: "CRITICAL - anyone on L1 can send messages"
+
+      - id: "CAIRO-INV-003"
+        name: "Storage Consistency"
+        expression: "storage reads reflect last write"
+        violation: "Race conditions in async contexts"
+
+      - id: "CAIRO-INV-004"
+        name: "Arithmetic Bounds"
+        expression: "u256 used for monetary amounts, not felt252"
+        violation: "Unexpected wrap-around in financial calculations"
+
+    high:
+      - id: "CAIRO-INV-005"
+        name: "Reentrancy Protection"
+        expression: "external_call => state_updated_before OR reentrancy_guard"
+        violation: "State manipulation during reentrancy"
+
+      - id: "CAIRO-INV-006"
+        name: "Initialization Guard"
+        expression: "initialize_once per contract instance"
+        violation: "Contract reinitialization"
+
+      - id: "CAIRO-INV-007"
+        name: "Signature Uniqueness"
+        expression: "signature + nonce unique per message"
+        violation: "Signature replay attacks"
+
+    medium:
+      - id: "CAIRO-INV-008"
+        name: "Event Emission"
+        expression: "state_change => event_emitted"
+        violation: "Missing audit trail"
+
+      - id: "CAIRO-INV-009"
+        name: "Storage Collision Prevention"
+        expression: "storage variables have unique keys"
+        violation: "Storage slot collision"
+
+  # ===========================================================================
+  # ATTACK PATTERNS
+  # ===========================================================================
+  attack_patterns:
+    authorization_attacks:
+      - name: "Missing Caller Check"
+        description: "Admin function without caller validation"
+        severity: "critical"
+        code_pattern: |
+          // VULNERABLE
+          #[external(v0)]
+          fn set_admin(ref self: ContractState, new_admin: ContractAddress) {
+              // Anyone can call!
+              self.admin.write(new_admin);
+          }
+
+          // SAFE
+          #[external(v0)]
+          fn set_admin(ref self: ContractState, new_admin: ContractAddress) {
+              let caller = get_caller_address();
+              assert(caller == self.admin.read(), 'NOT_AUTHORIZED');
+              self.admin.write(new_admin);
+          }
+
+      - name: "L1 Handler Spoofing"
+        description: "Accept L1 message from any sender"
+        severity: "critical"
+        code_pattern: |
+          // VULNERABLE
+          #[l1_handler]
+          fn handle_deposit(
+              ref self: ContractState,
+              from_address: felt252,  // Not validated!
+              user: ContractAddress,
+              amount: u256
+          ) {
+              self.balances.write(user, self.balances.read(user) + amount);
+          }
+
+          // SAFE
+          #[l1_handler]
+          fn handle_deposit(
+              ref self: ContractState,
+              from_address: felt252,
+              user: ContractAddress,
+              amount: u256
+          ) {
+              assert(from_address == TRUSTED_L1_BRIDGE, 'INVALID_SENDER');
+              self.balances.write(user, self.balances.read(user) + amount);
+          }
+
+    arithmetic_attacks:
+      - name: "felt252 Overflow"
+        description: "Arithmetic on felt252 wraps at prime"
+        severity: "high"
+        code_pattern: |
+          // DANGEROUS - felt252 wraps at prime (~2^252)
+          fn add_balance(ref self: ContractState, amount: felt252) {
+              let current: felt252 = self.balance.read();
+              // This can WRAP AROUND!
+              self.balance.write(current + amount);
+          }
+
+          // SAFE - use u256 for amounts
+          fn add_balance(ref self: ContractState, amount: u256) {
+              let current: u256 = self.balance.read();
+              // u256 addition panics on overflow
+              self.balance.write(current + amount);
+          }
+
+      - name: "Division Precision Loss"
+        description: "Integer division loses precision"
+        severity: "medium"
+        code_pattern: |
+          // VULNERABLE - precision loss
+          let fee = amount / 100 * fee_percent;
+
+          // BETTER - multiply first
+          let fee = amount * fee_percent / 100;
+
+    reentrancy_attacks:
+      - name: "External Call Reentrancy"
+        description: "State read during external call is stale"
+        severity: "high"
+        code_pattern: |
+          // VULNERABLE
+          #[external(v0)]
+          fn withdraw(ref self: ContractState, amount: u256) {
+              let balance = self.balances.read(get_caller_address());
+              assert(balance >= amount, 'INSUFFICIENT');
+
+              // External call BEFORE state update
+              IERC20Dispatcher { contract_address: self.token.read() }
+                  .transfer(get_caller_address(), amount);
+
+              // Attacker can reenter here
+              self.balances.write(get_caller_address(), balance - amount);
+          }
+
+          // SAFE - CEI pattern
+          #[external(v0)]
+          fn withdraw(ref self: ContractState, amount: u256) {
+              let caller = get_caller_address();
+              let balance = self.balances.read(caller);
+              assert(balance >= amount, 'INSUFFICIENT');
+
+              // State update BEFORE external call
+              self.balances.write(caller, balance - amount);
+
+              // Now safe to make external call
+              IERC20Dispatcher { contract_address: self.token.read() }
+                  .transfer(caller, amount);
+          }
+
+    signature_attacks:
+      - name: "Signature Replay"
+        description: "Same signature valid multiple times"
+        severity: "high"
+        code_pattern: |
+          // VULNERABLE - no nonce
+          fn execute_signed(
+              ref self: ContractState,
+              message_hash: felt252,
+              signature: Array<felt252>
+          ) {
+              assert(verify_signature(message_hash, signature), 'BAD_SIG');
+              // Same signature can be used again!
+          }
+
+          // SAFE - with nonce
+          fn execute_signed(
+              ref self: ContractState,
+              message_hash: felt252,
+              signature: Array<felt252>,
+              nonce: u256
+          ) {
+              assert(nonce == self.nonces.read(get_caller_address()), 'INVALID_NONCE');
+              assert(verify_signature(hash_with_nonce(message_hash, nonce), signature), 'BAD_SIG');
+              self.nonces.write(get_caller_address(), nonce + 1);
+          }
+
+      - name: "Signature Malleability"
+        description: "Multiple valid signatures for same message"
+        severity: "medium"
+        mitigation: "Use canonical signature verification"
+
+  # ===========================================================================
+  # AUDIT CHECKLIST
+  # ===========================================================================
+  audit_checklist:
+    authorization:
+      - id: "CAIRO-CHK-001"
+        check: "All external functions validate caller"
+        severity: "critical"
+        how: "Search for #[external(v0)] without get_caller_address()"
+
+      - id: "CAIRO-CHK-002"
+        check: "All L1 handlers validate from_address"
+        severity: "critical"
+        how: "Search for #[l1_handler] and verify from_address check"
+
+      - id: "CAIRO-CHK-003"
+        check: "Admin functions protected"
+        severity: "critical"
+        how: "Identify admin functions, verify authorization"
+
+    arithmetic:
+      - id: "CAIRO-CHK-004"
+        check: "Monetary amounts use u256, not felt252"
+        severity: "high"
+        how: "Check storage types for balances, amounts"
+
+      - id: "CAIRO-CHK-005"
+        check: "Overflow checks present"
+        severity: "high"
+        how: "Review arithmetic operations for bounds checks"
+
+    reentrancy:
+      - id: "CAIRO-CHK-006"
+        check: "CEI pattern followed"
+        severity: "high"
+        how: "External calls should be after state updates"
+
+      - id: "CAIRO-CHK-007"
+        check: "Reentrancy guard if needed"
+        severity: "high"
+        how: "Check for reentrancy lock variable"
+
+    signatures:
+      - id: "CAIRO-CHK-008"
+        check: "Nonces used for signed messages"
+        severity: "high"
+        how: "Verify nonce incremented after signature use"
+
+      - id: "CAIRO-CHK-009"
+        check: "Signature includes domain separator"
+        severity: "medium"
+        how: "Check for chain_id, contract address in hash"
+
+    initialization:
+      - id: "CAIRO-CHK-010"
+        check: "Constructor/initializer protected"
+        severity: "high"
+        how: "Verify can only be called once"
+
+  # ===========================================================================
+  # ULTRATHINK PROMPTS
+  # ===========================================================================
+  ultrathink_sections:
+    l1_l2_analysis: |
+      ## L1-L2 Security Analysis
+
+      For EVERY L1 handler:
+
+      1. **Sender Validation**
+         - Is from_address validated?
+         - Is it compared to correct L1 contract?
+         - Can it be spoofed?
+
+      2. **Message Integrity**
+         - Can message content be manipulated?
+         - Is message ordering important?
+         - Replay protection?
+
+      3. **Timing Assumptions**
+         - What timing is assumed?
+         - Can delays be exploited?
+         - L1 reorg handling?
+
+    felt252_analysis: |
+      ## felt252 Type Analysis
+
+      For EVERY arithmetic operation:
+
+      1. **Type Check**
+         - Is felt252 used for monetary values? (BAD)
+         - Is u256 used instead? (GOOD)
+
+      2. **Overflow Behavior**
+         - felt252 wraps at ~2^252 (prime)
+         - u256 panics on overflow
+         - Which is intended?
+
+      3. **Precision**
+         - Division before multiplication?
+         - Precision loss acceptable?
+
+    account_abstraction: |
+      ## Account Abstraction Analysis
+
+      1. **Signature Validation**
+         - How are signatures validated?
+         - Custom validation logic safe?
+         - Malleability handled?
+
+      2. **Transaction Validation**
+         - What can __validate__ reject?
+         - Can it be griefed?
+         - Fee payment secure?
+
+      3. **Account Upgrade**
+         - Can account be upgraded?
+         - Upgrade authorization?
+         - Proxy pattern safe?

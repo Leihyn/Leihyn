@@ -1,0 +1,441 @@
+name: Access Control Vulnerabilities
+category: authorization
+severity_range: Low - Critical
+
+description: |
+  Access control vulnerabilities occur when functions that should be restricted
+  to specific users or roles can be called by unauthorized parties. These are
+  among the most critical and frequently exploited vulnerabilities in smart contracts.
+
+cross_language: true
+
+vulnerabilities:
+  - name: Missing Access Control
+    id: AC-001
+    severity: Critical
+    description: |
+      Privileged functions can be called by anyone. No modifier, require statement,
+      or authorization check protects sensitive operations.
+    impact: |
+      - Direct theft of funds
+      - Protocol takeover
+      - Unauthorized minting/burning
+      - State manipulation
+    patterns:
+      solidity:
+        - "external function without onlyOwner/onlyRole"
+        - "public function modifying state without auth"
+      rust:
+        - "pub fn without Signer constraint"
+        - "missing is_signer check"
+      move:
+        - "entry fun without signer parameter"
+        - "public fun without capability check"
+      cairo:
+        - "#[external] without get_caller_address check"
+        - "l1_handler without from_address validation"
+    examples:
+      solidity:
+        vulnerable: |
+          // Anyone can withdraw all funds!
+          function withdrawAll() external {
+              payable(msg.sender).transfer(address(this).balance);
+          }
+        fixed: |
+          function withdrawAll() external onlyOwner {
+              payable(msg.sender).transfer(address(this).balance);
+          }
+      rust:
+        vulnerable: |
+          pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+              // No authority check!
+              let vault = &ctx.accounts.vault;
+              **vault.try_borrow_mut_lamports()? -= amount;
+              Ok(())
+          }
+        fixed: |
+          pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+              // Anchor validates Signer constraint
+              // authority: Signer<'info> in Context
+              Ok(())
+          }
+      cairo:
+        vulnerable: |
+          #[external(v0)]
+          fn set_fee(ref self: ContractState, new_fee: u256) {
+              // Anyone can change the fee!
+              self.fee.write(new_fee);
+          }
+        fixed: |
+          #[external(v0)]
+          fn set_fee(ref self: ContractState, new_fee: u256) {
+              let caller = get_caller_address();
+              assert(caller == self.owner.read(), 'Not owner');
+              self.fee.write(new_fee);
+          }
+    references:
+      - https://github.com/kadenzipfel/smart-contract-vulnerabilities/blob/master/vulnerabilities/access-control.md
+      - https://swcregistry.io/docs/SWC-105
+
+  - name: Broken Access Control Logic
+    id: AC-002
+    severity: High
+    description: |
+      Access control exists but contains logical flaws. Common issues include:
+      - OR instead of AND in role checks
+      - Incorrect comparison operators
+      - Missing edge cases
+    impact: |
+      - Privilege escalation
+      - Bypass of intended restrictions
+    patterns:
+      solidity:
+        - "require(a || b)" # should be &&
+        - "!= instead of =="
+    examples:
+      solidity:
+        vulnerable: |
+          // Bug: OR should be AND
+          require(
+              hasRole(ADMIN_ROLE, msg.sender) ||
+              msg.sender == owner,
+              "Not authorized"
+          );
+          // Anyone with EITHER role can execute
+        fixed: |
+          // Correct: explicit role check
+          require(
+              hasRole(ADMIN_ROLE, msg.sender),
+              "Not admin"
+          );
+    detection: |
+      - Look for complex boolean conditions in access checks
+      - Verify all paths require proper authorization
+      - Check for off-by-one errors in role hierarchies
+
+  - name: tx.origin Authentication
+    id: AC-003
+    severity: High
+    language: solidity
+    description: |
+      Using tx.origin for authorization allows phishing attacks where a malicious
+      contract can trick users into calling it, which then calls the victim contract.
+    impact: |
+      - Phishing attacks
+      - Unauthorized transactions on behalf of users
+    patterns:
+      solidity:
+        - "require(tx.origin == owner)"
+        - "tx.origin =="
+    examples:
+      solidity:
+        vulnerable: |
+          function transfer(address to, uint amount) external {
+              require(tx.origin == owner, "Not owner");
+              // Vulnerable to phishing!
+          }
+        fixed: |
+          function transfer(address to, uint amount) external {
+              require(msg.sender == owner, "Not owner");
+          }
+    references:
+      - https://swcregistry.io/docs/SWC-115
+
+  - name: Single-Step Ownership Transfer
+    id: AC-004
+    severity: Low
+    description: |
+      Ownership can be transferred in a single step, risking permanent loss
+      if transferred to wrong address (typo, wrong clipboard, etc.).
+    impact: |
+      - Accidental loss of ownership
+      - Locked funds/protocol
+    patterns:
+      solidity:
+        - "function transferOwnership"
+        - "owner = newOwner"
+    examples:
+      solidity:
+        fixed: |
+          // Two-step ownership transfer (OpenZeppelin Ownable2Step)
+          function transferOwnership(address newOwner) public override onlyOwner {
+              pendingOwner = newOwner;
+          }
+
+          function acceptOwnership() public {
+              require(msg.sender == pendingOwner, "Not pending owner");
+              _transferOwnership(msg.sender);
+          }
+    mitigation: |
+      Use OpenZeppelin's Ownable2Step or implement pending owner pattern
+
+  - name: Unprotected Initializer
+    id: AC-005
+    severity: Critical
+    description: |
+      Initializer function can be called by anyone, or called multiple times,
+      allowing attacker to set themselves as owner.
+    impact: |
+      - Protocol takeover
+      - Theft of funds
+    patterns:
+      solidity:
+        - "function initialize() public"
+        - "function init() external"
+      rust:
+        - "pub fn initialize"
+      cairo:
+        - "fn constructor"
+    examples:
+      solidity:
+        vulnerable: |
+          function initialize(address _owner) public {
+              owner = _owner;
+          }
+        fixed: |
+          bool private initialized;
+
+          function initialize(address _owner) public {
+              require(!initialized, "Already initialized");
+              initialized = true;
+              owner = _owner;
+          }
+
+          // Or use OpenZeppelin Initializable
+          function initialize(address _owner) public initializer {
+              owner = _owner;
+          }
+    references:
+      - https://blog.openzeppelin.com/proxy-patterns
+
+  - name: Missing Signer Check (Solana)
+    id: AC-006
+    severity: Critical
+    language: rust
+    blockchain: solana
+    description: |
+      Solana programs must explicitly verify that required accounts are signers.
+      Without this check, anyone can submit transactions on behalf of others.
+    impact: |
+      - Unauthorized transfers
+      - State manipulation
+      - Fund theft
+    patterns:
+      rust:
+        - "AccountInfo without is_signer"
+        - "authority not Signer<'info>"
+    examples:
+      rust:
+        vulnerable: |
+          #[derive(Accounts)]
+          pub struct Transfer<'info> {
+              #[account(mut)]
+              pub from: Account<'info, TokenAccount>,
+              // Bug: authority should be Signer<'info>
+              pub authority: AccountInfo<'info>,
+          }
+        fixed: |
+          #[derive(Accounts)]
+          pub struct Transfer<'info> {
+              #[account(mut)]
+              pub from: Account<'info, TokenAccount>,
+              // Anchor enforces signer constraint
+              pub authority: Signer<'info>,
+          }
+    references:
+      - https://github.com/coral-xyz/sealevel-attacks/blob/master/programs/0-signer-authorization
+
+  - name: L1 Handler Source Validation (StarkNet)
+    id: AC-007
+    severity: High
+    language: cairo
+    blockchain: starknet
+    description: |
+      L1 handlers receive messages from Ethereum L1. The from_address must be
+      validated to ensure messages come from expected L1 contracts.
+    impact: |
+      - Unauthorized L1-L2 messages
+      - State manipulation via fake L1 messages
+    patterns:
+      cairo:
+        - "#[l1_handler] without from_address check"
+    examples:
+      cairo:
+        vulnerable: |
+          #[l1_handler]
+          fn deposit(
+              ref self: ContractState,
+              from_address: felt252,
+              user: ContractAddress,
+              amount: u256
+          ) {
+              // Bug: No validation of from_address!
+              self.balances.write(user, amount);
+          }
+        fixed: |
+          #[l1_handler]
+          fn deposit(
+              ref self: ContractState,
+              from_address: felt252,
+              user: ContractAddress,
+              amount: u256
+          ) {
+              // Verify message comes from expected L1 bridge
+              assert(from_address == L1_BRIDGE_ADDRESS, 'Invalid L1 source');
+              self.balances.write(user, amount);
+          }
+
+  - name: Capability Leak (Move)
+    id: AC-008
+    severity: High
+    language: move
+    description: |
+      Move uses capabilities for authorization. If capabilities can be
+      created without restriction or transferred to unauthorized parties,
+      access control is broken.
+    impact: |
+      - Unauthorized access to privileged functions
+      - Privilege escalation
+    patterns:
+      move:
+        - "public fun that creates Capability"
+        - "Capability with store ability"
+    examples:
+      move:
+        vulnerable: |
+          // Anyone can create admin capability!
+          public fun get_admin_cap(account: &signer): AdminCap {
+              AdminCap { }
+          }
+        fixed: |
+          // Only module can create capability at initialization
+          fun init_module(admin: &signer) {
+              move_to(admin, AdminCap { });
+          }
+
+          // Or verify admin address
+          public fun get_admin_cap(account: &signer): AdminCap {
+              assert!(signer::address_of(account) == @admin, E_NOT_ADMIN);
+              AdminCap { }
+          }
+
+  - name: CPI Privilege Escalation (Solana)
+    id: AC-009
+    severity: Critical
+    language: rust
+    blockchain: solana
+    description: |
+      Cross-Program Invocations (CPI) can be exploited if the calling program
+      doesn't properly validate accounts before passing them to other programs.
+    impact: |
+      - Fund theft via unauthorized transfers
+      - State manipulation in target programs
+    patterns:
+      rust:
+        - "invoke_signed without account validation"
+        - "CpiContext with untrusted accounts"
+    examples:
+      rust:
+        vulnerable: |
+          // Attacker can pass arbitrary program as target
+          invoke(
+              &transfer_instruction,
+              &[source.clone(), destination.clone(), authority.clone()],
+          )?;
+        fixed: |
+          // Verify the program being called
+          require!(
+              *token_program.key == spl_token::ID,
+              ErrorCode::InvalidProgram
+          );
+
+          // Use typed accounts in Anchor
+          token::transfer(
+              ctx.accounts.into_transfer_context(),
+              amount,
+          )?;
+
+  - name: Renounce Ownership Risk
+    id: AC-010
+    severity: Medium
+    description: |
+      If renounceOwnership can be called, the protocol may become permanently
+      locked without an owner to perform critical operations.
+    impact: |
+      - Permanently locked protocol
+      - No ability to upgrade or fix issues
+    patterns:
+      solidity:
+        - "function renounceOwnership"
+    mitigation: |
+      - Override renounceOwnership to revert
+      - Implement multisig or DAO governance
+      - Add timelock before renouncing
+
+audit_checklist:
+  - "Are all external/public functions properly protected?"
+  - "Is the owner/admin set correctly in constructor/initializer?"
+  - "Can the initializer be called multiple times?"
+  - "Is ownership transfer two-step or single-step?"
+  - "Are there any functions using tx.origin?"
+  - "For upgradeable contracts, who can upgrade?"
+  - "Are role hierarchies properly implemented?"
+  - "Can roles be revoked/renounced?"
+  - "For Solana: Are all authority accounts Signer types?"
+  - "For StarkNet: Are L1 handlers validating source?"
+  - "For Move: Are capabilities properly guarded?"
+  - "Is there a timelock on critical operations?"
+
+severity_guidelines:
+  critical:
+    - "Anyone can steal funds"
+    - "Anyone can take over protocol"
+    - "Unprotected minting of tokens"
+  high:
+    - "Privilege escalation possible"
+    - "Bypass of role restrictions"
+    - "Unvalidated L1 handlers"
+  medium:
+    - "Single-step ownership with no timelock"
+    - "Missing role revocation"
+    - "Centralization risks"
+  low:
+    - "Missing two-step ownership"
+    - "Informational access control notes"
+
+poc_template: |
+  // SPDX-License-Identifier: MIT
+  pragma solidity ^0.8.0;
+
+  import "forge-std/Test.sol";
+
+  contract AccessControlPoCTest is Test {
+      address attacker = address(0xBAD);
+      address victim = address(0xDEAD);
+
+      function setUp() public {
+          // Deploy vulnerable contract
+      }
+
+      function testUnauthorizedAccess() public {
+          vm.startPrank(attacker);
+
+          // Call privileged function as attacker
+          // vulnerable.privilegedFunction();
+
+          // Assert attacker gained unauthorized access
+          vm.stopPrank();
+      }
+
+      function testOwnershipTakeover() public {
+          vm.startPrank(attacker);
+
+          // Front-run initialization or exploit missing check
+          // vulnerable.initialize(attacker);
+
+          // Assert attacker is now owner
+          // assertEq(vulnerable.owner(), attacker);
+
+          vm.stopPrank();
+      }
+  }

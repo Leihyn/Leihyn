@@ -1,0 +1,580 @@
+# Solana/Anchor Deep Knowledge Base
+# Maximum depth vulnerability patterns for world-class auditing
+
+solana:
+  name: "Solana (Anchor)"
+  thinking_budget: 32000  # Maximum for complex Solana analysis
+
+  # ===========================================================================
+  # HISTORICAL EXPLOITS - Learn from the past
+  # ===========================================================================
+  historical_exploits:
+    - name: "Wormhole Bridge Hack"
+      date: "February 2022"
+      loss: "$320M"
+      root_cause: "Missing signer verification on guardian set"
+      vulnerability_type: "Missing Signer Check"
+      lesson: "ALWAYS verify signers for cross-chain messages"
+      code_pattern: |
+        // VULNERABLE: Accepted any account as guardian
+        pub fn verify_signatures(ctx: Context<VerifySigs>) -> Result<()> {
+            // No check that guardian_set was signed by valid guardians
+        }
+
+    - name: "Cashio Hack"
+      date: "March 2022"
+      loss: "$52M"
+      root_cause: "Missing validation on collateral account"
+      vulnerability_type: "Account Validation Bypass"
+      lesson: "Validate ALL account relationships, not just types"
+      code_pattern: |
+        // VULNERABLE: Didn't verify collateral belonged to the bank
+        #[account(constraint = collateral.mint == bank.collateral_mint)]
+        pub collateral: Account<'info, TokenAccount>,
+        // Missing: collateral.owner == bank.key()
+
+    - name: "Mango Markets Exploit"
+      date: "October 2022"
+      loss: "$114M"
+      root_cause: "Oracle price manipulation + leveraged positions"
+      vulnerability_type: "Economic/Oracle Attack"
+      lesson: "Consider manipulation cost vs profit in oracle design"
+
+    - name: "Solend Oracle Manipulation"
+      date: "November 2022"
+      loss: "$1.26M"
+      root_cause: "Pyth oracle price deviation exploit"
+      vulnerability_type: "Oracle Staleness"
+      lesson: "Implement confidence interval checks on oracle prices"
+
+    - name: "Crema Finance Hack"
+      date: "July 2022"
+      loss: "$8.8M"
+      root_cause: "Flash loan + tick manipulation"
+      vulnerability_type: "Flash Loan Attack"
+      lesson: "Consider flash loan scenarios in AMM design"
+
+  # ===========================================================================
+  # CRITICAL INVARIANTS
+  # ===========================================================================
+  invariants:
+    critical:
+      - id: "SOL-INV-001"
+        name: "Signer Authorization"
+        description: "Every privileged operation MUST have a verified Signer"
+        expression: "privileged_action => has_signer_check(authority)"
+        violation_severity: "Critical - Direct fund theft possible"
+
+      - id: "SOL-INV-002"
+        name: "Account Ownership"
+        description: "Account data can only be trusted if owner == expected_program"
+        expression: "account.owner == program_id || account.owner == system_program"
+        violation_severity: "Critical - Attacker can inject malicious data"
+
+      - id: "SOL-INV-003"
+        name: "PDA Derivation"
+        description: "PDAs must be derived with unique, non-controllable seeds"
+        expression: "pda_seeds.contains(unique_identifier) && !user_controlled(seeds)"
+        violation_severity: "Critical - Account hijacking possible"
+
+      - id: "SOL-INV-004"
+        name: "CPI Authority"
+        description: "Cross-program invocations must use proper signer seeds"
+        expression: "cpi_call => invoke_signed(seeds) || has_signer"
+        violation_severity: "Critical - Unauthorized CPI execution"
+
+    high:
+      - id: "SOL-INV-005"
+        name: "Account Initialization"
+        description: "Accounts can only be initialized once"
+        expression: "init_action => !account.is_initialized"
+        violation_severity: "High - State reset attacks"
+
+      - id: "SOL-INV-006"
+        name: "Account Closure"
+        description: "Closed accounts must have data zeroed"
+        expression: "close_action => zero_data && transfer_lamports"
+        violation_severity: "High - Account revival attacks"
+
+      - id: "SOL-INV-007"
+        name: "Arithmetic Safety"
+        description: "All arithmetic must be checked for overflow"
+        expression: "arithmetic_op => checked_math || overflow_impossible"
+        violation_severity: "High - Integer overflow exploits"
+
+    medium:
+      - id: "SOL-INV-008"
+        name: "Rent Exemption"
+        description: "Accounts must maintain rent-exempt balance"
+        expression: "account.lamports >= rent_exempt_minimum"
+        violation_severity: "Medium - Account garbage collection"
+
+      - id: "SOL-INV-009"
+        name: "Data Size Validation"
+        description: "Account data size must match expected structure"
+        expression: "account.data.len() == expected_size"
+        violation_severity: "Medium - Deserialization issues"
+
+  # ===========================================================================
+  # ATTACK PATTERNS (Deep)
+  # ===========================================================================
+  attack_patterns:
+    account_attacks:
+      - name: "Type Cosplay"
+        description: "Pass account of type A when type B expected"
+        severity: "critical"
+        preconditions:
+          - "Uses raw AccountInfo<'info>"
+          - "Manual deserialization without discriminator"
+        attack_flow:
+          - "Create malicious account with crafted data"
+          - "Pass to function expecting different type"
+          - "Malicious data interpreted as valid"
+        detection_pattern: "AccountInfo<'info> without Account<'info, T>"
+        mitigation: "Use Anchor's Account<T> with discriminator checks"
+
+      - name: "PDA Substitution"
+        description: "Use different PDA than intended"
+        severity: "critical"
+        preconditions:
+          - "PDA seeds partially user-controlled"
+          - "Missing has_one or seeds constraint"
+        attack_flow:
+          - "Derive PDA with attacker-controlled seeds"
+          - "Initialize attacker's PDA"
+          - "Pass attacker's PDA to victim's transaction"
+        detection_pattern: "seeds = [user_input] without unique anchor"
+        mitigation: "Include user pubkey or unique ID in seeds"
+
+      - name: "Account Confusion via Remaining Accounts"
+        description: "Exploit ctx.remaining_accounts without validation"
+        severity: "high"
+        preconditions:
+          - "Uses ctx.remaining_accounts"
+          - "No validation on remaining accounts"
+        attack_flow:
+          - "Pass malicious accounts in remaining_accounts"
+          - "Program trusts and uses them"
+        detection_pattern: "ctx.remaining_accounts without owner/type checks"
+        mitigation: "Validate every remaining account explicitly"
+
+    authorization_attacks:
+      - name: "Missing Signer Escalation"
+        description: "Call privileged function without signing"
+        severity: "critical"
+        preconditions:
+          - "Authority account not marked as Signer"
+          - "Or signer check missing in logic"
+        attack_flow:
+          - "Find privileged function"
+          - "Pass authority pubkey without signing"
+          - "Execute privileged operation"
+        detection_pattern: "authority: AccountInfo (not Signer)"
+        mitigation: "Use Signer<'info> for all authorization"
+
+      - name: "Arbitrary CPI"
+        description: "Execute CPI to unintended program"
+        severity: "critical"
+        preconditions:
+          - "Program ID passed as parameter"
+          - "No validation on program ID"
+        attack_flow:
+          - "Pass malicious program ID"
+          - "CPI executes on attacker's program"
+        detection_pattern: "invoke(instruction, accounts) with unchecked program"
+        mitigation: "Hardcode program IDs or use Program<'info, T>"
+
+    economic_attacks:
+      - name: "Flash Loan Price Manipulation"
+        description: "Use flash loan to manipulate on-chain prices"
+        severity: "high"
+        preconditions:
+          - "Protocol uses on-chain AMM for pricing"
+          - "No TWAP or oracle validation"
+        attack_flow:
+          - "Flash borrow large amount"
+          - "Swap to move price"
+          - "Execute at manipulated price"
+          - "Reverse swap and repay"
+        detection_pattern: "Price read from pool.sqrt_price_x64 or similar"
+        mitigation: "Use TWAP, Pyth/Switchboard with confidence checks"
+
+  # ===========================================================================
+  # AUDIT CHECKLIST (Maximum Depth)
+  # ===========================================================================
+  audit_checklist:
+    account_validation:
+      - id: "SOL-CHK-001"
+        check: "Every AccountInfo validated"
+        question: "Is every AccountInfo<'info> properly validated for owner and type?"
+        severity: "critical"
+
+      - id: "SOL-CHK-002"
+        check: "All PDAs verified"
+        question: "Are all PDAs derived with correct seeds and bump?"
+        severity: "critical"
+
+      - id: "SOL-CHK-003"
+        check: "has_one constraints complete"
+        question: "Do all related accounts have has_one constraints?"
+        severity: "high"
+
+      - id: "SOL-CHK-004"
+        check: "Remaining accounts validated"
+        question: "Are ctx.remaining_accounts properly checked?"
+        severity: "high"
+
+    authorization:
+      - id: "SOL-CHK-005"
+        check: "All signers verified"
+        question: "Is every privileged action gated by Signer?"
+        severity: "critical"
+
+      - id: "SOL-CHK-006"
+        check: "Multi-sig if applicable"
+        question: "Do high-value operations require multiple signatures?"
+        severity: "medium"
+
+      - id: "SOL-CHK-007"
+        check: "Timelock for admin actions"
+        question: "Are admin actions time-delayed for transparency?"
+        severity: "medium"
+
+    arithmetic:
+      - id: "SOL-CHK-008"
+        check: "Checked arithmetic everywhere"
+        question: "Is checked_add/checked_sub/checked_mul used for all math?"
+        severity: "high"
+
+      - id: "SOL-CHK-009"
+        check: "Decimal handling correct"
+        question: "Are token decimals handled correctly in calculations?"
+        severity: "high"
+
+    state_management:
+      - id: "SOL-CHK-010"
+        check: "No reinitialization"
+        question: "Can accounts be reinitialized after creation?"
+        severity: "high"
+
+      - id: "SOL-CHK-011"
+        check: "Proper account closure"
+        question: "Is data zeroed and lamports transferred on close?"
+        severity: "high"
+
+      - id: "SOL-CHK-012"
+        check: "State consistency in CPIs"
+        question: "Is state consistent before/after cross-program invocations?"
+        severity: "high"
+
+    oracle_integration:
+      - id: "SOL-CHK-013"
+        check: "Oracle staleness check"
+        question: "Is oracle price age validated?"
+        severity: "critical"
+
+      - id: "SOL-CHK-014"
+        check: "Confidence interval check"
+        question: "Is Pyth confidence interval checked against threshold?"
+        severity: "high"
+
+      - id: "SOL-CHK-015"
+        check: "Multiple oracle sources"
+        question: "Is there fallback if primary oracle fails?"
+        severity: "medium"
+
+  # ===========================================================================
+  # ULTRATHINK PROMPTS
+  # ===========================================================================
+  ultrathink_sections:
+    account_analysis: |
+      ## Deep Account Analysis
+
+      For EVERY account in every instruction:
+
+      1. **Ownership Analysis**
+         - Who should own this account?
+         - Is owner check enforced?
+         - Can attacker pass account owned by different program?
+
+      2. **Type Safety**
+         - Is discriminator validated?
+         - Can type cosplay attack succeed?
+         - Are all fields properly deserialized?
+
+      3. **PDA Security**
+         - What are the seeds?
+         - Are seeds unique per user/context?
+         - Can attacker derive colliding PDA?
+         - Is bump validated?
+
+      4. **Relationship Validation**
+         - Are has_one constraints complete?
+         - Can accounts from different contexts be mixed?
+         - Is constraint = checks sufficient?
+
+    cpi_analysis: |
+      ## Cross-Program Invocation Analysis
+
+      For EVERY CPI:
+
+      1. **Program Validation**
+         - Is target program ID hardcoded?
+         - Can attacker substitute malicious program?
+
+      2. **Signer Seeds**
+         - Are PDA signer seeds correct?
+         - Can seeds be manipulated?
+
+      3. **Account Forwarding**
+         - Which accounts are forwarded?
+         - Can forwarded accounts be manipulated?
+
+      4. **Return Value Handling**
+         - Are CPI results properly handled?
+         - Can CPI failure be exploited?
+
+    economic_analysis: |
+      ## Economic Security Analysis
+
+      1. **Value Flows**
+         - Where do tokens/SOL enter?
+         - Where do they exit?
+         - Can value be redirected?
+
+      2. **Price Dependencies**
+         - What prices are used?
+         - How are prices obtained?
+         - Manipulation cost vs profit?
+
+      3. **Flash Loan Scenarios**
+         - Can flash loans amplify attack?
+         - Is protocol resistant to single-block manipulation?
+
+      4. **MEV Considerations**
+         - Can transactions be front-run?
+         - Is there sandwich attack risk?
+         - Are there profitable reordering opportunities?
+
+  # ===========================================================================
+  # SECURITY RESOURCES (from 0xMacro/awesome-solana-security)
+  # ===========================================================================
+  resources:
+    official:
+      - name: "Solana Docs"
+        url: "https://solana.com/docs/"
+      - name: "Solana Courses"
+        url: "https://solana.com/developers/courses/"
+      - name: "Solana Cookbook"
+        url: "https://solana.com/developers/cookbook"
+      - name: "Solana Program Examples (multi-framework)"
+        url: "https://github.com/solana-developers/program-examples"
+      - name: "SPL (Solana Program Library) Docs"
+        url: "https://spl.solana.com/"
+
+    anchor_framework:
+      - name: "Anchor Docs"
+        url: "https://www.anchor-lang.com/docs"
+      - name: "Anchor Book"
+        url: "https://book.anchor-lang.com/"
+      - name: "Anchor by Example"
+        url: "https://examples.anchor-lang.com/"
+      - name: "Anchor Wiki"
+        url: "https://docs.rs/anchor-lang"
+      - name: "Anchor SPL Wiki"
+        url: "https://docs.rs/anchor-spl"
+
+    evm_transitioners:
+      - name: "RareSkills Solana Course for Ethereum Devs"
+        url: "https://www.rareskills.io/solana-tutorial"
+      - name: "0xkowloon's Anchor for EVM Developers"
+        url: "https://0xkowloon.gitbook.io/anchor-for-evm-developers"
+      - name: "S3v3ru5's Solana Beginner Notes"
+        url: "https://s3v3ru5.github.io/posts/solana-beginner-notes/"
+
+    security_guides:
+      - name: "Solana Security Course (Official)"
+        url: "https://solana.com/developers/courses/program-security"
+        priority: "essential"
+      - name: "Ackee's Solana Handbook"
+        url: "https://ackee.xyz/solana/book/latest/"
+        priority: "essential"
+      - name: "Infect3d's Essentials for Starting Solana Auditing"
+        url: "https://www.infect3d.xyz/blog/solana-quick-start"
+        priority: "high"
+      - name: "Helius Common Vulnerabilities"
+        url: "https://www.helius.dev/blog/a-hitchhikers-guide-to-solana-program-security"
+        priority: "high"
+      - name: "Lucrative_Panda's Comprehensive Solana Security History"
+        url: "https://medium.com/@lucrativepanda/a-comprehensive-analysis-of-solanas-security-history-all-incidents-impacts-and-evolution-up-to-1b1564c7ddfe"
+        priority: "high"
+      - name: "Slowmist's Solana Best Practices"
+        url: "https://github.com/slowmist/solana-smart-contract-security-best-practices"
+        priority: "high"
+      - name: "ImmuneBytes Solana Attack Vectors"
+        url: "https://github.com/ImmuneBytes-Security-Audit/Blockchain-Attack-Vectors/tree/main/Solana%20Attack%20Vectors"
+      - name: "Exvul Solana Security Guide"
+        url: "https://exvul.com/rust-smart-contract-security-guide-in-solana/"
+      - name: "r0bre's 100 Daily Solana Tips"
+        url: "https://accretionxyz.substack.com/p/r0bres-100-daily-solana-tips"
+      - name: "Nirlin's Advanced Solana Vulnerabilities"
+        url: "https://substack.com/inbox/post/164534668"
+      - name: "Ottersec Lamport Transfer Vulnerabilities"
+        url: "https://osec.io/blog/2025-05-14-king-of-the-sol"
+      - name: "Asymmetric Research CPI Vulnerabilities"
+        url: "https://blog.asymmetric.re/invocation-security-navigating-vulnerabilities-in-solana-cpis/"
+      - name: "Alex Lazar CPI Vulnerability Analysis"
+        url: "https://newsletter.alexlazar.dev/p/external-calls-are-dangerous"
+      - name: "Hidden IDL Instructions and How to Abuse Them"
+        url: "https://accretionxyz.substack.com/p/hidden-idl-instructions-and-how-to"
+      - name: "Solana Program Execution Under the Hood"
+        url: "https://ubermensch.blog/under-the-hood-of-solana-program-execution-from-rust-code-to-sbf-bytecode"
+      - name: "Exo Tech Audit Readiness Guide"
+        url: "https://exotechnologies.xyz/p/a-developer-s-guide-to-audit-readiness"
+      - name: "Rektoff's Security Roadmap"
+        url: "https://github.com/Rektoff/Security-Roadmap-for-Solana-applications"
+      - name: "Urataps Solana Audit Examples"
+        url: "https://github.com/urataps/solana-audit-examples"
+      - name: "Blueshift Anchor and Pinocchio Courses"
+        url: "https://learn.blueshift.gg/"
+
+    token_2022_security:
+      - name: "Offside Token-2022 Best Practices Part 1"
+        url: "https://blog.offside.io/p/token-2022-security-best-practices-part-1"
+      - name: "Offside Token-2022 Best Practices Part 2"
+        url: "https://blog.offside.io/p/token-2022-security-best-practices-part-2"
+      - name: "Neodyme Token-2022 Security"
+        url: "https://neodyme.io/en/blog/token-2022"
+
+  # ===========================================================================
+  # SECURITY TOOLS
+  # ===========================================================================
+  tools:
+    - name: "Ackee's Trident"
+      url: "https://ackee.xyz/trident/docs/latest/"
+      type: "fuzzer"
+      description: "Fuzzing framework for Solana programs"
+
+    - name: "Ackee's Solana IDE Extension"
+      url: "https://marketplace.visualstudio.com/items?itemName=AckeeBlockchain.solana"
+      type: "static_analysis"
+      description: "Detects common security issues, visualizes Trident fuzzing coverage"
+
+    - name: "Sec3 IDL Guesser"
+      url: "https://github.com/sec3-service/IDLGuesser"
+      type: "reverse_engineering"
+      description: "Reverse engineers IDL from onchain programs"
+
+    - name: "Trail of Bits Anchor X-ray"
+      url: "https://github.com/crytic/anchorx-ray"
+      type: "visualization"
+      description: "Visualizes accounts in Anchor programs"
+
+    - name: "Anchor Version Detector"
+      url: "https://github.com/johnsaigle/anchor-version-detector"
+      type: "utility"
+      description: "Determines compatible Rust/Solana/Anchor versions for a project"
+
+    - name: "Solana Playground"
+      url: "https://beta.solpg.io/"
+      type: "development"
+      description: "Browser-based Solana development environment"
+
+  # ===========================================================================
+  # CTFs
+  # ===========================================================================
+  ctfs:
+    - name: "Ackee Solana CTF"
+      url: "https://github.com/Ackee-Blockchain/Solana-Auditors-Bootcamp/tree/master/Capture-the-Flag"
+      description: "CTF challenges from Ackee's Solana Auditors Bootcamp"
+
+  # ===========================================================================
+  # AUDIT CONTESTS (Public Reports)
+  # ===========================================================================
+  audit_contests:
+    sherlock:
+      - name: "Orderly"
+        url: "https://audits.sherlock.xyz/contests/524/report"
+        findings: "2 High, 1 Medium"
+      - name: "WOOFi"
+        url: "https://audits.sherlock.xyz/contests/535/report"
+        findings: "2 High, 3 Medium"
+
+    code4rena:
+      - name: "Pump Science"
+        url: "https://code4rena.com/reports/2025-01-pump-science"
+        findings: "2 High, 3 Medium"
+      - name: "Token22 Confidential Transfer (Solana Foundation)"
+        url: "https://code4rena.com/reports/2025-08-solana-foundation"
+        findings: "7 Low"
+      - name: "Meteora Dynamic Bonding Curve"
+        url: "https://code4rena.com/reports/2025-08-meteora-dynamic-bonding-curve"
+        findings: "2 Medium"
+
+    cantina:
+      - name: "Grass"
+        url: "https://cantina.xyz/competitions/3211ee0d-133f-43a0-837e-8dc1ecfaa424"
+        findings: "13 High, 6 Medium"
+      - name: "Olas"
+        url: "https://cantina.xyz/competitions/829164bf-7fba-4b84-a6b8-76652205bd97"
+        findings: "2 High, 3 Medium"
+      - name: "Tensor"
+        url: "https://cantina.xyz/competitions/21787352-de2c-4a77-af09-cc0a250d1f04"
+        findings: "5 High, 10 Medium"
+      - name: "ZetaChain (partial Solana)"
+        url: "https://cantina.xyz/competitions/80a33cf0-ad69-4163-a269-d27756aacb5e"
+        findings: "6 High, 27 Medium"
+      - name: "Inclusive Finance (partial Solana)"
+        url: "https://cantina.xyz/competitions/3eff5a8f-b73a-4cfe-8c54-546b475548f0"
+        findings: "45 High, 25 Medium"
+      - name: "Reserve Index"
+        url: "https://cantina.xyz/code/8b94becd-54e7-41cd-88e6-caae7becc76a"
+        findings: "10 High, 11 Medium"
+      - name: "Solayer"
+        url: "https://cantina.xyz/code/0f543452-2076-438f-86ae-bbd6b065fffb"
+        findings: "3 High, 6 Medium"
+      - name: "Genius (partial Solana)"
+        url: "https://cantina.xyz/code/12acc80c-4e4c-4081-a0a3-faa92150651a"
+        findings: "6 High, 4 Medium"
+
+    codehawks_first_flights:
+      - name: "RustFund"
+        url: "https://codehawks.cyfrin.io/c/2025-03-rustfund/results?t=report"
+        findings: "4 High, 3 Medium"
+        note: "Introductory challenge, smaller codebase"
+      - name: "SSSwap"
+        url: "https://codehawks.cyfrin.io/c/2025-05-ssswap/results?t=report"
+        findings: "5 High, 4 Medium"
+        note: "Introductory challenge, smaller codebase"
+
+  # ===========================================================================
+  # CODEBASES TO STUDY
+  # ===========================================================================
+  codebases_to_study:
+    essential:
+      - name: "Anchor Framework"
+        url: "https://github.com/solana-foundation/anchor"
+      - name: "Solana System Program"
+        url: "https://github.com/solana-program/system"
+      - name: "Solana Token Program"
+        url: "https://github.com/solana-program/token"
+      - name: "Solana Token-2022 Program"
+        url: "https://github.com/solana-program/token-2022"
+      - name: "Solana ATA Program"
+        url: "https://github.com/solana-program/associated-token-account"
+      - name: "Solana Token Metadata Program"
+        url: "https://github.com/solana-program/token-metadata"
+      - name: "Metaplex Token Metadata"
+        url: "https://github.com/metaplex-foundation/mpl-token-metadata"
+
+    optional:
+      - name: "Raydium (AMM)"
+        url: "https://github.com/raydium-io/raydium-cp-swap"
+      - name: "Kamino (Lending)"
+        url: "https://github.com/Kamino-Finance/klend"
+      - name: "Squads (Multisig)"
+        url: "https://github.com/Squads-Protocol/v4"
+      - name: "Solana Upgradeable BPF Loader"
+        url: "https://github.com/solana-program/loader-v3"
+      - name: "Solana Address Lookup Table"
+        url: "https://github.com/solana-program/address-lookup-table"

