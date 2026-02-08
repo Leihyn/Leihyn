@@ -62,6 +62,16 @@ def audit(
         "--depth",
         help="Audit depth: fast (~$2.50, basic hunters), standard (~$5, + slippage/math/validation + devils advocate), deep (~$10, full pipeline + attack synthesis)",
     ),
+    fork_url: Optional[str] = typer.Option(
+        None,
+        "--fork-url",
+        help="RPC URL for fork-based PoC execution (e.g., https://eth-mainnet.g.alchemy.com/v2/KEY)",
+    ),
+    fork_block: Optional[int] = typer.Option(
+        None,
+        "--fork-block",
+        help="Block number for fork (latest if omitted)",
+    ),
 ):
     """
     Run a security audit on smart contracts.
@@ -79,7 +89,9 @@ def audit(
         "[bold blue]Sentinel[/bold blue] - AI-Powered Smart Contract Auditor\n\n"
         f"Target: {target}\n"
         f"Model: {model}\n"
-        f"Depth: {depth}",
+        f"Depth: {depth}" +
+        (f"\nFork: {fork_url}" if fork_url else "") +
+        (f"\nFork Block: {fork_block}" if fork_block else ""),
         expand=False,
     ))
 
@@ -93,6 +105,8 @@ def audit(
             docs_path=docs,
             verbose=verbose,
             depth=depth,
+            fork_url=fork_url,
+            fork_block=fork_block,
         ))
 
         # Print final stats

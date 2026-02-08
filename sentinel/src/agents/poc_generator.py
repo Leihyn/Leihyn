@@ -28,7 +28,7 @@ from rich.syntax import Syntax
 
 from ..core.agent import HunterAgent, AgentRole
 from ..core.llm import LLMClient, Tool, get_llm_client
-from ..core.types import Finding, Severity, VulnerabilityType
+from ..core.types import Finding, PoC as CorePoC, Severity, VulnerabilityType
 
 console = Console()
 
@@ -461,6 +461,22 @@ Return the complete fixed Solidity code.
         """Extract gas used from test output."""
         match = re.search(r'gas[:\s]+(\d+)', output, re.IGNORECASE)
         return int(match.group(1)) if match else 0
+
+    @staticmethod
+    def _to_core_poc(poc: "PoC") -> CorePoC:
+        """Convert internal PoC to canonical core.types.PoC."""
+        return CorePoC(
+            finding_id=poc.finding_id,
+            code=poc.code,
+            language="solidity",
+            executed=poc.status in (PoCStatus.SUCCESS, PoCStatus.FAILED),
+            success=poc.verified,
+            output=poc.output,
+            profit=poc.profit if poc.profit else None,
+            iterations=poc.iterations,
+            gas_used=poc.gas_used,
+            template_used=poc.template_used,
+        )
 
     def write_all_pocs(self, output_dir: Path) -> None:
         """Write all generated PoCs to files."""

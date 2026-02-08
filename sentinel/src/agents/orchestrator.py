@@ -21,6 +21,7 @@ from ..core.types import (
     CrossContractCall,
     CrossContractFlow,
     Finding,
+    PoC,
     Severity,
     VulnerabilityType,
 )
@@ -59,12 +60,16 @@ class Orchestrator:
         verbose: bool = True,
         parallel_hunters: bool = True,
         depth: str = "standard",
+        fork_url: Optional[str] = None,
+        fork_block: Optional[int] = None,
     ):
         self.target_path = target_path
         self.docs_path = docs_path
         self.verbose = verbose
         self.parallel_hunters = parallel_hunters
         self.depth = depth
+        self.fork_url = fork_url
+        self.fork_block = fork_block
 
         # Initialize state
         self.state = AuditState(
@@ -416,6 +421,7 @@ class Orchestrator:
                         description=chain.description + "\n\n**Attack Steps:**\n" + "\n".join(f"{i+1}. {step}" for i, step in enumerate(chain.attack_steps)),
                         contract=", ".join({n.contract for n in chain.nodes}),
                         impact=f"Max extractable value: ${chain.max_extractable_value:,.0f}" if chain.max_extractable_value else "",
+                        root_cause=getattr(chain, "poc_concept", "") or "",
                         recommendation="See individual findings for specific fixes.",
                         confidence=chain.feasibility,
                         found_by=AgentRole.ATTACKER,
@@ -428,11 +434,94 @@ class Orchestrator:
         except Exception as e:
             self.log(f"Attack synthesis failed: {e}", style="red")
 
+    # Vulnerability types that are observational (not exploitable with a PoC)
+    OBSERVATION_TYPES = {
+        VulnerabilityType.CENTRALIZATION,
+        VulnerabilityType.SINGLE_POINT_FAILURE,
+        VulnerabilityType.MISSING_TIMELOCK,
+        VulnerabilityType.GAS_OPTIMIZATION,
+    }
+
+    # Severities eligible for PoC generation
+    POC_SEVERITIES = {Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM}
+
+    def _get_poc_eligible_findings(self) -> list[Finding]:
+        """Filter findings eligible for PoC generation."""
+        return [
+            f for f in self.state.findings
+            if f.severity in self.POC_SEVERITIES
+            and f.vulnerability_type not in self.OBSERVATION_TYPES
+        ]
+
+    def _apply_poc_results(self, poc_results: list, findings_map: dict[str, Finding]) -> None:
+        """Apply PoC results back to findings."""
+        from .poc_generator import PoCGeneratorAgent
+
+        for poc in poc_results:
+            finding = findings_map.get(poc.finding_id)
+            if not finding:
+                continue
+
+            core_poc = PoCGeneratorAgent._to_core_poc(poc)
+
+            if poc.verified:
+                finding.validated = True
+                finding.poc = core_poc
+                self.state.pocs.append(core_poc)
+                self.log(f"  [VERIFIED] {finding.id}: {finding.title}", style="bold green")
+            else:
+                finding.validated = False
+                finding.confidence = finding.confidence * 0.5
+                self.log(f"  [UNVERIFIED] {finding.id}: PoC failed, confidence halved to {finding.confidence:.2f}", style="yellow")
+
     async def run_phase_poc_generation(self) -> None:
-        """Phase 6: PoC Generation."""
+        """Phase 6: PoC Generation - create and verify exploits for findings."""
         self.log("Phase 6: PoC Generation", style="bold magenta")
-        # TODO: Implement PoCAgent
-        self.log("(PoC generation not yet implemented)")
+
+        eligible = self._get_poc_eligible_findings()
+        if not eligible:
+            self.log("No findings eligible for PoC generation")
+            return
+
+        self.log(f"{len(eligible)} findings eligible for PoC generation")
+
+        if not self.fork_url:
+            self.log("WARNING: No --fork-url provided. PoC code will be generated but not executed.", style="yellow")
+
+        try:
+            from .poc_generator import PoCGeneratorAgent, PoCConfig
+
+            config = PoCConfig(
+                fork_url=self.fork_url,
+                fork_block=self.fork_block,
+                output_dir=self.target_path / "sentinel_pocs" if self.fork_url else None,
+                run_tests=bool(self.fork_url),
+                ultrathink=True,
+            )
+
+            poc_agent = PoCGeneratorAgent(
+                state=self.state,
+                config=config,
+                llm_client=self.llm,
+                verbose=self.verbose,
+            )
+
+            findings_map = {f.id: f for f in eligible}
+            poc_results = await poc_agent.run(findings=eligible)
+
+            self._apply_poc_results(poc_results, findings_map)
+
+            # Mark findings with no PoC generated as unvalidated
+            for finding in eligible:
+                if finding.poc is None and finding.validated is False:
+                    self.log(f"  [NO POC] {finding.id}: No PoC generated", style="dim")
+
+            verified = sum(1 for f in eligible if f.validated)
+            self.log(f"PoC results: {verified}/{len(eligible)} verified", style="bold")
+
+        except Exception as e:
+            self.log(f"PoC generation failed: {e}", style="red")
+            self.log("All findings remain unverified")
 
     async def run_phase_reporting(self) -> None:
         """Phase 7: Report Generation."""
@@ -489,6 +578,52 @@ class Orchestrator:
         console.print(f"Contracts Analyzed: {len(self.state.contracts)}")
         console.print(f"Depth: {self.depth}")
 
+    def _write_finding_to_report(self, lines: list[str], finding: Finding, include_poc: bool = False) -> None:
+        """Write a single finding to the report lines."""
+        lines.extend([
+            f"#### [{finding.id}] {finding.title}",
+            "",
+            f"**Contract:** `{finding.contract}`" + (f" | **Function:** `{finding.function}`" if finding.function else ""),
+            "",
+            f"**Description:**",
+            finding.description,
+            "",
+        ])
+
+        if finding.impact:
+            lines.extend([
+                f"**Impact:**",
+                finding.impact,
+                "",
+            ])
+
+        if finding.recommendation:
+            lines.extend([
+                f"**Recommendation:**",
+                finding.recommendation,
+                "",
+            ])
+
+        if include_poc and finding.poc and finding.poc.code:
+            lines.extend([
+                f"**Proof of Concept:**",
+                "```solidity",
+                finding.poc.code,
+                "```",
+                "",
+            ])
+            if finding.poc.output:
+                lines.extend([
+                    f"**PoC Output:**",
+                    "```",
+                    finding.poc.output[:2000],
+                    "```",
+                    "",
+                ])
+
+        lines.append("---")
+        lines.append("")
+
     def generate_report(self) -> str:
         """Generate the final markdown report."""
         lines = [
@@ -541,56 +676,83 @@ class Orchestrator:
                 lines.append(f"- **{flow.flow_type}** [{flow.risk_level.upper()}]: {flow.description}")
             lines.append("")
 
-        # Findings
-        lines.extend([
-            "## Findings",
-            "",
-        ])
+        # Categorize findings
+        verified = [f for f in self.state.findings if f.validated and f.poc]
+        unverified_exploitable = [
+            f for f in self.state.findings
+            if not f.validated
+            and f.severity in self.POC_SEVERITIES
+            and f.vulnerability_type not in self.OBSERVATION_TYPES
+        ]
+        observations = [
+            f for f in self.state.findings
+            if f.vulnerability_type in self.OBSERVATION_TYPES
+        ]
+        low_info = [
+            f for f in self.state.findings
+            if f.severity in (Severity.LOW, Severity.INFORMATIONAL, Severity.GAS)
+            and f.vulnerability_type not in self.OBSERVATION_TYPES
+            and f not in verified and f not in unverified_exploitable
+        ]
 
-        for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW]:
-            findings = self.state.get_findings_by_severity(severity)
-            if not findings:
-                continue
+        # Verified Findings (with PoC)
+        if verified:
+            lines.extend([
+                "## Verified Findings (with Proof of Concept)",
+                "",
+            ])
 
-            lines.append(f"### {severity.value} Severity")
-            lines.append("")
+            for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM]:
+                sev_findings = [f for f in verified if f.severity == severity]
+                if not sev_findings:
+                    continue
 
-            for i, finding in enumerate(findings, 1):
-                lines.extend([
-                    f"#### [{finding.id}] {finding.title}",
-                    "",
-                    f"**Contract:** `{finding.contract}`" + (f" | **Function:** `{finding.function}`" if finding.function else ""),
-                    "",
-                    f"**Description:**",
-                    finding.description,
-                    "",
-                ])
-
-                if finding.impact:
-                    lines.extend([
-                        f"**Impact:**",
-                        finding.impact,
-                        "",
-                    ])
-
-                if finding.recommendation:
-                    lines.extend([
-                        f"**Recommendation:**",
-                        finding.recommendation,
-                        "",
-                    ])
-
-                if finding.poc and finding.poc.code:
-                    lines.extend([
-                        f"**Proof of Concept:**",
-                        "```solidity",
-                        finding.poc.code,
-                        "```",
-                        "",
-                    ])
-
-                lines.append("---")
+                lines.append(f"### {severity.value} Severity")
                 lines.append("")
+
+                for finding in sev_findings:
+                    self._write_finding_to_report(lines, finding, include_poc=True)
+
+        # Unverified Findings
+        if unverified_exploitable:
+            lines.extend([
+                "## Unverified Findings (Manual Review Recommended)",
+                "",
+                "> These findings were identified by analysis but could not be verified with a working PoC.",
+                "> Manual review is recommended before acting on them.",
+                "",
+            ])
+
+            for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM]:
+                sev_findings = [f for f in unverified_exploitable if f.severity == severity]
+                if not sev_findings:
+                    continue
+
+                lines.append(f"### {severity.value} Severity")
+                lines.append("")
+
+                for finding in sev_findings:
+                    self._write_finding_to_report(lines, finding, include_poc=False)
+
+        # Low/Informational
+        if low_info:
+            lines.extend([
+                "## Low / Informational",
+                "",
+            ])
+            for finding in low_info:
+                self._write_finding_to_report(lines, finding, include_poc=False)
+
+        # Design Observations
+        if observations:
+            lines.extend([
+                "## Design Observations",
+                "",
+                "> These are architectural or design observations, not directly exploitable.",
+                "",
+            ])
+            for finding in observations:
+                self._write_finding_to_report(lines, finding, include_poc=False)
 
         # Slither results summary
         if self.state.slither_results:
@@ -648,8 +810,9 @@ class Orchestrator:
             if self.depth == "deep":
                 await self.run_phase_attack_synthesis()
 
-            # Phase 6: PoC Generation
-            await self.run_phase_poc_generation()
+            # Phase 6: PoC Generation (standard+ depth, when findings exist)
+            if self.depth in ("standard", "deep") and self.state.findings:
+                await self.run_phase_poc_generation()
 
             # Phase 7: Reporting
             await self.run_phase_reporting()
@@ -666,6 +829,8 @@ async def run_audit(
     docs_path: Optional[Path] = None,
     verbose: bool = True,
     depth: str = "standard",
+    fork_url: Optional[str] = None,
+    fork_block: Optional[int] = None,
 ) -> AuditState:
     """
     Convenience function to run a full audit.
@@ -675,6 +840,8 @@ async def run_audit(
         docs_path: Optional path to documentation
         verbose: Whether to print progress
         depth: Audit depth - "fast", "standard", or "deep"
+        fork_url: RPC URL for fork-based PoC execution
+        fork_block: Block number for fork
 
     Returns:
         Audit state with findings
@@ -684,5 +851,7 @@ async def run_audit(
         docs_path=docs_path,
         verbose=verbose,
         depth=depth,
+        fork_url=fork_url,
+        fork_block=fork_block,
     )
     return await orchestrator.run()

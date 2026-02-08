@@ -247,6 +247,7 @@ Severity: {ex['severity']}
         self,
         finding: Finding,
         format: Optional[ReportFormat] = None,
+        include_poc: Optional[bool] = None,
     ) -> str:
         """
         Write a single finding in professional format.
@@ -254,7 +255,25 @@ Severity: {ex['severity']}
         Uses extended thinking to produce high-quality output.
         """
         format = format or self.config.format
+        if include_poc is None:
+            include_poc = self.config.include_poc
         template = self._get_finding_template(format)
+
+        poc_section = ""
+        if include_poc and finding.poc and finding.poc.code:
+            poc_section = f"""
+**Proof of Concept:**
+```solidity
+{finding.poc.code}
+```
+{"**PoC Output:** " + finding.poc.output[:1000] if finding.poc.output else ""}
+"""
+
+        verification_note = ""
+        if finding.validated:
+            verification_note = "**Status:** VERIFIED (PoC passes)"
+        elif finding.severity in (Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM):
+            verification_note = "**Status:** Unverified - manual review recommended"
 
         prompt = f"""Write a professional security finding based on this data:
 
@@ -269,6 +288,8 @@ Severity: {ex['severity']}
 - Root Cause: {finding.root_cause}
 - Recommendation: {finding.recommendation}
 - Confidence: {finding.confidence}
+{verification_note}
+{poc_section}
 
 **Template to Follow:**
 {template}
@@ -279,6 +300,7 @@ Severity: {ex['severity']}
 3. Add specific code references
 4. Make recommendation actionable
 5. Format for {format.value} submission
+{"6. Include the Proof of Concept code in the finding" if include_poc and finding.poc else "6. Do NOT include any PoC section"}
 """
 
         if self.config.ultrathink:
@@ -376,8 +398,45 @@ Write the complete submission:
 {Specific fix}
 """
 
+    def _categorize_findings(self) -> dict[str, list[Finding]]:
+        """Split findings into verified, unverified, low/info, and observations."""
+        from ..core.types import VulnerabilityType
+
+        observation_types = {
+            VulnerabilityType.CENTRALIZATION,
+            VulnerabilityType.SINGLE_POINT_FAILURE,
+            VulnerabilityType.MISSING_TIMELOCK,
+            VulnerabilityType.GAS_OPTIMIZATION,
+        }
+        poc_severities = {Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM}
+
+        verified = [f for f in self.state.findings if f.validated and f.poc]
+        unverified = [
+            f for f in self.state.findings
+            if not f.validated
+            and f.severity in poc_severities
+            and f.vulnerability_type not in observation_types
+        ]
+        observations = [
+            f for f in self.state.findings
+            if f.vulnerability_type in observation_types
+        ]
+        low_info = [
+            f for f in self.state.findings
+            if f.severity in (Severity.LOW, Severity.INFORMATIONAL, Severity.GAS)
+            and f.vulnerability_type not in observation_types
+            and f not in verified and f not in unverified
+        ]
+
+        return {
+            "verified": verified,
+            "unverified": unverified,
+            "low_info": low_info,
+            "observations": observations,
+        }
+
     async def _generate_markdown_report(self) -> str:
-        """Generate a standard markdown report."""
+        """Generate a standard markdown report with verification stratification."""
         lines = [
             f"# Security Audit Report: {self.state.target_name}",
             "",
@@ -398,17 +457,71 @@ Write the complete submission:
                 "",
             ])
 
-        # Findings by severity
-        for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW]:
-            findings = self.state.get_findings_by_severity(severity)
-            if not findings:
-                continue
+        categories = self._categorize_findings()
 
-            lines.append(f"## {severity.value} Severity Findings")
+        # Verified findings
+        if categories["verified"]:
+            lines.append("## Verified Findings (with Proof of Concept)")
             lines.append("")
 
-            for i, finding in enumerate(findings, 1):
-                finding_text = await self.write_finding(finding)
+            for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM]:
+                sev_findings = [f for f in categories["verified"] if f.severity == severity]
+                if not sev_findings:
+                    continue
+
+                lines.append(f"### {severity.value} Severity")
+                lines.append("")
+
+                for finding in sev_findings:
+                    finding_text = await self.write_finding(finding, include_poc=True)
+                    lines.append(finding_text)
+                    lines.append("")
+                    lines.append("---")
+                    lines.append("")
+
+        # Unverified findings
+        if categories["unverified"]:
+            lines.append("## Unverified Findings (Manual Review Recommended)")
+            lines.append("")
+            lines.append("> These findings could not be verified with a working PoC. Manual review is recommended.")
+            lines.append("")
+
+            for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM]:
+                sev_findings = [f for f in categories["unverified"] if f.severity == severity]
+                if not sev_findings:
+                    continue
+
+                lines.append(f"### {severity.value} Severity")
+                lines.append("")
+
+                for finding in sev_findings:
+                    finding_text = await self.write_finding(finding, include_poc=False)
+                    lines.append(finding_text)
+                    lines.append("")
+                    lines.append("---")
+                    lines.append("")
+
+        # Low/Informational
+        if categories["low_info"]:
+            lines.append("## Low / Informational")
+            lines.append("")
+
+            for finding in categories["low_info"]:
+                finding_text = await self.write_finding(finding, include_poc=False)
+                lines.append(finding_text)
+                lines.append("")
+                lines.append("---")
+                lines.append("")
+
+        # Design observations
+        if categories["observations"]:
+            lines.append("## Design Observations")
+            lines.append("")
+            lines.append("> Architectural or design observations, not directly exploitable.")
+            lines.append("")
+
+            for finding in categories["observations"]:
+                finding_text = await self.write_finding(finding, include_poc=False)
                 lines.append(finding_text)
                 lines.append("")
                 lines.append("---")
@@ -425,29 +538,63 @@ Write the complete submission:
             "",
         ]
 
-        # Organize by severity with platform-specific IDs
+        categories = self._categorize_findings()
+
+        # Verified findings first
+        if categories["verified"]:
+            lines.append("# Verified Findings")
+            lines.append("")
+
         finding_counter = {"H": 0, "M": 0, "L": 0, "Q": 0, "G": 0}
 
-        for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW]:
-            findings = self.state.get_findings_by_severity(severity)
-            if not findings:
+        for group_key, group_label in [("verified", "Verified"), ("unverified", "Unverified")]:
+            group = categories[group_key]
+            if not group:
                 continue
 
-            # Map severity to prefix
-            prefix = {
-                Severity.CRITICAL: "H",
-                Severity.HIGH: "H",
-                Severity.MEDIUM: "M",
-                Severity.LOW: "L",
-            }.get(severity, "L")
+            if group_key == "unverified":
+                lines.append("# Unverified Findings (Manual Review Recommended)")
+                lines.append("")
 
-            for finding in findings:
-                finding_counter[prefix] += 1
-                finding.id = f"{prefix}-{finding_counter[prefix]:02d}"
+            for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW]:
+                sev_findings = [f for f in group if f.severity == severity]
+                if not sev_findings:
+                    continue
 
+                prefix = {
+                    Severity.CRITICAL: "H",
+                    Severity.HIGH: "H",
+                    Severity.MEDIUM: "M",
+                    Severity.LOW: "L",
+                }.get(severity, "L")
+
+                for finding in sev_findings:
+                    finding_counter[prefix] += 1
+                    finding.id = f"{prefix}-{finding_counter[prefix]:02d}"
+
+                    include_poc = group_key == "verified"
+                    finding_text = await self.write_finding(
+                        finding,
+                        format=ReportFormat(platform),
+                        include_poc=include_poc,
+                    )
+                    lines.append(finding_text)
+                    lines.append("")
+
+        # Low/info and observations
+        for group_key, group_label in [("low_info", "Low / Informational"), ("observations", "Design Observations")]:
+            group = categories[group_key]
+            if not group:
+                continue
+
+            lines.append(f"# {group_label}")
+            lines.append("")
+
+            for finding in group:
                 finding_text = await self.write_finding(
                     finding,
                     format=ReportFormat(platform),
+                    include_poc=False,
                 )
                 lines.append(finding_text)
                 lines.append("")

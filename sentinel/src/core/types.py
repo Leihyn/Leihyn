@@ -262,6 +262,11 @@ class PoC:
     output: str = ""
     profit: Optional[float] = None  # In ETH/USD if applicable
 
+    # Generation metadata
+    iterations: int = 0
+    gas_used: int = 0
+    template_used: str = ""
+
     # Fork info
     fork_url: Optional[str] = None
     fork_block: Optional[int] = None
