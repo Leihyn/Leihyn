@@ -13,6 +13,10 @@ from .parameter_validation import ParameterValidationHunter
 from .math_verification import MathVerificationHunter
 from .slippage import SlippageHunter
 from .algebraic_verification import AlgebraicVerificationHunter
+from .invariant_fuzzer import InvariantFuzzerHunter
+from .sequence_explorer import SequenceExplorerHunter
+from .halmos_prover import HalmosProverHunter
+from .known_bug_replay import KnownBugReplayHunter
 
 __all__ = [
     "ReentrancyHunter",
@@ -23,6 +27,10 @@ __all__ = [
     "MathVerificationHunter",
     "SlippageHunter",
     "AlgebraicVerificationHunter",
+    "InvariantFuzzerHunter",
+    "SequenceExplorerHunter",
+    "HalmosProverHunter",
+    "KnownBugReplayHunter",
 ]
 
 
@@ -36,6 +44,10 @@ HUNTERS = {
     "math_verification": MathVerificationHunter,
     "slippage": SlippageHunter,
     "algebraic_verification": AlgebraicVerificationHunter,
+    "invariant_fuzzer": InvariantFuzzerHunter,
+    "sequence_explorer": SequenceExplorerHunter,
+    "halmos_prover": HalmosProverHunter,
+    "known_bug_replay": KnownBugReplayHunter,
 }
 
 

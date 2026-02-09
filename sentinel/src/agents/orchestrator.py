@@ -103,6 +103,22 @@ class Orchestrator:
             console.print(f"[{style}][Orchestrator][/{style}] {message}")
         self.state.add_log(f"[Orchestrator] {message}")
 
+    def _print_cost_status(self, phase_label: str = "") -> None:
+        """Print current API spend. Called before/after expensive phases."""
+        stats = self.llm.get_stats()
+        cost = stats["total_cost"]
+        input_t = stats["total_input_tokens"]
+        output_t = stats["total_output_tokens"]
+        thinking_t = stats["total_thinking_tokens"]
+        cache_savings = stats["prompt_cache_savings"]
+
+        label = f" (after {phase_label})" if phase_label else ""
+        console.print(
+            f"[bold cyan]  $ {cost:.4f} spent{label}[/bold cyan]"
+            f"  [dim]| {input_t:,} in | {output_t:,} out | {thinking_t:,} think"
+            f" | ${cache_savings:.4f} saved via cache[/dim]"
+        )
+
     async def run_phase_recon(self) -> None:
         """Phase 1: Reconnaissance."""
         self.log("Phase 1: Reconnaissance", style="bold magenta")
@@ -231,13 +247,24 @@ class Orchestrator:
         hunters = []
 
         # --- Fast depth: highest-signal hunters only ---
+        # KnownBugReplayHunter goes FIRST in all depths: mostly regex (cheapest),
+        # catches the highest-value M/H bugs from real audit findings.
         # SlippageHunter and ParameterValidationHunter produce the most findings per API dollar.
         # At fast depth, we skip low-yield hunters (reentrancy, flash loan, oracle pattern matching)
         # and rely on these two plus AccessControl for broad coverage.
         if self.depth == "fast":
             from .hunters.slippage import SlippageHunter
             from .hunters.parameter_validation import ParameterValidationHunter
+            from .hunters.known_bug_replay import KnownBugReplayHunter
 
+            # KnownBugReplayHunter first: cheap regex + LLM only on matches
+            hunters.append(
+                KnownBugReplayHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
             hunters.append(
                 SlippageHunter(
                     state=self.state,
@@ -260,11 +287,23 @@ class Orchestrator:
                 )
             )
 
-        # --- Standard: core + standard hunters ---
+        # --- Standard: core + standard hunters + invariant fuzzer ---
         elif self.depth == "standard":
             from .hunters.slippage import SlippageHunter
             from .hunters.math_verification import MathVerificationHunter
             from .hunters.parameter_validation import ParameterValidationHunter
+            from .hunters.invariant_fuzzer import InvariantFuzzerHunter
+            from .hunters.known_bug_replay import KnownBugReplayHunter
+            from .hunters.halmos_prover import HalmosProverHunter
+
+            # KnownBugReplayHunter first: cheap regex + LLM only on matches
+            hunters.append(
+                KnownBugReplayHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
 
             hunters.append(
                 AccessControlHunter(
@@ -314,11 +353,44 @@ class Orchestrator:
                 )
             )
 
-        # --- Deep: all hunters including algebraic verification ---
+            # InvariantFuzzerHunter: generates and runs Foundry invariant tests
+            if self.language == Language.SOLIDITY:
+                hunters.append(
+                    InvariantFuzzerHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+
+            # HalmosProverHunter last: most expensive (symbolic execution)
+            if self.language == Language.SOLIDITY:
+                hunters.append(
+                    HalmosProverHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+
+        # --- Deep: all hunters including algebraic verification, invariant fuzzer, sequence explorer ---
         else:  # depth == "deep"
             from .hunters.slippage import SlippageHunter
             from .hunters.math_verification import MathVerificationHunter
             from .hunters.parameter_validation import ParameterValidationHunter
+            from .hunters.invariant_fuzzer import InvariantFuzzerHunter
+            from .hunters.sequence_explorer import SequenceExplorerHunter
+            from .hunters.known_bug_replay import KnownBugReplayHunter
+            from .hunters.halmos_prover import HalmosProverHunter
+
+            # KnownBugReplayHunter first: cheap regex + LLM only on matches
+            hunters.append(
+                KnownBugReplayHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
 
             hunters.append(
                 AccessControlHunter(
@@ -388,6 +460,36 @@ class Orchestrator:
                 )
             except ImportError:
                 self.log("AlgebraicVerificationHunter not available", style="yellow")
+
+            # InvariantFuzzerHunter: generates and runs Foundry invariant tests
+            if self.language == Language.SOLIDITY:
+                hunters.append(
+                    InvariantFuzzerHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+
+            # SequenceExplorerHunter: multi-step attack sequences (deep only)
+            if self.language == Language.SOLIDITY:
+                hunters.append(
+                    SequenceExplorerHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+
+            # HalmosProverHunter last: most expensive (symbolic execution)
+            if self.language == Language.SOLIDITY:
+                hunters.append(
+                    HalmosProverHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
 
         # --- Deep-only: DeepHunter and InvariantAgent ---
         if self.depth == "deep":
@@ -515,8 +617,14 @@ class Orchestrator:
         return checkpoint_path
 
     async def run_phase_validation(self) -> None:
-        """Phase 3.5: Devil's Advocate - challenge and validate findings."""
-        self.log("Phase 3.5: Finding Validation (Devil's Advocate)", style="bold magenta")
+        """Phase 3.5: Unified validation - severity calibration + feasibility challenge + dedup.
+
+        Merges what was previously Phase 3.25 (SeverityCalibrator) and Phase 3.5
+        (DevilsAdvocate) into a single batched pass. Each batch of 3-5 findings
+        gets one ultrathink call that checks protections, calibrates severity,
+        challenges feasibility, and identifies root causes for dedup.
+        """
+        self.log("Phase 3.5: Finding Validation (Calibration + Challenge)", style="bold magenta")
 
         if not self.state.findings:
             self.log("No findings to validate")
@@ -530,6 +638,11 @@ class Orchestrator:
                 thinking_budget=16000,
                 strict_mode=False,
                 filter_low_confidence=True,
+                # Severity calibration (merged from SeverityCalibrator)
+                read_source=True,
+                deduplicate_root_cause=True,
+                # Batch processing: 4 findings per LLM call
+                batch_size=4,
             )
             advocate = DevilsAdvocateAgent(
                 state=self.state,
@@ -544,7 +657,7 @@ class Orchestrator:
             post_count = len(self.state.findings)
 
             filtered = pre_count - post_count
-            self.log(f"Validated {post_count}/{pre_count} findings ({filtered} filtered as false positives)")
+            self.log(f"Validated {post_count}/{pre_count} findings ({filtered} filtered/merged)")
 
         except Exception as e:
             self.log(f"Validation failed: {e}", style="red")
@@ -753,10 +866,21 @@ class Orchestrator:
 
         # Stats
         duration = (self.state.end_time - self.state.start_time).total_seconds() if self.state.end_time else 0
+        stats = self.llm.get_stats()
         console.print(f"\nDuration: {duration:.1f}s")
-        console.print(f"API Cost: ${self.llm.total_cost:.4f}")
         console.print(f"Contracts Analyzed: {len(self.state.contracts)}")
         console.print(f"Depth: {self.depth}")
+
+        # Final cost breakdown
+        console.print()
+        console.print("[bold cyan]--- Final Cost Summary ---[/bold cyan]")
+        console.print(f"  Total API Cost:     [bold]${stats['total_cost']:.4f}[/bold]")
+        console.print(f"  Cache Savings:      [green]${stats['prompt_cache_savings']:.4f}[/green]")
+        console.print(f"  Input Tokens:       {stats['total_input_tokens']:,}")
+        console.print(f"  Output Tokens:      {stats['total_output_tokens']:,}")
+        console.print(f"  Thinking Tokens:    {stats['total_thinking_tokens']:,}")
+        console.print(f"  Disk Cache Hits:    {stats['cache_hits']}")
+        console.print("[dim]  Check remaining balance at console.anthropic.com > Billing[/dim]")
 
     def _write_finding_to_report(self, lines: list[str], finding: Finding, include_poc: bool = False) -> None:
         """Write a single finding to the report lines."""
@@ -976,6 +1100,12 @@ class Orchestrator:
             expand=False
         ))
 
+        # Show starting cost (should be $0 unless client was reused)
+        console.print("[bold cyan]--- API Credit Tracker ---[/bold cyan]")
+        self._print_cost_status()
+        console.print("[dim]  (Check remaining balance at console.anthropic.com > Billing)[/dim]")
+        console.print()
+
         # Credit exhaustion error string to catch
         CREDIT_ERROR = "credit balance is too low"
 
@@ -988,6 +1118,7 @@ class Orchestrator:
             else:
                 # Phase 1: Recon
                 await self.run_phase_recon()
+                self._print_cost_status("Recon")
 
                 # Phase 2: Static Analysis
                 await self.run_phase_static_analysis()
@@ -995,9 +1126,11 @@ class Orchestrator:
                 # Phase 2.5: Cross-Contract Analysis (standard+)
                 if self.depth in ("standard", "deep"):
                     await self.run_phase_cross_contract_analysis()
+                self._print_cost_status("Static + Cross-Contract")
 
                 # Phase 3: Deep Analysis (all hunters based on depth)
                 await self.run_phase_deep_analysis()
+                self._print_cost_status("Hunters")
 
                 # Save checkpoint after hunters — this is the expensive part
                 self._save_checkpoint("hunters")
@@ -1011,14 +1144,17 @@ class Orchestrator:
                 # Phase 3.5: Validation (standard+)
                 if self.depth in ("standard", "deep"):
                     await self.run_phase_validation()
+                    self._print_cost_status("Validation")
 
                 # Phase 5: Attack Synthesis (deep only)
                 if self.depth == "deep":
                     await self.run_phase_attack_synthesis()
+                    self._print_cost_status("Attack Synthesis")
 
             # Phase 6: PoC Generation (standard+ depth, when findings exist)
             if self.depth in ("standard", "deep") and self.state.findings:
                 await self.run_phase_poc_generation()
+                self._print_cost_status("PoC Generation")
 
             # Save checkpoint before reporting — all expensive work is done
             self._save_checkpoint("pre_report")
