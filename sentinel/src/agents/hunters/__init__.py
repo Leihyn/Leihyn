@@ -12,6 +12,7 @@ from .flash_loan import FlashLoanHunter
 from .parameter_validation import ParameterValidationHunter
 from .math_verification import MathVerificationHunter
 from .slippage import SlippageHunter
+from .algebraic_verification import AlgebraicVerificationHunter
 
 __all__ = [
     "ReentrancyHunter",
@@ -21,6 +22,7 @@ __all__ = [
     "ParameterValidationHunter",
     "MathVerificationHunter",
     "SlippageHunter",
+    "AlgebraicVerificationHunter",
 ]
 
 
@@ -33,6 +35,7 @@ HUNTERS = {
     "parameter_validation": ParameterValidationHunter,
     "math_verification": MathVerificationHunter,
     "slippage": SlippageHunter,
+    "algebraic_verification": AlgebraicVerificationHunter,
 }
 
 

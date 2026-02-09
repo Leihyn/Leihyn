@@ -230,46 +230,67 @@ class Orchestrator:
         # Build list of hunters based on depth, language, and architecture
         hunters = []
 
-        # --- Core hunters (all depths) ---
-        hunters.append(
-            AccessControlHunter(
-                state=self.state,
-                verbose=self.verbose,
-                language=self.language,
-            )
-        )
+        # --- Fast depth: highest-signal hunters only ---
+        # SlippageHunter and ParameterValidationHunter produce the most findings per API dollar.
+        # At fast depth, we skip low-yield hunters (reentrancy, flash loan, oracle pattern matching)
+        # and rely on these two plus AccessControl for broad coverage.
+        if self.depth == "fast":
+            from .hunters.slippage import SlippageHunter
+            from .hunters.parameter_validation import ParameterValidationHunter
 
-        if self.language in [Language.SOLIDITY, Language.CAIRO]:
             hunters.append(
-                ReentrancyHunter(
-                    state=self.state,
-                    verbose=self.verbose,
-                    language=self.language,
-                )
-            )
-
-        # DeFi-specific core hunters
-        if self.state.architecture and self.state.architecture.is_defi:
-            hunters.append(
-                OracleManipulationHunter(
+                SlippageHunter(
                     state=self.state,
                     verbose=self.verbose,
                     language=self.language,
                 )
             )
             hunters.append(
-                FlashLoanHunter(
+                ParameterValidationHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
+            hunters.append(
+                AccessControlHunter(
                     state=self.state,
                     verbose=self.verbose,
                     language=self.language,
                 )
             )
 
-        # --- Standard+ hunters (standard and deep) ---
-        if self.depth in ("standard", "deep"):
+        # --- Standard: core + standard hunters ---
+        elif self.depth == "standard":
             from .hunters.slippage import SlippageHunter
             from .hunters.math_verification import MathVerificationHunter
             from .hunters.parameter_validation import ParameterValidationHunter
+
+            hunters.append(
+                AccessControlHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
+
+            if self.language in [Language.SOLIDITY, Language.CAIRO]:
+                hunters.append(
+                    ReentrancyHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+
+            if self.state.architecture and self.state.architecture.is_defi:
+                hunters.append(
+                    OracleManipulationHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
 
             hunters.append(
                 SlippageHunter(
@@ -292,6 +313,81 @@ class Orchestrator:
                     language=self.language,
                 )
             )
+
+        # --- Deep: all hunters including algebraic verification ---
+        else:  # depth == "deep"
+            from .hunters.slippage import SlippageHunter
+            from .hunters.math_verification import MathVerificationHunter
+            from .hunters.parameter_validation import ParameterValidationHunter
+
+            hunters.append(
+                AccessControlHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
+
+            if self.language in [Language.SOLIDITY, Language.CAIRO]:
+                hunters.append(
+                    ReentrancyHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+
+            if self.state.architecture and self.state.architecture.is_defi:
+                hunters.append(
+                    OracleManipulationHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+                hunters.append(
+                    FlashLoanHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+
+            hunters.append(
+                SlippageHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
+            hunters.append(
+                MathVerificationHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
+            hunters.append(
+                ParameterValidationHunter(
+                    state=self.state,
+                    verbose=self.verbose,
+                    language=self.language,
+                )
+            )
+
+            # AlgebraicVerificationHunter - catches tautologies, identities, and
+            # mathematical simplifications that negate security checks (e.g., TWAP = spot)
+            try:
+                from .hunters.algebraic_verification import AlgebraicVerificationHunter
+                hunters.append(
+                    AlgebraicVerificationHunter(
+                        state=self.state,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+            except ImportError:
+                self.log("AlgebraicVerificationHunter not available", style="yellow")
 
         # --- Deep-only: DeepHunter and InvariantAgent ---
         if self.depth == "deep":
@@ -336,8 +432,21 @@ class Orchestrator:
         self.log(f"Running {len(hunters)} hunters for {self.language.value} (depth={self.depth})...")
 
         if self.parallel_hunters:
-            tasks = [hunter.run() for hunter in hunters]
-            await asyncio.gather(*tasks, return_exceptions=True)
+            # Semaphore(1) = sequential execution with asyncio.gather error handling.
+            # Most Anthropic API tiers have 30-80k input tokens/min -- even 2 concurrent
+            # hunters with large contract contexts will cascade into 429 retries.
+            # Sequential execution is slower but reliable.
+            semaphore = asyncio.Semaphore(1)
+
+            async def rate_limited_run(hunter):
+                async with semaphore:
+                    return await hunter.run()
+
+            tasks = [rate_limited_run(hunter) for hunter in hunters]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for hunter, result in zip(hunters, results):
+                if isinstance(result, Exception):
+                    self.log(f"{hunter.name} failed: {result}", style="red")
         else:
             for hunter in hunters:
                 self.log(f"Running {hunter.name}...")

@@ -77,7 +77,7 @@ class LLMClient:
         model: str = "claude-sonnet-4-20250514",
         cache_dir: Optional[Path] = None,
         enable_cache: bool = True,
-        max_retries: int = 3,
+        max_retries: int = 5,
         default_thinking_budget: int = 10000,
     ):
         self.client = anthropic.Anthropic()
@@ -191,6 +191,9 @@ class LLMClient:
         # Extended thinking configuration
         if extended_thinking:
             budget = thinking_budget or self.default_thinking_budget
+            # API requires max_tokens > thinking.budget_tokens
+            if max_tokens <= budget:
+                kwargs["max_tokens"] = budget + 4096
             kwargs["thinking"] = {
                 "type": "enabled",
                 "budget_tokens": budget,
@@ -204,15 +207,19 @@ class LLMClient:
         last_error = None
         for attempt in range(self.max_retries):
             try:
-                if extended_thinking and stream_thinking:
-                    # Stream the response to show thinking in real-time
-                    response = self._stream_with_thinking(**kwargs)
+                if extended_thinking:
+                    # Always stream extended thinking requests -- the Anthropic API
+                    # requires streaming for requests that may exceed 10 minutes.
+                    response = self._stream_with_thinking(show_live=stream_thinking, **kwargs)
                 else:
                     response = self.client.messages.create(**kwargs)
                 break
             except anthropic.RateLimitError as e:
                 last_error = e
-                wait_time = 2 ** attempt
+                # Fixed 60s wait aligns with Anthropic's per-minute rate limit window.
+                # The 30k input tokens/min tier resets every 60s -- exponential backoff
+                # overshoots (30->60->120s) while fixed 60s is optimal.
+                wait_time = 60
                 console.print(f"[yellow]Rate limited, waiting {wait_time}s...[/yellow]")
                 time.sleep(wait_time)
             except anthropic.APIError as e:
@@ -274,23 +281,35 @@ class LLMClient:
 
         return result
 
-    def _stream_with_thinking(self, **kwargs) -> Any:
-        """Stream response and display thinking in real-time."""
-        thinking_text = Text()
-        response_text = Text()
+    def _stream_with_thinking(self, show_live: bool = True, **kwargs) -> Any:
+        """Stream response, optionally displaying thinking in real-time.
 
-        with self.client.messages.stream(**kwargs) as stream:
-            with Live(Panel(thinking_text, title="[cyan]Thinking...[/cyan]", border_style="cyan"),
-                      console=console, refresh_per_second=10) as live:
-                for event in stream:
-                    if hasattr(event, 'type'):
-                        if event.type == "content_block_delta":
-                            if hasattr(event.delta, 'thinking'):
-                                thinking_text.append(event.delta.thinking)
-                            elif hasattr(event.delta, 'text'):
-                                response_text.append(event.delta.text)
+        Args:
+            show_live: If True, render thinking to console. If False, stream
+                       silently (needed for extended thinking requests >10 min).
+        """
+        if show_live:
+            thinking_text = Text()
+            response_text = Text()
 
-                # Final response
+            with self.client.messages.stream(**kwargs) as stream:
+                with Live(Panel(thinking_text, title="[cyan]Thinking...[/cyan]", border_style="cyan"),
+                          console=console, refresh_per_second=10) as live:
+                    for event in stream:
+                        if hasattr(event, 'type'):
+                            if event.type == "content_block_delta":
+                                if hasattr(event.delta, 'thinking'):
+                                    thinking_text.append(event.delta.thinking)
+                                elif hasattr(event.delta, 'text'):
+                                    response_text.append(event.delta.text)
+
+                    # Final response
+                    response = stream.get_final_message()
+        else:
+            # Silent streaming -- consume the stream without rendering
+            with self.client.messages.stream(**kwargs) as stream:
+                for _event in stream:
+                    pass
                 response = stream.get_final_message()
 
         return response
@@ -364,6 +383,10 @@ class LLMClient:
                         result_str = json.dumps(result) if not isinstance(result, str) else result
                     except Exception as e:
                         result_str = f"Error executing tool: {str(e)}"
+                        if tool_name == "report_finding":
+                            console.print(f"[red]WARNING: Finding lost due to tool error: {e}[/red]")
+                        elif self.max_retries:  # any truthy context = verbose mode
+                            console.print(f"[yellow]Tool {tool_name} failed: {e}[/yellow]")
                 else:
                     result_str = f"Unknown tool: {tool_name}"
 
