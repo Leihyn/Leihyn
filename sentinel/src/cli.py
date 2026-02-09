@@ -72,6 +72,11 @@ def audit(
         "--fork-block",
         help="Block number for fork (latest if omitted)",
     ),
+    resume: Optional[str] = typer.Option(
+        None,
+        "--resume",
+        help="Path to checkpoint JSON to resume from (skips Phases 1-3)",
+    ),
 ):
     """
     Run a security audit on smart contracts.
@@ -107,6 +112,7 @@ def audit(
             depth=depth,
             fork_url=fork_url,
             fork_block=fork_block,
+            resume_from=resume,
         ))
 
         # Print final stats

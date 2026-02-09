@@ -2,7 +2,8 @@
 Core types and data structures for the Sentinel auditing system.
 """
 
-from dataclasses import dataclass, field
+import json
+from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -393,6 +394,69 @@ class AuditState:
     def get_validated_findings(self) -> list[Finding]:
         """Get all validated findings."""
         return [f for f in self.findings if f.validated and not f.false_positive]
+
+    def save_checkpoint(self, path: Path) -> None:
+        """Serialize state to JSON for resume after credit exhaustion."""
+        def _serialize(obj):
+            if isinstance(obj, datetime):
+                return obj.isoformat()
+            if isinstance(obj, Path):
+                return str(obj)
+            if isinstance(obj, Enum):
+                return obj.value
+            if isinstance(obj, set):
+                return list(obj)
+            raise TypeError(f"Cannot serialize {type(obj)}")
+
+        data = asdict(self)
+        path.write_text(json.dumps(data, default=_serialize, indent=2))
+
+    @classmethod
+    def load_checkpoint(cls, path: Path) -> "AuditState":
+        """Deserialize state from JSON checkpoint."""
+        data = json.loads(path.read_text())
+
+        # Reconstruct findings with proper enum types
+        findings = []
+        for f in data.get("findings", []):
+            findings.append(Finding(
+                id=f["id"],
+                title=f["title"],
+                severity=Severity(f["severity"]),
+                vulnerability_type=VulnerabilityType(f["vulnerability_type"]),
+                description=f["description"],
+                contract=f["contract"],
+                function=f.get("function"),
+                line_numbers=tuple(f.get("line_numbers", (0, 0))),
+                impact=f.get("impact", ""),
+                root_cause=f.get("root_cause", ""),
+                recommendation=f.get("recommendation", ""),
+                validated=f.get("validated", False),
+                false_positive=f.get("false_positive", False),
+                found_by=AgentRole(f.get("found_by", "vulnerability_hunter")),
+                confidence=f.get("confidence", 0.0),
+                related_findings=f.get("related_findings", []),
+                references=f.get("references", []),
+            ))
+
+        # Reconstruct contracts (minimal — enough for PoC generation)
+        contracts = []
+        for c in data.get("contracts", []):
+            contracts.append(ContractInfo(
+                name=c["name"],
+                path=Path(c["path"]),
+                source=c["source"],
+            ))
+
+        state = cls(
+            target_path=Path(data["target_path"]),
+            target_name=data["target_name"],
+            depth=data.get("depth", "standard"),
+        )
+        state.contracts = contracts
+        state.findings = findings
+        state.logs = data.get("logs", [])
+        return state
 
 
 @dataclass

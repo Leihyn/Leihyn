@@ -457,6 +457,63 @@ class Orchestrator:
 
         self.log(f"Deep analysis complete: {len(self.state.findings)} total findings")
 
+    def _deduplicate_findings(self) -> None:
+        """Merge findings with the same root cause into a single consolidated finding.
+
+        SLIPPAGE-001 through SLIPPAGE-004 (same vuln type, same root cause pattern)
+        become one finding with all affected locations listed. This saves 4x on
+        DevilsAdvocate/PoC API calls.
+        """
+        if not self.state.findings:
+            return
+
+        from collections import defaultdict
+
+        # Group by vulnerability_type + first 50 chars of recommendation (proxy for root cause)
+        groups = defaultdict(list)
+        for f in self.state.findings:
+            # Key: same vuln type + similar recommendation = same root cause
+            rec_key = f.recommendation[:50] if f.recommendation else ""
+            key = (f.vulnerability_type.value, rec_key)
+            groups[key].append(f)
+
+        deduped = []
+        for key, group in groups.items():
+            if len(group) == 1:
+                deduped.append(group[0])
+                continue
+
+            # Merge group into one finding
+            primary = group[0]
+            other_contracts = [f.contract for f in group[1:]]
+            other_ids = [f.id for f in group[1:]]
+
+            # Consolidate: keep primary, append other locations
+            primary.description += "\n\n**Also affects:** " + ", ".join(
+                f"{f.contract}:{f.function or 'N/A'}" for f in group[1:]
+            )
+            primary.related_findings.extend(other_ids)
+            # Take highest severity and confidence from the group
+            severity_order = [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW, Severity.INFORMATIONAL]
+            primary.severity = min((f.severity for f in group), key=lambda s: severity_order.index(s))
+            primary.confidence = max(f.confidence for f in group)
+
+            deduped.append(primary)
+            self.log(f"  Deduped {len(group)} findings -> {primary.id} ({primary.title[:50]}...)")
+
+        before = len(self.state.findings)
+        self.state.findings = deduped
+        after = len(self.state.findings)
+        if before != after:
+            self.log(f"Deduplication: {before} -> {after} findings ({before - after} merged)")
+
+    def _save_checkpoint(self, phase: str) -> Path:
+        """Save state checkpoint after a phase completes."""
+        checkpoint_path = self.target_path / f"sentinel_checkpoint_{phase}.json"
+        self.state.save_checkpoint(checkpoint_path)
+        self.log(f"Checkpoint saved: {checkpoint_path}", style="dim")
+        return checkpoint_path
+
     async def run_phase_validation(self) -> None:
         """Phase 3.5: Devil's Advocate - challenge and validate findings."""
         self.log("Phase 3.5: Finding Validation (Devil's Advocate)", style="bold magenta")
@@ -885,31 +942,51 @@ class Orchestrator:
 
         return "\n".join(lines)
 
-    async def run(self) -> AuditState:
+    async def run(self, resume_from: Optional[str] = None) -> AuditState:
         """
         Execute the full audit pipeline.
+
+        Args:
+            resume_from: Path to a checkpoint JSON to resume from.
+                         Skips Phases 1-3 and goes straight to validation/PoC.
 
         Returns:
             Final audit state with all findings
         """
         console.print(Panel(
-            f"[bold]Sentinel Security Audit[/bold]\n\nTarget: {self.target_path}\nDepth: {self.depth}",
+            f"[bold]Sentinel Security Audit[/bold]\n\nTarget: {self.target_path}\nDepth: {self.depth}"
+            + (f"\nResuming from checkpoint" if resume_from else ""),
             expand=False
         ))
 
+        # Credit exhaustion error string to catch
+        CREDIT_ERROR = "credit balance is too low"
+
         try:
-            # Phase 1: Recon
-            await self.run_phase_recon()
+            if resume_from:
+                # Resume mode: load state from checkpoint, skip expensive phases
+                from ..core.types import AuditState
+                self.state = AuditState.load_checkpoint(Path(resume_from))
+                self.log(f"Resumed from checkpoint: {len(self.state.findings)} findings loaded", style="bold green")
+            else:
+                # Phase 1: Recon
+                await self.run_phase_recon()
 
-            # Phase 2: Static Analysis
-            await self.run_phase_static_analysis()
+                # Phase 2: Static Analysis
+                await self.run_phase_static_analysis()
 
-            # Phase 2.5: Cross-Contract Analysis (standard+)
-            if self.depth in ("standard", "deep"):
-                await self.run_phase_cross_contract_analysis()
+                # Phase 2.5: Cross-Contract Analysis (standard+)
+                if self.depth in ("standard", "deep"):
+                    await self.run_phase_cross_contract_analysis()
 
-            # Phase 3: Deep Analysis (all hunters based on depth)
-            await self.run_phase_deep_analysis()
+                # Phase 3: Deep Analysis (all hunters based on depth)
+                await self.run_phase_deep_analysis()
+
+                # Save checkpoint after hunters — this is the expensive part
+                self._save_checkpoint("hunters")
+
+            # Deduplicate before expensive LLM phases
+            self._deduplicate_findings()
 
             # Phase 3.5: Validation (standard+)
             if self.depth in ("standard", "deep"):
@@ -927,8 +1004,22 @@ class Orchestrator:
             await self.run_phase_reporting()
 
         except Exception as e:
-            self.log(f"Audit failed: {e}", style="bold red")
-            raise
+            error_msg = str(e)
+            if CREDIT_ERROR in error_msg.lower():
+                # Graceful credit exhaustion: save checkpoint + partial report
+                self.log("Credit balance exhausted. Saving checkpoint and partial report...", style="bold yellow")
+                checkpoint = self._save_checkpoint("partial")
+                self.state.end_time = datetime.now()
+                self.print_summary()
+                report = self.generate_report()
+                report_path = self.target_path / "sentinel_report.md"
+                report_path.write_text(report)
+                self.log(f"Partial report saved: {report_path}", style="yellow")
+                self.log(f"Resume with: sentinel audit {self.target_path} --resume {checkpoint}", style="bold yellow")
+                return self.state
+            else:
+                self.log(f"Audit failed: {e}", style="bold red")
+                raise
 
         return self.state
 
@@ -940,6 +1031,7 @@ async def run_audit(
     depth: str = "standard",
     fork_url: Optional[str] = None,
     fork_block: Optional[int] = None,
+    resume_from: Optional[str] = None,
 ) -> AuditState:
     """
     Convenience function to run a full audit.
@@ -951,6 +1043,7 @@ async def run_audit(
         depth: Audit depth - "fast", "standard", or "deep"
         fork_url: RPC URL for fork-based PoC execution
         fork_block: Block number for fork
+        resume_from: Path to checkpoint JSON to resume from
 
     Returns:
         Audit state with findings
@@ -963,4 +1056,4 @@ async def run_audit(
         fork_url=fork_url,
         fork_block=fork_block,
     )
-    return await orchestrator.run()
+    return await orchestrator.run(resume_from=resume_from)
