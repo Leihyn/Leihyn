@@ -17,6 +17,7 @@ from .invariant_fuzzer import InvariantFuzzerHunter
 from .sequence_explorer import SequenceExplorerHunter
 from .halmos_prover import HalmosProverHunter
 from .known_bug_replay import KnownBugReplayHunter
+from .reasoning_hunter import ReasoningHunter
 
 __all__ = [
     "ReentrancyHunter",
@@ -31,6 +32,7 @@ __all__ = [
     "SequenceExplorerHunter",
     "HalmosProverHunter",
     "KnownBugReplayHunter",
+    "ReasoningHunter",
 ]
 
 
@@ -48,6 +50,7 @@ HUNTERS = {
     "sequence_explorer": SequenceExplorerHunter,
     "halmos_prover": HalmosProverHunter,
     "known_bug_replay": KnownBugReplayHunter,
+    "reasoning": ReasoningHunter,
 }
 
 

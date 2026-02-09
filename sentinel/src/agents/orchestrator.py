@@ -295,6 +295,7 @@ class Orchestrator:
             from .hunters.invariant_fuzzer import InvariantFuzzerHunter
             from .hunters.known_bug_replay import KnownBugReplayHunter
             from .hunters.halmos_prover import HalmosProverHunter
+            from .hunters.reasoning_hunter import ReasoningHunter, ReasoningHunterConfig
 
             # KnownBugReplayHunter first: cheap regex + LLM only on matches
             hunters.append(
@@ -353,6 +354,22 @@ class Orchestrator:
                 )
             )
 
+            # ReasoningHunter: concrete execution tracing (before fuzzer/prover)
+            if self.language == Language.SOLIDITY:
+                reasoning_config = ReasoningHunterConfig(
+                    max_contracts=2,
+                    max_functions_per_contract=5,
+                    trace_thinking_budget=16000,
+                )
+                hunters.append(
+                    ReasoningHunter(
+                        state=self.state,
+                        config=reasoning_config,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
+
             # InvariantFuzzerHunter: generates and runs Foundry invariant tests
             if self.language == Language.SOLIDITY:
                 hunters.append(
@@ -382,6 +399,7 @@ class Orchestrator:
             from .hunters.sequence_explorer import SequenceExplorerHunter
             from .hunters.known_bug_replay import KnownBugReplayHunter
             from .hunters.halmos_prover import HalmosProverHunter
+            from .hunters.reasoning_hunter import ReasoningHunter, ReasoningHunterConfig
 
             # KnownBugReplayHunter first: cheap regex + LLM only on matches
             hunters.append(
@@ -446,6 +464,22 @@ class Orchestrator:
                     language=self.language,
                 )
             )
+
+            # ReasoningHunter: concrete execution tracing (before fuzzer/prover)
+            if self.language == Language.SOLIDITY:
+                reasoning_config = ReasoningHunterConfig(
+                    max_contracts=3,
+                    max_functions_per_contract=7,
+                    trace_thinking_budget=24000,
+                )
+                hunters.append(
+                    ReasoningHunter(
+                        state=self.state,
+                        config=reasoning_config,
+                        verbose=self.verbose,
+                        language=self.language,
+                    )
+                )
 
             # AlgebraicVerificationHunter - catches tautologies, identities, and
             # mathematical simplifications that negate security checks (e.g., TWAP = spot)
@@ -615,6 +649,75 @@ class Orchestrator:
         self.state.save_checkpoint(checkpoint_path)
         self.log(f"Checkpoint saved: {checkpoint_path}", style="dim")
         return checkpoint_path
+
+    async def run_phase_protocol_intent(self) -> None:
+        """Phase 2.75: Protocol Intent - understand design before hunting."""
+        self.log("Phase 2.75: Protocol Intent Analysis", style="bold magenta")
+
+        try:
+            from .protocol_intent import ProtocolIntentAgent, ProtocolIntentConfig
+
+            config = ProtocolIntentConfig(
+                ultrathink=True,
+                thinking_budget=16000,
+            )
+            agent = ProtocolIntentAgent(
+                state=self.state,
+                config=config,
+                llm_client=self.llm,
+                verbose=self.verbose,
+            )
+
+            intent = await agent.run()
+            self.log(f"Protocol type: {intent.protocol_type}", style="green")
+            if intent.intentional_restrictions:
+                self.log(f"Intentional restrictions: {len(intent.intentional_restrictions)}")
+            if intent.trust_model:
+                self.log(f"Trust model roles: {', '.join(intent.trust_model.keys())}")
+
+        except Exception as e:
+            self.log(f"Protocol intent analysis failed: {e}", style="red")
+            self.log("Continuing without protocol intent")
+
+    def _enrich_call_chains(self) -> None:
+        """Phase 3.25: Call-Chain Enrichment - trace callers for each finding."""
+        self.log("Phase 3.25: Call-Chain Enrichment", style="bold magenta")
+
+        if not self.state.findings:
+            self.log("No findings to enrich")
+            return
+
+        try:
+            from .call_chain_enricher import CallChainEnricher
+
+            enricher = CallChainEnricher(state=self.state, verbose=self.verbose)
+            self.state.findings = enricher.enrich(self.state.findings, self.state)
+
+        except Exception as e:
+            self.log(f"Call-chain enrichment failed: {e}", style="red")
+            self.log("Continuing without call-chain context")
+
+    async def run_phase_c4_gate(self) -> None:
+        """Phase 3.75: C4 Severity Gate - apply hard C4 judging rules."""
+        self.log("Phase 3.75: C4 Severity Gate", style="bold magenta")
+
+        if not self.state.findings:
+            self.log("No findings to gate")
+            return
+
+        try:
+            from .c4_severity_gate import C4SeverityGate
+
+            gate = C4SeverityGate(
+                state=self.state,
+                llm_client=self.llm,
+                verbose=self.verbose,
+            )
+            self.state.findings = await gate.apply(self.state.findings, self.state)
+
+        except Exception as e:
+            self.log(f"C4 severity gate failed: {e}", style="red")
+            self.log("Continuing without C4 gate")
 
     async def run_phase_validation(self) -> None:
         """Phase 3.5: Unified validation - severity calibration + feasibility challenge + dedup.
@@ -1128,6 +1231,11 @@ class Orchestrator:
                     await self.run_phase_cross_contract_analysis()
                 self._print_cost_status("Static + Cross-Contract")
 
+                # Phase 2.75: Protocol Intent (standard+)
+                if self.depth in ("standard", "deep"):
+                    await self.run_phase_protocol_intent()
+                    self._print_cost_status("Protocol Intent")
+
                 # Phase 3: Deep Analysis (all hunters based on depth)
                 await self.run_phase_deep_analysis()
                 self._print_cost_status("Hunters")
@@ -1138,6 +1246,9 @@ class Orchestrator:
             # Deduplicate before expensive LLM phases
             self._deduplicate_findings()
 
+            # Phase 3.25: Call-Chain Enrichment (all depths, free — no LLM)
+            self._enrich_call_chains()
+
             if poc_only:
                 self.log("--poc-only: Skipping validation and attack synthesis", style="bold cyan")
             else:
@@ -1145,6 +1256,10 @@ class Orchestrator:
                 if self.depth in ("standard", "deep"):
                     await self.run_phase_validation()
                     self._print_cost_status("Validation")
+
+                # Phase 3.75: C4 Severity Gate (all depths)
+                await self.run_phase_c4_gate()
+                self._print_cost_status("C4 Gate")
 
                 # Phase 5: Attack Synthesis (deep only)
                 if self.depth == "deep":
