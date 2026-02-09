@@ -630,10 +630,12 @@ class Orchestrator:
 
             core_poc = PoCGeneratorAgent._to_core_poc(poc)
 
+            # Always save PoC to state and finding (even if unverified)
+            finding.poc = core_poc
+            self.state.pocs.append(core_poc)
+
             if poc.verified:
                 finding.validated = True
-                finding.poc = core_poc
-                self.state.pocs.append(core_poc)
                 self.log(f"  [VERIFIED] {finding.id}: {finding.title}", style="bold green")
             else:
                 finding.validated = False
@@ -660,7 +662,7 @@ class Orchestrator:
             config = PoCConfig(
                 fork_url=self.fork_url,
                 fork_block=self.fork_block,
-                output_dir=self.target_path / "sentinel_pocs" if self.fork_url else None,
+                output_dir=self.target_path / "sentinel_pocs",
                 run_tests=bool(self.fork_url),
                 ultrathink=True,
             )
@@ -701,10 +703,22 @@ class Orchestrator:
         # Generate report
         report = self.generate_report()
 
-        # Save report
+        # Save report — try target_path first, fall back to cwd
         report_path = self.target_path / "sentinel_report.md"
-        report_path.write_text(report)
-        self.log(f"Report saved to: {report_path}", style="bold green")
+        try:
+            report_path.parent.mkdir(parents=True, exist_ok=True)
+            report_path.write_text(report)
+            self.log(f"Report saved to: {report_path}", style="bold green")
+        except OSError as e:
+            # target_path may not be writable (removed, read-only, etc.)
+            fallback_path = Path.cwd() / f"sentinel_report_{self.state.target_name}.md"
+            self.log(f"Cannot write to {report_path}: {e}", style="red")
+            try:
+                fallback_path.write_text(report)
+                self.log(f"Report saved to fallback: {fallback_path}", style="bold yellow")
+            except OSError as e2:
+                self.log(f"Cannot write report anywhere: {e2}", style="bold red")
+                self.log("Report content is in memory — use generate_report() to retrieve it", style="yellow")
 
     def print_summary(self) -> None:
         """Print a summary of findings."""
@@ -942,20 +956,23 @@ class Orchestrator:
 
         return "\n".join(lines)
 
-    async def run(self, resume_from: Optional[str] = None) -> AuditState:
+    async def run(self, resume_from: Optional[str] = None, poc_only: bool = False) -> AuditState:
         """
         Execute the full audit pipeline.
 
         Args:
             resume_from: Path to a checkpoint JSON to resume from.
                          Skips Phases 1-3 and goes straight to validation/PoC.
+            poc_only: Skip validation and attack synthesis, jump straight to PoC generation.
+                      Use with resume_from to save API credits.
 
         Returns:
             Final audit state with all findings
         """
         console.print(Panel(
             f"[bold]Sentinel Security Audit[/bold]\n\nTarget: {self.target_path}\nDepth: {self.depth}"
-            + (f"\nResuming from checkpoint" if resume_from else ""),
+            + (f"\nResuming from checkpoint" if resume_from else "")
+            + (f"\nMode: PoC generation only" if poc_only else ""),
             expand=False
         ))
 
@@ -988,26 +1005,38 @@ class Orchestrator:
             # Deduplicate before expensive LLM phases
             self._deduplicate_findings()
 
-            # Phase 3.5: Validation (standard+)
-            if self.depth in ("standard", "deep"):
-                await self.run_phase_validation()
+            if poc_only:
+                self.log("--poc-only: Skipping validation and attack synthesis", style="bold cyan")
+            else:
+                # Phase 3.5: Validation (standard+)
+                if self.depth in ("standard", "deep"):
+                    await self.run_phase_validation()
 
-            # Phase 5: Attack Synthesis (deep only)
-            if self.depth == "deep":
-                await self.run_phase_attack_synthesis()
+                # Phase 5: Attack Synthesis (deep only)
+                if self.depth == "deep":
+                    await self.run_phase_attack_synthesis()
 
             # Phase 6: PoC Generation (standard+ depth, when findings exist)
             if self.depth in ("standard", "deep") and self.state.findings:
                 await self.run_phase_poc_generation()
+
+            # Save checkpoint before reporting — all expensive work is done
+            self._save_checkpoint("pre_report")
 
             # Phase 7: Reporting
             await self.run_phase_reporting()
 
         except Exception as e:
             error_msg = str(e)
-            if CREDIT_ERROR in error_msg.lower():
-                # Graceful credit exhaustion: save checkpoint + partial report
+            is_credit_error = CREDIT_ERROR in error_msg.lower()
+
+            if is_credit_error:
                 self.log("Credit balance exhausted. Saving checkpoint and partial report...", style="bold yellow")
+            else:
+                self.log(f"Audit failed: {e}", style="bold red")
+
+            # Always try to save checkpoint + partial report on failure
+            try:
                 checkpoint = self._save_checkpoint("partial")
                 self.state.end_time = datetime.now()
                 self.print_summary()
@@ -1016,10 +1045,12 @@ class Orchestrator:
                 report_path.write_text(report)
                 self.log(f"Partial report saved: {report_path}", style="yellow")
                 self.log(f"Resume with: sentinel audit {self.target_path} --resume {checkpoint}", style="bold yellow")
+            except Exception as save_err:
+                self.log(f"Could not save checkpoint/report: {save_err}", style="bold red")
+
+            if is_credit_error:
                 return self.state
-            else:
-                self.log(f"Audit failed: {e}", style="bold red")
-                raise
+            raise
 
         return self.state
 
@@ -1032,6 +1063,7 @@ async def run_audit(
     fork_url: Optional[str] = None,
     fork_block: Optional[int] = None,
     resume_from: Optional[str] = None,
+    poc_only: bool = False,
 ) -> AuditState:
     """
     Convenience function to run a full audit.
@@ -1044,6 +1076,7 @@ async def run_audit(
         fork_url: RPC URL for fork-based PoC execution
         fork_block: Block number for fork
         resume_from: Path to checkpoint JSON to resume from
+        poc_only: Skip validation/synthesis, jump to PoC generation
 
     Returns:
         Audit state with findings
@@ -1056,4 +1089,4 @@ async def run_audit(
         fork_url=fork_url,
         fork_block=fork_block,
     )
-    return await orchestrator.run(resume_from=resume_from)
+    return await orchestrator.run(resume_from=resume_from, poc_only=poc_only)

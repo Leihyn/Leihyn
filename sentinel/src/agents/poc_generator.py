@@ -15,6 +15,7 @@ This agent:
 """
 
 import asyncio
+import os
 import subprocess
 import re
 from dataclasses import dataclass, field
@@ -118,6 +119,13 @@ class PoCGeneratorAgent(HunterAgent):
     def system_prompt(self) -> str:
         return """You are an expert at writing Foundry exploit PoCs.
 
+CRITICAL RULES:
+1. NEVER create mock or simplified versions of the target contract
+2. ALWAYS import the real contract using the provided import path
+3. If the contract is behind a proxy, deploy and test via the proxy
+4. If interfaces are needed, define only the minimal interface — never recreate the implementation
+5. The PoC must prove the vulnerability exists in the ACTUAL deployed code
+
 Your PoCs must:
 1. Actually compile (valid Solidity 0.8.20+)
 2. Actually run (proper setup, valid addresses)
@@ -136,6 +144,7 @@ Best practices:
 - Use vm.roll/warp for block/time manipulation
 - Use vm.createSelectFork for mainnet forking
 - Assert that profit was made at the end
+- Import and test the REAL contract, not mock versions
 
 Common imports:
 ```solidity
@@ -208,7 +217,7 @@ Error handling:
                 # Try to fix
                 if poc.iterations < self.config.max_iterations:
                     self.log(f"  Compile error, fixing (attempt {poc.iterations + 1})...", style="yellow")
-                    poc.code = await self._fix_poc(poc, compile_result["error"])
+                    poc.code = await self._fix_poc(poc, compile_result["error"], finding)
                     poc.iterations += 1
                     continue
                 else:
@@ -231,7 +240,7 @@ Error handling:
                     # Try to fix
                     if poc.iterations < self.config.max_iterations:
                         self.log(f"  Test failed, fixing (attempt {poc.iterations + 1})...", style="yellow")
-                        poc.code = await self._fix_poc(poc, run_result["output"])
+                        poc.code = await self._fix_poc(poc, run_result["output"], finding)
                         poc.iterations += 1
                         continue
 
@@ -250,8 +259,99 @@ Error handling:
             return full_path.read_text()
         return ""
 
+    def _find_contract_info(self, contract_name: str):
+        """Find ContractInfo by name.
+
+        Tries exact match, then case-insensitive, then partial.
+        Returns the ContractInfo or None.
+        """
+        # Exact match
+        for c in self.state.contracts:
+            if c.name == contract_name:
+                return c
+
+        # Case-insensitive
+        for c in self.state.contracts:
+            if c.name.lower() == contract_name.lower():
+                return c
+
+        # Partial match (finding may say "BuyBackBurnerUniswap" but contract file has multiple)
+        for c in self.state.contracts:
+            if contract_name.lower() in c.name.lower() or c.name.lower() in contract_name.lower():
+                return c
+
+        return None
+
+    def _find_contract_source(self, contract_name: str) -> tuple[str, str]:
+        """Find contract source and file path by name.
+
+        Returns (source_code, relative_import_path) or ("", "") if not found.
+        """
+        info = self._find_contract_info(contract_name)
+        if info:
+            return info.source, self._get_import_path(info.path)
+        return "", ""
+
+    def _get_import_path(self, contract_path: Path) -> str:
+        """Get relative import path from sentinel_pocs/ to the contract."""
+        if self.config.output_dir:
+            try:
+                return os.path.relpath(contract_path, self.config.output_dir)
+            except ValueError:
+                return str(contract_path)
+        return str(contract_path)
+
     async def _generate_poc_code(self, finding: Finding, template: str) -> str:
         """Generate PoC code using ultrathink."""
+        # Look up real contract source
+        contract_info = self._find_contract_info(finding.contract)
+        contract_source = contract_info.source if contract_info else ""
+        import_path = self._get_import_path(contract_info.path) if contract_info else ""
+
+        # Gather sources for contracts mentioned in the finding description
+        matched_name = contract_info.name if contract_info else finding.contract
+        related_sources = []
+        for c in self.state.contracts:
+            if c.name != matched_name and c.name in finding.description:
+                related_sources.append((c.name, c.source[:2000], self._get_import_path(c.path)))
+
+        # Build real contract context
+        if contract_source:
+            contract_context = f"""
+**CRITICAL: You MUST import and test the REAL contract. Do NOT create mock contracts.**
+**Do NOT rewrite or recreate the vulnerable contract. Import it from the codebase.**
+
+**Target Contract Source ({finding.contract}):**
+```solidity
+{contract_source[:8000]}
+```
+
+**Import Path (from sentinel_pocs/ directory):**
+```
+import "{import_path}";
+```"""
+        else:
+            contract_context = f"""
+**WARNING: Could not find source for {finding.contract} in the codebase.**
+**Use the contract addresses and interfaces from the description.**"""
+
+        # Build related contracts context
+        related_context = ""
+        if related_sources:
+            related_context = "\n**Related Contracts:**\n"
+            for name, source, rel_path in related_sources:
+                related_context += f"\n*{name}* (import \"{rel_path}\"):\n```solidity\n{source}\n```\n"
+
+        # Check for proxy patterns
+        proxy_context = ""
+        if contract_info and (contract_info.is_proxy or contract_info.is_upgradeable):
+            proxy_context = f"""
+**PROXY PATTERN DETECTED:** This contract is deployed behind a proxy.
+- Test via the proxy, not the implementation directly
+- The initializer may be called atomically in the proxy constructor
+- Check if the vulnerability is accessible through the proxy's delegatecall pattern
+"""
+
         prompt = f"""Generate a working Foundry PoC for this vulnerability.
 
 **Vulnerability:**
@@ -269,6 +369,9 @@ Error handling:
 
 **Impact:**
 {finding.impact or "See description"}
+{contract_context}
+{related_context}
+{proxy_context}
 
 **Template to build on:**
 ```solidity
@@ -278,10 +381,11 @@ Error handling:
 **Requirements:**
 1. Use Solidity 0.8.20+
 2. Import forge-std/Test.sol and console.sol
-3. Fork mainnet if needed: vm.createSelectFork("mainnet", blockNumber);
-4. Name the test function: test_exploit_{finding.id.replace("-", "_")}
-5. Use console.log to show attack progress
-6. Assert profit at the end
+3. Import the REAL target contract — do NOT create mock/simplified versions
+4. Fork mainnet if needed: vm.createSelectFork("mainnet", blockNumber);
+5. Name the test function: test_exploit_{finding.id.replace("-", "_")}
+6. Use console.log to show attack progress
+7. Assert profit at the end
 
 **Fork Configuration:**
 {f"Fork URL: {self.config.fork_url}" if self.config.fork_url else "Use hardcoded mainnet addresses"}
@@ -320,8 +424,20 @@ Generate complete, compilable, runnable PoC code.
         # If no code block, assume entire response is code
         return response.strip()
 
-    async def _fix_poc(self, poc: PoC, error: str) -> str:
+    async def _fix_poc(self, poc: PoC, error: str, finding: Optional[Finding] = None) -> str:
         """Fix a failing PoC."""
+        # Look up real contract source for context
+        contract_source_section = ""
+        if finding:
+            contract_source, _ = self._find_contract_source(finding.contract)
+            if contract_source:
+                contract_source_section = f"""
+**Real Contract Source (for reference — use this to fix interface/signature mismatches):**
+```solidity
+{contract_source[:5000]}
+```
+"""
+
         prompt = f"""Fix this Foundry PoC that has an error.
 
 **Current Code:**
@@ -333,16 +449,17 @@ Generate complete, compilable, runnable PoC code.
 ```
 {error[:2000]}
 ```
-
+{contract_source_section}
 **Instructions:**
 1. Analyze the error carefully
 2. Fix the specific issue
-3. Return the complete fixed code
+3. Do NOT replace real contract imports with mock contracts
+4. Return the complete fixed code
 
 Common fixes:
 - Import missing dependencies
-- Fix interface definitions
-- Correct function signatures
+- Fix interface definitions to match the real contract
+- Correct function signatures to match the real contract
 - Fix memory/calldata issues
 - Add missing returns
 

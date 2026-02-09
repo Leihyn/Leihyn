@@ -77,6 +77,11 @@ def audit(
         "--resume",
         help="Path to checkpoint JSON to resume from (skips Phases 1-3)",
     ),
+    poc_only: bool = typer.Option(
+        False,
+        "--poc-only",
+        help="Skip validation/synthesis, jump straight to PoC generation (use with --resume to save credits)",
+    ),
 ):
     """
     Run a security audit on smart contracts.
@@ -113,6 +118,7 @@ def audit(
             fork_url=fork_url,
             fork_block=fork_block,
             resume_from=resume,
+            poc_only=poc_only,
         ))
 
         # Print final stats
