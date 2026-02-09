@@ -1,9 +1,11 @@
 """
-Prompt pairs for the Reasoning Hunter's three-pass analysis.
+Prompt pairs for the Reasoning Hunter's multi-pass analysis.
 
 Pass 1 (TRIAGE): Haiku ranks functions by risk — cheap, no ultrathink.
 Pass 2 (STATE_TRACE): Forces concrete execution tracing with specific values.
+Pass 2.5 (AMPLIFICATION): Deepens near-miss findings via looping/flash loans.
 Pass 3 (CROSS_FUNCTION): Checks symmetric function pairs for inconsistencies.
+Pass 4 (MULTI_CONTRACT): Traces data flows across contract boundaries.
 """
 
 # ---------------------------------------------------------------------------
@@ -21,6 +23,7 @@ You score based on concrete risk signals, NOT vibes:
 - Modifies balances or accounting state: +3
 - Has division operations: +2
 - Uses block.timestamp or block.number: +1
+- Slither already flagged this function: +3
 
 Functions that are view-only, pure, or admin-only with timelock score 0.
 
@@ -34,6 +37,8 @@ TRIAGE_PROMPT = """Rank the state-changing functions in this contract by bug lik
 {trust_model_context}
 
 {fund_flow_context}
+
+{slither_context}
 
 ## Source Code:
 ```
@@ -71,7 +76,7 @@ For each function, you:
 You MUST trace each function with these scenarios:
 1. **First-use / empty state**: totalSupply=0, totalAssets=0, all balances=0
 2. **Boundary values**: inputs of 0, 1, type(uint256).max
-3. **Decimal mismatch**: 6-decimal token (USDC: 1e6) vs 18-decimal token (WETH: 1e18)
+3. **Decimal mismatch**: use the ACTUAL token decimals from the protocol (see token info below)
 4. **Post-external-call state**: what if a callback re-enters before state updates?
 5. **Adversarial sequence**: 2-3 step attack where attacker profits. COMPUTE the profit.
 
@@ -141,6 +146,8 @@ STATE_TRACE_PROMPT = """Trace concrete execution of the top-risk functions in th
 ## Intentional Restrictions (NOT bugs):
 {intentional_restrictions}
 
+{token_context}
+
 ## Functions to Trace (ranked by triage):
 {ranked_functions}
 
@@ -155,6 +162,66 @@ or an attacker can profit at others' expense.
 
 Use the report_finding tool for each confirmed bug. Each finding MUST have a
 "### Concrete Attack" section with specific values and computed profit/loss."""
+
+# ---------------------------------------------------------------------------
+# Pass 2.5: Amplification — deepen near-miss findings
+# ---------------------------------------------------------------------------
+
+AMPLIFICATION_SYSTEM = """You are a DeFi exploit amplification specialist. You take \
+near-miss vulnerabilities — small rounding errors, 1-wei losses, minor inconsistencies — \
+and determine whether they can be amplified into real Medium/High exploits.
+
+## Amplification Vectors
+
+For each near-miss, you check:
+
+### 1. Loop Amplification
+Can the attacker repeat the operation N times to accumulate the small loss?
+- Compute: loss_per_iteration * N_iterations = total_loss
+- Factor in gas costs: is total_loss > gas_cost_for_N_txs?
+- Example: 1 wei loss per deposit, but 1000 deposits in one tx via contract = 1000 wei loss
+
+### 2. Flash Loan Amplification
+Can a flash loan magnify the position size to make the small % loss into real money?
+- Compute: if loss is 0.01% of deposit, a $10M flash loan deposit = $1000 loss
+- Check: does the protocol allow single-block deposit+withdraw?
+
+### 3. Scale Amplification
+Does the bug get worse with larger positions or more users?
+- Compute: loss at $100 vs $1M vs $100M position
+- Check: does rounding error grow linearly or quadratically?
+
+### 4. Time Amplification
+Does the error compound over time?
+- Compute: after 1 day, 1 week, 1 year of accrual
+- Check: is interest computed on the wrong base?
+
+## Output Requirements
+
+For each near-miss that CAN be amplified:
+- Show the concrete amplification math
+- Compute the realistic profit/loss (assume attacker has $10M + flash loans)
+- If amplified loss > $100: report as a finding
+- If amplified loss < $100 for any realistic scenario: not worth reporting"""
+
+AMPLIFICATION_PROMPT = """These near-miss conditions were found during state-trace analysis.
+Determine if any can be amplified into real exploits.
+
+## Contract: {contract_name}
+## Protocol Type: {protocol_type}
+
+## Near-Miss Conditions:
+{near_misses}
+
+## Full Source Code:
+```solidity
+{source}
+```
+
+For each near-miss, try all 4 amplification vectors (loop, flash loan, scale, time).
+Report findings ONLY when amplified impact exceeds $100 in realistic scenarios.
+
+Use the report_finding tool for each amplified exploit."""
 
 # ---------------------------------------------------------------------------
 # Pass 3: Cross-Function Consistency — symmetric pairs and state invariants
@@ -243,3 +310,68 @@ Check all symmetric function pairs, state variable consistency, interest/reward 
 and fee consistency. Report findings ONLY with concrete cross-function traces.
 
 Use the report_finding tool for each confirmed inconsistency."""
+
+# ---------------------------------------------------------------------------
+# Pass 4: Multi-Contract Trace — data flows across contract boundaries
+# ---------------------------------------------------------------------------
+
+MULTI_CONTRACT_SYSTEM = """You are a cross-contract security auditor. You find bugs that \
+ONLY appear when data flows from one contract to another.
+
+## What You Check
+
+### 1. Value Translation Errors
+When Contract A sends a value to Contract B:
+- Does the decimal precision match? (A uses 18 decimals, B expects 6?)
+- Is the value scaled correctly during the call?
+- Compute: what happens when Contract A sends 1e18 and Contract B interprets it as 1e6?
+
+### 2. State Assumption Mismatches
+When Contract A calls Contract B:
+- Does A assume B's state hasn't changed since last check?
+- Can an attacker change B's state between A's check and A's call?
+- Trace: A reads B.price() → attacker manipulates B → A uses stale price
+
+### 3. Trust Boundary Violations
+- Does Contract A trust return values from Contract B without validation?
+- Can Contract B return unexpected values (0, max_uint, negative via underflow)?
+- Trace: what happens when B.getPrice() returns 0?
+
+### 4. Reentrancy Across Contracts
+- Contract A calls B, B calls back into A or into C which calls A
+- Trace the exact state at each re-entry point
+- Compute: can the attacker profit from the intermediate state?
+
+## Output Requirements
+
+For each cross-contract bug found:
+1. Show the exact call chain: A.func1() → B.func2() → ...
+2. Compute values at each contract boundary
+3. Show where the translation/assumption breaks
+4. Quantify the impact"""
+
+MULTI_CONTRACT_PROMPT = """Trace data flows across contract boundaries to find bugs that \
+only appear in cross-contract interactions.
+
+## Protocol Type: {protocol_type}
+
+## Critical Cross-Contract Flows:
+{critical_flows}
+
+## Contracts Involved:
+
+{contracts_source}
+
+## Core Invariants:
+{core_invariants}
+
+## Findings from Single-Contract Analysis:
+{existing_findings}
+
+Trace each critical flow with concrete values. Focus on:
+1. Value translation errors at contract boundaries
+2. State assumptions that can be violated between calls
+3. Trust boundary violations (unchecked return values)
+4. Cross-contract reentrancy paths
+
+Use the report_finding tool for each confirmed cross-contract bug."""
