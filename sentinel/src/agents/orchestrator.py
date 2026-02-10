@@ -697,6 +697,35 @@ class Orchestrator:
             self.log(f"Call-chain enrichment failed: {e}", style="red")
             self.log("Continuing without call-chain context")
 
+    async def _confirm_findings(self) -> None:
+        """Phase 3.3: Deterministic finding confirmation via Semgrep.
+
+        For each confirmable finding, generates a Semgrep pattern that would
+        match the specific code claim, then runs it. Boosts confidence for
+        confirmed findings, reduces it for unconfirmed ones.
+        """
+        if not self.state.findings:
+            self.log("No findings to confirm")
+            return
+
+        self.log("Phase 3.3: Finding Confirmation (Semgrep)", style="bold magenta")
+
+        try:
+            from .finding_confirmer import FindingConfirmer
+
+            confirmer = FindingConfirmer(
+                state=self.state,
+                llm_client=self.llm,
+                verbose=self.verbose,
+            )
+            self.state.findings = await confirmer.apply(
+                self.state.findings, self.state,
+            )
+
+        except Exception as e:
+            self.log(f"Finding confirmation failed: {e}", style="red")
+            self.log("Continuing without Semgrep confirmation")
+
     async def run_phase_c4_gate(self) -> None:
         """Phase 3.75: C4 Severity Gate - apply hard C4 judging rules."""
         self.log("Phase 3.75: C4 Severity Gate", style="bold magenta")
@@ -1248,6 +1277,11 @@ class Orchestrator:
 
             # Phase 3.25: Call-Chain Enrichment (all depths, free — no LLM)
             self._enrich_call_chains()
+
+            # Phase 3.3: Semgrep confirmation (standard+, cheap — one Haiku batch + local Semgrep)
+            if self.depth in ("standard", "deep"):
+                await self._confirm_findings()
+                self._print_cost_status("Finding Confirmation")
 
             if poc_only:
                 self.log("--poc-only: Skipping validation and attack synthesis", style="bold cyan")

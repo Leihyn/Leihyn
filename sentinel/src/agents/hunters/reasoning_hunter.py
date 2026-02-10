@@ -92,6 +92,9 @@ class ReasoningHunterConfig:
     enable_multi_contract: bool = True    # Run Pass 4 if dependency graph exists
     enable_triage_cache: bool = True      # Cache triage results to disk
     parallel_contracts: bool = True       # Analyze contracts in parallel
+    # Cost-aware budget allocation: distribute thinking tokens proportionally
+    total_thinking_budget: int = 48000    # Total budget across all contracts
+    min_thinking_per_contract: int = 8000  # Floor: don't go below this
 
 
 # Minimal system prompt — the real prompts are per-pass
@@ -293,12 +296,29 @@ class ReasoningHunter(AnalysisAgent):
                 score += 2
         return score
 
-    def _select_contracts(self, contracts: list[ContractInfo]) -> list[ContractInfo]:
-        """Select top contracts for deep analysis based on risk score."""
+    def _select_contracts(self, contracts: list[ContractInfo]) -> list[tuple[ContractInfo, int]]:
+        """Select top contracts for deep analysis and allocate thinking budget proportionally.
+
+        High-risk contracts get more thinking tokens, lower-risk ones get less.
+        Total budget is capped at config.total_thinking_budget.
+        """
         scored = [(self._score_contract(c), c) for c in contracts]
         scored.sort(key=lambda x: x[0], reverse=True)
-        selected = [c for score, c in scored[:self.config.max_contracts] if score > 0]
-        return selected
+        selected = [(c, s) for s, c in scored[:self.config.max_contracts] if s > 0]
+
+        if not selected:
+            return []
+
+        total_score = sum(s for _, s in selected)
+        result = []
+        for contract, score in selected:
+            share = score / total_score if total_score > 0 else 1.0 / len(selected)
+            budget = max(
+                self.config.min_thinking_per_contract,
+                int(self.config.total_thinking_budget * share),
+            )
+            result.append((contract, budget))
+        return result
 
     def _get_protocol_context(self) -> dict:
         """Extract protocol intent context for prompts."""
@@ -545,6 +565,7 @@ class ReasoningHunter(AnalysisAgent):
 
     async def _run_state_trace(
         self, llm, contract: ContractInfo, ranked_functions: list[dict], context: dict,
+        thinking_budget: Optional[int] = None,
     ) -> tuple[str, list[dict]]:
         """Pass 2: State-Trace — concrete execution with edge values."""
         ranked_str = "\n".join(
@@ -564,13 +585,14 @@ class ReasoningHunter(AnalysisAgent):
             source=contract.source,
         )
 
+        budget = thinking_budget or self.config.trace_thinking_budget
         response, tool_results, _thinking = llm.run_agent_loop(
             initial_message=prompt,
             system=STATE_TRACE_SYSTEM,
             tools=self.tools,
             max_iterations=10,
             extended_thinking=True,
-            thinking_budget=self.config.trace_thinking_budget,
+            thinking_budget=budget,
             use_routing_model=False,
         )
 
@@ -701,8 +723,16 @@ class ReasoningHunter(AnalysisAgent):
 
     async def _analyze_contract(
         self, llm, contract: ContractInfo, context: dict,
+        thinking_budget: Optional[int] = None,
     ) -> tuple[int, str]:
-        """Run Passes 1-3 for a single contract. Returns (finding_count, trace_response)."""
+        """Run Passes 1-3 for a single contract. Returns (finding_count, trace_response).
+
+        Args:
+            thinking_budget: Per-contract thinking budget allocated by _select_contracts().
+                             Falls back to config.trace_thinking_budget if not provided.
+        """
+        trace_budget = thinking_budget or self.config.trace_thinking_budget
+
         if self.verbose:
             print(f"  {self.name}: [Pass 1] Triage — {contract.name}")
 
@@ -718,10 +748,12 @@ class ReasoningHunter(AnalysisAgent):
         # Pass 2: State-Trace
         if self.verbose:
             print(f"  {self.name}: [Pass 2] State-Trace — {contract.name} "
-                  f"({len(ranked)} functions, thinking={self.config.trace_thinking_budget})")
+                  f"({len(ranked)} functions, thinking={trace_budget})")
 
         findings_before = len(self.findings)
-        response, tool_results = await self._run_state_trace(llm, contract, ranked, context)
+        response, tool_results = await self._run_state_trace(
+            llm, contract, ranked, context, thinking_budget=trace_budget,
+        )
         findings_after = len(self.findings)
         trace_finding_count = findings_after - findings_before
 
@@ -773,7 +805,7 @@ class ReasoningHunter(AnalysisAgent):
                 print(f"  {self.name}: no contracts to analyze")
             return self.findings
 
-        # Select top contracts for deep analysis
+        # Select top contracts and allocate thinking budget proportionally
         selected = self._select_contracts(self.state.contracts)
         if not selected:
             if self.verbose:
@@ -783,23 +815,26 @@ class ReasoningHunter(AnalysisAgent):
         context = self._get_protocol_context()
 
         if self.verbose:
+            budget_info = ", ".join(
+                f"{c.name}={b}" for c, b in selected
+            )
             print(f"  {self.name}: analyzing {len(selected)} contracts "
-                  f"(depth={self.state.depth}, budget={self.config.trace_thinking_budget})")
+                  f"(depth={self.state.depth}, budgets=[{budget_info}])")
 
         # Analyze contracts — parallel if enabled and multiple contracts
         if self.config.parallel_contracts and len(selected) > 1:
             tasks = [
-                self._analyze_contract(llm, contract, context)
-                for contract in selected
+                self._analyze_contract(llm, contract, context, thinking_budget=budget)
+                for contract, budget in selected
             ]
             results = await asyncio.gather(*tasks, return_exceptions=True)
-            for contract, result in zip(selected, results):
+            for (contract, _budget), result in zip(selected, results):
                 if isinstance(result, Exception):
                     if self.verbose:
                         print(f"  {self.name}: {contract.name} analysis failed: {result}")
         else:
-            for contract in selected:
-                await self._analyze_contract(llm, contract, context)
+            for contract, budget in selected:
+                await self._analyze_contract(llm, contract, context, thinking_budget=budget)
 
         # Pass 4: Multi-Contract (if dependency graph exists)
         if self.config.enable_multi_contract:
