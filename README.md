@@ -73,7 +73,7 @@ Privacy protocol with stealth addresses (DKSAP), fixed-denomination privacy pool
 ### [Privacy Chronicles: Glass Wallet](https://github.com/Leihyn/glass-wallet-comic) Privacy Education Through Storytelling
 **Winner, Solana Privacy Hackathon | Content Creation Track Winner, Zypherpunk Hackathon | [Live Demo](https://glass-wallet-comic.vercel.app)**
 
-Interactive comic series exploring blockchain privacy through narrative. Glass Wallet: 12-page comic on selective privacy (MEV, surveillance, stealth addresses) for Solana. This win led to a direct conversation with the encrypt.trade CEO about protocol integration and developer education. Privacy Chronicles: 5-episode series (70+ pages) on zero-knowledge proofs with 3D solar system in React Three Fiber and voice narration.
+Interactive comic series exploring blockchain privacy through narrative. Glass Wallet: 12-page comic on selective privacy (MEV, surveillance, stealth addresses) for Solana. Privacy Chronicles: 5-episode series (70+ pages) on zero-knowledge proofs with 3D solar system in React Three Fiber and voice narration.
 
 `JavaScript` `Next.js` `React Three Fiber` `Solana` `TypeScript`
 

@@ -21,7 +21,7 @@ FEATURED PROJECTS
    Winner, Solana Privacy Hackathon | Content Creation Track Winner, Zypherpunk Hackathon
    Live: glass-wallet-comic.vercel.app | GitHub: github.com/Leihyn/glass-wallet-comic
 
-   Glass Wallet: 12-page interactive comic on selective privacy (MEV, surveillance, stealth addresses) for Solana. This win led to a direct conversation with the encrypt.trade CEO about protocol integration and developer education. Privacy Chronicles: 5-episode series (70+ pages) on zero-knowledge proofs with 3D solar system in React Three Fiber and voice narration.
+   Glass Wallet: 12-page interactive comic on selective privacy (MEV, surveillance, stealth addresses) for Solana. Privacy Chronicles: 5-episode series (70+ pages) on zero-knowledge proofs with 3D solar system in React Three Fiber and voice narration.
 
    Tech: JavaScript, Next.js, React Three Fiber, TypeScript
 
@@ -107,7 +107,7 @@ EDUCATION & TRAINING
 
 ACHIEVEMENTS
 ------------
-- Winner, Solana Privacy Hackathon - Glass Wallet interactive comic; led to direct conversation with encrypt.trade CEO about protocol integration and developer education
+- Winner, Solana Privacy Hackathon - Glass Wallet interactive comic
 - Content Creation Track Winner at Zypherpunk Hackathon (Zcash & Mina)
 - 2nd Place at Seedify Prediction Markets Hackathon
 - Graduated from Uniswap Hook Incubator (UHI7) - 15% acceptance rate
