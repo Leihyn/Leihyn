@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onatola Timilehin Faruq - Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.5in;
+        }
+        @media print {
+            body {
+                padding: 0;
+                font-size: 10px;
+            }
+            @page {
+                margin: 0.5in;
+            }
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+        }
+        .subtitle {
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+        .contact {
+            font-size: 11px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+        .contact a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 12px 0;
+        }
+        h2 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 3px;
+        }
+        h3 {
+            font-size: 12px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 2px;
+        }
+        .project-meta {
+            font-size: 10px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 4px;
+        }
+        .project-meta a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        p {
+            margin-bottom: 6px;
+        }
+        ul {
+            margin-left: 18px;
+            margin-bottom: 8px;
+        }
+        li {
+            margin-bottom: 3px;
+        }
+        .competencies {
+            font-size: 11px;
+            color: #444;
+            margin-bottom: 8px;
+        }
+        .competencies strong {
+            color: #222;
+        }
+        .skills-row {
+            margin-bottom: 4px;
+        }
+        .skills-row strong {
+            color: #222;
+        }
+        .section {
+            margin-bottom: 14px;
+        }
+        .project {
+            margin-bottom: 12px;
+        }
+        .experience {
+            margin-bottom: 10px;
+        }
+        .job-title {
+            font-weight: 600;
+        }
+        .job-company {
+            color: #555;
+        }
+        .achievement {
+            margin-bottom: 8px;
+        }
+        .achievement-title {
+            font-weight: 600;
+        }
+        .achievement-desc {
+            font-size: 10px;
+            color: #555;
+            font-style: italic;
+        }
+        .two-col {
+            display: flex;
+            gap: 20px;
+        }
+        .col {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Onatola Timilehin Faruq</h1>
+        <div class="subtitle">Developer Relations Engineer | Protocol Engineer | Technical Content Creator</div>
+        <div class="contact">
+            onatolafaruq@gmail.com | <a href="https://github.com/Leihyn">github.com/Leihyn</a> | <a href="https://faruukku.vercel.app">faruukku.vercel.app</a>
+        </div>
+    </header>
+
+    <hr>
+
+    <section class="section">
+        <h2>Executive Summary</h2>
+        <p>Blockchain developer with hands-on experience building privacy-preserving applications using zero-knowledge proofs (zkSNARKs, zkSTARKs, Noir). Combines deep technical expertise with proven ability to create developer education content—including winning Mina Foundation's Content Creation Track. Builds production-quality SDKs with comprehensive documentation, examples, and tutorials.</p>
+        <p class="competencies"><strong>Core Competencies:</strong> Zero-Knowledge Proofs • Privacy Protocols • Developer Education • SDK Development • Technical Writing • Community Engagement</p>
+    </section>
+
+    <hr>
+
+    <section class="section">
+        <h2>Technical Expertise</h2>
+        <div class="skills-row"><strong>Privacy & ZK:</strong> zkSNARKs • zkSTARKs • Noir/UltraHonk • Stealth Addresses (DKSAP) • HTLC • Privacy Pools</div>
+        <div class="skills-row"><strong>Smart Contracts:</strong> Solidity (Advanced) • TypeScript (Advanced) • Rust (Intermediate) • Foundry • Hardhat</div>
+        <div class="skills-row"><strong>Blockchains:</strong> Ethereum • Zcash • Mina • Aztec • Miden • Solana • Hedera • Cosmos/Osmosis</div>
+        <div class="skills-row"><strong>Full-Stack:</strong> React/Next.js • Node.js • Ethers.js • Wagmi • WebSocket • GraphQL</div>
+        <div class="skills-row"><strong>DevRel Tools:</strong> GitHub Actions • Documentation (Markdown/MDX) • API Reference Design • Example Apps</div>
+    </section>
+
+    <hr>
+
+    <section class="section">
+        <h2>Privacy & ZK Projects</h2>
+
+        <div class="project">
+            <h3>OmniSwap SDK</h3>
+            <div class="project-meta">Cross-Chain Privacy Swap SDK | TypeScript | <a href="https://github.com/Leihyn/omniswap-sdk">github.com/Leihyn/omniswap-sdk</a></div>
+            <p>Built comprehensive SDK for privacy-preserving cross-chain atomic swaps across 6 blockchains.</p>
+            <ul>
+                <li>Implemented Privacy Hub architecture using zkSNARKs and zkSTARKs for correlation-resistant swaps</li>
+                <li>Developed stealth address system (DKSAP) for transaction unlinkability</li>
+                <li>Created timing decorrelation using CSPRNG + Log-Normal distribution to prevent analysis</li>
+                <li><strong>Wrote 70KB+ documentation</strong> including API reference, tutorials, and technical deep-dives</li>
+                <li>Built 5 working example applications demonstrating different use cases</li>
+            </ul>
+        </div>
+
+        <div class="project">
+            <h3>Nocturne</h3>
+            <div class="project-meta">Private Payments Protocol | Noir/UltraHonk | <a href="https://github.com/Leihyn/nocturne">github.com/Leihyn/nocturne</a></div>
+            <p>Designed and built private payment system on Solana using zero-knowledge proofs.</p>
+            <ul>
+                <li>Implemented Noir circuits for ZK proof generation with UltraHonk proving system</li>
+                <li>Built fixed-denomination privacy pools achieving 97% transaction unlinkability</li>
+                <li>Developed stealth address derivation for recipient privacy</li>
+            </ul>
+        </div>
+
+        <div class="project">
+            <h3>OmniShield Wallet</h3>
+            <div class="project-meta">Multi-Chain Privacy Wallet | TypeScript | <a href="https://github.com/Leihyn/omnishield-wallet">github.com/Leihyn/omnishield-wallet</a></div>
+            <p>Built HD wallet supporting 6 privacy-focused blockchains with unique privacy features.</p>
+            <ul>
+                <li>Implemented BIP-39/32/44 key derivation for 6 chains (Zcash, Miden, Aztec, Mina, Fhenix, Osmosis)</li>
+                <li>Created privacy scoring algorithm with auto-shield recommendations</li>
+                <li>Built React web interface and React Native mobile app</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="section">
+        <h2>Developer Education & Content</h2>
+
+        <div class="project">
+            <h3>Glass Wallet Comic</h3>
+            <div class="project-meta">Interactive Privacy Education | <a href="https://github.com/Leihyn/glass-wallet-comic">github.com/Leihyn/glass-wallet-comic</a></div>
+            <p>Created interactive comic explaining blockchain privacy concepts to developers—how public wallets expose users to MEV attacks, scammers, and surveillance, and the solution of selective privacy.</p>
+        </div>
+
+        <div class="project">
+            <h3>Mina Foundation Content Creation Track Winner</h3>
+            <div class="project-meta">Zypherpunk Hackathon | Privacy Chronicles</div>
+            <p>Won content creation competition for technical articles explaining zero-knowledge concepts and Mina's privacy features to developer audiences.</p>
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="section">
+        <h2>Professional Experience</h2>
+
+        <div class="experience">
+            <h3><span class="job-title">Blockchain / Full Stack Engineer</span> <span class="job-company">| DeFiConnectCredit | Remote | Jan 2025 – Present</span></h3>
+            <ul>
+                <li>Architected modular smart contract systems integrating Aave v3, Uniswap v3, GMX perpetuals, and Curve pools</li>
+                <li>Established Foundry testing framework with 95%+ coverage, identifying 3 critical vulnerabilities pre-deployment</li>
+                <li><strong>Created internal documentation and developer guides</strong> for protocol integration patterns</li>
+                <li>Built deployment automation suite improving developer experience</li>
+            </ul>
+        </div>
+
+        <div class="experience">
+            <h3><span class="job-title">Blockchain Development Engineer (Intern)</span> <span class="job-company">| DeFiConnectCredit | Remote | Jun 2024 – Dec 2024</span></h3>
+            <ul>
+                <li>Contributed to core lending protocol implementing collateral management and liquidation mechanisms</li>
+                <li>Conducted security reviews on 15+ contracts, identifying reentrancy, front-running, and oracle manipulation vulnerabilities</li>
+                <li><strong>Mentored developers</strong> on smart contract best practices and security patterns</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="section">
+        <h2>Additional Projects</h2>
+
+        <div class="project">
+            <h3>Sentiment – Uniswap v4 Hook <span style="font-weight: normal; font-size: 10px;">(UHI7 Incubator Graduate)</span></h3>
+            <p>Dynamic fee hook implementing counter-cyclical fees (0.25%-0.44%) based on real-time market sentiment using Chainlink Automation + Gelato.</p>
+        </div>
+
+        <div class="project">
+            <h3>TruthBounty – Reputation Protocol <span style="font-weight: normal; font-size: 10px;">(2nd Place, Seedify Hackathon)</span></h3>
+            <p>Decentralized reputation protocol tracking prediction accuracy across markets with soulbound NFT credentials.</p>
+        </div>
+
+        <div class="project">
+            <h3>TerraCred – Real Estate DeFi</h3>
+            <p>Built KYC/AML compliance layer using HCS with <strong>zero-knowledge proofs for privacy-preserving verification</strong>.</p>
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="section">
+        <h2>Achievements & Certifications</h2>
+        <div class="achievement">
+            <span class="achievement-title">2nd Place</span> – Seedify Prediction Market Hackathon<br>
+            <span class="achievement-desc">TruthBounty: Decentralized reputation protocol for prediction markets</span>
+        </div>
+        <div class="achievement">
+            <span class="achievement-title">Uniswap Hook Incubator (UHI7)</span> – Graduate | 15% acceptance rate<br>
+            <span class="achievement-desc">Production-ready hook development • Uniswap Labs collaboration</span>
+        </div>
+        <div class="achievement">
+            <span class="achievement-title">Cyfrin Updraft</span> – DeFi Security & Protocol Engineering (Completed)<br>
+            <span class="achievement-desc">Aave v3 • Uniswap v3/v4 • GMX • Curve • Smart Contract Security</span>
+        </div>
+        <div class="achievement">
+            <span class="achievement-title">School of Solana</span> – Ackee Blockchain (Ongoing)<br>
+            <span class="achievement-desc">Rust/Anchor Framework</span>
+        </div>
+        <div class="achievement">
+            <span class="achievement-title">Hashgraph Developer Certification</span> – The Hashgraph Association
+        </div>
+    </section>
+
+    <hr>
+
+    <div class="two-col">
+        <div class="col">
+            <h2>Education</h2>
+            <p><strong>Bachelor of Science in Physiotherapy</strong><br>
+            University of Ibadan, College of Medicine | Graduated 2024</p>
+        </div>
+        <div class="col">
+            <h2>Languages</h2>
+            <p><strong>Human:</strong> English (Native) • Spanish (Conversational)</p>
+            <p><strong>Programming:</strong> TypeScript • Solidity • Noir • Rust</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <p style="text-align: center; font-size: 10px; color: #666;">
+        Portfolio: <a href="https://faruukku.vercel.app">faruukku.vercel.app</a> | Code samples: <a href="https://github.com/Leihyn">github.com/Leihyn</a>
+    </p>
+</body>
+</html>

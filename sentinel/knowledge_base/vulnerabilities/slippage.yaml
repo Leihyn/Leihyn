@@ -1,0 +1,194 @@
+name: Slippage & MEV Protection
+id: SLIPPAGE
+severity: Critical
+cwe: CWE-20
+
+description: |
+  Slippage protection vulnerabilities occur when swap, exchange, or liquidity operations
+  lack proper minimum output checks, deadlines, or price limits. This allows sandwich
+  attacks (frontrunning + backrunning) to extract value from users. A $10,000 swap with
+  amountOutMin = 0 can lose 100% of its value to MEV.
+
+vulnerabilities:
+  - name: "amountOutMin = 0 in Swaps"
+    id: SLIPPAGE-001
+    severity: Critical
+    description: |
+      Setting minimum output to zero lets a sandwich attacker extract the entire swap
+      value. This is the single most common MEV vulnerability in DeFi.
+    detection_heuristics:
+      - "1. Find all swap router calls (swapExact*, exactInput*, exchange)"
+      - "2. Check the amountOutMin / amountOutMinimum / min_dy parameter"
+      - "3. If the value is 0, 1, or an unchecked user input, flag it"
+      - "4. Check if a wrapper function accepts minOut but passes 0 to the router"
+    patterns:
+      solidity:
+        - "swapExactTokensForTokens(amountIn, 0,"
+        - "amountOutMinimum: 0"
+        - ".exchange(i, j, dx, 0)"
+        - "vault.swap(singleSwap, funds, 0,"
+      rust:
+        - "minimum_amount_out: 0"
+        - "other_amount_threshold: 0"
+      move:
+        - "min_amount_out: 0"
+        - "amount_limit: 0"
+      cairo:
+        - "amountOutMin: 0"
+        - "sqrt_ratio_limit: 0"
+    examples:
+      solidity:
+        vulnerable: |
+          router.swapExactTokensForTokens(amountIn, 0, path, to, deadline);
+        fixed: |
+          uint256 minOut = oracle.getExpectedOutput(amountIn) * 99 / 100;
+          router.swapExactTokensForTokens(amountIn, minOut, path, to, deadline);
+    false_positive_conditions:
+      - "Swap is in a private/internal function called by another that enforces slippage"
+      - "The 0 is a placeholder overridden by the caller via parameter"
+      - "Swap is part of a rebalance where output is immediately re-invested"
+    impact:
+      - "100% of swap value extractable via sandwich attack"
+      - "Protocol funds at risk if swap handles protocol-owned liquidity"
+
+  - name: Missing Deadline
+    id: SLIPPAGE-002
+    severity: High
+    description: |
+      Without a deadline, validators can hold a transaction and execute it when the
+      price moves against the user. Using type(uint256).max or block.timestamp as
+      deadline provides no protection.
+    detection_heuristics:
+      - "1. Find swap/liquidity calls and check the deadline parameter"
+      - "2. Flag deadline = type(uint256).max (never expires)"
+      - "3. Flag deadline = block.timestamp (always passes)"
+      - "4. Check if deadline is a user-supplied parameter or hardcoded"
+    patterns:
+      solidity:
+        - "type(uint256).max"
+        - "block.timestamp)"
+    examples:
+      solidity:
+        vulnerable: |
+          router.swapExactTokensForTokens(amountIn, minOut, path, to, type(uint256).max);
+        fixed: |
+          router.swapExactTokensForTokens(amountIn, minOut, path, to, block.timestamp + 300);
+    false_positive_conditions:
+      - "Transaction is submitted via a private mempool (Flashbots Protect)"
+      - "Deadline is enforced at a higher level (e.g., multicall wrapper)"
+
+  - name: Hardcoded Slippage Tolerance
+    id: SLIPPAGE-003
+    severity: Medium/High
+    description: |
+      A hardcoded slippage tolerance (e.g., 5%) instead of oracle-derived minimum.
+      On a $1M swap, 5% hardcoded slippage = $50,000 extractable by MEV.
+    detection_heuristics:
+      - "1. Find arithmetic like `amount * 95 / 100` or `amount * 9500 / 10000` near swap calls"
+      - "2. Check if slippage percentage is a constant vs oracle-calculated"
+      - "3. Flag hardcoded values >= 3% as HIGH, < 3% as MEDIUM"
+    examples:
+      solidity:
+        vulnerable: |
+          uint256 minOut = expectedOut * 95 / 100;  // 5% hardcoded
+        fixed: |
+          uint256 oraclePrice = oracle.getPrice(tokenIn, tokenOut);
+          uint256 expectedOut = amountIn * oraclePrice / 1e18;
+          uint256 minOut = expectedOut * 9950 / 10000;  // 0.5% tolerance from oracle
+    false_positive_conditions:
+      - "Hardcoded slippage is configurable by governance/admin"
+      - "Small trade sizes where MEV extraction is unprofitable"
+
+  - name: Missing minAmounts in Liquidity Operations
+    id: SLIPPAGE-004
+    severity: High
+    description: |
+      addLiquidity and removeLiquidity without minimum amount checks let attackers
+      manipulate pool ratios before the LP operation, extracting value.
+    detection_heuristics:
+      - "1. Find addLiquidity/removeLiquidity calls"
+      - "2. Check minAmountA, minAmountB parameters (or min_mint_amount for Curve)"
+      - "3. Flag if both minAmounts are 0"
+    patterns:
+      solidity:
+        - ".addLiquidity(tokenA, tokenB, amountA, amountB, 0, 0,"
+        - ".removeLiquidity(tokenA, tokenB, liquidity, 0, 0,"
+        - ".add_liquidity([amount0, amount1], 0)"
+        - ".remove_liquidity_one_coin(lp_amount, i, 0)"
+    examples:
+      solidity:
+        vulnerable: |
+          router.addLiquidity(tokenA, tokenB, amountA, amountB, 0, 0, to, deadline);
+        fixed: |
+          router.addLiquidity(
+              tokenA, tokenB, amountA, amountB,
+              amountA * 99 / 100, amountB * 99 / 100,
+              to, deadline
+          );
+    false_positive_conditions:
+      - "Liquidity operations are atomic and the pool cannot be front-run"
+      - "Protocol controls the pool and no external actors can sandwich"
+
+  - name: Balancer limit = 0
+    id: SLIPPAGE-005
+    severity: Critical
+    description: |
+      Balancer Vault uses `limit` instead of `amountOutMin`. Setting it to zero is
+      equivalent to no slippage protection but is easy to miss in code review because
+      the parameter name differs from Uniswap conventions.
+    detection_heuristics:
+      - "1. Find vault.swap() or vault.batchSwap() calls"
+      - "2. Check the `limit` or `limits` parameter"
+      - "3. Flag if limit = 0 or all limits are zero"
+    patterns:
+      solidity:
+        - "vault.swap(singleSwap, funds, 0,"
+        - "vault.batchSwap(kind, swaps, assets, funds, limits,"
+    false_positive_conditions:
+      - "Limits are computed dynamically before the call but not visible in the same line"
+
+  - name: Unprotected Custom Swap Functions
+    id: SLIPPAGE-006
+    severity: High
+    description: |
+      Custom swap wrapper functions that don't accept or enforce any slippage parameter
+      are unconditionally vulnerable. The function signature itself lacks a minOutput.
+    detection_heuristics:
+      - "1. Find custom swap/exchange functions in the codebase"
+      - "2. Check if the function signature includes a min output parameter"
+      - "3. Check if the function body validates output amount after the swap"
+    false_positive_conditions:
+      - "Function is internal and called by a public function that enforces slippage"
+
+dex_patterns_by_language:
+  solidity:
+    uniswap_v2: "swapExactTokensForTokens(amountIn, amountOutMin, path, to, deadline)"
+    uniswap_v3: "exactInputSingle(ExactInputSingleParams{..., amountOutMinimum, ...})"
+    curve: "exchange(i, j, dx, min_dy) / add_liquidity(amounts, min_mint_amount)"
+    balancer: "vault.swap(singleSwap, funds, limit, deadline)"
+  rust:
+    spl_token_swap: "swap(amount_in, minimum_amount_out)"
+    raydium: "swap_base_in(amount_in, minimum_out)"
+    orca_whirlpool: "swap(amount, other_amount_threshold, ...)"
+  move:
+    liquidswap: "swap_exact_coin_for_coin(coins_in, min_amount_out)"
+    cetus: "swap_a2b(amount, amount_limit, ...)"
+  cairo:
+    jediswap: "swap_exact_tokens_for_tokens(amount_in, amountOutMin, ...)"
+    ekubo: "swap(pool_key, params) with sqrt_ratio_limit check"
+
+audit_checklist:
+  - "Does every swap call have a non-zero amountOutMin?"
+  - "Are deadlines meaningful (not type(uint256).max or block.timestamp)?"
+  - "Is slippage oracle-derived or hardcoded?"
+  - "Do liquidity operations have minimum amount protections?"
+  - "Do wrapper functions preserve slippage params to underlying routers?"
+  - "Are Balancer limit parameters set correctly?"
+
+historical_exploits:
+  - name: BadgerDAO
+    loss: "$120M"
+    description: "Compromised frontend injected approvals, but swaps with no slippage allowed maximal extraction"
+  - name: MEV sandwich bots
+    loss: ">$1B cumulative"
+    description: "Ongoing extraction from unprotected swaps across all DEXes"

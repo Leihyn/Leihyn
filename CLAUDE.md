@@ -43,7 +43,7 @@ When creating or editing guides:
 
 ## Tech Context
 
-**Current Role**: Junior Blockchain Engineer at DeFiConnectCredit
+**Current Role**: Blockchain / Full Stack Engineer at DeFiConnectCredit
 - Integrating Aave V3, Uniswap V3/V4, Curve, GMX in production
 - Building reusable contract libraries and SDKs
 

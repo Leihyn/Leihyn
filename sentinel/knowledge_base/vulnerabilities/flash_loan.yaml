@@ -1,0 +1,215 @@
+name: Flash Loan Attacks
+id: FLASH
+severity: Critical
+cwe: CWE-362
+
+description: |
+  Flash loan attacks exploit the atomicity of blockchain transactions to temporarily
+  acquire large amounts of capital, manipulate protocol state (prices, collateral,
+  governance), and profit — all within a single transaction. The attacker pays only
+  the flash loan fee, making attacks extremely capital-efficient.
+
+vulnerabilities:
+  - name: Price Manipulation via Flash Loan
+    id: FLASH-001
+    severity: Critical
+    description: |
+      Flash loan -> manipulate AMM spot price -> exploit price-dependent logic -> repay loan.
+      Any protocol that reads spot prices from AMM pools is vulnerable.
+    detection_heuristics:
+      - "1. Find functions that read balanceOf() or getReserves() for pricing"
+      - "2. Check if those price reads are used in deposit/withdraw/borrow logic"
+      - "3. Verify there's no TWAP, oracle, or same-block protection"
+      - "4. Calculate potential profit: amount * price_deviation achievable"
+    patterns:
+      solidity:
+        - "getReserves()"
+        - "balanceOf(address(this))"
+        - "totalAssets()"
+      rust:
+        - "pool.token_a_amount"
+        - "reserve"
+    examples:
+      solidity:
+        vulnerable: |
+          function deposit(uint amount) external {
+              uint shares = amount * totalShares / totalAssets();  // Manipulable!
+              _mint(msg.sender, shares);
+          }
+        fixed: |
+          function deposit(uint amount) external {
+              require(lastDepositBlock[msg.sender] < block.number, "Flash guard");
+              uint shares = amount * totalShares / _twapTotalAssets();
+              _mint(msg.sender, shares);
+              lastDepositBlock[msg.sender] = block.number;
+          }
+    false_positive_conditions:
+      - "Protocol uses TWAP oracle for all pricing decisions"
+      - "Flash loan guard (same-block check) is present"
+      - "Function is view-only or doesn't move funds"
+    impact:
+      - "Direct fund theft from vault/pool depositors"
+      - "Inflated share minting"
+
+  - name: Collateral Manipulation
+    id: FLASH-002
+    severity: Critical
+    description: |
+      Flash loan -> inflate collateral value -> borrow excess funds -> repay loan.
+      Lending protocols that evaluate collateral using spot prices are vulnerable.
+    detection_heuristics:
+      - "1. Find collateral valuation functions"
+      - "2. Check if they use spot prices or balances"
+      - "3. Look for borrow functions that check collateral in the same tx"
+      - "4. Verify TWAP or delayed collateral evaluation exists"
+    patterns:
+      solidity:
+        - "getCollateralValue"
+        - "collateralBalance"
+        - "LTV"
+        - "healthFactor"
+    examples:
+      solidity:
+        vulnerable: |
+          function borrow(uint amount) external {
+              uint collateralValue = getSpotPrice() * collateralBalance;
+              require(amount <= collateralValue * LTV / 1e18);
+              _transfer(msg.sender, amount);
+          }
+    false_positive_conditions:
+      - "Collateral valuation uses time-delayed oracle (Chainlink heartbeat)"
+      - "Minimum collateral deposit period enforced"
+
+  - name: Governance Flash Loan Attack
+    id: FLASH-003
+    severity: High
+    description: |
+      Flash loan -> acquire voting tokens -> pass/block governance proposal -> profit.
+      Governance tokens with no snapshot or timelock are vulnerable.
+    detection_heuristics:
+      - "1. Check if voting power is based on current balance (not snapshot)"
+      - "2. Look for proposal execution without timelock"
+      - "3. Verify if vote counting uses block.number snapshots"
+    patterns:
+      solidity:
+        - "balanceOf(msg.sender)"
+        - "votingPower"
+        - "propose("
+        - "execute("
+    false_positive_conditions:
+      - "Governance uses ERC20Votes with checkpointing (getPastVotes)"
+      - "Proposals have multi-day timelock before execution"
+      - "Minimum proposal threshold requires sustained token holding"
+
+  - name: LP Token Inflation (Donation Attack)
+    id: FLASH-004
+    severity: High
+    description: |
+      Flash loan -> donate tokens to vault/pool -> inflate share price ->
+      profit from the discrepancy between real and inflated value.
+      The classic "first depositor" attack variant.
+    detection_heuristics:
+      - "1. Check share/LP token calculation: shares = amount * totalShares / totalAssets"
+      - "2. Look for first-depositor handling (totalSupply == 0 case)"
+      - "3. Check if totalAssets() includes direct token balance (donatable)"
+      - "4. Verify minimum initial deposit or dead shares mechanism"
+    patterns:
+      solidity:
+        - "totalSupply == 0"
+        - "totalAssets()"
+        - "address(this).balance"
+        - "balanceOf(address(this))"
+    examples:
+      solidity:
+        vulnerable: |
+          function deposit(uint amount) external {
+              uint shares = totalSupply == 0
+                  ? amount
+                  : amount * totalSupply / balanceOf(address(this));
+              _mint(msg.sender, shares);
+          }
+        fixed: |
+          function deposit(uint amount) external {
+              uint assets = _internalBalance;  // Track internally, not via balanceOf
+              uint shares = totalSupply == 0
+                  ? amount - MINIMUM_LIQUIDITY  // Burn initial shares
+                  : amount * totalSupply / assets;
+              require(shares > 0, "Zero shares");
+              _internalBalance += amount;
+              _mint(msg.sender, shares);
+          }
+    false_positive_conditions:
+      - "Vault uses internal accounting (not balanceOf) for totalAssets"
+      - "Dead shares or minimum liquidity mechanism present"
+      - "OpenZeppelin ERC4626 with virtual offset"
+
+  - name: Reentrancy + Flash Loan Amplification
+    id: FLASH-005
+    severity: Critical
+    description: |
+      Combining flash loans with reentrancy for amplified damage. Flash loan provides
+      the capital, reentrancy allows multiple state manipulations in one call.
+    detection_heuristics:
+      - "1. Find functions with external calls before state updates"
+      - "2. Check if those functions are also callable with flash-loaned funds"
+      - "3. Look for missing nonReentrant modifier on value-moving functions"
+    false_positive_conditions:
+      - "ReentrancyGuard is applied to all external-facing functions"
+      - "CEI pattern is strictly followed"
+
+flash_loan_protection_patterns:
+  solidity:
+    - name: "Block-based guard"
+      code: |
+        mapping(address => uint) public lastDepositBlock;
+        modifier noFlashLoan() {
+            require(lastDepositBlock[msg.sender] < block.number, "Flash loan guard");
+            _;
+        }
+    - name: "Reentrancy guard"
+      code: |
+        import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+    - name: "TWAP oracle"
+      code: |
+        uint256 price = oracle.consult(token, 1e18, 1800); // 30-min TWAP
+    - name: "Cooldown mechanism"
+      code: |
+        require(block.timestamp > lastAction[msg.sender] + COOLDOWN, "Cooldown active");
+  rust:
+    - name: "Slot-based guard"
+      code: |
+        require!(
+            ctx.accounts.user_state.last_action_slot < Clock::get()?.slot,
+            ErrorCode::SameSlotOperation
+        );
+  move:
+    - name: "Epoch-based restriction"
+      code: |
+        assert!(current_epoch > user.deposit_epoch, E_SAME_EPOCH);
+  cairo:
+    - name: "Block-based cooldown"
+      code: |
+        let current_block = get_block_number();
+        assert(current_block > self.deposit_block.read(caller), 'Same block');
+
+audit_checklist:
+  - "Can an attacker acquire large amounts of tokens temporarily via flash loan?"
+  - "Are there price-dependent operations vulnerable to single-tx manipulation?"
+  - "Is there any same-block or same-tx protection?"
+  - "Does the protocol use spot prices anywhere?"
+  - "Are deposit/withdraw share calculations donation-resistant?"
+  - "Is governance snapshot-based or balance-based?"
+
+historical_exploits:
+  - name: bZx
+    loss: "$8M"
+    description: "Flash loan + oracle manipulation to drain lending pool"
+  - name: Harvest Finance
+    loss: "$34M"
+    description: "Flash loan to manipulate Curve pool, arbitraged vault share pricing"
+  - name: Cream Finance
+    loss: "$130M"
+    description: "Flash loan + price manipulation of collateral tokens"
+  - name: Euler Finance
+    loss: "$197M"
+    description: "Flash loan + donation attack on lending pool share accounting"

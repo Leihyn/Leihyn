@@ -1,0 +1,153 @@
+name: Parameter Validation Inconsistency
+id: PARAM
+severity: High
+cwe: CWE-20
+
+description: |
+  Parameter validation vulnerabilities occur when state variables are written by both
+  an initializer/constructor AND a setter function, but the validation constraints differ.
+  The classic pattern: initialize() checks `require(maxSlippage <= MAX_BPS)` but
+  changeMaxSlippage() has no such check — allowing values > 10,000 BPS (> 100%).
+
+vulnerabilities:
+  - name: Missing Bounds Check in Setter
+    id: PARAM-001
+    severity: High
+    description: |
+      The initialize/constructor function enforces an upper/lower bound on a parameter,
+      but the corresponding setter (set*, change*, update*) does not. An admin (or
+      attacker with admin access) can push the parameter past its safe range.
+    detection_heuristics:
+      - "1. Find all state variables written in initialize() or constructor"
+      - "2. For each, find the corresponding setter function"
+      - "3. Extract require/if-revert/assert conditions from both"
+      - "4. Flag when initialize has bounds checks that the setter lacks"
+    examples:
+      solidity:
+        vulnerable: |
+          function initialize(uint256 _maxSlippage) external initializer {
+              require(_maxSlippage <= MAX_BPS, "Overflow");
+              maxSlippage = _maxSlippage;
+          }
+
+          function changeMaxSlippage(uint256 _maxSlippage) external onlyOwner {
+              maxSlippage = _maxSlippage;  // NO bounds check!
+          }
+        fixed: |
+          function changeMaxSlippage(uint256 _maxSlippage) external onlyOwner {
+              require(_maxSlippage <= MAX_BPS, "Overflow");
+              maxSlippage = _maxSlippage;
+          }
+    false_positive_conditions:
+      - "Setter has a different but equivalent bounds check"
+      - "Parameter is bounded by its type (e.g., uint8 can't exceed 255)"
+      - "The missing check is intentional to allow emergency override"
+    impact:
+      - "Slippage > 100% allows complete fund extraction"
+      - "Fee > 100% means users pay more than their deposit"
+      - "Rate parameters out of range cause arithmetic overflow/underflow"
+
+  - name: Missing Zero-Value Check in Setter
+    id: PARAM-002
+    severity: High
+    description: |
+      initialize() checks `require(param != 0)` but the setter allows zero.
+      Setting a parameter to zero can brick the protocol (divide-by-zero),
+      disable fees, or set critical addresses to address(0).
+    detection_heuristics:
+      - "1. Find zero-checks in initialize (require(x != 0) or if(x == 0) revert)"
+      - "2. Verify the same zero-check exists in every setter for that variable"
+      - "3. For address parameters, check require(addr != address(0))"
+    examples:
+      solidity:
+        vulnerable: |
+          constructor(address _treasury) {
+              require(_treasury != address(0), "Zero address");
+              treasury = _treasury;
+          }
+
+          function setTreasury(address _treasury) external onlyOwner {
+              treasury = _treasury;  // Can set to address(0)!
+          }
+    false_positive_conditions:
+      - "Zero is a valid sentinel value that triggers special behavior"
+      - "The parameter is not used in division or as a call target"
+    impact:
+      - "Division by zero causes permanent DoS"
+      - "Zero address causes funds to be permanently locked"
+
+  - name: Asymmetric Validation Across Multiple Setters
+    id: PARAM-003
+    severity: Medium
+    description: |
+      Two different functions write to the same state variable but apply different
+      constraints. For example, setFee() caps at 1000 BPS but batchUpdateConfig()
+      does not enforce the same limit.
+    detection_heuristics:
+      - "1. Map every function that writes to each state variable"
+      - "2. Extract validation constraints from each writer"
+      - "3. Flag when one writer has stricter checks than another"
+      - "4. Pay special attention to batch/multicall functions"
+    false_positive_conditions:
+      - "The less-restricted function has additional access control (e.g., multisig only)"
+      - "Different constraints are intentional for different use cases"
+
+  - name: Constructor vs Setter Drift
+    id: PARAM-004
+    severity: Medium
+    description: |
+      The constructor/initializer validates thoroughly, but a setter added in a later
+      version (after an upgrade) skips some checks. Common after proxy upgrades where
+      new setter functions are added without copying all original validations.
+    detection_heuristics:
+      - "1. Compare validation in initialize() vs all setters"
+      - "2. Look for setters added in newer implementation contracts"
+      - "3. Check if upgrade path introduces new setters without validation"
+    false_positive_conditions:
+      - "New setter intentionally has relaxed constraints for new functionality"
+      - "Original constraints were overly restrictive and removed by design"
+
+  - name: Type-Boundary Danger Values
+    id: PARAM-005
+    severity: Medium
+    description: |
+      A setter allows values up to type(uint256).max when the variable is later used
+      in multiplication, creating potential overflow (even in 0.8.x, this causes
+      unexpected reverts that DoS the protocol).
+    detection_heuristics:
+      - "1. Find setters with no upper bound on uint256 parameters"
+      - "2. Trace where that variable is used in arithmetic"
+      - "3. If used in multiplication, check if extreme values cause overflow"
+      - "4. If Solidity >= 0.8, overflow = revert = potential DoS"
+    false_positive_conditions:
+      - "Variable is only used in comparisons, not arithmetic"
+      - "Overflow is caught and handled gracefully"
+
+analysis_methodology:
+  - "1. Enumerate all setters: Find every function that writes to a state variable (initialize, constructor, set*, change*, update*)"
+  - "2. Extract validation constraints: For each writer, extract all require(), if-revert, assert() conditions on the parameter"
+  - "3. Compare constraints per variable: For each state variable, ensure every writer enforces the SAME constraints"
+  - "4. Assess impact: A missing upper bound on a fee parameter is High. A missing zero check on a non-critical config is Low."
+
+high_signal_parameters:
+  - "Fee rates (feeRate, protocolFee, swapFee) — missing cap allows > 100%"
+  - "Slippage limits (maxSlippage, slippageTolerance) — missing cap allows > 100%"
+  - "Addresses (treasury, oracle, router) — missing zero check bricks protocol"
+  - "Multipliers/rates (rewardRate, interestRate) — unbounded causes overflow"
+  - "Array lengths/counts (maxValidators, batchSize) — unbounded causes gas DoS"
+  - "Timelock durations (delay, cooldown) — zero allows instant execution"
+
+audit_checklist:
+  - "Every state variable setter has the same validation as its initializer"
+  - "All address setters check for address(0)"
+  - "All fee/rate setters have upper bounds"
+  - "Batch update functions enforce per-parameter validation"
+  - "Upgrade-added setters carry forward original constraints"
+
+historical_exploits:
+  - name: Olas Tokenomics
+    loss: "Governance risk"
+    description: "initialize() bounded maxSlippage to MAX_BPS, changeMaxSlippage() had no check"
+  - name: Compound Parameter Misconfiguration
+    loss: "$80M+ at risk"
+    description: "Governance proposal set reward speed incorrectly due to missing bounds validation"

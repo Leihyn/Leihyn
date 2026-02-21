@@ -1,5 +1,10 @@
 """
 Claude API wrapper with tool support, caching, extended thinking, and cost tracking.
+
+Cost optimizations:
+- Prompt caching: 90% discount on repeated system prompts (5-min TTL)
+- Haiku routing: tool-routing iterations use Haiku (~4x cheaper than Sonnet)
+- Response caching: identical requests served from disk cache
 """
 
 import asyncio
@@ -18,23 +23,33 @@ from rich.text import Text
 
 console = Console()
 
-# Pricing per million tokens (as of Jan 2025)
-# Extended thinking tokens are charged at different rates
+# Models
+HAIKU_MODEL = "claude-3-5-haiku-20241022"
+SONNET_MODEL = "claude-sonnet-4-20250514"
+OPUS_MODEL = "claude-opus-4-20250514"
+
+# Pricing per million tokens
 PRICING = {
-    "claude-sonnet-4-20250514": {
+    SONNET_MODEL: {
         "input": 3.0,
         "output": 15.0,
-        "thinking": 3.0,  # Thinking tokens at input rate
+        "thinking": 3.0,
+        "cache_write": 3.75,   # 1.25x input price
+        "cache_read": 0.30,    # 0.1x input price (90% discount)
     },
-    "claude-opus-4-20250514": {
+    OPUS_MODEL: {
         "input": 15.0,
         "output": 75.0,
         "thinking": 15.0,
+        "cache_write": 18.75,
+        "cache_read": 1.50,
     },
-    "claude-3-5-haiku-20241022": {
+    HAIKU_MODEL: {
         "input": 0.80,
         "output": 4.0,
         "thinking": 0.80,
+        "cache_write": 1.0,
+        "cache_read": 0.08,
     },
 }
 
@@ -65,8 +80,9 @@ class Tool:
 class LLMClient:
     """
     Wrapper around Claude API with:
-    - Tool execution loop
-    - Response caching
+    - Tool execution loop (with Haiku routing for cost savings)
+    - Anthropic prompt caching (90% discount on system prompts)
+    - Response caching (disk)
     - Cost tracking
     - Retry logic
     - Extended thinking (ultrathink) support
@@ -74,14 +90,16 @@ class LLMClient:
 
     def __init__(
         self,
-        model: str = "claude-sonnet-4-20250514",
+        model: str = SONNET_MODEL,
         cache_dir: Optional[Path] = None,
         enable_cache: bool = True,
         max_retries: int = 5,
         default_thinking_budget: int = 10000,
+        routing_model: str = HAIKU_MODEL,
     ):
         self.client = anthropic.Anthropic()
         self.model = model
+        self.routing_model = routing_model
         self.cache_dir = cache_dir or Path(".cache/llm")
         self.enable_cache = enable_cache
         self.max_retries = max_retries
@@ -93,6 +111,7 @@ class LLMClient:
         self.total_thinking_tokens = 0
         self.total_cost = 0.0
         self.cache_hits = 0
+        self.prompt_cache_savings = 0.0
 
         # Create cache directory
         if enable_cache:
@@ -121,14 +140,43 @@ class LLMClient:
         cache_file.write_text(json.dumps(response))
 
     def _calculate_cost(
-        self, input_tokens: int, output_tokens: int, thinking_tokens: int = 0
+        self,
+        input_tokens: int,
+        output_tokens: int,
+        thinking_tokens: int = 0,
+        model: Optional[str] = None,
+        cache_creation_tokens: int = 0,
+        cache_read_tokens: int = 0,
     ) -> float:
-        """Calculate the cost of a request including thinking tokens."""
-        pricing = PRICING.get(self.model, {"input": 3.0, "output": 15.0, "thinking": 3.0})
+        """Calculate the cost of a request including thinking and cache tokens."""
+        m = model or self.model
+        pricing = PRICING.get(m, PRICING[SONNET_MODEL])
         input_cost = (input_tokens / 1_000_000) * pricing["input"]
         output_cost = (output_tokens / 1_000_000) * pricing["output"]
         thinking_cost = (thinking_tokens / 1_000_000) * pricing.get("thinking", pricing["input"])
-        return input_cost + output_cost + thinking_cost
+        cache_write_cost = (cache_creation_tokens / 1_000_000) * pricing.get("cache_write", pricing["input"])
+        cache_read_cost = (cache_read_tokens / 1_000_000) * pricing.get("cache_read", pricing["input"] * 0.1)
+        return input_cost + output_cost + thinking_cost + cache_write_cost + cache_read_cost
+
+    def _build_system_with_caching(self, system: str, enable_prompt_cache: bool = True) -> Any:
+        """Build system parameter with Anthropic prompt caching.
+
+        Anthropic prompt caching gives 90% discount on the cached portion of
+        the system prompt. System prompts >1024 tokens are eligible. The cache
+        has a 5-minute TTL -- perfect for hunter agent loops that make 5-15
+        calls with the same system prompt within seconds.
+        """
+        if not enable_prompt_cache or not system:
+            return system
+
+        # Use structured system with cache_control
+        return [
+            {
+                "type": "text",
+                "text": system,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ]
 
     def chat(
         self,
@@ -140,6 +188,8 @@ class LLMClient:
         extended_thinking: bool = False,
         thinking_budget: Optional[int] = None,
         stream_thinking: bool = False,
+        model_override: Optional[str] = None,
+        enable_prompt_cache: bool = True,
     ) -> LLMResponse:
         """
         Send a chat request to Claude.
@@ -153,9 +203,13 @@ class LLMClient:
             extended_thinking: Enable extended thinking (ultrathink) mode
             thinking_budget: Token budget for thinking (default: 10000)
             stream_thinking: Stream thinking process to console
+            model_override: Use a specific model for this call (e.g., Haiku for routing)
+            enable_prompt_cache: Enable Anthropic prompt caching on system prompt
 
         Returns the response without executing tools.
         """
+        active_model = model_override or self.model
+
         # Convert tools to API format
         tool_defs = []
         if tools:
@@ -168,7 +222,7 @@ class LLMClient:
                 for t in tools
             ]
 
-        # Check cache (skip for extended thinking - we want fresh analysis)
+        # Check disk cache (skip for extended thinking)
         if not extended_thinking:
             cache_key = self._get_cache_key(messages, system, tool_defs)
             cached = self._get_cached_response(cache_key)
@@ -179,26 +233,27 @@ class LLMClient:
 
         # Build request kwargs
         kwargs = {
-            "model": self.model,
+            "model": active_model,
             "max_tokens": max_tokens,
             "messages": messages,
         }
+
+        # System prompt with optional Anthropic prompt caching
         if system:
-            kwargs["system"] = system
+            kwargs["system"] = self._build_system_with_caching(system, enable_prompt_cache)
+
         if tool_defs:
             kwargs["tools"] = tool_defs
 
         # Extended thinking configuration
         if extended_thinking:
             budget = thinking_budget or self.default_thinking_budget
-            # API requires max_tokens > thinking.budget_tokens
             if max_tokens <= budget:
                 kwargs["max_tokens"] = budget + 4096
             kwargs["thinking"] = {
                 "type": "enabled",
                 "budget_tokens": budget,
             }
-            # Temperature must be 1 for extended thinking
             kwargs["temperature"] = 1
         else:
             kwargs["temperature"] = temperature
@@ -208,17 +263,12 @@ class LLMClient:
         for attempt in range(self.max_retries):
             try:
                 if extended_thinking:
-                    # Always stream extended thinking requests -- the Anthropic API
-                    # requires streaming for requests that may exceed 10 minutes.
                     response = self._stream_with_thinking(show_live=stream_thinking, **kwargs)
                 else:
                     response = self.client.messages.create(**kwargs)
                 break
             except anthropic.RateLimitError as e:
                 last_error = e
-                # Fixed 60s wait aligns with Anthropic's per-minute rate limit window.
-                # The 30k input tokens/min tier resets every 60s -- exponential backoff
-                # overshoots (30->60->120s) while fixed 60s is optimal.
                 wait_time = 60
                 console.print(f"[yellow]Rate limited, waiting {wait_time}s...[/yellow]")
                 time.sleep(wait_time)
@@ -248,15 +298,32 @@ class LLMClient:
                     "input": block.input,
                 })
 
-        # Calculate cost including thinking tokens
+        # Calculate cost including thinking and cache tokens
         input_tokens = response.usage.input_tokens
         output_tokens = response.usage.output_tokens
-        # Extended thinking adds cache_creation_input_tokens for thinking
-        thinking_tokens = getattr(response.usage, "cache_creation_input_tokens", 0)
+
+        thinking_tokens = 0
         if hasattr(response.usage, "thinking_tokens"):
             thinking_tokens = response.usage.thinking_tokens
+        elif hasattr(response.usage, "cache_creation_input_tokens") and extended_thinking:
+            thinking_tokens = getattr(response.usage, "cache_creation_input_tokens", 0)
 
-        cost = self._calculate_cost(input_tokens, output_tokens, thinking_tokens)
+        cache_creation = getattr(response.usage, "cache_creation_input_tokens", 0)
+        cache_read = getattr(response.usage, "cache_read_input_tokens", 0)
+
+        cost = self._calculate_cost(
+            input_tokens, output_tokens, thinking_tokens,
+            model=active_model,
+            cache_creation_tokens=cache_creation,
+            cache_read_tokens=cache_read,
+        )
+
+        # Track prompt cache savings
+        if cache_read > 0:
+            pricing = PRICING.get(active_model, PRICING[SONNET_MODEL])
+            full_price = (cache_read / 1_000_000) * pricing["input"]
+            cached_price = (cache_read / 1_000_000) * pricing.get("cache_read", pricing["input"] * 0.1)
+            self.prompt_cache_savings += (full_price - cached_price)
 
         # Update stats
         self.total_input_tokens += input_tokens
@@ -282,12 +349,7 @@ class LLMClient:
         return result
 
     def _stream_with_thinking(self, show_live: bool = True, **kwargs) -> Any:
-        """Stream response, optionally displaying thinking in real-time.
-
-        Args:
-            show_live: If True, render thinking to console. If False, stream
-                       silently (needed for extended thinking requests >10 min).
-        """
+        """Stream response, optionally displaying thinking in real-time."""
         if show_live:
             thinking_text = Text()
             response_text = Text()
@@ -303,10 +365,8 @@ class LLMClient:
                                 elif hasattr(event.delta, 'text'):
                                     response_text.append(event.delta.text)
 
-                    # Final response
                     response = stream.get_final_message()
         else:
-            # Silent streaming -- consume the stream without rendering
             with self.client.messages.stream(**kwargs) as stream:
                 for _event in stream:
                     pass
@@ -323,9 +383,15 @@ class LLMClient:
         on_tool_call: Optional[Callable[[str, dict], None]] = None,
         extended_thinking: bool = False,
         thinking_budget: Optional[int] = None,
+        use_routing_model: bool = True,
     ) -> tuple[str, list[dict], str]:
         """
         Run a full agent loop with tool execution.
+
+        Cost optimization: when use_routing_model=True (default), intermediate
+        iterations that just route tool calls use Haiku (~$0.80/M) instead of
+        Sonnet (~$3/M). The final response (no tool calls) always uses the
+        primary model for analysis quality.
 
         Returns (final_response, all_tool_results, thinking_trace)
         """
@@ -335,20 +401,38 @@ class LLMClient:
         all_thinking = []
 
         for iteration in range(max_iterations):
+            # Use routing model for intermediate iterations (tool calls),
+            # primary model for final analysis (no tool calls).
+            # First iteration always uses primary model to understand the task.
+            # Extended thinking always uses primary model.
+            if use_routing_model and iteration > 0 and not extended_thinking:
+                model = self.routing_model
+            else:
+                model = None  # Use default (primary model)
+
             response = self.chat(
                 messages,
                 system=system,
                 tools=tools,
                 extended_thinking=extended_thinking,
                 thinking_budget=thinking_budget,
+                model_override=model,
             )
 
             # Collect thinking traces
             if response.thinking:
                 all_thinking.append(f"[Iteration {iteration + 1}]\n{response.thinking}")
 
-            # If no tool calls, we're done
+            # If no tool calls, we're done -- this used the primary model
             if not response.tool_calls:
+                # If the final response came from routing model, re-run with primary
+                if model == self.routing_model and response.content:
+                    response = self.chat(
+                        messages,
+                        system=system,
+                        tools=tools,
+                        model_override=None,
+                    )
                 return response.content, all_tool_results, "\n\n".join(all_thinking)
 
             # Execute tools
@@ -362,8 +446,6 @@ class LLMClient:
 
                 if tool_name in tool_map:
                     try:
-                        # Try kwargs first (handlers with named params like path, file_path)
-                        # Fall back to positional dict (handlers with params: dict)
                         try:
                             result = tool_map[tool_name](**tool_input)
                         except TypeError:
@@ -385,7 +467,7 @@ class LLMClient:
                         result_str = f"Error executing tool: {str(e)}"
                         if tool_name == "report_finding":
                             console.print(f"[red]WARNING: Finding lost due to tool error: {e}[/red]")
-                        elif self.max_retries:  # any truthy context = verbose mode
+                        elif self.max_retries:
                             console.print(f"[yellow]Tool {tool_name} failed: {e}[/yellow]")
                 else:
                     result_str = f"Unknown tool: {tool_name}"
@@ -402,7 +484,6 @@ class LLMClient:
                 })
 
             # Add assistant message and tool results
-            # Tool calls need "type": "tool_use" for the API
             assistant_content = []
             if response.content:
                 assistant_content.append({"type": "text", "text": response.content})
@@ -448,6 +529,7 @@ class LLMClient:
             "total_thinking_tokens": self.total_thinking_tokens,
             "total_cost": round(self.total_cost, 4),
             "cache_hits": self.cache_hits,
+            "prompt_cache_savings": round(self.prompt_cache_savings, 4),
         }
 
 

@@ -1,0 +1,530 @@
+name: Front-Running & MEV
+id: MEV
+severity: Critical
+cwe: CWE-362
+
+description: |
+  The mempool is a public waiting room. Every pending transaction is visible to anyone
+  watching, and validators can reorder, insert, or censor transactions for profit. MEV
+  (Maximal Extractable Value) is the profit extractable through this transaction ordering
+  power — $600M+ extracted since 2020.
+
+  Front-running vulnerabilities exist whenever a transaction's outcome depends on execution
+  order and an attacker can profitably reorder around it. This covers sandwich attacks,
+  initialization races, commit-reveal bypasses, approval front-running, and validator-level
+  extraction (JIT liquidity, time-bandit attacks).
+
+  Slippage-specific vulnerabilities (amountOutMin=0, missing deadlines) are covered in
+  slippage.yaml. This file covers the broader MEV attack surface.
+
+vulnerabilities:
+  - name: Sandwich Attack
+    id: MEV-01
+    severity: Medium/High
+    description: |
+      Attacker sees a pending DEX trade in the mempool, front-runs with a buy (pushing
+      price up), lets the victim trade execute at the worse price, then back-runs with a
+      sell. The victim receives fewer tokens; the attacker pockets the spread.
+
+      On a $100,000 swap with 5% slippage tolerance, up to $5,000 is extractable.
+    detection_heuristics:
+      - "1. Find all swap/exchange functions callable by external users"
+      - "2. Check if slippage protection is enforced (covered by slippage.yaml)"
+      - "3. Check if the protocol routes through public mempool vs private relay"
+      - "4. Look for large-value swaps in protocol logic (rebalancing, fee conversion)"
+      - "5. Protocol-owned swaps are highest risk — no user-set slippage protection"
+    patterns:
+      solidity:
+        - "swapExactTokensForTokens"
+        - "exactInputSingle"
+        - ".exchange("
+        - ".swap("
+    examples:
+      solidity:
+        vulnerable: |
+          // Protocol auto-compounds fees — no slippage, sandwichable
+          function harvestAndCompound() external {
+              uint256 fees = collectFees();
+              router.swapExactTokensForTokens(fees, 0, path, address(this), block.timestamp);
+          }
+        fixed: |
+          function harvestAndCompound() external {
+              uint256 fees = collectFees();
+              uint256 minOut = oracle.getExpectedOutput(fees) * 9900 / 10000;
+              router.swapExactTokensForTokens(fees, minOut, path, address(this), block.timestamp + 300);
+          }
+    false_positive_conditions:
+      - "Transaction is submitted via Flashbots Protect or private mempool"
+      - "Swap amount is too small for sandwich to be profitable (< $1000)"
+      - "Protocol uses on-chain oracle for slippage bounds"
+    impact:
+      - "Direct value extraction from every unprotected swap"
+      - "Protocol-owned liquidity operations are highest risk"
+    cross_references:
+      - "SLIPPAGE-001: amountOutMin = 0"
+      - "SLIPPAGE-003: Hardcoded slippage tolerance"
+
+  - name: Front-Running Initialization
+    id: MEV-02
+    severity: High
+    description: |
+      Unprotected initialize() functions can be front-run by an attacker who calls them
+      first, setting themselves as owner or injecting malicious parameters. Common in
+      proxy patterns where the constructor runs on the implementation, not the proxy.
+    detection_heuristics:
+      - "1. Find initialize/init functions without access control"
+      - "2. Check if the function can only be called once (initializer modifier)"
+      - "3. Look for proxy patterns where initialize is called in a separate tx from deploy"
+      - "4. Check if deploy + initialize are atomic (same tx via factory)"
+    patterns:
+      solidity:
+        - "function initialize("
+        - "function init("
+        - "function setUp("
+        - "initializer"
+      rust:
+        - "pub fn initialize("
+        - "is_initialized"
+      move:
+        - "public entry fun initialize("
+      cairo:
+        - "fn initializer("
+        - "#[constructor]"
+    examples:
+      solidity:
+        vulnerable: |
+          // Anyone can call initialize before the deployer
+          function initialize(address _owner) external {
+              require(owner == address(0), "Already initialized");
+              owner = _owner;
+          }
+        fixed: |
+          // Deploy and initialize atomically via factory
+          function deploy(address _owner) external returns (address proxy) {
+              proxy = address(new ERC1967Proxy(impl, abi.encodeCall(
+                  Protocol.initialize, (_owner)
+              )));
+          }
+
+          // Or use OpenZeppelin's initializer modifier
+          function initialize(address _owner) external initializer {
+              __Ownable_init(_owner);
+          }
+    false_positive_conditions:
+      - "Deploy + initialize happen in the same transaction (factory pattern)"
+      - "OpenZeppelin Initializable modifier is correctly applied"
+      - "Constructor disables initializers on the implementation"
+    impact:
+      - "Complete protocol takeover — attacker becomes owner"
+      - "Malicious parameters injected at protocol birth"
+
+  - name: ERC20 Approval Front-Running
+    id: MEV-03
+    severity: Medium
+    description: |
+      The classic approve() race condition. If Alice changes an approval from 100 to 50,
+      Bob can front-run with a transferFrom for the original 100, then use the new 50
+      approval for a total of 150 tokens.
+    detection_heuristics:
+      - "1. Check if the protocol calls approve() with a non-zero value when allowance is already non-zero"
+      - "2. Look for approve(spender, newAmount) without first setting to 0"
+      - "3. Check if increaseAllowance/decreaseAllowance is used instead"
+      - "4. For USDT: approve to non-zero when current allowance is non-zero will revert"
+    patterns:
+      solidity:
+        - ".approve("
+        - "IERC20(token).approve("
+    examples:
+      solidity:
+        vulnerable: |
+          // If current allowance is 100 and we set to 50, race condition exists
+          token.approve(spender, newAmount);
+        fixed: |
+          // Option 1: Reset to zero first
+          token.approve(spender, 0);
+          token.approve(spender, newAmount);
+
+          // Option 2: Use SafeERC20 (handles USDT and race condition)
+          token.forceApprove(spender, newAmount);
+
+          // Option 3: Use increaseAllowance/decreaseAllowance
+          token.increaseAllowance(spender, delta);
+    false_positive_conditions:
+      - "Approval is set only once (from 0 to N), never modified"
+      - "SafeERC20.forceApprove is used"
+      - "The spender is a trusted protocol contract, not an EOA"
+    impact:
+      - "Double-spend of approved tokens"
+      - "Particularly dangerous with USDT which reverts on non-zero to non-zero approve"
+
+  - name: Commit-Reveal Bypass
+    id: MEV-04
+    severity: High
+    description: |
+      Commit-reveal schemes protect against front-running by splitting an action into
+      commit (hash of intent) and reveal (actual parameters). But flawed implementations
+      leak information: short brute-forceable commitment spaces, missing blinding factors,
+      or reveal transactions that can themselves be front-run.
+    detection_heuristics:
+      - "1. Find commit-reveal patterns (commit/reveal function pairs)"
+      - "2. Check if the commitment includes a user-supplied salt/blinding factor"
+      - "3. Verify the commitment space is large enough (not brute-forceable)"
+      - "4. Check if reveal enforces a time window (commit must age before reveal)"
+      - "5. Check if the reveal transaction itself is front-runnable"
+    patterns:
+      solidity:
+        - "keccak256(abi.encodePacked("
+        - "commit("
+        - "reveal("
+        - "commitment"
+    examples:
+      solidity:
+        vulnerable: |
+          // Commitment has only 3 possible values — brute-forceable
+          function commit(bytes32 hash) external {
+              commitments[msg.sender] = hash;
+          }
+          function reveal(uint8 choice) external {
+              // choice is 0, 1, or 2 — attacker can hash all 3 and match
+              require(keccak256(abi.encodePacked(choice)) == commitments[msg.sender]);
+          }
+        fixed: |
+          function commit(bytes32 hash) external {
+              commitments[msg.sender] = CommitData(hash, block.number);
+          }
+          function reveal(uint8 choice, bytes32 salt) external {
+              CommitData memory c = commitments[msg.sender];
+              require(block.number > c.blockNumber + MIN_COMMIT_AGE, "Too early");
+              require(block.number < c.blockNumber + MAX_COMMIT_AGE, "Expired");
+              require(keccak256(abi.encodePacked(choice, salt, msg.sender)) == c.hash);
+          }
+    false_positive_conditions:
+      - "Commitment includes msg.sender + salt with sufficient entropy"
+      - "Reveal window is enforced (not too early, not too late)"
+      - "The protocol uses a private relay for reveal transactions"
+    impact:
+      - "Front-running of auctions, games, votes, or any order-dependent action"
+      - "Complete bypass of the front-running protection the scheme was designed to provide"
+
+  - name: Back-Running / Arbitrage Leakage
+    id: MEV-05
+    severity: Low/Medium
+    description: |
+      Protocol operations that create price dislocations (large swaps, oracle updates,
+      liquidations) leak arbitrage opportunities. Back-runners (searchers) capture this
+      value instead of the protocol or its users.
+
+      Not always a vulnerability — some protocols intentionally capture this via
+      protocol-owned arbitrage (e.g., CrocSwap surplus).
+    detection_heuristics:
+      - "1. Find operations that move prices on AMMs (large swaps, rebalances)"
+      - "2. Check if the protocol captures post-operation arbitrage"
+      - "3. Look for liquidation bonus that exceeds the discount needed"
+      - "4. Check oracle update functions that create temporary mispricings"
+    patterns:
+      solidity:
+        - "liquidate("
+        - "rebalance("
+        - "updatePrice("
+        - "harvestRewards("
+    examples:
+      solidity:
+        vulnerable: |
+          // Liquidation leaves arbitrage on the table for back-runners
+          function liquidate(address user) external {
+              uint256 collateral = getCollateral(user);
+              uint256 bonus = collateral * LIQUIDATION_BONUS / 10000;
+              _transfer(msg.sender, collateral + bonus);
+          }
+        fixed: |
+          // Dutch auction liquidation — captures more value for the protocol
+          function liquidate(address user) external {
+              uint256 elapsed = block.timestamp - liquidationStart[user];
+              uint256 discount = MIN_DISCOUNT + elapsed * DISCOUNT_RATE;
+              uint256 bonus = collateral * discount / 10000;
+              _transfer(msg.sender, collateral + bonus);
+          }
+    false_positive_conditions:
+      - "Protocol intentionally shares MEV with searchers (e.g., order flow auctions)"
+      - "Operations are too small for arbitrage to be profitable"
+    impact:
+      - "Value leakage from protocol to MEV searchers"
+      - "Over-incentivized liquidations drain protocol reserves"
+
+  - name: JIT (Just-In-Time) Liquidity
+    id: MEV-06
+    severity: Low
+    description: |
+      On concentrated liquidity AMMs (Uniswap V3, etc.), a searcher adds tightly
+      concentrated liquidity just before a large swap and removes it immediately after.
+      They earn the swap fees without taking sustained IL risk.
+
+      This is primarily a concern for existing LPs (fee dilution), not a smart contract
+      vulnerability. But protocols building on top of concentrated liquidity should be
+      aware of it.
+    detection_heuristics:
+      - "1. Check if protocol relies on LP fee income from concentrated liquidity pools"
+      - "2. Look for position NFTs that can be minted and burned in the same block"
+      - "3. Check for minimum position duration requirements"
+    patterns:
+      solidity:
+        - "mint(MintParams"
+        - "increaseLiquidity("
+        - "decreaseLiquidity("
+        - "collect("
+    false_positive_conditions:
+      - "Protocol enforces minimum LP duration"
+      - "Fees are distributed based on time-weighted liquidity"
+    impact:
+      - "Fee dilution for honest LPs"
+      - "Reduced yield for protocols depending on LP income"
+
+  - name: Transaction Ordering Dependence
+    id: MEV-07
+    severity: Medium
+    description: |
+      Any state-changing operation where the outcome depends on transaction ordering
+      is vulnerable to MEV extraction. This is the general case that covers auction
+      sniping, NFT minting races, token launches, and first-come-first-served claims.
+    detection_heuristics:
+      - "1. Find functions where 'first caller wins' (claim, mint with cap, auction bid)"
+      - "2. Check if there's any ordering protection (commit-reveal, VRF, etc.)"
+      - "3. Look for block.timestamp or block.number used for fairness"
+      - "4. Check if gas price competition (priority fee) determines winners"
+    patterns:
+      solidity:
+        - "function claim("
+        - "function mint("
+        - "function bid("
+        - "totalSupply < maxSupply"
+      rust:
+        - "first_depositor"
+        - "claim_reward"
+      cairo:
+        - "fn claim("
+        - "fn mint("
+    examples:
+      solidity:
+        vulnerable: |
+          // First caller gets the airdrop — gas auction
+          function claimAirdrop(bytes32[] calldata proof) external {
+              require(!claimed[msg.sender], "Already claimed");
+              require(MerkleProof.verify(proof, root, keccak256(abi.encodePacked(msg.sender))));
+              claimed[msg.sender] = true;
+              token.transfer(msg.sender, AIRDROP_AMOUNT);
+          }
+        fixed: |
+          // Commit-reveal with salt prevents front-running the claim
+          // Or: use Flashbots Protect for claim transactions
+          // Or: implement a claim window where all valid claims get equal share
+          function claimAirdrop(bytes32[] calldata proof) external {
+              require(block.timestamp >= claimStart && block.timestamp <= claimEnd);
+              require(!claimed[msg.sender]);
+              require(MerkleProof.verify(proof, root, keccak256(abi.encodePacked(msg.sender))));
+              claimed[msg.sender] = true;
+              pendingClaims.push(msg.sender);
+          }
+          function distributeClaims() external {
+              // Batch distribute after claim window closes
+          }
+    false_positive_conditions:
+      - "Function is not time-sensitive or order-dependent"
+      - "Commit-reveal scheme protects the action"
+      - "Chainlink VRF provides randomness"
+    impact:
+      - "Unfair advantage to sophisticated actors (bots over humans)"
+      - "Gas wars that increase costs for all participants"
+
+  - name: Permit Front-Running (Griefing)
+    id: MEV-08
+    severity: Medium
+    description: |
+      ERC-2612 permit() can be front-run. If a protocol calls permit() then transferFrom()
+      in sequence, an attacker can extract the permit signature from the mempool, call
+      permit() first (which succeeds), and then the protocol's permit() call reverts
+      (nonce already used). The transferFrom also fails. Result: griefing, not theft.
+
+      The fix is to try/catch the permit call, since the allowance was already set.
+    detection_heuristics:
+      - "1. Find permit() calls followed by transferFrom() in the same function"
+      - "2. Check if permit failure is handled (try/catch or allowance check)"
+      - "3. Look for permit + deposit/swap patterns"
+    patterns:
+      solidity:
+        - "permit("
+        - "IERC20Permit"
+        - "DOMAIN_SEPARATOR"
+    examples:
+      solidity:
+        vulnerable: |
+          function depositWithPermit(uint amount, uint deadline, uint8 v, bytes32 r, bytes32 s) external {
+              token.permit(msg.sender, address(this), amount, deadline, v, r, s);  // Reverts if front-run
+              token.transferFrom(msg.sender, address(this), amount);
+          }
+        fixed: |
+          function depositWithPermit(uint amount, uint deadline, uint8 v, bytes32 r, bytes32 s) external {
+              try token.permit(msg.sender, address(this), amount, deadline, v, r, s) {} catch {}
+              token.transferFrom(msg.sender, address(this), amount);  // Works if allowance was already set
+          }
+    false_positive_conditions:
+      - "Permit call is wrapped in try/catch"
+      - "Function checks allowance before calling permit"
+      - "Transaction is submitted via private relay"
+    impact:
+      - "Griefing: user's transaction reverts, must retry"
+      - "No direct fund loss, but poor UX and wasted gas"
+
+mev_protection_patterns:
+  private_transaction_relays:
+    - name: "Flashbots Protect"
+      description: "Sends transactions directly to block builders, bypassing public mempool"
+      chains: ["ethereum"]
+      url: "https://protect.flashbots.net"
+    - name: "MEV Blocker"
+      description: "OFA (Order Flow Auction) — searchers bid for your order flow"
+      chains: ["ethereum"]
+    - name: "Jito"
+      description: "MEV infrastructure on Solana — bundles and tips"
+      chains: ["solana"]
+
+  smart_contract_protections:
+    - name: "Commit-Reveal"
+      effectiveness: High
+      use_case: "Auctions, votes, games"
+      code: |
+        // Phase 1: Commit
+        commitments[msg.sender] = keccak256(abi.encodePacked(value, salt, msg.sender));
+        // Phase 2: Reveal (after N blocks)
+        require(keccak256(abi.encodePacked(value, salt, msg.sender)) == commitments[msg.sender]);
+
+    - name: "Submarine Send"
+      effectiveness: High
+      use_case: "Value-revealing transactions"
+      description: |
+        Send funds to a CREATE2-derived address before the contract exists.
+        Deploy the contract to claim them. The destination address is not
+        linked to the transaction until reveal.
+
+    - name: "Batch Auctions"
+      effectiveness: High
+      use_case: "Token sales, NFT mints"
+      description: |
+        Collect all bids/claims in a window, then settle at a uniform clearing
+        price. Eliminates ordering advantage entirely.
+      code: |
+        // All bids in the window get the same price
+        function bid(uint amount) external {
+            require(block.timestamp < auctionEnd, "Auction ended");
+            bids[msg.sender] += amount;
+            totalBids += amount;
+        }
+        function settle() external {
+            require(block.timestamp >= auctionEnd);
+            uint256 clearingPrice = totalSupply * 1e18 / totalBids;
+            // Everyone gets tokens at clearingPrice
+        }
+
+    - name: "Oracle-Derived Slippage"
+      effectiveness: Medium
+      use_case: "DEX swaps"
+      code: |
+        uint256 oraclePrice = chainlinkFeed.latestAnswer();
+        uint256 expectedOut = amountIn * oraclePrice / 1e8;
+        uint256 minOut = expectedOut * 9950 / 10000;  // 0.5% tolerance
+
+    - name: "Chainlink VRF"
+      effectiveness: High
+      use_case: "Randomness-dependent operations (lotteries, NFT reveals)"
+      description: |
+        Verifiable Random Function provides tamper-proof randomness that
+        validators cannot manipulate. Eliminates ordering advantage for
+        random outcomes.
+
+mev_landscape_by_chain:
+  ethereum:
+    mempool: "Public (unless Flashbots)"
+    block_builder: "PBS (Proposer-Builder Separation) via MEV-Boost"
+    dominant_mev: "Sandwich, liquidations, arbitrage"
+    protection: "Flashbots Protect, MEV Blocker, private RPCs"
+  solana:
+    mempool: "No global mempool — leader receives txs directly"
+    block_builder: "Validators schedule in FIFO, but Jito enables bundles"
+    dominant_mev: "Arbitrage, liquidation (sandwich is harder due to no public mempool)"
+    protection: "Jito bundles, priority fees"
+  arbitrum:
+    mempool: "Sequencer-controlled — first-come-first-served"
+    block_builder: "Centralized sequencer (Offchain Labs)"
+    dominant_mev: "Reduced — sequencer ordering limits sandwich"
+    protection: "Sequencer fairness, but centralization risk"
+  base:
+    mempool: "Sequencer-controlled (Coinbase)"
+    block_builder: "Centralized sequencer"
+    dominant_mev: "Similar to Arbitrum"
+    protection: "Sequencer FCFS ordering"
+
+audit_checklist:
+  - "Are there any unprotected initialize/init functions deployable in separate transactions?"
+  - "Do protocol-owned swaps (fee conversion, rebalancing) have oracle-derived slippage?"
+  - "Is commit-reveal used where ordering matters? Is the commitment space large enough?"
+  - "Are ERC20 approve() calls safe from race conditions (forceApprove or reset to 0)?"
+  - "Do permit() calls handle front-running gracefully (try/catch)?"
+  - "Are liquidations designed to minimize extractable MEV (dutch auction vs fixed bonus)?"
+  - "Does the protocol recommend or enforce private transaction submission?"
+  - "Are there any first-come-first-served operations that benefit from gas auctions?"
+
+historical_exploits:
+  - name: The DAO (front-run rescue)
+    date: "2016-06-17"
+    loss: "Failed rescue"
+    description: |
+      Dan Robinson's 'Ethereum is a Dark Forest' — attempted to rescue funds from a
+      vulnerable contract. Rescue transaction was spotted by generalized front-runners
+      in the mempool and replicated before it could execute.
+    reference: "https://www.paradigm.xyz/2020/08/ethereum-is-a-dark-forest"
+
+  - name: Bancor Vulnerability Rescue
+    date: "2020-06-22"
+    loss: "~$500K saved, partial front-run"
+    description: |
+      White-hat rescue of Bancor funds. Despite using Flashbots, parts of the rescue
+      were detected and front-run by sophisticated searchers monitoring contract
+      interactions.
+
+  - name: Sandwich Bot Cumulative
+    date: "2020-present"
+    loss: ">$1B cumulative"
+    description: |
+      Ongoing extraction from unprotected swaps. jaredfromsubway.eth alone extracted
+      $34M in 2 months in 2023 via sandwich attacks on Uniswap trades.
+
+  - name: Wintermute Governance Attack
+    date: "2022-06-08"
+    loss: "$20M OP tokens"
+    description: |
+      Wintermute published a multisig address on Optimism that hadn't been deployed yet.
+      Attacker front-ran the deployment to claim 20M OP tokens at the same address
+      via CREATE2.
+
+  - name: Rook Protocol MEV
+    date: "2021-2023"
+    loss: "N/A (design study)"
+    description: |
+      Rook (formerly KeeperDAO) attempted to internalize MEV for users via a
+      Coordination Game. Demonstrated that protocols can capture MEV instead of
+      leaking it to external searchers.
+
+references:
+  - title: "Ethereum is a Dark Forest"
+    url: "https://www.paradigm.xyz/2020/08/ethereum-is-a-dark-forest"
+    author: "Dan Robinson, Georgios Konstantopoulos"
+  - title: "Escaping the Dark Forest"
+    url: "https://samczsun.com/escaping-the-dark-forest/"
+    author: "samczsun"
+  - title: "Flash Boys 2.0"
+    url: "https://arxiv.org/abs/1904.05234"
+    author: "Daian et al."
+  - title: "MEV Explore"
+    url: "https://explore.flashbots.net"
+    description: "Real-time MEV extraction dashboard"
+  - title: "Flashbots Docs"
+    url: "https://docs.flashbots.net"

@@ -11,6 +11,7 @@ from rich.panel import Panel
 
 from .llm import LLMClient, Tool, get_llm_client
 from .types import AgentRole, AuditState, Finding
+from ..knowledge.vulnerability_registry import VulnerabilityRegistry
 
 console = Console()
 
@@ -87,6 +88,43 @@ class BaseAgent(ABC):
             )
         self.state.add_finding(finding)
 
+    def _get_knowledge_tools(self) -> list[Tool]:
+        """Return vulnerability knowledge tools for hunter agents."""
+        registry = VulnerabilityRegistry.get_instance()
+        categories = registry.get_reference_categories()
+
+        def handler(input_data: dict) -> str:
+            category = input_data.get("category", "")
+            language = input_data.get("language", "solidity")
+            return registry.get_reference(category, language)
+
+        return [
+            Tool(
+                name="get_vulnerability_reference",
+                description=(
+                    "Load detailed detection heuristics, code examples, and "
+                    "false-positive conditions for a vulnerability category. "
+                    f"Available categories: {', '.join(categories)}"
+                ),
+                input_schema={
+                    "type": "object",
+                    "properties": {
+                        "category": {
+                            "type": "string",
+                            "description": "Vulnerability category name",
+                        },
+                        "language": {
+                            "type": "string",
+                            "description": "Target language (solidity, rust, move, cairo)",
+                            "default": "solidity",
+                        },
+                    },
+                    "required": ["category"],
+                },
+                handler=handler,
+            ),
+        ]
+
     def execute_tool(self, tool_name: str, tool_input: dict) -> Any:
         """Execute a tool by name."""
         for tool in self._tools:
@@ -105,7 +143,15 @@ class BaseAgent(ABC):
         """
         self._tools = self.get_tools()
 
+        # Inject vulnerability knowledge tools for hunter agents
+        self._tools.extend(self._get_knowledge_tools())
+
         full_system = self.system_prompt
+
+        # Inject Tier 1 cheatsheet into system prompt (benefits from prompt caching)
+        if self.state.vulnerability_cheatsheet:
+            full_system += f"\n\n{self.state.vulnerability_cheatsheet}"
+
         if additional_context:
             full_system += f"\n\n## Additional Context\n{additional_context}"
 

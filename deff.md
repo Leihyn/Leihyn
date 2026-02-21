@@ -20,9 +20,9 @@
 Protocol focused blockchain engineer specializing in **DeFi integrations**, **stablecoin infrastructure**, and **cross-chain applications**. I build production-grade decentralized systems from smart contracts to full-stack applications, with emphasis on security, scalability, and developer experience.
 
 🔭 **Currently:**
-- 🏗️ Junior Blockchain Engineer at **DeFiConnectCredit** - Integrating Aave v3, Uniswap v3/v4, Curve, GMX
-- 🎓 Graduate of **Uniswap Hook Incubator (UHI7)** - Built modular DeFi extensions
-- 📚 Student at **School of Solana (Ackee Blockchain)** - Mastering Rust & Anchor framework
+- 🏗️ Blockchain / Full Stack Engineer at **DeFiConnectCredit** Integrating Aave v3, Uniswap v3/v4, Curve, GMX
+- 🎓 Graduate of **Uniswap Hook Incubator (UHI7)** Built modular DeFi extensions
+- 📚 Student at **School of Solana (Ackee Blockchain)** Mastering Rust & Anchor framework
 
 
 🎯 **Core Interests:**
@@ -88,7 +88,7 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 ## 🚀 Featured Projects
 
-### 🎨 [Comic Pad](https://github.com/Leihyn/comicpad) - Production NFT Publishing Platform
+### 🎨 [Comic Pad](https://github.com/Leihyn/comicpad) Production NFT Publishing Platform
 **Hedera Hashgraph | 50K+ Transactions Processed | Full-Stack Solo Build**
 
 <details>
@@ -133,7 +133,7 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 ---
 
-### 🌉 [Cybria Cross-Chain Bridge](https://github.com/Leihyn/Bridge_Validatior_Script) - Production Validator Infrastructure
+### 🌉 [Cybria Cross-Chain Bridge](https://github.com/Leihyn/Bridge_Validatior_Script) Production Validator Infrastructure
 **EVM-Compatible | Production Volume**
 
 <details>
@@ -166,7 +166,7 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 ---
 
-### 🏢 TerraCred - RWA Stablecoin Protocol
+### 🏢 TerraCred RWA Stablecoin Protocol
 **Hedera Hashgraph | Testnet | Real-World Asset Tokenization**
 
 <details>
@@ -206,7 +206,7 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 ---
 
-### 🦄 [Sentiment](https://github.com/Leihyn/sentiment-hook) - Dynamic Fee Hook for Uniswap v4
+### 🦄 [Sentiment](https://github.com/Leihyn/sentiment-hook) Dynamic Fee Hook for Uniswap v4
 **UHI7 Graduate Capstone | Base Sepolia | Production-Ready**
 
 <details>
@@ -238,8 +238,8 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 
 ---
 
-### 🎯 [TruthBounty](https://github.com/Leihyn/truthbounty) - Prediction Market Reputation Protocol
-**Top 20 Seedify Hackathon | BNB Chain | Ongoing**
+### 🎯 [TruthBounty](https://github.com/Leihyn/truthbounty) Prediction Market Reputation Protocol
+**2nd Place, Seedify Hackathon | BNB Chain | Ongoing**
 
 <details>
 <summary><b>🔍 View Technical Details</b></summary>
@@ -263,6 +263,121 @@ Protocol focused blockchain engineer specializing in **DeFi integrations**, **st
 </details>
 
 **Tech:** Solidity • The Graph • Next.js • Dynamic NFTs • PancakeSwap • Polymarket
+
+---
+
+### 🔍 [Sentinel](https://github.com/Leihyn/sentinel) AI-Powered Smart Contract Auditor
+**Multi-Agent Security Framework | Solidity, Rust, Move, Cairo | Production**
+
+<details>
+<summary><b>🔍 View Technical Details</b></summary>
+
+**Automated auditing framework for competitive security contests (Sherlock, Code4rena, Cantina):**
+
+**Multi-Agent Pipeline:**
+- Recon → Slither/Mythril static analysis → LLM-powered hunter swarm → Devils Advocate → Attack Synthesizer → Foundry PoC → Report
+- Depth control: `--depth fast|standard|deep`
+- Cost-aware budget allocation across agents
+
+**Hunter Agents:**
+- Core: Reentrancy, Oracle Manipulation, Flash Loan, Access Control
+- Specialized: SlippageHunter, MathVerificationHunter, ParameterValidationHunter
+- CrossContract analysis for multi-contract vulnerability traces
+
+**Validation:**
+- Foundry-based PoC generation with mainnet fork validation
+- Semgrep static rules for finding confirmation
+- Supports Solidity, Rust, Move, and Cairo
+
+**🎯 Key Achievement:** End-to-end automated security review pipeline covering 4 smart contract languages.
+
+</details>
+
+**Tech:** Python • Slither • Mythril • Foundry • Semgrep • Multi-Agent LLM
+
+---
+
+### 🎨 [Privacy Chronicles: Glass Wallet](https://github.com/Leihyn/glass-wallet-comic) Privacy Education Through Storytelling
+**Winner, Solana Privacy Hackathon | Content Creation Track Winner, Zypherpunk Hackathon | [Live Demo](https://glass-wallet-comic.vercel.app)**
+
+<details>
+<summary><b>🔍 View Technical Details</b></summary>
+
+**Interactive comic series making blockchain privacy concepts accessible through narrative:**
+
+**Glass Wallet (Solana Privacy Hackathon — Winner):**
+- 12-page interactive comic on selective privacy: MEV, surveillance, stealth addresses
+- Built for the Solana ecosystem to educate users on on-chain privacy risks
+
+**Privacy Chronicles (Zypherpunk Hackathon — Content Creation Track Winner):**
+- 5-episode series with 70+ pages total
+- 3D solar system in React Three Fiber for immersive episode navigation
+- Voice narration for accessibility
+
+**Technical Implementation:**
+- Next.js App Router with server-side rendering
+- React Three Fiber for 3D interactive scenes
+- Solana wallet integration for gated content
+
+**🎯 Key Achievement:** Two hackathon wins demonstrating ability to translate complex ZK and privacy concepts into accessible storytelling.
+
+</details>
+
+**Tech:** JavaScript • Next.js • React Three Fiber • Solana • TypeScript
+
+---
+
+### 🌙 [Nocturne](https://github.com/Leihyn/nocturne) Private Payments on Solana
+**ZK Privacy Protocol | Deployed on Devnet | 97% Unlinkability**
+
+<details>
+<summary><b>🔍 View Technical Details</b></summary>
+
+**Full privacy stack for unlinkable transactions on Solana:**
+
+**Privacy Mechanisms:**
+- Stealth addresses using Dual-Key Stealth Address Protocol (DKSAP)
+- Fixed-denomination privacy pools with Merkle commitments
+- ZK proofs (Noir/UltraHonk) for unlinkable withdrawals
+- TEE relay for identity protection during deposit scanning
+
+**On-Chain Implementation:**
+- Anchor programs deployed on Solana Devnet
+- Merkle tree for anonymity set management
+- Nullifier tracking to prevent double-spends
+
+**🎯 Key Achievement:** Full ZK privacy stack on Solana achieving 97% unlinkability — foundation for the Glass Wallet hackathon wins.
+
+</details>
+
+**Tech:** Rust • Anchor • Solana • Noir • Zero-Knowledge
+
+---
+
+### 🔀 [OmniSwap SDK](https://github.com/Leihyn/omniswap-sdk) Cross-Chain Swap Middleware
+**TypeScript SDK | 6 Blockchains | 70KB+ Documentation**
+
+<details>
+<summary><b>🔍 View Technical Details</b></summary>
+
+**Production-grade SDK enabling atomic swaps across heterogeneous blockchains:**
+
+**Architecture:**
+- Chain-specific adapter pattern for extensibility across 6 chains
+- HTLC-based atomic swap protocol
+- Typed errors with exhaustive error handling
+- Exponential backoff retry logic for reliability
+
+**Developer Experience:**
+- 70KB+ documentation with API reference and working tutorials
+- Type-safe interfaces throughout
+- Examples covering all supported chains
+
+**🎯 Key Achievement:** Comprehensive multi-chain SDK with developer-first documentation — reduces integration complexity to a few function calls.
+
+</details>
+
+**Tech:** TypeScript • Multi-Chain • SDK Design • HTLC
 
 ---
 
@@ -320,9 +435,11 @@ University of Ibadan, College of Medicine | Graduated 2024
 ## 🏆 Achievements & Recognition
 
 ✨ **Developed two live production blockchain applications** serving real users
-🎤 **Presenter at Hedera Web3 Africa Hackathon** - Presented to 200+ developers
-🎓 **Graduated from Uniswap Hook Incubator (UHI7)** - 15% acceptance rate, built Sentiment dynamic fee hook
-🏅 **Top 20 in Seedify Hackathon** - TruthBounty prediction market reputation protocol
+🏆 **Winner, Solana Privacy Hackathon** Privacy Chronicles: Glass Wallet interactive comic
+🏆 **Content Creation Track Winner, Zypherpunk Hackathon** Privacy Chronicles: 5-episode ZK privacy series (70+ pages)
+🎤 **Presenter at Hedera Web3 Africa Hackathon** Presented to 200+ developers
+🎓 **Graduated from Uniswap Hook Incubator (UHI7)** 15% acceptance rate, built Sentiment dynamic fee hook
+🏅 **2nd Place, Seedify Hackathon** TruthBounty prediction market reputation protocol
 🛠️ **Integrated 5+ major DeFi protocols** in production environment
 🌉 **Built cross-chain infrastructure** processing secure bridge transactions
 👨‍🏫 **Mentored 15+ aspiring blockchain developers** through code reviews and workshops
@@ -331,7 +448,7 @@ University of Ibadan, College of Medicine | Graduated 2024
 
 ## 💼 Professional Experience
 
-**Junior Blockchain Engineer** @ DeFiConnectCredit | Jan 2025 - Present
+**Blockchain / Full Stack Engineer** @ DeFiConnectCredit | Jan 2025 - Present
 - Integrating Aave v3, Uniswap v3/v4, Curve v1/v2, GMX Perpetuals in production
 - Building reusable contract libraries reducing partner integration time by 60%
 - Leading API/SDK development for external partner integrations
@@ -347,9 +464,9 @@ University of Ibadan, College of Medicine | Graduated 2024
 
 ## 📝 Technical Writing & Research
 
-- **[The Atomic Schlep: The Architecture of the Unstoppable Swap](https://medium.com/@faruukku)** - Deep dive into atomic swap mechanics
-- **[Sub-100ms Event Detection: Real-Time Blockchain Monitoring](https://medium.com/@faruukku)** - Building high-performance event listeners
-- **[Closing the Information Gap: Data Availability in DeFi](https://medium.com/@faruukku)** - Data availability layers and DeFi implications
+- **[The Atomic Schlep: The Architecture of the Unstoppable Swap](https://medium.com/@faruukku)** Deep dive into atomic swap mechanics
+- **[Sub-100ms Event Detection: Real-Time Blockchain Monitoring](https://medium.com/@faruukku)** Building high-performance event listeners
+- **[Closing the Information Gap: Data Availability in DeFi](https://medium.com/@faruukku)** Data availability layers and DeFi implications
 
 ---
 

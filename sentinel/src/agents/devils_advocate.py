@@ -1,21 +1,23 @@
 """
-Devil's Advocate Agent - Challenge and validate findings.
+Devil's Advocate Agent - Unified validation pipeline.
 
-Before submitting findings, challenge them:
-- Is this ACTUALLY exploitable?
-- What preconditions are needed?
-- Is the severity inflated?
-- Would a judge accept this?
+Merges severity calibration (check designed protections) and feasibility
+challenge (is this actually exploitable?) into a single pass. Processes
+findings in batches of 3-5 to minimize API calls.
 
-This agent:
-1. Critically examines each finding
-2. Tries to find why it's NOT exploitable
-3. Adjusts confidence and severity
-4. Filters out false positives
+For each finding:
+1. Read actual contract source to check for DESIGNED PROTECTIONS
+2. Calibrate severity: if protection is FULL, cap at Low
+3. Challenge feasibility: is this actually exploitable?
+4. Deduplicate by root cause across the batch
+5. Return validated, correctly-severed findings
+
+One ultrathink call per batch = 3-5x fewer API calls than one-per-finding.
 """
 
 import asyncio
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, field
 from typing import Optional
 from enum import Enum
 
@@ -52,6 +54,9 @@ class ChallengeReport:
     defenses: list[str]
     judge_perspective: str
     recommendation: str
+    protections_found: list[str] = field(default_factory=list)
+    protection_effectiveness: str = "none"
+    root_cause_key: str = ""
 
 
 @dataclass
@@ -63,25 +68,31 @@ class DevilsAdvocateConfig:
     min_confidence_threshold: float = 0.3
     severity_adjustment: bool = True
     filter_low_confidence: bool = True
+    # Severity calibration settings (merged from SeverityCalibrator)
+    read_source: bool = True
+    deduplicate_root_cause: bool = True
+    max_severity_with_protection: Severity = Severity.LOW
+    # Batch settings
+    batch_size: int = 4
 
 
 class DevilsAdvocateAgent(HunterAgent):
     """
-    Challenge every finding to validate quality.
+    Unified validation: severity calibration + feasibility challenge + dedup.
 
-    Analysis:
-    1. Is the attack path feasible?
-    2. What preconditions are needed?
-    3. Is severity correctly assessed?
-    4. Would a judge/reviewer accept this?
-    5. Are there mitigating factors?
+    Processes findings in batches of 3-5 per LLM call:
+    1. For each finding, checks actual source for designed protections
+    2. Calibrates severity based on protection effectiveness
+    3. Challenges feasibility (is the attack path realistic?)
+    4. Deduplicates findings with the same root cause
+    5. Filters low-confidence false positives
 
-    Goal: Reduce false positives and improve finding quality.
+    One ultrathink call per batch instead of one per finding.
     """
 
     role = AgentRole.VULNERABILITY_HUNTER
     name = "DevilsAdvocate"
-    description = "Critically challenge and validate findings"
+    description = "Validate findings: calibrate severity, challenge feasibility, deduplicate"
 
     def __init__(
         self,
@@ -96,170 +107,199 @@ class DevilsAdvocateAgent(HunterAgent):
 
     @property
     def system_prompt(self) -> str:
-        return """You are a skeptical security reviewer and judge.
+        return """You are a Code4rena / Sherlock judge performing final validation on audit findings.
 
-Your job is to CHALLENGE every finding and try to PROVE IT WRONG.
+You do TWO things for each finding:
 
-Ask these questions:
-1. **Is it ACTUALLY exploitable?**
-   - Can an attacker really execute this?
-   - What specific preconditions are needed?
-   - Are those preconditions realistic?
+## 1. SEVERITY CALIBRATION (check designed protections)
 
-2. **Is the attack path FEASIBLE?**
-   - Gas costs vs profit?
-   - Time constraints?
-   - Required capital/flash loans?
-   - Competition from other attackers?
+Search the source code for EXISTING PROTECTIONS that mitigate the reported issue:
+- Wrapper functions with pre/post validation
+- Oracle price bounds or TWAP checks
+- Access controls that limit who can trigger the path
+- Rate limits, timelocks, cooldowns
+- Reentrancy guards
+- Slippage parameters set at a higher level
+- Call-chain context (check "Call Chain Context" section in the finding description
+  for protections in CALLING functions, not just the function itself)
 
-3. **Is the severity CORRECT?**
-   - Is the impact overstated?
-   - Are there mitigating factors?
-   - Compare to similar historical issues
+Protection effectiveness:
+- FULL: Protection completely prevents exploitation -> cap at Low/QA
+- PARTIAL: Protection limits but doesn't prevent exploitation -> one level lower
+- NONE: No protection exists -> keep original severity
 
-4. **Would a JUDGE accept this?**
-   - Is the description clear?
-   - Is there sufficient evidence?
-   - Are edge cases considered?
-   - Is the PoC convincing?
+Key patterns that REDUCE severity:
+- "amountOutMin=0 BUT oracle validates price" -> QA (defense in depth)
+- "Missing access control BUT function only callable by owner" -> Low
+- "Reentrancy possible BUT follows CEI pattern" -> Low/QA
+- "Flash loan attack BUT protocol has cooldown" -> Medium (not Critical)
+- "Oracle manipulation BUT TWAP with sufficient window" -> Low/Medium
 
-5. **What DEFENDS this finding?**
-   - Are there access controls?
-   - Time locks or delays?
-   - Rate limits?
-   - Other safeguards?
+## 2. FEASIBILITY CHALLENGE (try to prove it wrong)
 
-Be HARSH but FAIR:
-- Look for reasons to REJECT
-- But acknowledge when findings are solid
-- Don't let good findings through with inflated severity
-- Don't reject valid findings out of excessive skepticism
+Ask:
+- Is the attack path ACTUALLY feasible? Gas costs vs profit?
+- What specific preconditions are needed? Are they realistic?
+- Would a contest judge accept this?
+- Are there mitigating factors beyond code protections?
 
-Severity Guidelines (for calibration):
-- CRITICAL: Direct, unconditional loss of all funds
-- HIGH: Conditional loss of funds, requires specific conditions
-- MEDIUM: Limited loss, temporary issues, griefing
-- LOW: Best practices, unlikely scenarios
+## 3. ROOT CAUSE IDENTIFICATION
 
-When adjusting:
-- Most findings are initially overrated
-- If preconditions are unlikely, downgrade
-- If impact is limited, downgrade
-- If exploit cost > profit, consider rejecting"""
+For deduplication: identify the ONE fundamental root cause. Multiple findings
+about the same root cause (e.g., "amountOutMin=0" in V2 and V3 paths) should
+share the same ROOT_CAUSE key.
+
+## C4 Severity Definitions (Exact Rules)
+
+- **HIGH**: Assets can be stolen/lost/compromised directly (or indirectly if
+  there is a valid attack path that does not have hand-wavy hypotheticals).
+  There must be a concrete, realistic attack path with direct asset risk.
+
+- **MEDIUM**: Assets not at direct risk, but the function of the protocol or
+  its availability could be impacted, or leak value with a hypothetical attack
+  path with stated assumptions.
+
+- **LOW/QA**: Anything that is not a risk to assets or protocol function.
+  Includes: best practices, code style, gas optimizations, informational.
+
+## C4 Mandatory Rules
+
+- **Admin roles are TRUSTED**: All privileged roles (owner, admin, governance,
+  multisig) are assumed trustworthy. Findings that require admin to misbehave,
+  misconfigure, or act maliciously are QA, NOT Medium/High. "Reckless admin
+  mistakes" (e.g., setting wrong value) are also QA.
+
+- **Fee-on-transfer / rebasing tokens**: OUT OF SCOPE unless the contest
+  explicitly includes them. Do not accept findings about non-standard token
+  behavior unless documentation says these tokens are supported.
+
+- **Dust amounts from rounding**: Precision loss / rounding errors with no
+  proof of material, cumulative loss are QA/Low, not Medium/High.
+
+- **No hand-wavy hypotheticals**: Findings at M/H MUST have a concrete
+  attack path. "An attacker could theoretically..." without specifics is
+  insufficient.
+
+- **Centralization risks**: Admin can rug, single point of failure, missing
+  timelock — these are QA/informational, not M/H.
+
+Be HARSH but FAIR. Most findings are initially overrated."""
 
     def get_tools(self) -> list[Tool]:
         return []
 
     async def run(self, **kwargs) -> list[Finding]:
-        """Challenge all findings and return validated ones."""
+        """Validate all findings in batches."""
         findings: list[Finding] = kwargs.get("findings", [])
 
         if not findings:
-            self.log("No findings to challenge", style="yellow")
+            self.log("No findings to validate", style="yellow")
             return []
 
-        self.log(f"Challenging {len(findings)} findings...", style="bold magenta")
+        self.log(f"Validating {len(findings)} findings (batch size={self.config.batch_size})...", style="bold magenta")
+
+        # Split findings into batches
+        batches = []
+        for i in range(0, len(findings), self.config.batch_size):
+            batches.append(findings[i:i + self.config.batch_size])
+
+        self.log(f"Processing {len(batches)} batch(es)...", style="cyan")
 
         validated_findings = []
 
-        for finding in findings:
-            self.log(f"Challenging: {finding.title[:50]}...", style="cyan")
+        for batch_idx, batch in enumerate(batches):
+            self.log(f"Batch {batch_idx + 1}/{len(batches)} ({len(batch)} findings)...", style="cyan")
 
-            report = await self.challenge_finding(finding)
-            self.challenge_reports.append(report)
+            reports = await self._challenge_batch(batch)
 
-            if report.result == ChallengeResult.REJECTED:
-                self.log(f"  [REJECTED] False positive", style="red")
-                continue
+            for finding, report in zip(batch, reports):
+                self.challenge_reports.append(report)
 
-            if report.result == ChallengeResult.DOWNGRADED:
-                self.log(f"  [DOWNGRADED] {report.original_severity.value} -> {report.adjusted_severity.value}", style="yellow")
-                finding.severity = report.adjusted_severity
-
-            finding.confidence = report.adjusted_confidence
-
-            # Filter low confidence
-            if self.config.filter_low_confidence:
-                if finding.confidence < self.config.min_confidence_threshold:
-                    self.log(f"  [FILTERED] Confidence too low: {finding.confidence:.0%}", style="dim")
+                if report.result == ChallengeResult.REJECTED:
+                    self.log(f"  [{finding.id}] REJECTED - False positive", style="red")
                     continue
 
-            validated_findings.append(finding)
-            self.log(f"  [VALIDATED] Confidence: {finding.confidence:.0%}", style="green")
+                if report.result == ChallengeResult.DOWNGRADED:
+                    self.log(
+                        f"  [{finding.id}] DOWNGRADED {report.original_severity.value} -> {report.adjusted_severity.value}"
+                        f" (protection: {report.protection_effectiveness})",
+                        style="yellow",
+                    )
+                    finding.severity = report.adjusted_severity
+
+                finding.confidence = report.adjusted_confidence
+
+                # Filter low confidence
+                if self.config.filter_low_confidence:
+                    if finding.confidence < self.config.min_confidence_threshold:
+                        self.log(f"  [{finding.id}] FILTERED - Confidence too low: {finding.confidence:.0%}", style="dim")
+                        continue
+
+                validated_findings.append(finding)
+                self.log(f"  [{finding.id}] VALIDATED - Confidence: {finding.confidence:.0%}", style="green")
+
+        # Deduplicate by root cause
+        if self.config.deduplicate_root_cause:
+            before = len(validated_findings)
+            validated_findings = self._deduplicate_by_root_cause(validated_findings)
+            after = len(validated_findings)
+            if before != after:
+                self.log(f"Root cause dedup: {before} -> {after} findings ({before - after} merged)", style="yellow")
 
         self.print_summary()
         return validated_findings
 
-    async def challenge_finding(self, finding: Finding) -> ChallengeReport:
-        """Challenge a single finding."""
-        prompt = f"""Challenge this security finding. Try to prove it's NOT valid or overrated.
+    async def _challenge_batch(self, batch: list[Finding]) -> list[ChallengeReport]:
+        """Challenge a batch of findings in a single LLM call."""
+        # Build the batch prompt
+        finding_sections = []
+        for i, finding in enumerate(batch):
+            source_context = self._get_source_context(finding) if self.config.read_source else "Source reading disabled."
 
-**Finding:**
-- ID: {finding.id}
-- Title: {finding.title}
-- Severity: {finding.severity.value}
-- Type: {finding.vulnerability_type.value}
-- Contract: {finding.contract}
-- Confidence: {finding.confidence:.0%}
+            finding_sections.append(f"""--- FINDING {i + 1} ---
+ID: {finding.id}
+Title: {finding.title}
+Severity: {finding.severity.value}
+Type: {finding.vulnerability_type.value}
+Contract: {finding.contract}
+Function: {finding.function or "N/A"}
+Confidence: {finding.confidence:.0%}
 
-**Description:**
-{finding.description}
+Description:
+{finding.description[:1500]}
 
-**Root Cause:**
-{finding.root_cause or "Not specified"}
+Impact: {finding.impact or "Not specified"}
+Root Cause: {finding.root_cause or "Not specified"}
+Recommendation: {finding.recommendation or "Not specified"}
 
-**Impact:**
-{finding.impact or "Not specified"}
+Source Code Context:
+{source_context[:3000]}
+""")
 
-**Recommendation:**
-{finding.recommendation or "Not specified"}
+        prompt = f"""Validate these {len(batch)} findings. For EACH finding, perform severity calibration (check protections) AND feasibility challenge.
+
+{chr(10).join(finding_sections)}
 
 ---
 
-**YOUR CHALLENGE:**
+For EACH finding, provide your analysis in this EXACT format (repeat for each finding):
 
-1. **Attack Feasibility Analysis**
-   - List ALL preconditions needed
-   - Assess likelihood of each precondition
-   - Calculate: Is it profitable after gas/fees?
-
-2. **Mitigation Search**
-   - Are there access controls we missed?
-   - Time locks, rate limits, pauses?
-   - Other safeguards in the code?
-
-3. **Severity Calibration**
-   - Compare to similar historical issues
-   - What severity would Code4rena/Sherlock assign?
-   - Is impact quantified correctly?
-
-4. **Counter-Arguments**
-   - Why might this NOT be exploitable?
-   - What assumptions could be wrong?
-   - Edge cases that break the attack?
-
-5. **Defense (if valid)**
-   - What makes this finding solid?
-   - Evidence that supports it?
-
-**Final Verdict:**
-- VALIDATED: Finding is solid as-is
-- ADJUSTED: Valid but needs confidence/details adjusted
-- DOWNGRADED: Valid but severity should be lower (specify new severity)
-- REJECTED: False positive (explain why)
-
-Format:
+=== FINDING [ID] ===
+PROTECTIONS_FOUND:
+- [Protection 1 with code reference]
+- [Protection 2]
+EFFECTIVENESS: [FULL/PARTIAL/NONE]
 VERDICT: [VALIDATED/ADJUSTED/DOWNGRADED/REJECTED]
-ADJUSTED_SEVERITY: [if DOWNGRADED]
+ADJUSTED_SEVERITY: [Critical/High/Medium/Low/Informational] (required if DOWNGRADED)
 ADJUSTED_CONFIDENCE: [0-100]%
+ROOT_CAUSE: [One-line root cause for dedup grouping]
 CHALLENGES:
-- [Challenge 1]
-- [Challenge 2]
+- [Why this might NOT be exploitable]
 DEFENSES:
-- [Defense 1]
-- [Defense 2]
-JUDGE_PERSPECTIVE: [What would a contest judge say?]
-RECOMMENDATION: [What should be done with this finding?]
+- [Why this finding IS valid]
+JUDGE_PERSPECTIVE: [What would a C4/Sherlock judge say?]
+RECOMMENDATION: [Keep/downgrade/reject and why]
+=== END ===
 """
 
         if self.config.ultrathink:
@@ -275,14 +315,95 @@ RECOMMENDATION: [What should be done with this finding?]
                 system=self.system_prompt,
             )
 
-        return self._parse_challenge_report(response.content, finding)
+        return self._parse_batch_response(response.content, batch)
 
-    def _parse_challenge_report(self, response: str, finding: Finding) -> ChallengeReport:
-        """Parse challenge report from LLM response."""
-        import re
+    def _get_source_context(self, finding: Finding) -> str:
+        """Get source code context for a finding."""
+        contract_name = finding.contract.split(",")[0].strip()
+
+        for contract in self.state.contracts:
+            if contract.name == contract_name or contract_name in contract.name:
+                source = contract.source
+                if len(source) > 6000:
+                    # Extract relevant section around the function
+                    if finding.function:
+                        func_pattern = rf'function\s+{re.escape(finding.function)}\s*\('
+                        match = re.search(func_pattern, source)
+                        if match:
+                            start = max(0, match.start() - 500)
+                            end = min(len(source), match.start() + 2500)
+                            return f"```solidity\n// ... (around {finding.function})\n{source[start:end]}\n// ...\n```"
+                    return f"```solidity\n{source[:6000]}\n// ... [truncated]\n```"
+                return f"```solidity\n{source}\n```"
+
+        return "Contract source not found in recon data."
+
+    def _parse_batch_response(self, response: str, batch: list[Finding]) -> list[ChallengeReport]:
+        """Parse batch response into individual challenge reports."""
+        reports = []
+
+        # Split response by finding sections
+        # Try to match each finding by its ID
+        for finding in batch:
+            # Find the section for this finding
+            section = self._extract_finding_section(response, finding.id)
+            if section:
+                reports.append(self._parse_single_report(section, finding))
+            else:
+                # Fallback: if we can't find the section, create a default ADJUSTED report
+                self.log(f"  Warning: Could not parse response for {finding.id}, keeping as-is", style="dim")
+                reports.append(ChallengeReport(
+                    finding_id=finding.id,
+                    result=ChallengeResult.ADJUSTED,
+                    original_severity=finding.severity,
+                    adjusted_severity=None,
+                    original_confidence=finding.confidence,
+                    adjusted_confidence=finding.confidence * 0.9,
+                    challenges=[],
+                    defenses=[],
+                    judge_perspective="Could not parse batch response for this finding",
+                    recommendation="Manual review recommended",
+                    protections_found=[],
+                    protection_effectiveness="unknown",
+                    root_cause_key=finding.title[:50],
+                ))
+
+        return reports
+
+    def _extract_finding_section(self, response: str, finding_id: str) -> Optional[str]:
+        """Extract the section of the response that corresponds to a specific finding."""
+        # Try exact ID match first
+        pattern = rf'===\s*FINDING\s+{re.escape(finding_id)}\s*===(.*?)(?====\s*(?:FINDING|END)\s*===|$)'
+        match = re.search(pattern, response, re.DOTALL | re.IGNORECASE)
+        if match:
+            return match.group(1)
+
+        # Try matching by finding ID appearing anywhere in a section
+        pattern = rf'{re.escape(finding_id)}.*?(?====\s*(?:FINDING|END)\s*===|$)'
+        match = re.search(pattern, response, re.DOTALL | re.IGNORECASE)
+        if match:
+            return match.group(0)
+
+        return None
+
+    def _parse_single_report(self, section: str, finding: Finding) -> ChallengeReport:
+        """Parse a single finding's challenge report from its section of the response."""
+        # Extract protections
+        protections = []
+        prot_match = re.search(r'PROTECTIONS_FOUND:\s*\n((?:-\s*.+\n?)+)', section)
+        if prot_match:
+            protections = [
+                p.strip().lstrip("- ")
+                for p in prot_match.group(1).split("\n")
+                if p.strip()
+            ]
+
+        # Extract effectiveness
+        eff_match = re.search(r'EFFECTIVENESS:\s*(\w+)', section, re.IGNORECASE)
+        effectiveness = eff_match.group(1).lower() if eff_match else "none"
 
         # Extract verdict
-        verdict_match = re.search(r'VERDICT:\s*(\w+)', response, re.IGNORECASE)
+        verdict_match = re.search(r'VERDICT:\s*(\w+)', section, re.IGNORECASE)
         verdict_str = verdict_match.group(1).lower() if verdict_match else "adjusted"
 
         result_map = {
@@ -295,45 +416,66 @@ RECOMMENDATION: [What should be done with this finding?]
 
         # Extract adjusted severity
         adjusted_severity = finding.severity
-        if result == ChallengeResult.DOWNGRADED:
-            sev_match = re.search(r'ADJUSTED_SEVERITY:\s*(\w+)', response, re.IGNORECASE)
-            if sev_match:
-                sev_str = sev_match.group(1).lower()
-                sev_map = {
-                    "critical": Severity.CRITICAL,
-                    "high": Severity.HIGH,
-                    "medium": Severity.MEDIUM,
-                    "low": Severity.LOW,
-                    "informational": Severity.INFORMATIONAL,
-                }
-                adjusted_severity = sev_map.get(sev_str, finding.severity)
+        sev_match = re.search(r'ADJUSTED_SEVERITY:\s*(\w+)', section, re.IGNORECASE)
+        if sev_match:
+            sev_str = sev_match.group(1).lower()
+            sev_map = {
+                "critical": Severity.CRITICAL,
+                "high": Severity.HIGH,
+                "medium": Severity.MEDIUM,
+                "low": Severity.LOW,
+                "informational": Severity.INFORMATIONAL,
+                "qa": Severity.INFORMATIONAL,
+                "gas": Severity.GAS,
+            }
+            adjusted_severity = sev_map.get(sev_str, finding.severity)
+
+        # If protection is FULL, cap at max_severity_with_protection
+        if effectiveness == "full":
+            severity_order = [
+                Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM,
+                Severity.LOW, Severity.INFORMATIONAL, Severity.GAS,
+            ]
+            max_idx = severity_order.index(self.config.max_severity_with_protection)
+            cal_idx = severity_order.index(adjusted_severity)
+            if cal_idx < max_idx:
+                adjusted_severity = self.config.max_severity_with_protection
+                result = ChallengeResult.DOWNGRADED
+
+        # If downgraded, ensure severity actually changed
+        if result == ChallengeResult.DOWNGRADED and adjusted_severity == finding.severity:
+            result = ChallengeResult.ADJUSTED
 
         # Extract adjusted confidence
-        conf_match = re.search(r'ADJUSTED_CONFIDENCE:\s*(\d+)', response)
+        conf_match = re.search(r'ADJUSTED_CONFIDENCE:\s*(\d+)', section)
         adjusted_confidence = int(conf_match.group(1)) / 100 if conf_match else finding.confidence
 
         # If rejected, set confidence very low
         if result == ChallengeResult.REJECTED:
             adjusted_confidence = 0.1
 
+        # Extract root cause
+        root_match = re.search(r'ROOT_CAUSE:\s*(.+?)(?=\n|CHALLENGES:|$)', section, re.DOTALL)
+        root_cause = root_match.group(1).strip() if root_match else finding.title[:50]
+
         # Extract challenges
         challenges = []
-        challenges_match = re.search(r'CHALLENGES:\s*\n((?:-\s*.+\n?)+)', response)
+        challenges_match = re.search(r'CHALLENGES:\s*\n((?:-\s*.+\n?)+)', section)
         if challenges_match:
             challenges = [c.strip().lstrip('- ') for c in challenges_match.group(1).split('\n') if c.strip()]
 
         # Extract defenses
         defenses = []
-        defenses_match = re.search(r'DEFENSES:\s*\n((?:-\s*.+\n?)+)', response)
+        defenses_match = re.search(r'DEFENSES:\s*\n((?:-\s*.+\n?)+)', section)
         if defenses_match:
             defenses = [d.strip().lstrip('- ') for d in defenses_match.group(1).split('\n') if d.strip()]
 
         # Extract judge perspective
-        judge_match = re.search(r'JUDGE_PERSPECTIVE:\s*(.+?)(?=RECOMMENDATION:|$)', response, re.DOTALL)
+        judge_match = re.search(r'JUDGE_PERSPECTIVE:\s*(.+?)(?=RECOMMENDATION:|$)', section, re.DOTALL)
         judge_perspective = judge_match.group(1).strip() if judge_match else ""
 
         # Extract recommendation
-        rec_match = re.search(r'RECOMMENDATION:\s*(.+?)$', response, re.DOTALL)
+        rec_match = re.search(r'RECOMMENDATION:\s*(.+?)(?====|$)', section, re.DOTALL)
         recommendation = rec_match.group(1).strip() if rec_match else ""
 
         return ChallengeReport(
@@ -347,14 +489,69 @@ RECOMMENDATION: [What should be done with this finding?]
             defenses=defenses[:5],
             judge_perspective=judge_perspective[:500],
             recommendation=recommendation[:500],
+            protections_found=protections[:5],
+            protection_effectiveness=effectiveness,
+            root_cause_key=root_cause[:100],
         )
 
+    def _deduplicate_by_root_cause(self, findings: list[Finding]) -> list[Finding]:
+        """Merge findings with the same root cause."""
+        from collections import defaultdict
+
+        # Build root cause keys from challenge reports
+        root_cause_map = {}
+        for report in self.challenge_reports:
+            if report.root_cause_key:
+                root_cause_map[report.finding_id] = report.root_cause_key
+
+        # Group findings by normalized root cause
+        groups = defaultdict(list)
+        for finding in findings:
+            key = root_cause_map.get(finding.id, finding.title[:50])
+            normalized = key.lower().strip()
+            for prefix in ["missing ", "lack of ", "no ", "absent "]:
+                if normalized.startswith(prefix):
+                    normalized = normalized[len(prefix):]
+            groups[normalized].append(finding)
+
+        # Merge groups
+        deduped = []
+        for key, group in groups.items():
+            if len(group) == 1:
+                deduped.append(group[0])
+                continue
+
+            # Keep the finding with the highest severity as primary
+            severity_order = [
+                Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM,
+                Severity.LOW, Severity.INFORMATIONAL, Severity.GAS,
+            ]
+            group.sort(key=lambda f: severity_order.index(f.severity))
+            primary = group[0]
+
+            # Append other locations to description
+            other_locations = [
+                f"{f.contract}:{f.function or 'N/A'} ({f.id})"
+                for f in group[1:]
+            ]
+            primary.description += f"\n\n**Also affects:** {', '.join(other_locations)}"
+            primary.related_findings.extend(f.id for f in group[1:])
+            primary.confidence = max(f.confidence for f in group)
+
+            deduped.append(primary)
+            self.log(
+                f"  Merged {len(group)} findings -> {primary.id} (root cause: {key[:50]})",
+                style="dim",
+            )
+
+        return deduped
+
     def print_summary(self) -> None:
-        """Print challenge summary."""
+        """Print validation summary."""
         if not self.challenge_reports:
             return
 
-        console.print("\n[bold magenta]═══ DEVIL'S ADVOCATE RESULTS ═══[/bold magenta]\n")
+        console.print("\n[bold magenta]=== VALIDATION RESULTS (Calibration + Challenge) ===[/bold magenta]\n")
 
         # Count by result
         result_counts = {}
@@ -362,7 +559,7 @@ RECOMMENDATION: [What should be done with this finding?]
             result = report.result.value
             result_counts[result] = result_counts.get(result, 0) + 1
 
-        summary_table = Table(title="Challenge Results")
+        summary_table = Table(title="Validation Results")
         summary_table.add_column("Result", style="bold")
         summary_table.add_column("Count", justify="right")
 
@@ -377,11 +574,27 @@ RECOMMENDATION: [What should be done with this finding?]
 
         console.print(summary_table)
 
+        # Protection effectiveness breakdown
+        eff_counts = {}
+        for report in self.challenge_reports:
+            eff = report.protection_effectiveness
+            eff_counts[eff] = eff_counts.get(eff, 0) + 1
+
+        if any(e != "none" and e != "unknown" for e in eff_counts):
+            prot_table = Table(title="Protection Effectiveness")
+            prot_table.add_column("Level", style="bold")
+            prot_table.add_column("Count", justify="right")
+            for eff, count in eff_counts.items():
+                style = {"full": "green", "partial": "yellow", "none": "red"}.get(eff, "dim")
+                prot_table.add_row(eff.upper(), str(count), style=style)
+            console.print(prot_table)
+
         # Detailed results
-        details_table = Table(title="Finding Challenges")
+        details_table = Table(title="Finding Details")
         details_table.add_column("ID", style="cyan", max_width=20)
         details_table.add_column("Result")
         details_table.add_column("Severity Change")
+        details_table.add_column("Protection")
         details_table.add_column("Confidence")
 
         for report in self.challenge_reports:
@@ -394,14 +607,15 @@ RECOMMENDATION: [What should be done with this finding?]
 
             sev_change = ""
             if report.adjusted_severity:
-                sev_change = f"{report.original_severity.value} → {report.adjusted_severity.value}"
+                sev_change = f"{report.original_severity.value} -> {report.adjusted_severity.value}"
 
-            conf_change = f"{report.original_confidence:.0%} → {report.adjusted_confidence:.0%}"
+            conf_change = f"{report.original_confidence:.0%} -> {report.adjusted_confidence:.0%}"
 
             details_table.add_row(
                 report.finding_id[:20],
                 f"[{result_style}]{report.result.value.upper()}[/{result_style}]",
                 sev_change,
+                report.protection_effectiveness,
                 conf_change,
             )
 

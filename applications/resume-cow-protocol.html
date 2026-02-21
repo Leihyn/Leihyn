@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin: 0.8cm 1.5cm;
+  }
+  body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 8.5pt;
+    line-height: 1.35;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 16pt;
+    margin: 0 0 1px 0;
+    color: #111;
+  }
+  h1 + p {
+    margin-top: 0;
+    color: #444;
+    font-size: 9pt;
+  }
+  h2 {
+    font-size: 10pt;
+    color: #111;
+    border-bottom: 1.5px solid #ccc;
+    padding-bottom: 1px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+  h3 {
+    font-size: 9pt;
+    color: #222;
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 5px 0;
+  }
+  p {
+    margin: 2px 0;
+  }
+  strong {
+    color: #111;
+  }
+  code {
+    background: #f0f0f0;
+    padding: 0px 4px;
+    border-radius: 3px;
+    font-size: 7.5pt;
+    color: #333;
+  }
+  ul {
+    padding-left: 16px;
+    margin: 2px 0;
+  }
+  li {
+    margin: 1px 0;
+  }
+  a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  em {
+    color: #555;
+  }
+  .contact {
+    font-size: 8pt;
+    color: #444;
+    margin: 1px 0;
+  }
+  .project-meta {
+    color: #555;
+    font-size: 8pt;
+    font-style: italic;
+    margin: 1px 0;
+  }
+  .tags {
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+<h1>Onatola Timilehin Faruq</h1>
+<p><strong>Smart Contract Engineer | DeFi Protocol Integration | Security Tooling</strong></p>
+<p class="contact">onatolafaruq@gmail.com | <a href="https://github.com/Leihyn">github.com/Leihyn</a> | <a href="https://faruukku.vercel.app">faruukku.vercel.app</a> | <a href="https://linkedin.com/in/leihyn">linkedin.com/in/leihyn</a></p>
+<hr />
+
+<h2>Summary</h2>
+<p>Solidity engineer with production experience integrating Aave v3, Uniswap v3/v4, Curve, and GMX. Built Sentinel, an automated smart contract auditing framework with Slither/Mythril integration, flash loan and oracle manipulation detection, and Foundry PoC generation. Strong Foundry testing practices (95%+ coverage), gas optimization (35% cost reduction), and security review track record (15+ contracts). Python proficiency, intermediate Rust, fully remote and async-first.</p>
+<hr />
+
+<h2>Technical Expertise</h2>
+<p><strong>Smart Contracts:</strong> Solidity (Advanced) | Foundry (Forge, fuzz testing, fork testing, invariant testing) | Hardhat</p>
+<p><strong>DeFi Protocols:</strong> Aave v3 | Uniswap v3/v4 | Curve v1/v2 | GMX | Chainlink (Data Feeds, VRF, Automation, CCIP)</p>
+<p><strong>Security:</strong> Slither | Mythril | Semgrep | Flash Loan Analysis | Oracle Manipulation Detection | MEV Awareness | Audit Tooling</p>
+<p><strong>Languages:</strong> Solidity | Python | TypeScript | Rust (Intermediate, Anchor/Solana) | JavaScript</p>
+<p><strong>Monitoring &amp; Analysis:</strong> Tenderly | Dune Analytics | The Graph (Subgraphs)</p>
+<p><strong>Infrastructure:</strong> GitHub Actions CI/CD | Docker | PostgreSQL | Redis</p>
+<p><strong>Chains:</strong> Ethereum | Base | Arbitrum | Optimism | BNB Chain | Solana | Hedera</p>
+<hr />
+
+<h2>Professional Experience</h2>
+<h3>Blockchain Engineer | DeFiConnectCredit | Jan 2025 - Present</h3>
+<ul>
+<li>Architected modular smart contract systems integrating <strong>Aave v3, Uniswap v3/v4, Curve, and GMX</strong> in production</li>
+<li>Established Foundry testing framework with <strong>95%+ code coverage</strong> including fuzz testing and fork testing against mainnet state</li>
+<li>Identified and resolved <strong>3 critical vulnerabilities</strong> pre-deployment through systematic security review (oracle manipulation, reentrancy)</li>
+<li>Reduced transaction costs by <strong>35%</strong> through assembly optimization and storage pattern improvements</li>
+<li>Built deployment automation suite with verification checks, cutting deployment time from 2 hours to 15 minutes</li>
+</ul>
+
+<h3>Blockchain Engineer (Intern) | DeFiConnectCredit | Jun 2024 - Dec 2024</h3>
+<ul>
+<li>Conducted security reviews on <strong>15+ contracts</strong> pre-deployment, identifying reentrancy, front-running, and oracle manipulation vulnerabilities</li>
+<li>Developed test suites with <strong>90%+ coverage</strong> including edge case testing, invariant testing, and stress testing</li>
+<li>Contributed to collateral management and liquidation mechanism implementation for core lending protocol</li>
+<li>Built ERC721 incentive system with Merkle tree proofs for 500+ users</li>
+</ul>
+<hr />
+
+<h2>Security &amp; Protocol Tooling</h2>
+<h3><a href="https://github.com/Leihyn/sentinel">Sentinel</a> — Automated Smart Contract Auditing Framework</h3>
+<p class="project-meta">Multi-agent security auditor for competitive audits (Sherlock, Code4rena, Cantina). Written in Python.</p>
+<ul>
+<li>Architected multi-agent pipeline: reconnaissance, static analysis (Slither/Mythril), LLM-powered deep analysis, PoC generation</li>
+<li>Built specialized vulnerability hunters for <strong>flash loan attacks, oracle manipulation</strong>, reentrancy (classic, cross-function, cross-contract, read-only), and access control</li>
+<li>Implemented automated <strong>Foundry-based PoC generation</strong> with mainnet fork testing and validation</li>
+<li>Supports 4 languages: Solidity, Rust/Solana, Move (Aptos/Sui), Cairo/StarkNet</li>
+<li>Integrated Semgrep rules for static pattern matching with cost-aware budget allocation</li>
+</ul>
+<p class="tags"><code>Python</code> <code>Slither</code> <code>Mythril</code> <code>Foundry</code> <code>Semgrep</code></p>
+<hr />
+
+<h2>DeFi Projects</h2>
+<h3><a href="https://github.com/Leihyn/Sentiment">Sentiment</a> — Uniswap v4 Dynamic Fee Hook</h3>
+<p class="project-meta">UHI7 Incubator Capstone | Protocol-level hook integrating on-chain and off-chain infrastructure</p>
+<ul>
+<li>Designed counter-cyclical fee algorithm (0.25%-0.44%) responding to real-time market conditions from 8 off-chain sources</li>
+<li>Built multi-keeper architecture using <strong>Chainlink Automation + Gelato</strong> for redundancy and failover</li>
+<li>Achieved <strong>&lt;30k gas overhead</strong> per swap through optimization</li>
+<li>Graduated from Uniswap Hook Incubator (15% acceptance rate, Uniswap Labs collaboration)</li>
+</ul>
+<p class="tags"><code>Solidity</code> <code>Foundry</code> <code>Chainlink</code> <code>Uniswap v4</code></p>
+
+<h3><a href="https://truthbounty.xyz">TruthBounty</a> — Prediction Market Reputation Protocol</h3>
+<p class="project-meta">2nd Place, Seedify Hackathon | BNB Chain | Oracle-integrated reputation system across 13 markets</p>
+<ul>
+<li>Architected data verification pipeline across Polymarket, Azuro, Thales, PancakeSwap Prediction, and 9 others</li>
+<li>Designed soulbound NFT credentials with on-chain SVG generation</li>
+<li>Built custom subgraphs for cross-chain data indexing</li>
+</ul>
+<p class="tags"><code>Solidity</code> <code>The Graph</code> <code>BNB Chain</code> <code>Soulbound NFTs</code></p>
+
+<h3><a href="https://github.com/Leihyn/nocturne">Nocturne</a> — Private Payments on Solana</h3>
+<p class="project-meta">Rust/Anchor with Noir/UltraHonk ZK proofs and TEE relay</p>
+<ul>
+<li>Built in <strong>Rust/Anchor</strong> with zero-knowledge proof circuits for withdrawal verification</li>
+<li>Implemented stealth addresses (DKSAP), Merkle commitment pools, TEE relay</li>
+<li>Achieved <strong>97% unlinkability score</strong> through systematic privacy testing</li>
+</ul>
+<p class="tags"><code>Rust</code> <code>Anchor</code> <code>Noir</code> <code>Zero-Knowledge</code></p>
+
+<h3><a href="https://github.com/Leihyn/omniswap-sdk">OmniSwap SDK</a> — Cross-Chain Swap SDK</h3>
+<p class="project-meta">Production-grade TypeScript SDK with 70KB+ documentation</p>
+<ul>
+<li>Architected chain-specific adapter pattern across 6 blockchains with HTLC-based atomic swap protocol</li>
+<li>Built typed error system, exponential backoff retry logic, and automated refund management</li>
+</ul>
+<p class="tags"><code>TypeScript</code> <code>Multi-Chain</code> <code>SDK Design</code></p>
+<hr />
+
+<h2>Certifications &amp; Training</h2>
+<ul>
+<li><strong>Uniswap Hook Incubator (UHI7)</strong> — Graduate (15% acceptance rate)</li>
+<li><strong>Cyfrin Updraft</strong> — DeFi Security &amp; Protocol Engineering (Aave v3, Uniswap, GMX, Curve, Auditing)</li>
+<li><strong>School of Solana</strong> — Ackee Blockchain (Rust/Anchor Development)</li>
+<li><strong>Hashgraph Developer Certification</strong> — The Hashgraph Association</li>
+</ul>
+<hr />
+
+<h2>Education</h2>
+<p><strong>BSc Physiotherapy</strong> | University of Ibadan, College of Medicine | 2024</p>
+<hr />
+<p><em>Portfolio: <a href="https://faruukku.vercel.app">faruukku.vercel.app</a> | GitHub: <a href="https://github.com/Leihyn">github.com/Leihyn</a> | References available upon request</em></p>
+</body>
+</html>

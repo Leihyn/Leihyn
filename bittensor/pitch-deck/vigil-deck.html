@@ -11,23 +11,58 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #0a1628;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a1628;
             color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .deck {
+            transform-origin: top left;
         }
 
         .slide {
             width: 1920px;
             height: 1080px;
             padding: 80px;
-            display: flex;
+            display: none;
             flex-direction: column;
             justify-content: center;
             background: linear-gradient(135deg, #0a1628 0%, #0d1f3c 100%);
-            page-break-after: always;
             position: relative;
             overflow: hidden;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .nav-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.4);
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255,255,255,0.4);
+            font-size: 14px;
+            z-index: 1000;
         }
 
         .slide::before {
@@ -371,15 +406,24 @@
         }
 
         @media print {
+            .deck {
+                transform: none !important;
+            }
             .slide {
+                display: flex !important;
                 page-break-after: always;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+            }
+            .nav-hint, .slide-counter {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
+
+<div class="deck">
 
 <!-- SLIDE 1: Title -->
 <div class="slide">
@@ -745,11 +789,69 @@
     </ul>
 
     <div class="contact center" style="margin-top: 30px;">
-        <p style="font-size: 24px;">[Your Name]</p>
-        <p style="font-size: 22px;">@[TwitterHandle]</p>
+        <p style="font-size: 24px;">Faruukku</p>
+        <p style="font-size: 22px;">@faruukku</p>
     </div>
     <div class="slide-number">11</div>
 </div>
+
+</div><!-- end .deck -->
+
+<div class="nav-hint">Use arrow keys or click to navigate</div>
+<div class="slide-counter"><span id="current">1</span> / <span id="total">11</span></div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const deck = document.querySelector('.deck');
+    const currentSpan = document.getElementById('current');
+    const totalSpan = document.getElementById('total');
+    let currentSlide = 0;
+
+    totalSpan.textContent = slides.length;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        currentSpan.textContent = index + 1;
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function scaleDeck() {
+        const scaleX = window.innerWidth / 1920;
+        const scaleY = window.innerHeight / 1080;
+        const scale = Math.min(scaleX, scaleY);
+        deck.style.transform = `scale(${scale})`;
+        deck.style.marginLeft = `${(window.innerWidth - 1920 * scale) / 2}px`;
+        deck.style.marginTop = `${(window.innerHeight - 1080 * scale) / 2}px`;
+    }
+
+    // Initialize
+    showSlide(0);
+    scaleDeck();
+
+    // Event listeners
+    window.addEventListener('resize', scaleDeck);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.clientX > window.innerWidth / 2) nextSlide();
+        else prevSlide();
+    });
+</script>
 
 </body>
 </html>

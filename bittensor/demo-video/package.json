@@ -1,0 +1,22 @@
+{
+  "name": "vigil-demo-video",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion render VigilPitch out/vigil-pitch.mp4",
+    "voiceover": "node scripts/generate-voiceover.mjs",
+    "check-durations": "node scripts/check-durations.mjs",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "@remotion/google-fonts": "^4.0.0",
+    "@remotion/transitions": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.0",
+    "typescript": "^5.0.0",
+    "@types/react": "^18.2.0"
+  }
+}

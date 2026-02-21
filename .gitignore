@@ -1,3 +1,9 @@
 tmpclaude-*
 IMPORTANT.md
 knowledge/
+.DS_Store
+.claude/
+port-protocol/
+node_modules/
+.next/
+applications/kaspathon/

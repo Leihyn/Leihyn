@@ -239,6 +239,50 @@ class Orchestrator:
         self.state.dependency_graph = graph
         self.log(f"Dependency graph: {len(graph.nodes)} contracts, {len(graph.edges)} edges, {len(graph.critical_flows)} critical flows")
 
+    async def run_phase_test_plan(self) -> None:
+        """Phase 2.6: Test Plan - generate testing-diagram.md and test-setup.md."""
+        self.log("Phase 2.6: Test Plan Generation", style="bold magenta")
+
+        if not self.state.contracts:
+            self.log("No contracts to generate test plan for")
+            return
+
+        try:
+            from .test_plan import TestPlanAgent
+
+            agent = TestPlanAgent(
+                state=self.state,
+                llm_client=self.llm,
+                verbose=self.verbose,
+            )
+
+            diagram_md, setup_md = await agent.run()
+
+            # Write output files
+            if diagram_md:
+                diagram_path = self.target_path / "testing-diagram.md"
+                try:
+                    diagram_path.write_text(diagram_md)
+                    self.log(f"Testing diagram saved: {diagram_path}", style="bold green")
+                except OSError:
+                    fallback = Path.cwd() / f"testing-diagram-{self.state.target_name}.md"
+                    fallback.write_text(diagram_md)
+                    self.log(f"Testing diagram saved (fallback): {fallback}", style="bold yellow")
+
+            if setup_md:
+                setup_path = self.target_path / "test-setup.md"
+                try:
+                    setup_path.write_text(setup_md)
+                    self.log(f"Test setup saved: {setup_path}", style="bold green")
+                except OSError:
+                    fallback = Path.cwd() / f"test-setup-{self.state.target_name}.md"
+                    fallback.write_text(setup_md)
+                    self.log(f"Test setup saved (fallback): {fallback}", style="bold yellow")
+
+        except Exception as e:
+            self.log(f"Test plan generation failed: {e}", style="red")
+            self.log("Continuing without test plan")
+
     async def run_phase_deep_analysis(self) -> None:
         """Phase 3: Deep Analysis with specialized hunters via HunterSwarm."""
         self.log("Phase 3: Deep Analysis (Vulnerability Hunting)", style="bold magenta")
@@ -1252,6 +1296,13 @@ class Orchestrator:
                 await self.run_phase_recon()
                 self._print_cost_status("Recon")
 
+                # Generate vulnerability cheatsheet (zero API cost — pure YAML parsing)
+                from ..knowledge.vulnerability_registry import VulnerabilityRegistry
+                registry = VulnerabilityRegistry.get_instance()
+                self.state.vulnerability_cheatsheet = registry.generate_cheatsheet(
+                    language=self.language.value, depth=self.depth,
+                )
+
                 # Phase 2: Static Analysis
                 await self.run_phase_static_analysis()
 
@@ -1259,6 +1310,10 @@ class Orchestrator:
                 if self.depth in ("standard", "deep"):
                     await self.run_phase_cross_contract_analysis()
                 self._print_cost_status("Static + Cross-Contract")
+
+                # Phase 2.6: Test Plan (~$0.10 — 2 LLM calls + free static analysis)
+                await self.run_phase_test_plan()
+                self._print_cost_status("Test Plan")
 
                 # Phase 2.75: Protocol Intent (standard+)
                 if self.depth in ("standard", "deep"):

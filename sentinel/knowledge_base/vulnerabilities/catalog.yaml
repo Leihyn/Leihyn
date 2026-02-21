@@ -382,46 +382,66 @@ frontrunning:
   sandwich_attack:
     id: "MEV-01"
     name: "Sandwich Attack"
-    severity: "Medium"
-    description: "No slippage protection on swaps"
+    severity: "Medium/High"
+    description: "Front-run + back-run around victim swap to extract spread"
     languages: ["solidity"]
-    pattern: "swap() without minAmountOut"
+    pattern: "swap() without minAmountOut, protocol-owned swaps with hardcoded slippage"
 
   front_running_initialization:
     id: "MEV-02"
     name: "Front-Running Initialization"
     severity: "High"
-    description: "Attacker front-runs initialize()"
-    languages: ["solidity", "cairo"]
+    description: "Attacker front-runs initialize() to claim ownership"
+    languages: ["solidity", "rust", "move", "cairo"]
+    pattern: "initialize() callable by anyone, deploy and init in separate txs"
+
+  erc20_approval_race:
+    id: "MEV-03"
+    name: "ERC20 Approval Front-Running"
+    severity: "Medium"
+    description: "approve() race condition allows double-spend of allowance"
+    languages: ["solidity"]
+    pattern: "approve(spender, newAmount) without reset to 0"
+
+  commit_reveal_bypass:
+    id: "MEV-04"
+    name: "Commit-Reveal Bypass"
+    severity: "High"
+    description: "Flawed commit-reveal with brute-forceable commitment space or missing salt"
+    languages: ["solidity"]
+    pattern: "keccak256(abi.encodePacked(value)) without salt, small input space"
 
   back_running_arbitrage:
-    id: "MEV-03"
-    name: "Back-Running Arbitrage"
-    severity: "Low"
-    description: "Protocol leaks arbitrage opportunity"
+    id: "MEV-05"
+    name: "Back-Running / Arbitrage Leakage"
+    severity: "Low/Medium"
+    description: "Protocol operations create price dislocations captured by searchers"
     languages: ["solidity"]
-
-  time_bandit_attack:
-    id: "MEV-04"
-    name: "Time Bandit Attack"
-    severity: "Low"
-    description: "Miners reorg to capture value"
-    languages: ["solidity"]
+    pattern: "Large swaps, rebalances, liquidations leaking arbitrage"
 
   just_in_time_liquidity:
-    id: "MEV-05"
+    id: "MEV-06"
     name: "JIT Liquidity Attack"
     severity: "Low"
-    description: "LP adds/removes around large trades"
+    description: "LP adds/removes concentrated liquidity around large trades for fee capture"
     languages: ["solidity"]
+    pattern: "Concentrated liquidity positions mintable and burnable in same block"
 
-  missing_deadline:
-    id: "MEV-06"
-    name: "Missing Transaction Deadline"
+  transaction_ordering_dependence:
+    id: "MEV-07"
+    name: "Transaction Ordering Dependence"
     severity: "Medium"
-    description: "Transaction valid indefinitely"
+    description: "First-come-first-served operations exploitable via gas auctions"
+    languages: ["solidity", "rust", "cairo"]
+    pattern: "claim(), mint() with cap, auctions without commit-reveal"
+
+  permit_front_running:
+    id: "MEV-08"
+    name: "Permit Front-Running (Griefing)"
+    severity: "Medium"
+    description: "ERC-2612 permit() extracted from mempool and replayed, griefing the original tx"
     languages: ["solidity"]
-    pattern: "No deadline parameter on swaps"
+    pattern: "permit() then transferFrom() without try/catch"
 
 # ==============================================================================
 # CATEGORY 8: DENIAL OF SERVICE

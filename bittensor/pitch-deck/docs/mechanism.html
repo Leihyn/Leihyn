@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigil - Mechanism Design</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a1628;
+            color: #ffffff;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        nav {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(201, 169, 98, 0.2);
+            position: sticky;
+            top: 0;
+            background: #0a1628;
+            z-index: 100;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+
+        .logo span {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c9a962, #e8d5a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #a0a8b8;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #c9a962;
+        }
+
+        .content {
+            padding: 60px 0;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb a {
+            color: #c9a962;
+            text-decoration: none;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #a0a8b8;
+            margin-bottom: 48px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 48px;
+            margin-bottom: 20px;
+            color: #c9a962;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #c0c8d8;
+            margin-bottom: 16px;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        li {
+            font-size: 16px;
+            color: #c0c8d8;
+            margin-bottom: 8px;
+        }
+
+        code {
+            background: rgba(201, 169, 98, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #e8d5a3;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .highlight-box {
+            background: rgba(201, 169, 98, 0.1);
+            border-left: 4px solid #c9a962;
+            padding: 20px 24px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            color: #e8d5a3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            font-weight: 600;
+            color: #c9a962;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 15px;
+            color: #a0a8b8;
+        }
+
+        .doc-nav {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .doc-nav a {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .doc-nav a:hover {
+            border-color: rgba(201, 169, 98, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .doc-nav .label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .doc-nav .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        footer p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #c9a962;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; }
+            h2 { font-size: 24px; }
+            .nav-links { display: none; }
+            .doc-nav { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="../" class="logo">
+            <img src="../assets/vigil-logo.jpg" alt="Vigil">
+            <span>VIGIL</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="./">Overview</a></li>
+            <li><a href="mechanism.html" class="active">Mechanism</a></li>
+            <li><a href="miner.html">Miner Guide</a></li>
+            <li><a href="validator.html">Validator Guide</a></li>
+            <li><a href="../deck/">Pitch Deck</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="content">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../">Home</a> / <a href="./">Docs</a> / Mechanism Design
+        </div>
+
+        <h1>Mechanism Design</h1>
+        <p class="subtitle">Scoring, emissions, and anti-gaming measures</p>
+
+        <h2>Epoch Flow</h2>
+
+        <pre><code>EVERY EPOCH (1 hour):
+
+1. T=0:00   Validators snapshot at-risk positions (1.0 < HF < 1.5)
+2. T=0:00   Miners receive position list
+3. T=0:10   Prediction window closes (commit-reveal complete)
+4. T=0:10   Observation window STARTS
+5. T=6:10   Observation window ends (6 hours after predictions locked)
+6. T=6:10   Validators match predictions to actual liquidations
+7.          Miners scored on accuracy (rolling 24-hour aggregation)
+8.          TAO distributed to top performers</code></pre>
+
+        <div class="highlight-box">
+            <p><strong>Key timing detail:</strong> Observation window starts AFTER prediction window closes. Liquidations during the 10-minute prediction window are excluded from scoring. This ensures miners always have time to analyze before being judged.</p>
+        </div>
+
+        <h2>Emission Split</h2>
+
+        <p>TAO emissions flow from the Bittensor network (similar to Bitcoin mining rewards) and are split:</p>
+
+        <table>
+            <tr>
+                <th>Recipient</th>
+                <th>Share</th>
+            </tr>
+            <tr>
+                <td>Miners</td>
+                <td>41%</td>
+            </tr>
+            <tr>
+                <td>Validators</td>
+                <td>41%</td>
+            </tr>
+            <tr>
+                <td>Subnet Creator</td>
+                <td>18%</td>
+            </tr>
+        </table>
+
+        <h2>Scoring Formula</h2>
+
+        <p>Miners are scored on four dimensions:</p>
+
+        <table>
+            <tr>
+                <th>Dimension</th>
+                <th>Weight</th>
+                <th>What It Measures</th>
+            </tr>
+            <tr>
+                <td>Precision</td>
+                <td>40%</td>
+                <td>Of predictions made, how many were correct?</td>
+            </tr>
+            <tr>
+                <td>Recall</td>
+                <td>30%</td>
+                <td>Of liquidations that happened, how many did you predict?</td>
+            </tr>
+            <tr>
+                <td>Lead Time</td>
+                <td>20%</td>
+                <td>How early was the prediction? (requires 50%+ precision)</td>
+            </tr>
+            <tr>
+                <td>Calibration</td>
+                <td>10%</td>
+                <td>Does stated confidence match actual accuracy?</td>
+            </tr>
+        </table>
+
+        <h3>Why These Weights</h3>
+
+        <ul>
+            <li><strong>Precision (40%):</strong> Prevents "predict everything" gaming</li>
+            <li><strong>Recall (30%):</strong> Rewards catching actual liquidations</li>
+            <li><strong>Lead Time (20%):</strong> Earlier predictions are more valuable to users</li>
+            <li><strong>Calibration (10%):</strong> Lower weight due to measurement noise</li>
+        </ul>
+
+        <h3>Final Score Calculation</h3>
+
+        <pre><code>base_score = (precision x 0.40) + (recall x 0.30)
+
+IF precision >= 0.50:
+    lead_time_bonus = min(avg_lead_time_hours / 6, 2.0)
+ELSE:
+    lead_time_bonus = 1.0  # No bonus for low-precision miners
+
+calibration_score = 1 - brier_score_binned  # 3-bin system
+
+final_score = base_score + (lead_time_bonus x 0.20) + (calibration_score x 0.10)</code></pre>
+
+        <p><strong>Lead time bonus requires 50%+ precision.</strong> This prevents gaming where miners make wild early guesses hoping for the lead time multiplier.</p>
+
+        <h2>Danger Zone Partial Credit</h2>
+
+        <p>A miner predicts liquidation, but the borrower adds collateral and saves the position. This seems like a false positive, but the prediction was reasonable.</p>
+
+        <p><strong>Solution:</strong> Partial credit for positions that entered the "danger zone."</p>
+
+        <pre><code>OUTCOME CLASSIFICATION:
+
+1. TRUE POSITIVE (full credit: 1.0)
+   - Predicted liquidation
+   - Position was liquidated
+
+2. DANGER ZONE HIT (partial credit: 0.5)
+   - Predicted liquidation
+   - Position hit HF < 1.02 but was rescued
+   - Prediction was reasonable, borrower intervened
+
+3. FALSE POSITIVE (no credit: 0.0)
+   - Predicted liquidation
+   - Position never approached danger (HF stayed > 1.1)
+
+4. FALSE NEGATIVE (penalty: -0.5)
+   - Did not predict
+   - Position was liquidated</code></pre>
+
+        <h2>Rolling 24-Hour Aggregation</h2>
+
+        <p><strong>Problem:</strong> With only 5-10 liquidations per day, scoring per epoch is statistically noisy.</p>
+
+        <p><strong>Solution:</strong> Aggregate scores over a rolling 24-hour window.</p>
+
+        <pre><code>miner_score = aggregate(
+    epochs[-24:],  # Last 24 epochs (24 hours)
+    weights=time_decay  # Recent epochs weighted slightly higher
+)</code></pre>
+
+        <p>This provides 50-200+ data points for scoring, making results statistically meaningful.</p>
+
+        <h2>Calibration: 3-Bin System</h2>
+
+        <p><strong>Problem:</strong> Measuring "70% confidence = 70% accuracy" requires many predictions at exactly 70% confidence. Not realistic.</p>
+
+        <p><strong>Solution:</strong> Group confidence into 3 bins.</p>
+
+        <table>
+            <tr>
+                <th>Bin</th>
+                <th>Confidence Range</th>
+                <th>Expected Behavior</th>
+            </tr>
+            <tr>
+                <td>Low</td>
+                <td>0-40%</td>
+                <td>Should be wrong more than right</td>
+            </tr>
+            <tr>
+                <td>Medium</td>
+                <td>40-70%</td>
+                <td>Should be right roughly half the time</td>
+            </tr>
+            <tr>
+                <td>High</td>
+                <td>70-100%</td>
+                <td>Should be right most of the time</td>
+            </tr>
+        </table>
+
+        <p>Calibration score measures whether each bin performs as expected, aggregated over 7 days.</p>
+
+        <h2>Anti-Gaming Measures</h2>
+
+        <table>
+            <tr>
+                <th>Attack</th>
+                <th>Defense</th>
+            </tr>
+            <tr>
+                <td>Predict everything</td>
+                <td>Precision penalty (40% weight)</td>
+            </tr>
+            <tr>
+                <td>Predict nothing</td>
+                <td>Recall penalty (30% weight)</td>
+            </tr>
+            <tr>
+                <td>Wild early guesses</td>
+                <td>Lead time bonus requires 50%+ precision</td>
+            </tr>
+            <tr>
+                <td>Copy other miners</td>
+                <td>Commit-reveal mechanism</td>
+            </tr>
+            <tr>
+                <td>Predict only obvious (HF near 1.0)</td>
+                <td>Minimum 1-hour lead time required</td>
+            </tr>
+            <tr>
+                <td>Game confidence scores</td>
+                <td>3-bin system with 7-day rolling window</td>
+            </tr>
+        </table>
+
+        <div class="doc-nav">
+            <a href="./">
+                <div class="label">Previous</div>
+                <div class="title">Overview</div>
+            </a>
+            <a href="miner.html">
+                <div class="label">Next</div>
+                <div class="title">Miner Guide</div>
+            </a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>Vigil - Bittensor Subnet Ideathon 2026</p>
+        <p style="margin-top: 8px;">Built by <a href="https://twitter.com/faruukku" target="_blank">@faruukku</a></p>
+    </div>
+</footer>
+
+</body>
+</html>

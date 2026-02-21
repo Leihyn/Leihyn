@@ -1,0 +1,223 @@
+name: Oracle Manipulation
+id: ORACLE
+severity: Critical
+cwe: CWE-829
+
+description: |
+  Oracle manipulation vulnerabilities occur when price feeds or data oracles can be
+  influenced by attackers, leading to incorrect valuations, liquidations, or fund theft.
+  Common vectors include spot price manipulation via flash loans, stale price exploitation,
+  and TWAP window attacks.
+
+vulnerabilities:
+  - name: Spot Price Usage
+    id: ORACLE-001
+    severity: Critical
+    description: |
+      Using instantaneous prices from AMM pools (getReserves, balanceOf ratios) that
+      can be manipulated within a single transaction via flash loans.
+    detection_heuristics:
+      - "1. Search for getReserves() calls followed by price computation (reserve1/reserve0)"
+      - "2. Search for balanceOf() used in price or rate calculations"
+      - "3. Check if any oracle-free pricing uses pool state directly"
+      - "4. Verify no TWAP or external oracle is used as a sanity check"
+    patterns:
+      solidity:
+        - "getReserves()"
+        - "balanceOf(address(this))"
+        - "reserve1 * 1e18 / reserve0"
+      rust:
+        - "pool.token_a_amount * price / pool.token_b_amount"
+        - "get_amount_out"
+      move:
+        - "pool.reserve_a * pool.reserve_b"
+    examples:
+      solidity:
+        vulnerable: |
+          (uint112 reserve0, uint112 reserve1, ) = pair.getReserves();
+          uint256 price = reserve1 * 1e18 / reserve0;
+        fixed: |
+          uint256 price = oracle.consult(token, 1e18, TWAP_WINDOW);
+    false_positive_conditions:
+      - "Pool reserves used only for liquidity depth estimation, not pricing"
+      - "Spot price used as a secondary check alongside a TWAP or Chainlink oracle"
+      - "View-only function with no state-changing consequences"
+    impact:
+      - "Direct fund theft via flash loan price manipulation"
+      - "Incorrect collateral valuations leading to bad debt"
+
+  - name: Stale Price Data
+    id: ORACLE-002
+    severity: High
+    description: |
+      Not checking oracle freshness allows outdated prices to be used, which may
+      deviate significantly from market price during volatility.
+    detection_heuristics:
+      - "1. Find latestRoundData() calls and check if updatedAt is validated"
+      - "2. Check for answeredInRound >= roundId validation"
+      - "3. For Pyth: check for get_price_no_older_than or manual timestamp check"
+      - "4. For Pragma (Cairo): check last_updated_timestamp validation"
+    patterns:
+      solidity:
+        - "latestRoundData()"
+        - "(, int256 price, , , )"
+      rust:
+        - "Price::get_price"
+        - "AggregatorAccountData"
+      cairo:
+        - "get_data_median"
+        - "IPragmaABIDispatcher"
+    examples:
+      solidity:
+        vulnerable: |
+          (, int256 price, , , ) = priceFeed.latestRoundData();
+        fixed: |
+          (uint80 roundId, int256 price, , uint256 updatedAt, uint80 answeredInRound) =
+              priceFeed.latestRoundData();
+          require(updatedAt > block.timestamp - MAX_DELAY, "Stale price");
+          require(answeredInRound >= roundId, "Stale round");
+          require(price > 0, "Invalid price");
+    false_positive_conditions:
+      - "Oracle is a custom trusted feed updated by protocol-controlled keeper"
+      - "Staleness check exists but in a wrapper function not visible in the same file"
+    impact:
+      - "Liquidations at wrong prices during volatility"
+      - "Arbitrage opportunities using stale prices"
+
+  - name: Insufficient TWAP Window
+    id: ORACLE-003
+    severity: High
+    description: |
+      TWAP windows shorter than 10-30 minutes can be manipulated by multi-block
+      MEV or by sustaining price manipulation across a few blocks.
+    detection_heuristics:
+      - "1. Find TWAP window duration (seconds) in observe/consult calls"
+      - "2. Flag windows under 600 seconds (10 minutes) as HIGH risk"
+      - "3. Flag windows under 1800 seconds (30 minutes) as MEDIUM risk"
+      - "4. Check if the TWAP window is configurable and if there's a minimum"
+    patterns:
+      solidity:
+        - "observe("
+        - "consult("
+        - "twapWindow"
+        - "secondsAgo"
+    examples:
+      solidity:
+        vulnerable: |
+          uint32 twapWindow = 60; // Only 1 minute!
+          (int24 tick, ) = oracle.observe(twapWindow);
+        fixed: |
+          uint32 twapWindow = 1800; // 30 minutes
+          (int24 tick, ) = oracle.observe(twapWindow);
+    false_positive_conditions:
+      - "Short window used only for display/UI purposes, not for on-chain decisions"
+      - "Protocol also uses Chainlink as primary oracle, TWAP is secondary"
+
+  - name: Missing Circuit Breakers
+    id: ORACLE-004
+    severity: Medium
+    description: |
+      No protection against extreme price movements. Oracle returns a price that
+      deviates wildly from historical norms, and the protocol accepts it without
+      any sanity check.
+    detection_heuristics:
+      - "1. Check if oracle price is compared against any min/max bounds"
+      - "2. Look for deviation checks (e.g., |newPrice - lastPrice| < threshold)"
+      - "3. Verify there's a fallback oracle mechanism"
+    false_positive_conditions:
+      - "Protocol is designed for volatile assets where large price swings are expected"
+      - "Circuit breaker exists at the oracle layer (e.g., Chainlink deviation threshold)"
+
+  - name: Single Oracle Dependency
+    id: ORACLE-005
+    severity: Medium
+    description: |
+      Relying on a single oracle without any fallback. If the oracle goes down,
+      returns stale data, or is compromised, the protocol has no recourse.
+    detection_heuristics:
+      - "1. Count the number of distinct oracle sources used"
+      - "2. Check for try/catch or fallback logic around oracle calls"
+      - "3. Verify if there's a manual override mechanism for emergencies"
+    false_positive_conditions:
+      - "Protocol has a pause mechanism that stops price-dependent operations"
+      - "Oracle is Chainlink with multiple aggregators behind it"
+
+  - name: Decimal Handling Errors
+    id: ORACLE-006
+    severity: High
+    description: |
+      Incorrect price decimal normalization. Chainlink feeds use 8 decimals,
+      tokens use 6/8/18. Mixing these without proper scaling causes incorrect valuations.
+    detection_heuristics:
+      - "1. Check if Chainlink price is used with 1e18 instead of 1e8"
+      - "2. Look for hardcoded decimals without calling decimals()"
+      - "3. For Pyth: check if exponent (expo) is handled"
+      - "4. Verify cross-token calculations normalize decimals"
+    patterns:
+      solidity:
+        - "1e18"
+        - "1e8"
+        - "10**18"
+        - "decimals()"
+      rust:
+        - "expo"
+        - "exponent"
+    examples:
+      solidity:
+        vulnerable: |
+          // Chainlink returns 8 decimals, but code assumes 18
+          uint256 value = amount * uint256(price) / 1e18;
+        fixed: |
+          uint256 value = amount * uint256(price) / (10 ** priceFeed.decimals());
+    false_positive_conditions:
+      - "All tokens in the system use the same decimal count"
+      - "Decimal normalization happens in a utility library not visible in the file"
+
+oracle_types_by_ecosystem:
+  solidity:
+    - name: Chainlink
+      interface: "AggregatorV3Interface"
+      key_function: "latestRoundData()"
+      decimals: 8
+    - name: Uniswap V2/V3 TWAP
+      key_function: "observe() / consult()"
+    - name: Band Protocol
+      interface: "IStdReference"
+      key_function: "getReferenceData()"
+    - name: Custom oracles
+      notes: "DIY price feeds - highest risk"
+  rust:
+    - name: Pyth Network
+      notes: "Most common on Solana. Check confidence interval and exponent."
+    - name: Switchboard
+      notes: "Decentralized oracle network on Solana"
+  move:
+    - name: Pyth on Aptos/Sui
+      notes: "Native Pyth integration"
+    - name: Switchboard
+      notes: "Aptos/Sui support"
+  cairo:
+    - name: Pragma Oracle
+      notes: "Native StarkNet oracle"
+    - name: Chainlink via L1
+      notes: "Cross-layer oracle - check L1 message source validation"
+
+audit_checklist:
+  - "Can any price be manipulated in a single transaction?"
+  - "What's the cost to manipulate vs potential profit?"
+  - "Are there freshness checks on all oracle data?"
+  - "Is there a fallback oracle mechanism?"
+  - "How are price decimals handled across different tokens?"
+  - "Are TWAP windows long enough (>= 30 minutes)?"
+  - "Are there circuit breakers for extreme price movements?"
+
+historical_exploits:
+  - name: Harvest Finance
+    loss: "$34M"
+    description: "Flash loan manipulation of Curve pool price used for vault share calculation"
+  - name: Bonq/AllianceBlock
+    loss: "$120M"
+    description: "TellorFlex oracle manipulation - attacker submitted fake price data"
+  - name: Mango Markets
+    loss: "$116M"
+    description: "MNGO perp price manipulation via thin liquidity, inflated collateral value"

@@ -321,6 +321,19 @@ class ArchitectureAnalysis:
 
 
 @dataclass
+class ProtocolIntent:
+    """What the protocol is designed to do — used to distinguish bugs from features."""
+    protocol_type: str = ""                                  # "DEX", "Lending", "Governance", "Staking", etc.
+    core_invariants: list[str] = field(default_factory=list)  # "total_deposits >= total_shares * price_per_share"
+    fund_flows: list[str] = field(default_factory=list)       # "Users deposit TOKEN_A -> mint shares -> earn yield"
+    trust_model: dict[str, list[str]] = field(default_factory=dict)  # {"owner": ["upgrade", "pause"], "anyone": ["deposit"]}
+    intentional_restrictions: list[str] = field(default_factory=list) # "buOLAS transfers are intentionally disabled"
+    critical_state_transitions: list[str] = field(default_factory=list) # "Service state: ACTIVE -> TERMINATED requires multisig"
+    admin_capabilities: list[str] = field(default_factory=list)   # "Owner can change slippage params, implementation, managers"
+    external_dependencies: list[str] = field(default_factory=list) # "Price depends on Chainlink ETH/USD feed"
+
+
+@dataclass
 class SlitherResult:
     """Parsed Slither analysis result."""
     detector: str
@@ -358,6 +371,12 @@ class AuditState:
 
     # Cross-contract analysis
     dependency_graph: Optional["ContractDependencyGraph"] = None
+
+    # Protocol intent (design understanding)
+    protocol_intent: Optional[ProtocolIntent] = None
+
+    # Vulnerability cheatsheet (Tier 1 knowledge for hunters)
+    vulnerability_cheatsheet: str = ""
 
     # Documentation (if provided)
     documentation: Optional[str] = None

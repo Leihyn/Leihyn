@@ -246,6 +246,255 @@ def recon(
 
 
 @app.command()
+def orient(
+    target: Path = typer.Argument(
+        ...,
+        help="Path to the smart contract project to analyze",
+        exists=True,
+    ),
+    docs: Optional[Path] = typer.Option(
+        None,
+        "--docs", "-d",
+        help="Path to documentation/specification file",
+    ),
+    model: str = typer.Option(
+        "claude-sonnet-4-20250514",
+        "--model", "-m",
+        help="Claude model to use",
+    ),
+    verbose: bool = typer.Option(
+        True,
+        "--verbose/--quiet", "-v/-q",
+        help="Enable verbose output",
+    ),
+):
+    """
+    Generate a day-1 orientation report for manual auditing.
+
+    Run this on day 1 of an audit to get:
+    - Contract map with inheritance and dependencies
+    - Trust boundary analysis
+    - Value flow diagram
+    - Attack surface ranking
+    - Invariant candidates
+    - Prioritized manual review checklist
+
+    This is the hybrid audit mode: Sentinel accelerates YOUR manual audit.
+
+    Example:
+        sentinel orient ./contracts
+        sentinel orient ./src --docs ./docs/spec.md
+    """
+    from .core.types import AuditState
+    from .agents.orchestrator import Orchestrator
+
+    console.print(Panel(
+        "[bold blue]Sentinel[/bold blue] - Orientation Mode (Hybrid Audit)\n\n"
+        f"Target: {target}\n"
+        f"Model: {model}",
+        expand=False,
+    ))
+
+    get_llm_client(model=model)
+
+    async def run():
+        # Run recon + static analysis to gather data
+        orchestrator = Orchestrator(
+            target_path=target,
+            docs_path=docs,
+            verbose=verbose,
+            depth="fast",  # Fast recon, no hunters
+        )
+
+        # Phase 1: Recon
+        await orchestrator.run_phase_recon()
+
+        # Phase 2: Static Analysis
+        await orchestrator.run_phase_static_analysis()
+
+        # Phase 2.5: Cross-Contract Analysis
+        await orchestrator.run_phase_cross_contract_analysis()
+
+        # Generate orientation report
+        from .agents.orientation_agent import OrientationAgent, OrientationConfig
+
+        config = OrientationConfig(
+            ultrathink=False,  # Save credits, use standard for orientation
+            include_invariants=True,
+            include_attack_surface=True,
+            include_value_flows=True,
+            include_trust_boundaries=True,
+        )
+
+        agent = OrientationAgent(
+            state=orchestrator.state,
+            config=config,
+            llm_client=orchestrator.llm,
+            verbose=verbose,
+        )
+
+        report = await agent.run()
+
+        llm = get_llm_client()
+        console.print(f"\n[bold green]Orientation complete![/bold green]")
+        console.print(f"API cost: ${llm.total_cost:.4f}")
+
+    try:
+        asyncio.run(run())
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Cancelled by user[/yellow]")
+        raise typer.Exit(1)
+    except Exception as e:
+        console.print(f"\n[bold red]Error:[/bold red] {e}")
+        raise typer.Exit(1)
+
+
+@app.command("test-plan")
+def test_plan(
+    target: Path = typer.Argument(
+        ...,
+        help="Path to the smart contract project to analyze",
+        exists=True,
+    ),
+    docs: Optional[Path] = typer.Option(
+        None,
+        "--docs", "-d",
+        help="Path to documentation/specification file",
+    ),
+    output: Optional[Path] = typer.Option(
+        None,
+        "--output", "-o",
+        help="Output directory for generated files (default: target directory)",
+    ),
+    model: str = typer.Option(
+        "claude-sonnet-4-20250514",
+        "--model", "-m",
+        help="Claude model to use",
+    ),
+    verbose: bool = typer.Option(
+        True,
+        "--verbose/--quiet", "-v/-q",
+        help="Enable verbose output",
+    ),
+    diagram_only: bool = typer.Option(
+        False,
+        "--diagram-only",
+        help="Only generate testing-diagram.md (skip setUp generation)",
+    ),
+    setup_only: bool = typer.Option(
+        False,
+        "--setup-only",
+        help="Only generate test-setup.md (skip diagram generation)",
+    ),
+):
+    """
+    Generate a complete testing reference for a protocol.
+
+    Outputs two standalone markdown files:
+    - testing-diagram.md: function tables, call graph, access control, value flows,
+      actors, state transitions
+    - test-setup.md: Foundry setUp(), deployment order, constructor args, cheatcodes
+
+    Static analysis is free. Two LLM calls (~$0.10 total) infer user flows and
+    generate the setUp() code.
+
+    Example:
+        sentinel test-plan ./contracts
+        sentinel test-plan ./src --docs ./docs/spec.md -o ./test-ref
+        sentinel test-plan ./contracts --diagram-only
+    """
+    from .core.types import AuditState
+    from .agents.orchestrator import Orchestrator
+
+    if diagram_only and setup_only:
+        console.print("[red]Cannot use --diagram-only and --setup-only together.[/red]")
+        raise typer.Exit(1)
+
+    console.print(Panel(
+        "[bold blue]Sentinel[/bold blue] - Test Plan Generator\n\n"
+        f"Target: {target}\n"
+        f"Model: {model}" +
+        ("\n[dim]Diagram only[/dim]" if diagram_only else "") +
+        ("\n[dim]Setup only[/dim]" if setup_only else ""),
+        expand=False,
+    ))
+
+    get_llm_client(model=model)
+
+    output_dir = output or target
+
+    async def run():
+        # Run recon to parse contracts
+        orchestrator = Orchestrator(
+            target_path=target,
+            docs_path=docs,
+            verbose=verbose,
+            depth="fast",
+        )
+
+        # Phase 1: Recon
+        await orchestrator.run_phase_recon()
+
+        if not orchestrator.state.contracts:
+            console.print("[yellow]No contracts found. Nothing to generate.[/yellow]")
+            return
+
+        # Phase 2.5: Cross-Contract Analysis
+        await orchestrator.run_phase_cross_contract_analysis()
+
+        # Generate test plan
+        from .agents.test_plan import TestPlanAgent
+
+        agent = TestPlanAgent(
+            state=orchestrator.state,
+            llm_client=orchestrator.llm,
+            verbose=verbose,
+        )
+
+        diagram_md, setup_md = await agent.run(
+            diagram_only=diagram_only,
+            setup_only=setup_only,
+        )
+
+        # Write output files
+        out = Path(output_dir)
+        out.mkdir(parents=True, exist_ok=True)
+
+        if diagram_md:
+            diagram_path = out / "testing-diagram.md"
+            try:
+                diagram_path.write_text(diagram_md)
+                console.print(f"[bold green]Saved:[/bold green] {diagram_path}")
+            except OSError:
+                fallback = Path.cwd() / f"testing-diagram-{orchestrator.state.target_name}.md"
+                fallback.write_text(diagram_md)
+                console.print(f"[bold yellow]Saved (fallback):[/bold yellow] {fallback}")
+
+        if setup_md:
+            setup_path = out / "test-setup.md"
+            try:
+                setup_path.write_text(setup_md)
+                console.print(f"[bold green]Saved:[/bold green] {setup_path}")
+            except OSError:
+                fallback = Path.cwd() / f"test-setup-{orchestrator.state.target_name}.md"
+                fallback.write_text(setup_md)
+                console.print(f"[bold yellow]Saved (fallback):[/bold yellow] {fallback}")
+
+        llm = get_llm_client()
+        console.print(f"\n[bold green]Test plan complete![/bold green]")
+        console.print(f"API cost: ${llm.total_cost:.4f}")
+
+    try:
+        asyncio.run(run())
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Cancelled by user[/yellow]")
+        raise typer.Exit(1)
+    except Exception as e:
+        console.print(f"\n[bold red]Error:[/bold red] {e}")
+        raise typer.Exit(1)
+
+
+@app.command()
 def version():
     """Show version information."""
     from . import __version__

@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vigil: Decentralized Liquidation Prediction - Subnet Proposal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+@page {
+    size: A4;
+    margin: 2.8cm 2cm 2.5cm 2cm;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11pt;
+    line-height: 1.65;
+    color: #1a1a2e;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 26pt;
+    font-weight: 800;
+    color: #0a1628;
+    border-bottom: 3px solid #c9a962;
+    padding-bottom: 12px;
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+h2 {
+    font-size: 17pt;
+    font-weight: 700;
+    color: #0d1f3c;
+    border-bottom: 2px solid #e8d5a3;
+    padding-bottom: 6px;
+    margin-top: 36px;
+    margin-bottom: 16px;
+    page-break-after: avoid;
+}
+
+h3 {
+    font-size: 12.5pt;
+    font-weight: 700;
+    color: #1a3a5c;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+strong {
+    color: #0a1628;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 28px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+}
+
+thead tr {
+    background: #0d1f3c;
+}
+
+th {
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 9.5pt;
+    color: #ffffff;
+}
+
+td {
+    padding: 7px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+}
+
+tr:nth-child(even) td {
+    background: #f8f8fa;
+}
+
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 9pt;
+    background: #f0f0f5;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #8b6914;
+}
+
+pre {
+    background: #0d1f3c;
+    color: #e8d5a3;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 8.5pt;
+    line-height: 1.5;
+    overflow-x: auto;
+    page-break-inside: avoid;
+    margin: 14px 0;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: #e8d5a3;
+    font-size: 8.5pt;
+}
+
+ul, ol {
+    margin-bottom: 10px;
+    padding-left: 22px;
+}
+
+li {
+    margin-bottom: 4px;
+}
+</style>
+</head>
+<body>
+<h1 id="vigil-decentralized-liquidation-prediction">Vigil: Decentralized Liquidation Prediction</h1>
+<h2 id="the-problem">The Problem</h2>
+<p>A user deposits $100,000 into Aave as collateral and borrows $70,000. Market drops 20% overnight. Their health factor crosses 1.0. They get liquidated.</p>
+<p>No warning. No alert. Just a 10% penalty: $7,000 gone.</p>
+<p>Meanwhile, a liquidator with a private prediction bot saw this coming 3 hours ago. They positioned themselves, executed the liquidation, and pocketed the bonus.</p>
+<p><strong>$2.4 billion</strong> was liquidated across DeFi in 2024. The borrowers who lost had no warning. The liquidators who won had proprietary prediction systems.</p>
+<p>This intelligence exists. It's just locked inside private bots.</p>
+<hr />
+<h2 id="the-solution">The Solution</h2>
+<p><strong>Vigil</strong> is a Bittensor subnet where miners compete to predict DeFi liquidations before they happen.</p>
+<ul>
+<li>Miners analyze on-chain positions and predict which will be liquidated</li>
+<li>Validators verify predictions against actual liquidation events</li>
+<li>Accurate predictions earn TAO</li>
+</ul>
+<p><strong>The result:</strong> Decentralized liquidation intelligence that anyone can access.</p>
+<hr />
+<h2 id="1-mechanism-design">1. Mechanism Design</h2>
+<h3 id="11-overview">1.1 Overview</h3>
+<pre><code>EVERY EPOCH (1 hour):
+
+1. T=0:00   Validators snapshot at-risk positions (1.0 &lt; HF &lt; 1.5)
+2. T=0:00   Miners receive position list
+3. T=0:10   Prediction window closes (commit-reveal complete)
+4. T=0:10   Observation window STARTS
+5. T=6:10   Observation window ends (6 hours after predictions locked)
+6. T=6:10   Validators match predictions to actual liquidations
+7.          Miners scored on accuracy (rolling 24-hour aggregation)
+8.          TAO distributed to top performers
+</code></pre>
+<p><strong>Key timing details:</strong>
+- Only positions with HF &gt; 1.0 are included (already-liquidatable positions are excluded)
+- Observation window starts AFTER prediction window closes
+- Liquidations during the 10-minute prediction window are excluded from scoring
+- This ensures miners always have time to analyze before being judged</p>
+<h3 id="12-emission-split">1.2 Emission Split</h3>
+<table>
+<thead>
+<tr>
+<th>Recipient</th>
+<th>Share</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Miners</td>
+<td>41%</td>
+</tr>
+<tr>
+<td>Validators</td>
+<td>41%</td>
+</tr>
+<tr>
+<td>Subnet Creator</td>
+<td>18%</td>
+</tr>
+</tbody>
+</table>
+<p>Standard Bittensor allocation.</p>
+<h3 id="13-scoring-formula">1.3 Scoring Formula</h3>
+<p>Miners are scored on four dimensions:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Weight</th>
+<th>What It Measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Precision</strong></td>
+<td>40%</td>
+<td>Of predictions made, how many were correct?</td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>30%</td>
+<td>Of liquidations that happened, how many did you predict?</td>
+</tr>
+<tr>
+<td><strong>Lead Time</strong></td>
+<td>20%</td>
+<td>How early was the prediction? (requires 50%+ precision to activate)</td>
+</tr>
+<tr>
+<td><strong>Calibration</strong></td>
+<td>10%</td>
+<td>Does stated confidence match actual accuracy? (3-bin system)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why these weights:</strong>
+- Precision (40%): Prevents "predict everything" gaming
+- Recall (30%): Rewards catching actual liquidations
+- Lead Time (20%): Earlier predictions are more valuable
+- Calibration (10%): Lower weight due to measurement noise</p>
+<p><strong>Final score (rolling 24-hour window):</strong></p>
+<pre><code>base_score = (precision × 0.40) + (recall × 0.30)
+
+IF precision &gt;= 0.50:
+    lead_time_bonus = min(avg_lead_time_hours / 6, 2.0)
+ELSE:
+    lead_time_bonus = 1.0  # No bonus for low-precision miners
+
+calibration_score = 1 - brier_score_binned  # 3-bin system
+
+final_score = base_score + (lead_time_bonus × 0.20) + (calibration_score × 0.10)
+</code></pre>
+<p><strong>Lead time bonus requires 50%+ precision.</strong> This prevents gaming where miners make wild early guesses hoping for the lead time multiplier.</p>
+<h3 id="14-danger-zone-partial-credit">1.4 Danger Zone Partial Credit</h3>
+<p><strong>Problem:</strong> A miner predicts liquidation, but the borrower adds collateral and saves the position. This seems like a false positive, but the prediction was reasonable.</p>
+<p><strong>Solution:</strong> Partial credit for positions that entered the "danger zone."</p>
+<pre><code>OUTCOME CLASSIFICATION:
+
+1. TRUE POSITIVE (full credit)
+   - Predicted liquidation
+   - Position was liquidated
+
+2. DANGER ZONE HIT (partial credit: 0.5)
+   - Predicted liquidation
+   - Position hit HF &lt; 1.02 but was rescued
+   - Prediction was reasonable, borrower intervened
+
+3. FALSE POSITIVE (no credit)
+   - Predicted liquidation
+   - Position never approached danger (HF stayed &gt; 1.1)
+
+4. FALSE NEGATIVE (penalty)
+   - Did not predict
+   - Position was liquidated
+</code></pre>
+<p>This provides more data points and fairer scoring, especially during low-volume periods.</p>
+<h3 id="15-rolling-24-hour-aggregation">1.5 Rolling 24-Hour Aggregation</h3>
+<p><strong>Problem:</strong> With only 5-10 liquidations per day, scoring per epoch is statistically noisy.</p>
+<p><strong>Solution:</strong> Aggregate scores over a rolling 24-hour window.</p>
+<pre><code>miner_score = aggregate(
+    epochs[-24:],  # Last 24 epochs (24 hours)
+    weights=time_decay  # Recent epochs weighted slightly higher
+)
+</code></pre>
+<p>This provides 50-200+ data points for scoring, making results statistically meaningful.</p>
+<h3 id="16-calibration-3-bin-system">1.6 Calibration: 3-Bin System</h3>
+<p><strong>Problem:</strong> Measuring "70% confidence = 70% accuracy" requires many predictions at exactly 70% confidence. Not realistic.</p>
+<p><strong>Solution:</strong> Group confidence into 3 bins.</p>
+<table>
+<thead>
+<tr>
+<th>Bin</th>
+<th>Confidence Range</th>
+<th>Expected Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Low</td>
+<td>0-40%</td>
+<td>Should be wrong more than right</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>40-70%</td>
+<td>Should be right roughly half the time</td>
+</tr>
+<tr>
+<td>High</td>
+<td>70-100%</td>
+<td>Should be right most of the time</td>
+</tr>
+</tbody>
+</table>
+<p>Calibration score measures whether each bin performs as expected, aggregated over 7 days.</p>
+<h3 id="17-anti-gaming-summary">1.7 Anti-Gaming Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Attack</th>
+<th>Defense</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Predict everything</td>
+<td>Precision penalty (40% weight)</td>
+</tr>
+<tr>
+<td>Predict nothing</td>
+<td>Recall penalty (30% weight)</td>
+</tr>
+<tr>
+<td>Wild early guesses</td>
+<td>Lead time bonus requires 50%+ precision</td>
+</tr>
+<tr>
+<td>Copy other miners</td>
+<td>Commit-reveal mechanism</td>
+</tr>
+<tr>
+<td>Predict only obvious (HF ≈ 1.0)</td>
+<td>Minimum 1-hour lead time required</td>
+</tr>
+<tr>
+<td>Game confidence scores</td>
+<td>3-bin system with 7-day rolling window</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-miner-design">2. Miner Design</h2>
+<h3 id="21-task">2.1 Task</h3>
+<p>Miners monitor DeFi lending positions and predict liquidations.</p>
+<p><strong>What miners do:</strong>
+1. Index positions from Aave V3
+2. Track health factors, collateral values, debt amounts
+3. Analyze market conditions and price trends
+4. Predict which positions will liquidate and when</p>
+<h3 id="22-what-makes-liquidation-prediction-hard">2.2 What Makes Liquidation Prediction Hard</h3>
+<p><strong>This isn't just price prediction.</strong> Miners must understand:</p>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Why It Matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Borrower behavior</strong></td>
+<td>Will they add collateral? Repay debt?</td>
+</tr>
+<tr>
+<td><strong>Cascading effects</strong></td>
+<td>One liquidation can trigger others</td>
+</tr>
+<tr>
+<td><strong>Liquidator dynamics</strong></td>
+<td>When gas is high, liquidators wait</td>
+</tr>
+<tr>
+<td><strong>Oracle delays</strong></td>
+<td>Chainlink heartbeat means price updates aren't instant</td>
+</tr>
+<tr>
+<td><strong>Protocol mechanics</strong></td>
+<td>Liquidation thresholds vary by asset and protocol</td>
+</tr>
+</tbody>
+</table>
+<p>A miner who only predicts price will underperform one who understands these factors.</p>
+<h3 id="23-input">2.3 Input</h3>
+<p>Validators provide position snapshots:</p>
+<pre><code class="language-json">{
+  &quot;epoch&quot;: &quot;2026-02-05T14:00:00Z&quot;,
+  &quot;positions&quot;: [
+    {
+      &quot;id&quot;: &quot;aave_v3_eth_0x1234&quot;,
+      &quot;protocol&quot;: &quot;aave_v3&quot;,
+      &quot;chain&quot;: &quot;ethereum&quot;,
+      &quot;user&quot;: &quot;0x1234...abcd&quot;,
+      &quot;health_factor&quot;: &quot;1.15&quot;,
+      &quot;collateral_usd&quot;: &quot;100000&quot;,
+      &quot;debt_usd&quot;: &quot;75000&quot;,
+      &quot;collateral_assets&quot;: [&quot;WETH&quot;],
+      &quot;debt_assets&quot;: [&quot;USDC&quot;]
+    }
+  ],
+  &quot;market_data&quot;: {
+    &quot;eth_price_usd&quot;: 2500,
+    &quot;eth_24h_change&quot;: -0.05,
+    &quot;gas_price_gwei&quot;: 30
+  }
+}
+</code></pre>
+<h3 id="24-output">2.4 Output</h3>
+<p>Miners submit predictions:</p>
+<pre><code class="language-json">{
+  &quot;miner_id&quot;: &quot;5F3sa...&quot;,
+  &quot;epoch&quot;: &quot;2026-02-05T14:00:00Z&quot;,
+  &quot;predictions&quot;: [
+    {
+      &quot;position_id&quot;: &quot;aave_v3_eth_0x1234&quot;,
+      &quot;will_liquidate&quot;: true,
+      &quot;time_window_hours&quot;: [2, 6],
+      &quot;confidence&quot;: 0.75
+    },
+    {
+      &quot;position_id&quot;: &quot;aave_v3_eth_0x5678&quot;,
+      &quot;will_liquidate&quot;: false,
+      &quot;confidence&quot;: 0.90
+    }
+  ],
+  &quot;commitment_hash&quot;: &quot;0xabc...&quot;
+}
+</code></pre>
+<h3 id="25-miner-edge">2.5 Miner Edge</h3>
+<p><strong>What separates good miners from bad:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Edge</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Better price models</td>
+<td>More accurate volatility forecasting</td>
+</tr>
+<tr>
+<td>Historical analysis</td>
+<td>Learning from past liquidation patterns</td>
+</tr>
+<tr>
+<td>Protocol expertise</td>
+<td>Understanding Aave-specific mechanics</td>
+</tr>
+<tr>
+<td>Real-time data</td>
+<td>Faster position monitoring</td>
+</tr>
+<tr>
+<td>Whale tracking</td>
+<td>Monitoring large wallet movements</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-validator-design">3. Validator Design</h2>
+<h3 id="31-task">3.1 Task</h3>
+<p>Validators verify miner predictions against on-chain reality.</p>
+<p><strong>What validators do:</strong>
+1. Snapshot positions at epoch start
+2. Collect and verify miner commitments
+3. Monitor for liquidation events
+4. Score miners based on outcomes
+5. Submit scores to Bittensor consensus</p>
+<h3 id="32-verification">3.2 Verification</h3>
+<p>Liquidations are on-chain facts:</p>
+<pre><code>For each prediction:
+  1. Query: Did position X get liquidated?
+     → Check for LiquidationCall events
+  2. If yes: When? (block timestamp)
+     → If liquidation occurred BEFORE observation window started, EXCLUDE from scoring
+  3. If no: Did position enter danger zone? (HF &lt; 1.02)
+  4. Compare to miner's prediction
+  5. Classify outcome and score
+</code></pre>
+<p><strong>Exclusion Rules:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Action</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Position HF &lt; 1.0 at snapshot</td>
+<td>Exclude from prediction set</td>
+<td>Already liquidatable, not predictable</td>
+</tr>
+<tr>
+<td>Liquidation during 10-min prediction window</td>
+<td>Exclude from scoring</td>
+<td>Miners had no chance to predict</td>
+</tr>
+<tr>
+<td>Position removed/repaid before observation</td>
+<td>Exclude from scoring</td>
+<td>No longer a valid prediction target</td>
+</tr>
+</tbody>
+</table>
+<p><strong>No subjectivity.</strong> Validators verify facts, not judge quality.</p>
+<h3 id="33-scoring-logic">3.3 Scoring Logic</h3>
+<pre><code class="language-python">def score_miner(predictions, actual_events, position_snapshots):
+    outcomes = []
+
+    for pred in predictions:
+        liquidation = find_liquidation(pred.position_id, actual_events)
+        min_hf = get_minimum_health_factor(pred.position_id, observation_window)
+
+        if pred.will_liquidate:
+            if liquidation:
+                # True positive
+                outcomes.append(('TP', 1.0, liquidation.timestamp - pred.timestamp))
+            elif min_hf &lt; 1.02:
+                # Danger zone hit - partial credit
+                outcomes.append(('DZ', 0.5, None))
+            else:
+                # False positive
+                outcomes.append(('FP', 0.0, None))
+        else:
+            if liquidation:
+                # False negative
+                outcomes.append(('FN', -0.5, None))
+            else:
+                # True negative
+                outcomes.append(('TN', 0.1, None))
+
+    return calculate_final_score(outcomes)
+</code></pre>
+<h3 id="34-evaluation-cadence">3.4 Evaluation Cadence</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Epoch length</td>
+<td>1 hour</td>
+<td>Balance freshness with gas costs</td>
+</tr>
+<tr>
+<td>Prediction window</td>
+<td>10 minutes</td>
+<td>Time for miners to analyze and submit</td>
+</tr>
+<tr>
+<td>Observation window</td>
+<td>6 hours</td>
+<td>Starts AFTER prediction window closes</td>
+</tr>
+<tr>
+<td>Total epoch duration</td>
+<td>6h 10m</td>
+<td>Prediction (10m) + Observation (6h)</td>
+</tr>
+<tr>
+<td>Score aggregation</td>
+<td>Rolling 24 hours</td>
+<td>Statistical significance</td>
+</tr>
+<tr>
+<td>Calibration window</td>
+<td>Rolling 7 days</td>
+<td>Enough data for bin accuracy</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> Overlapping epochs are allowed. A new epoch starts every hour, even while previous observation windows are still open. This means ~6 concurrent observation windows at any time.</p>
+<h3 id="35-validator-incentive-alignment">3.5 Validator Incentive Alignment</h3>
+<p><strong>Why do validators score honestly?</strong></p>
+<p>Three mechanisms ensure validator integrity:</p>
+<p><strong>1. Yuma Consensus (Bittensor Protocol)</strong></p>
+<p>Validators are weighted by agreement with other validators. Outliers are penalized.</p>
+<pre><code>Validator A scores: [0.8, 0.2, 0.5]  ← agrees with consensus
+Validator B scores: [0.7, 0.3, 0.5]  ← agrees with consensus
+Validator C scores: [0.1, 0.9, 0.2]  ← outlier, discounted
+
+Result: Validator C earns less TAO
+</code></pre>
+<p><strong>2. Objective Ground Truth (Vigil-Specific)</strong></p>
+<p>Unlike subjective tasks, Vigil has provable ground truth:</p>
+<table>
+<thead>
+<tr>
+<th>Validator Claim</th>
+<th>On-Chain Reality</th>
+<th>Consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"No liquidation"</td>
+<td>LiquidationCall tx exists</td>
+<td>Provably wrong</td>
+</tr>
+<tr>
+<td>"HF never hit 1.02"</td>
+<td>Archive node shows HF = 1.01</td>
+<td>Provably wrong</td>
+</tr>
+</tbody>
+</table>
+<p>Validators can't argue about facts. Either the liquidation happened or it didn't. This makes honest scoring the only viable strategy.</p>
+<p><strong>3. Compute Cost vs. Reward</strong></p>
+<p>Validators must:
+- Run archive node queries (real cost)
+- Verify danger zone hits (compute work)
+- Aggregate miner scores (processing)</p>
+<p>Random scoring would be detected by Yuma Consensus. The only way to earn the 41% validator emission is to do the verification work correctly.</p>
+<p><strong>Collusion Resistance:</strong></p>
+<ul>
+<li>Miner-validator collusion requires 51%+ of validator stake</li>
+<li>Liquidations are public on-chain events — can't fake them</li>
+<li>Any participant can verify scores independently</li>
+</ul>
+<hr />
+<h2 id="4-why-bittensor">4. Why Bittensor</h2>
+<h3 id="41-proof-of-intelligence">4.1 Proof of Intelligence</h3>
+<p>Predicting liquidations requires genuine intelligence:</p>
+<ul>
+<li>Analyzing market conditions</li>
+<li>Anticipating borrower behavior</li>
+<li>Timing predictions accurately</li>
+<li>Understanding protocol mechanics</li>
+</ul>
+<p><strong>Random predictions have near-zero precision.</strong> You can't fake this.</p>
+<h3 id="42-objective-verification">4.2 Objective Verification</h3>
+<p>Unlike subjective tasks, liquidations are <strong>on-chain facts</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Data Point</th>
+<th>Source</th>
+<th>Verifiable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amount</td>
+<td>Event logs</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Health factor</td>
+<td>Contract state</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Liquidation happened</td>
+<td>Transaction hash</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Timestamp</td>
+<td>Block number</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>No ambiguity. No disputes. Validators verify facts, not opinions.</p>
+<h3 id="43-differentiation-from-sn10-sturdy">4.3 Differentiation from SN10 (Sturdy)</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>SN10 (Sturdy)</th>
+<th>Vigil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Goal</strong></td>
+<td>Maximize yield (offense)</td>
+<td>Predict risk (defense)</td>
+</tr>
+<tr>
+<td><strong>Task type</strong></td>
+<td>Continuous optimization</td>
+<td>Discrete event prediction</td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td>Allocation percentages</td>
+<td>Binary predictions + timing</td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td>Performance over weeks</td>
+<td>Outcome within hours</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td>Yield seekers</td>
+<td>Risk managers, borrowers</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sturdy helps you make money. Vigil helps you not lose money.</strong></p>
+<hr />
+<h2 id="5-business-logic">5. Business Logic</h2>
+<h3 id="51-who-pays-for-vigil">5.1 Who Pays for Vigil</h3>
+<table>
+<thead>
+<tr>
+<th>Customer</th>
+<th>Product</th>
+<th>Why They Pay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Analytics platforms</strong></td>
+<td>Data feed</td>
+<td>Content for their users</td>
+</tr>
+<tr>
+<td><strong>Borrowers</strong></td>
+<td>Alert subscription</td>
+<td>Avoid liquidation penalty (5-15% savings)</td>
+</tr>
+<tr>
+<td><strong>Liquidators</strong></td>
+<td>Prediction API</td>
+<td>Better timing = more profit</td>
+</tr>
+<tr>
+<td><strong>Protocols</strong></td>
+<td>Risk dashboard</td>
+<td>Monitor systemic risk in real-time</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-why-liquidators-use-vigil-not-just-self-liquidate">5.2 Why Liquidators Use Vigil (Not Just Self-Liquidate)</h3>
+<p><strong>Question:</strong> If miners can predict liquidations, why don't they just liquidate themselves?</p>
+<p><strong>Answer:</strong> Different skills, different capital requirements.</p>
+<table>
+<thead>
+<tr>
+<th>Prediction</th>
+<th>Liquidation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Requires: Analysis skills</td>
+<td>Requires: Capital ($100K+)</td>
+</tr>
+<tr>
+<td>Requires: Data infrastructure</td>
+<td>Requires: MEV infrastructure</td>
+</tr>
+<tr>
+<td>Risk: Lost TAO emissions</td>
+<td>Risk: Failed transactions, gas wars</td>
+</tr>
+<tr>
+<td>Reward: Steady TAO income</td>
+<td>Reward: Variable liquidation profits</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Vigil commoditizes prediction. Liquidators compete on execution.</strong></p>
+<p>Miners who predict well but can't execute now have a way to monetize their intelligence.</p>
+<h3 id="53-market-size">5.3 Market Size</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeFi lending TVL</td>
+<td>$30B+</td>
+</tr>
+<tr>
+<td>Annual liquidation volume</td>
+<td>$2.4B (2024)</td>
+</tr>
+<tr>
+<td>Liquidation penalty</td>
+<td>5-15%</td>
+</tr>
+<tr>
+<td>Liquidator profits</td>
+<td>~$500M annually</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Growing market.</strong> As DeFi lending grows, so does liquidation volume.</p>
+<h3 id="54-revenue-model">5.4 Revenue Model</h3>
+<table>
+<thead>
+<tr>
+<th>Stream</th>
+<th>Description</th>
+<th>Timeline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TAO emissions</td>
+<td>Subnet rewards</td>
+<td>Day 1</td>
+</tr>
+<tr>
+<td>Borrower alerts</td>
+<td>Push notifications for at-risk positions</td>
+<td>Month 3+</td>
+</tr>
+<tr>
+<td>Liquidator API</td>
+<td>Premium prediction feeds</td>
+<td>Month 3+</td>
+</tr>
+<tr>
+<td>Protocol dashboards</td>
+<td>B2B risk monitoring</td>
+<td>Month 6+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-competitive-landscape">6. Competitive Landscape</h2>
+<h3 id="61-within-bittensor">6.1 Within Bittensor</h3>
+<table>
+<thead>
+<tr>
+<th>Subnet</th>
+<th>Focus</th>
+<th>Differentiation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SN10 (Sturdy)</td>
+<td>Yield optimization</td>
+<td>Offense vs defense</td>
+</tr>
+<tr>
+<td>None</td>
+<td>Liquidation prediction</td>
+<td><strong>Novel: first mover</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="62-outside-bittensor">6.2 Outside Bittensor</h3>
+<table>
+<thead>
+<tr>
+<th>Competitor</th>
+<th>What They Do</th>
+<th>Vigil's Edge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chaos Labs</td>
+<td>Risk simulation</td>
+<td>Historical, not predictive</td>
+</tr>
+<tr>
+<td>DeFi Saver</td>
+<td>Automated protection</td>
+<td>Reactive, not predictive</td>
+</tr>
+<tr>
+<td>Gauntlet</td>
+<td>Risk modeling</td>
+<td>B2B only, not real-time, centralized</td>
+</tr>
+<tr>
+<td>Liquidation bots</td>
+<td>Private prediction</td>
+<td>Proprietary, not decentralized</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Gap:</strong> No decentralized, predictive liquidation intelligence exists.</p>
+<hr />
+<h2 id="7-go-to-market">7. Go-To-Market</h2>
+<h3 id="71-bootstrap-strategy-pre-launch">7.1 Bootstrap Strategy (Pre-Launch)</h3>
+<p><strong>The Cold-Start Problem:</strong></p>
+<ul>
+<li>Miners won't join without TAO rewards</li>
+<li>Validators won't join without miners to score</li>
+<li>Users won't pay without quality predictions</li>
+</ul>
+<p><strong>Solution: Two-pronged bootstrap</strong></p>
+<p><strong>A) Technical Bootstrap: Historical Replay Rewards</strong></p>
+<p>Before mainnet has real liquidations, miners earn TAO by predicting historical data:</p>
+<pre><code>1. Take mainnet position snapshots from 30 days ago
+2. Miners predict based on that state
+3. Validators score against known outcomes
+4. TAO distributed to accurate miners
+</code></pre>
+<p>This solves cold-start immediately — miners can earn from day one by proving skill on historical data. As real liquidations occur, the system transitions to live predictions.</p>
+<p><strong>B) Business Bootstrap: Anchor Partnerships</strong></p>
+<p>Pre-launch partnerships to prove demand:</p>
+<table>
+<thead>
+<tr>
+<th>Target Partner</th>
+<th>Value Proposition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Liquidation bots (Instadapp, DeFi Saver)</td>
+<td>Better timing signals → more profit</td>
+<td>Target</td>
+</tr>
+<tr>
+<td>Lending protocols (Aave, Compound)</td>
+<td>Risk monitoring dashboard</td>
+<td>Target</td>
+</tr>
+<tr>
+<td>DeFi aggregators (DeBank, Zapper)</td>
+<td>User protection alerts</td>
+<td>Target</td>
+</tr>
+</tbody>
+</table>
+<p>Goal: 2-3 signed LOIs before mainnet launch.</p>
+<p><strong>C) Early Miner/Validator Incentives</strong></p>
+<table>
+<thead>
+<tr>
+<th>Incentive</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First 50 miners</td>
+<td>Featured in launch announcement</td>
+</tr>
+<tr>
+<td>First 10 validators</td>
+<td>Direct onboarding support</td>
+</tr>
+<tr>
+<td>Historical replay leaderboard</td>
+<td>Top performers highlighted pre-mainnet</td>
+</tr>
+</tbody>
+</table>
+<p>No inflated token rewards — we attract quality participants through reputation and early mover advantage, not unsustainable emissions.</p>
+<h3 id="72-phase-1-launch-month-1-2">7.2 Phase 1: Launch (Month 1-2)</h3>
+<ul>
+<li>Deploy subnet on mainnet</li>
+<li>Transition from historical replay to live predictions</li>
+<li>Reference miner implementation (open source)</li>
+<li>Basic alert bot (Discord/Telegram)</li>
+<li>Documentation and onboarding guides</li>
+</ul>
+<h3 id="73-phase-2-adoption-month-3-6">7.3 Phase 2: Adoption (Month 3-6)</h3>
+<ul>
+<li>Borrower dashboard</li>
+<li>Liquidator integrations</li>
+<li>Premium API tiers</li>
+<li>Protocol partnerships (Aave governance proposal)</li>
+</ul>
+<h3 id="74-phase-3-scale-month-6">7.4 Phase 3: Scale (Month 6+)</h3>
+<ul>
+<li>Advanced analytics products</li>
+<li>Multi-chain (Arbitrum, Base, Optimism)</li>
+<li>Multi-protocol (Compound, Morpho, Spark)</li>
+<li>Protection products built by third parties</li>
+</ul>
+<hr />
+<h2 id="8-round-ii-implementation">8. Round II Implementation</h2>
+<h3 id="81-scope">8.1 Scope</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Included</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Position monitoring</td>
+<td>Yes</td>
+<td>Aave V3 + Compound V3 + Morpho on Ethereum</td>
+</tr>
+<tr>
+<td>Miner predictions</td>
+<td>Yes</td>
+<td>Commit-reveal mechanism</td>
+</tr>
+<tr>
+<td>Validator scoring</td>
+<td>Yes</td>
+<td>Precision/recall/lead time</td>
+</tr>
+<tr>
+<td>Danger zone credit</td>
+<td>Yes</td>
+<td>Partial credit for near-misses</td>
+</tr>
+<tr>
+<td>Rolling aggregation</td>
+<td>Yes</td>
+<td>24-hour window</td>
+</tr>
+<tr>
+<td>On-chain warnings</td>
+<td>Yes</td>
+<td>Event emissions</td>
+</tr>
+<tr>
+<td>Multi-protocol</td>
+<td>Yes</td>
+<td>Aave V3 + Compound V3 + Morpho (~65% of lending market)</td>
+</tr>
+<tr>
+<td>Multi-chain</td>
+<td>No</td>
+<td>Ethereum only</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-protocol-adapter-architecture">8.2 Protocol Adapter Architecture</h3>
+<p>The system is built on a protocol-agnostic adapter interface:</p>
+<pre><code class="language-python">class ProtocolAdapter:
+    name: str
+    prediction_window: timedelta    # Protocol-specific (6h, 12h, 24h)
+    risk_threshold: float           # When position is &quot;at risk&quot;
+
+    def get_at_risk_positions(self) -&gt; List[Position]
+    def get_risk_score(self, position) -&gt; float      # Normalized 0-1
+    def get_liquidation_events(self, start, end) -&gt; List[Event]
+    def is_danger_zone(self, position) -&gt; bool
+</code></pre>
+<p><strong>Round II Adapters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Protocol</th>
+<th>Window</th>
+<th>Risk Metric</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aave V3</td>
+<td>6h</td>
+<td>Health Factor &lt; 1</td>
+<td>~$68B TVL</td>
+</tr>
+<tr>
+<td>Compound V3</td>
+<td>6h</td>
+<td>Liquidity &lt; 0</td>
+<td>~$3B TVL</td>
+</tr>
+<tr>
+<td>Morpho</td>
+<td>6h</td>
+<td>Health Factor &lt; 1</td>
+<td>~$13B TVL</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Future Adapters (Post-Hackathon):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Protocol</th>
+<th>Window</th>
+<th>Prediction Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MakerDAO</td>
+<td>24h</td>
+<td>Auction start (not completion)</td>
+</tr>
+</tbody>
+</table>
+<p>Maker uses auction-based liquidations that take hours to complete. Our architecture supports variable prediction windows, so Maker would use a 24-hour window predicting auction initiation rather than completion. This is documented but not implemented in Round II.</p>
+<h3 id="83-historical-replay-mode">8.3 Historical Replay Mode</h3>
+<p><strong>Problem:</strong> Testnet may have few or no real liquidations.</p>
+<p><strong>Solution:</strong> Use historical mainnet data for testing.</p>
+<pre><code>HISTORICAL REPLAY:
+
+1. Take mainnet position snapshots from 30 days ago
+2. Miners predict based on that state
+3. Validators score against what actually happened (known ground truth)
+4. Proves mechanism works without needing live liquidations
+</code></pre>
+<p>This demonstrates mechanism correctness before mainnet deployment.</p>
+<h3 id="84-timeline">8.4 Timeline</h3>
+<table>
+<thead>
+<tr>
+<th>Week</th>
+<th>Deliverable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Adapter interface, position indexing, Aave V3 adapter</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Compound V3 adapter, Morpho adapter</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Validator scoring (protocol-agnostic), danger zone logic, rolling aggregation</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Integration testing with historical replay, documentation, demo</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Feature Flags:</strong> Each protocol adapter behind a flag. If Morpho or Compound is unstable, disable and ship with working adapters only.</p>
+<h3 id="85-success-criteria">8.5 Success Criteria</h3>
+<ul>
+<li>Miners can submit predictions via commit-reveal</li>
+<li>Validators score against actual/historical liquidations</li>
+<li>Danger zone partial credit works correctly</li>
+<li>Rolling 24-hour aggregation produces stable scores</li>
+<li>TAO flows to accurate miners</li>
+</ul>
+<hr />
+<h2 id="9-technical-architecture">9. Technical Architecture</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                         VIGIL SUBNET                          │
+│                                                                  │
+│  ┌───────────────┐    ┌───────────────┐    ┌───────────────┐   │
+│  │   MINERS      │    │   BITTENSOR   │    │  VALIDATORS   │   │
+│  │               │    │   NETWORK     │    │               │   │
+│  │ • Monitor     │    │               │    │ • Snapshot    │   │
+│  │   positions   │───▶│ • Consensus   │◀───│   positions   │   │
+│  │ • Predict     │    │ • Emissions   │    │ • Track HF    │   │
+│  │   liquidations│    │               │    │   minimums    │   │
+│  │ • Commit-     │    │               │    │ • Verify      │   │
+│  │   reveal      │    │               │    │   outcomes    │   │
+│  └───────────────┘    └───────────────┘    └───────────────┘   │
+│           │                                        │            │
+│           ▼                                        ▼            │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                    DATA LAYER                            │   │
+│  │                                                          │   │
+│  │  Aave V3 positions │ Liquidation events │ HF history    │   │
+│  │  (via RPC)         │ (on-chain)         │ (for DZ)      │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="10-risk-factors">10. Risk Factors</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Likelihood</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Few miners at launch</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Reference implementation + documentation</td>
+</tr>
+<tr>
+<td>Low liquidation volume</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Danger zone credit + 24-hour aggregation</td>
+</tr>
+<tr>
+<td>Miner collusion</td>
+<td>Low</td>
+<td>Medium</td>
+<td>Commit-reveal + Yuma Consensus</td>
+</tr>
+<tr>
+<td>Oracle manipulation</td>
+<td>Low</td>
+<td>High</td>
+<td>Multiple price source verification</td>
+</tr>
+<tr>
+<td>Testnet has no liquidations</td>
+<td>High</td>
+<td>High</td>
+<td>Historical replay mode</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="summary">Summary</h2>
+<p><strong>Vigil</strong> brings decentralized intelligence to DeFi liquidations.</p>
+<p><strong>The problem:</strong> $2.4B liquidated with no warning. Prediction intelligence is locked in private bots.</p>
+<p><strong>The solution:</strong> Miners compete to predict liquidations. Validators verify against on-chain facts. Best predictors earn TAO.</p>
+<p><strong>Key mechanisms:</strong>
+- 3-bin calibration system for noisy data
+- Danger zone partial credit for fair scoring
+- Lead time bonus with precision threshold to prevent gaming
+- Rolling 24-hour scoring for statistical significance</p>
+<p><strong>Why Bittensor:</strong>
+- Decentralized (no single entity controls predictions)
+- Objective verification (liquidations are on-chain facts)
+- Proof of intelligence (prediction is genuinely hard)</p>
+<p><strong>Why now:</strong>
+- Clear path to paying customers
+- DeFi lending is growing
+- Novel use case: no Bittensor subnet does this</p>
+<p><strong>Round II:</strong> Working testnet with historical replay, Aave V3 + Compound V3 + Morpho predictions, and complete scoring mechanism.</p>
+<hr />
+<h2 id="links">Links</h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pitch Deck</strong></td>
+<td>https://vigil-pitch-deck.vercel.app</td>
+</tr>
+<tr>
+<td><strong>Twitter</strong></td>
+<td>@faruukku</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

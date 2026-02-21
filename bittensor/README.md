@@ -16,7 +16,7 @@
 
 ## Deliverables Checklist
 
-### Round I - Ideathon (Due Feb 28, 2026)
+### Round I: Ideathon (Due Feb 28, 2026)
 
 - [x] **Subnet Design Proposal** (`proposal/VIGIL-FINAL.md`)
   - [x] Incentive & Mechanism Design
@@ -44,7 +44,7 @@
   - [x] Logo (`vigil-logo.jpg`)
   - [ ] Export to PDF
 
-### Round II - Hackathon (Mar 2-30, if selected)
+### Round II: Hackathon (Mar 2-30, if selected)
 
 - [ ] Testnet implementation
 - [ ] Aave V3 adapter
@@ -78,24 +78,25 @@
 | Deliverable | File | Status |
 |-------------|------|--------|
 | **Proposal** | `proposal/VIGIL-FINAL.md` | Done |
+| **Pitch Deck (Live)** | https://vigil-pitch-deck.vercel.app | Deployed |
 | **Pitch Deck (HTML)** | `pitch-deck/vigil-deck.html` | Done |
 | **Pitch Deck (MD)** | `pitch-deck/VIGIL-FINAL-DECK.md` | Done |
 | **Logo** | `pitch-deck/vigil-logo.jpg` | Done |
 | **Video Script** | `video-script/VIGIL-FINAL-SCRIPT.md` | Done |
 | **Talk Track** | `video-script/TALK-TRACK.md` | Done |
-| **Twitter Post** | `marketing/VIGIL-FINAL-TWITTER.md` | Done |
 | **Video Recording** | TBD | TODO |
+| **Twitter Post** | `marketing/VIGIL-FINAL-TWITTER.md` | Done |
 
 ### Archive (Earlier Iterations)
 
-- `proposal/LIQUIDATION-ORACLE.md` - Earlier version with protection protocol
-- `proposal/CROSS-CHAIN-INTENTS.md` - PathFinder concept (backup idea)
+- `proposal/CROSS-CHAIN-INTENTS.md`: PathFinder concept (backup idea)
+- `proposal/LIQUIDATION-ORACLE.md`: Earlier version with protection protocol
 
 ## Resources
 
 - [Bittensor Docs](https://docs.bittensor.com/)
-- [Subnet Template](https://github.com/opentensor/bittensor-subnet-template)
 - [Hackathon Page](https://www.hackquest.io/hackathon/bittensor-subnet-ideathon)
+- [Subnet Template](https://github.com/opentensor/bittensor-subnet-template)
 
 ## Timeline
 

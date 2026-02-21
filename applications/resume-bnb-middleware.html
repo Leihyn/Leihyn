@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin: 0.8cm 1.5cm;
+  }
+  body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 8.5pt;
+    line-height: 1.35;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 16pt;
+    margin: 0 0 1px 0;
+    color: #111;
+  }
+  h1 + p {
+    margin-top: 0;
+    color: #444;
+    font-size: 9pt;
+  }
+  h2 {
+    font-size: 10pt;
+    color: #111;
+    border-bottom: 1.5px solid #ccc;
+    padding-bottom: 1px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+  h3 {
+    font-size: 9pt;
+    color: #222;
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 5px 0;
+  }
+  p {
+    margin: 2px 0;
+  }
+  strong {
+    color: #111;
+  }
+  code {
+    background: #f0f0f0;
+    padding: 0px 4px;
+    border-radius: 3px;
+    font-size: 7.5pt;
+    color: #333;
+  }
+  ul {
+    padding-left: 16px;
+    margin: 2px 0;
+  }
+  li {
+    margin: 1px 0;
+  }
+  a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  em {
+    color: #555;
+  }
+  .contact {
+    font-size: 8pt;
+    color: #444;
+    margin: 1px 0;
+  }
+  .project-meta {
+    color: #555;
+    font-size: 8pt;
+    font-style: italic;
+    margin: 1px 0;
+  }
+  .tags {
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+<h1>Onatola Timilehin Faruq</h1>
+<p><strong>Web3 Infrastructure Engineer | SDK Development | Full-Stack dApps</strong></p>
+<p class="contact">onatolafaruq@gmail.com | <a href="https://github.com/Leihyn">github.com/Leihyn</a> | <a href="https://faruukku.vercel.app">faruukku.vercel.app</a> | <a href="https://linkedin.com/in/leihyn">linkedin.com/in/leihyn</a></p>
+<hr />
+
+<h2>Summary</h2>
+<p>Full-stack Web3 engineer specializing in middleware, SDK development, and developer tooling. Built OmniSwap SDK, a cross-chain swap library with chain adapters for 6 blockchains and comprehensive documentation. Ships production dApps using React, Next.js, TypeScript, Viem, Wagmi, and Ethers.js. Experience building on BNB Chain (TruthBounty, 2nd place Seedify Hackathon).</p>
+<hr />
+
+<h2>Technical Expertise</h2>
+<p><strong>Frontend:</strong> React | Next.js 14 | TypeScript | Tailwind CSS | Three.js | React Three Fiber</p>
+<p><strong>Web3 Integration:</strong> Viem | Wagmi | Ethers.js v6 | Web3.js | Wallet Connectors (MetaMask, WalletConnect, HashPack, Blade)</p>
+<p><strong>SDK &amp; Middleware:</strong> API Design | Chain Adapters | Error Handling | Retry Logic | TypeScript SDKs | Developer Documentation</p>
+<p><strong>Smart Contracts:</strong> Solidity (Advanced) | Rust/Anchor (Intermediate) | Foundry | Hardhat</p>
+<p><strong>Backend:</strong> Node.js | Express | PostgreSQL | Redis | WebSocket | GraphQL | REST APIs</p>
+<p><strong>Infrastructure:</strong> The Graph (Subgraphs) | IPFS/Arweave | Docker | GitHub Actions CI/CD | Tenderly</p>
+<p><strong>Chains:</strong> Ethereum | BNB Chain | Base | Arbitrum | Optimism | Solana | Hedera</p>
+<hr />
+
+<h2>Professional Experience</h2>
+<h3>Blockchain Engineer | DeFiConnectCredit | Jan 2025 - Present</h3>
+<ul>
+<li>Architected modular frontend components for multi-protocol DeFi dashboard integrating Aave v3, Uniswap v3/v4, Curve, and GMX</li>
+<li>Built reusable React hooks and TypeScript utilities for wallet connection, transaction signing, and contract interactions across 4 DeFi protocols</li>
+<li>Reduced transaction costs by <strong>35%</strong> through gas optimization, improving UX for end users</li>
+<li>Created deployment automation suite cutting deployment time from 2 hours to 15 minutes</li>
+<li>Established Foundry testing framework with <strong>95%+ code coverage</strong> across integration suite</li>
+</ul>
+
+<h3>Blockchain Engineer (Intern) | DeFiConnectCredit | Jun 2024 - Dec 2024</h3>
+<ul>
+<li>Contributed to lending protocol frontend with collateral management and liquidation mechanism interfaces</li>
+<li>Conducted security reviews on <strong>15+ contracts</strong> pre-deployment</li>
+<li>Built ERC721 incentive system with Merkle tree proofs serving 500+ users</li>
+</ul>
+<hr />
+
+<h2>SDK &amp; Middleware Projects</h2>
+<h3><a href="https://github.com/Leihyn/omniswap-sdk">OmniSwap SDK</a> — Cross-Chain Swap Middleware</h3>
+<p class="project-meta">Production-grade TypeScript SDK enabling atomic swaps across 6 heterogeneous blockchains</p>
+<ul>
+<li>Architected chain-specific adapter pattern: unified interface, per-chain implementation (Zcash, Osmosis, Mina, Aztec, Miden, Fhenix)</li>
+<li>Implemented HTLC-based swap protocol with automated refund management and timeout handling</li>
+<li>Built typed error system with exponential backoff retry logic for RPC resilience</li>
+<li>Created <strong>70KB+ documentation</strong>: API reference, step-by-step tutorials, 5 working examples, migration guides</li>
+<li>Set up CI/CD pipeline with GitHub Actions for automated testing and publishing</li>
+</ul>
+<p class="tags"><code>TypeScript</code> <code>Multi-Chain</code> <code>SDK Design</code> <code>Developer Tooling</code></p>
+
+<h3><a href="https://github.com/Leihyn/omnishield-wallet">OmniShield Wallet</a> — Multi-Chain HD Wallet</h3>
+<p class="project-meta">Developer-facing wallet SDK supporting 6 blockchains with unified interface</p>
+<ul>
+<li>Implemented BIP-39/32/44 key derivation across multiple chain types</li>
+<li>Built chain-specific adapters with unified API for balance queries and transactions</li>
+<li>Created both React web interface and React Native (Expo) mobile app</li>
+</ul>
+<p class="tags"><code>TypeScript</code> <code>React</code> <code>React Native</code> <code>Wallet Integration</code></p>
+<hr />
+
+<h2>Full-Stack dApp Projects</h2>
+<h3><a href="https://github.com/Leihyn/comicPad">Comic Pad</a> — NFT Marketplace (Production)</h3>
+<p class="project-meta">Full-stack platform on Hedera with complex financial UX and multi-wallet support</p>
+<ul>
+<li>Solo-built complete marketplace: smart contracts, backend API, React/Next.js frontend</li>
+<li>Integrated <strong>3 wallet providers</strong> (HashPack, Blade, MetaMask) with seamless connection flow</li>
+<li>Built real-time WebSocket server delivering updates to <strong>1K+ concurrent users</strong> (&lt;50ms latency)</li>
+<li>Designed UX for Dutch/English auctions, royalty distribution, dynamic pricing, and token-gated content</li>
+</ul>
+<p class="tags"><code>Next.js</code> <code>TypeScript</code> <code>PostgreSQL</code> <code>Redis</code> <code>WebSocket</code> <code>Hedera</code></p>
+
+<h3><a href="https://truthbounty.xyz">TruthBounty</a> — Prediction Market Protocol (BNB Chain)</h3>
+<p class="project-meta">2nd Place, Seedify Hackathon | Reputation system integrating 13 prediction market platforms</p>
+<ul>
+<li>Built data aggregation layer across PancakeSwap Prediction, Polymarket, Azuro, Thales, and 10 others</li>
+<li>Designed soulbound NFT credentials with on-chain SVG generation</li>
+<li>Created custom subgraphs for cross-chain indexing and real-time data fetching</li>
+<li>Built Next.js dashboard presenting complex reputation data through clean, scannable UI</li>
+</ul>
+<p class="tags"><code>Solidity</code> <code>Next.js</code> <code>The Graph</code> <code>BNB Chain</code> <code>Soulbound NFTs</code></p>
+
+<h3><a href="https://github.com/Leihyn/Sentiment">Sentiment</a> — Uniswap v4 Dynamic Fee Hook</h3>
+<p class="project-meta">UHI7 Incubator Capstone | Dynamic fee hook consuming data from 8 off-chain sources</p>
+<ul>
+<li>Built data pipeline integrating multiple oracle sources with staleness detection via Chainlink Automation and Gelato</li>
+<li>Achieved <strong>&lt;30k gas overhead</strong> per swap through optimization</li>
+<li>Graduated from Uniswap Hook Incubator (15% acceptance rate)</li>
+</ul>
+<p class="tags"><code>Solidity</code> <code>Foundry</code> <code>Chainlink</code> <code>Uniswap v4</code></p>
+
+<h3><a href="https://github.com/Leihyn/privacy-chronicles">Privacy Chronicles</a> — Interactive Education Platform</h3>
+<p class="project-meta">Content Creation Track Winner, Zypherpunk Hackathon (Zcash &amp; Mina Foundations)</p>
+<ul>
+<li>Built immersive 3D solar system in React Three Fiber with interactive episode navigation</li>
+<li>Implemented accessibility-first design with voice narration for 70+ page comic series</li>
+</ul>
+<p class="tags"><code>Next.js</code> <code>Three.js</code> <code>React Three Fiber</code> <code>TypeScript</code></p>
+<hr />
+
+<h2>Certifications &amp; Training</h2>
+<ul>
+<li><strong>Uniswap Hook Incubator (UHI7)</strong> — Graduate (15% acceptance rate)</li>
+<li><strong>Cyfrin Updraft</strong> — DeFi Security &amp; Protocol Engineering (Completed)</li>
+<li><strong>School of Solana</strong> — Ackee Blockchain (Rust/Anchor Development)</li>
+<li><strong>Hashgraph Developer Certification</strong> — The Hashgraph Association</li>
+</ul>
+<hr />
+
+<h2>Education</h2>
+<p><strong>BSc Physiotherapy</strong> | University of Ibadan, College of Medicine | 2024</p>
+<hr />
+<p><em>Portfolio: <a href="https://faruukku.vercel.app">faruukku.vercel.app</a> | GitHub: <a href="https://github.com/Leihyn">github.com/Leihyn</a> | References available upon request</em></p>
+</body>
+</html>

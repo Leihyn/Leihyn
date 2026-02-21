@@ -1,0 +1,219 @@
+name: Mathematical & Algebraic Verification
+id: MATH
+severity: High
+cwe: CWE-682
+
+description: |
+  Mathematical bugs in smart contracts are the most dangerous class of vulnerability
+  because the code compiles, tests pass, and the formula looks correct — but algebraic
+  simplification reveals it computes something different from what the developer intended.
+  The canonical example: a "TWAP" formula that simplifies to just the spot price.
+
+vulnerabilities:
+  - name: TWAP Tautology
+    id: MATH-001
+    severity: Critical
+    description: |
+      A TWAP (Time-Weighted Average Price) implementation where the cumulative price
+      terms cancel out algebraically, reducing the "time-weighted average" to just the
+      instantaneous spot price. This defeats the purpose of TWAP entirely.
+
+      Example tautology:
+        result = (cPriceLast + spotPrice * timeDelta - cPriceLast) / timeDelta
+               = (spotPrice * timeDelta) / timeDelta
+               = spotPrice  (NOT a time-weighted average!)
+    detection_heuristics:
+      - "1. Find cumulative price / TWAP functions"
+      - "2. Extract the formula symbolically"
+      - "3. Simplify algebraically — do any terms cancel?"
+      - "4. If the result equals spotPrice, it's a tautology (CRITICAL)"
+      - "5. A real TWAP must be: (cumPrice_now - cumPrice_past) / (time_now - time_past)"
+    patterns:
+      solidity:
+        - "cumulativePriceLast"
+        - "priceAccumulator"
+        - "priceCumulative"
+        - "timeWeighted"
+    examples:
+      solidity:
+        vulnerable: |
+          function getTWAP() returns (uint256) {
+              uint256 timeDelta = block.timestamp - lastTimestamp;
+              uint256 cumDelta = cumulativePriceLast + spotPrice * timeDelta - cumulativePriceLast;
+              return cumDelta / timeDelta;
+              // Simplifies to: spotPrice * timeDelta / timeDelta = spotPrice!
+          }
+        fixed: |
+          function getTWAP() returns (uint256) {
+              uint256 timeDelta = block.timestamp - lastTimestamp;
+              uint256 cumDelta = currentCumulativePrice - lastCumulativePrice;
+              return cumDelta / timeDelta;
+          }
+    false_positive_conditions:
+      - "Function explicitly documents that it returns spot price, not TWAP"
+      - "The cumulative price update happens in a separate function and is correct"
+
+  - name: Interest Rate Model Errors
+    id: MATH-002
+    severity: High
+    description: |
+      Errors in interest/yield computation: using linear approximation where
+      compound interest is needed, rate-per-block vs rate-per-second confusion,
+      or exponentiation overflow with large time periods.
+    detection_heuristics:
+      - "1. Find interest/accrual functions"
+      - "2. Check if compound formula (rpow) or linear approximation is used"
+      - "3. Linear is only valid for short periods (< 1 day at DeFi rates)"
+      - "4. Check for overflow in exponentiation with large time deltas"
+    patterns:
+      solidity:
+        - "accrueInterest"
+        - "rpow"
+        - "ratePerSecond"
+        - "ratePerBlock"
+        - "compound"
+    examples:
+      solidity:
+        vulnerable: |
+          // Linear approximation — loses accuracy over time
+          uint256 interest = principal * rate * timeElapsed / SECONDS_PER_YEAR / 1e18;
+        fixed: |
+          // Compound interest
+          uint256 compoundedRate = rpow(ratePerSecond, timeElapsed, RAY);
+          uint256 newDebt = principalDebt * compoundedRate / RAY;
+    false_positive_conditions:
+      - "Protocol documents linear approximation as intentional for gas savings"
+      - "Accrual happens frequently enough that compounding error is negligible"
+
+  - name: Fee Calculation Truncation
+    id: MATH-003
+    severity: High
+    description: |
+      Division before multiplication in fee calculations causes truncation to zero
+      for small amounts. Also: fee applied to wrong base (post-fee vs pre-fee).
+    detection_heuristics:
+      - "1. Find fee = amount * rate / denominator patterns"
+      - "2. Check order: is division BEFORE multiplication?"
+      - "3. For small amounts, does the fee truncate to 0?"
+      - "4. Check: is fee computed on pre-fee or post-fee amount?"
+    patterns:
+      solidity:
+        - "feeRate"
+        - "feeBps"
+        - "FEE_DENOMINATOR"
+        - "protocolFee"
+    examples:
+      solidity:
+        vulnerable: |
+          uint256 fee = amount / 10000 * feeRate;  // Truncates for amount < 10000!
+        fixed: |
+          uint256 fee = amount * feeRate / 10000;
+    false_positive_conditions:
+      - "Fee is intentionally zero for small amounts (documented behavior)"
+      - "Division happens after multiplication in the actual execution order"
+
+  - name: AMM Invariant Violation
+    id: MATH-004
+    severity: Critical
+    description: |
+      The AMM invariant (x*y=k, or StableSwap invariant) is not preserved after
+      a swap, or getAmountOut doesn't match the actual swap execution.
+    detection_heuristics:
+      - "1. Find swap/getAmountOut functions"
+      - "2. Verify: reserveIn_new * reserveOut_new >= k_old (after fees)"
+      - "3. Check if fee is applied correctly to the invariant"
+      - "4. Verify getAmountOut formula matches the actual swap logic"
+    patterns:
+      solidity:
+        - "getAmountOut"
+        - "getAmountIn"
+        - "invariant"
+        - "reserveIn"
+        - "reserveOut"
+    false_positive_conditions:
+      - "Invariant intentionally allows small decrease (fee model)"
+      - "Virtual reserves are used and the invariant is on virtual values"
+
+  - name: Division-Before-Multiplication Precision Loss
+    id: MATH-005
+    severity: High
+    description: |
+      Integer division truncates in all smart contract languages. Dividing before
+      multiplying causes precision loss that compounds with repeated operations.
+    detection_heuristics:
+      - "1. Find patterns: a / b * c (division before multiplication)"
+      - "2. Check if reordering to a * c / b would preserve precision"
+      - "3. Look for fee/share/reward calculations with this pattern"
+      - "4. Check intermediate overflow risk if reordered"
+    patterns:
+      solidity:
+        - "/ denominator *"
+        - "/ 10000 *"
+        - "/ 1e18 *"
+      rust:
+        - "checked_div(...)?.checked_mul"
+      move:
+        - "/ denominator *"
+    false_positive_conditions:
+      - "Division is needed first to prevent overflow (documented)"
+      - "mulDiv library handles the ordering correctly"
+
+  - name: Rounding Direction Exploits
+    id: MATH-006
+    severity: Medium
+    description: |
+      Truncation always rounds toward zero. In share/vault math, rounding should
+      favor the protocol (round down on deposits/mints, round up on withdrawals/redeems)
+      to prevent economic exploits.
+    detection_heuristics:
+      - "1. Find convertToShares/convertToAssets or equivalent"
+      - "2. Check: does deposit round DOWN shares? (favors protocol)"
+      - "3. Check: does withdraw round UP assets needed? (favors protocol)"
+      - "4. Look for explicit Math.ceilDiv usage"
+    patterns:
+      solidity:
+        - "convertToShares"
+        - "convertToAssets"
+        - "previewDeposit"
+        - "previewRedeem"
+    false_positive_conditions:
+      - "Rounding is handled by a library (OpenZeppelin Math.mulDiv with rounding)"
+      - "Protocol intentionally rounds in user's favor as a feature"
+
+  - name: Reward Distribution Precision Loss
+    id: MATH-007
+    severity: Medium
+    description: |
+      Staking reward formulas accumulate rounding errors over time. When totalStaked
+      is very large, rewardPerToken += (reward * PRECISION) / totalStaked can lose
+      significant reward amounts.
+    detection_heuristics:
+      - "1. Find rewardPerToken / accRewardPerShare calculations"
+      - "2. Check the PRECISION constant (should be >= 1e18)"
+      - "3. Calculate: with max totalStaked, what's the minimum detectable reward?"
+      - "4. Check first-staker edge case (totalStaked = 0)"
+    patterns:
+      solidity:
+        - "rewardPerToken"
+        - "accRewardPerShare"
+        - "PRECISION"
+        - "REWARD_PRECISION"
+    false_positive_conditions:
+      - "Precision constant is large enough (1e18+) for expected token amounts"
+      - "Dust loss is within acceptable range for the protocol"
+
+verification_approach:
+  - "1. Extract the symbolic expression from the code"
+  - "2. Simplify algebraically, showing every step"
+  - "3. Check: do any variables cancel out? (tautology)"
+  - "4. Check: what happens at boundary values (0, 1, max)?"
+  - "5. Check: does integer division cause precision loss?"
+  - "6. Check: is the formula equivalent to what the developer intended?"
+
+audit_checklist:
+  - "Every TWAP formula verified algebraically (not just code-reviewed)"
+  - "Fee calculations multiply before dividing"
+  - "Share/vault math rounds in protocol's favor"
+  - "Interest models use compound (not linear) for periods > 1 day"
+  - "AMM invariant verified to hold after every swap"
+  - "Precision constants are large enough for expected token amounts"

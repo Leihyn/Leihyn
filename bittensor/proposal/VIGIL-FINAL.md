@@ -4,7 +4,7 @@
 
 A user deposits $100,000 into Aave as collateral and borrows $70,000. Market drops 20% overnight. Their health factor crosses 1.0. They get liquidated.
 
-No warning. No alert. Just a 10% penalty - $7,000 gone.
+No warning. No alert. Just a 10% penalty: $7,000 gone.
 
 Meanwhile, a liquidator with a private prediction bot saw this coming 3 hours ago. They positioned themselves, executed the liquidation, and pocketed the bonus.
 
@@ -182,11 +182,11 @@ Miners monitor DeFi lending positions and predict liquidations.
 
 | Factor | Why It Matters |
 |--------|----------------|
-| **Protocol mechanics** | Liquidation thresholds vary by asset and protocol |
-| **Oracle delays** | Chainlink heartbeat means price updates aren't instant |
 | **Borrower behavior** | Will they add collateral? Repay debt? |
-| **Liquidator dynamics** | When gas is high, liquidators wait |
 | **Cascading effects** | One liquidation can trigger others |
+| **Liquidator dynamics** | When gas is high, liquidators wait |
+| **Oracle delays** | Chainlink heartbeat means price updates aren't instant |
+| **Protocol mechanics** | Liquidation thresholds vary by asset and protocol |
 
 A miner who only predicts price will underperform one who understands these factors.
 
@@ -250,10 +250,10 @@ Miners submit predictions:
 | Edge | Description |
 |------|-------------|
 | Better price models | More accurate volatility forecasting |
-| Whale tracking | Monitoring large wallet movements |
-| Protocol expertise | Understanding Aave-specific mechanics |
 | Historical analysis | Learning from past liquidation patterns |
+| Protocol expertise | Understanding Aave-specific mechanics |
 | Real-time data | Faster position monitoring |
+| Whale tracking | Monitoring large wallet movements |
 
 ---
 
@@ -391,10 +391,10 @@ Random scoring would be detected by Yuma Consensus. The only way to earn the 41%
 
 Predicting liquidations requires genuine intelligence:
 
-- Understanding protocol mechanics
 - Analyzing market conditions
 - Anticipating borrower behavior
 - Timing predictions accurately
+- Understanding protocol mechanics
 
 **Random predictions have near-zero precision.** You can't fake this.
 
@@ -404,10 +404,10 @@ Unlike subjective tasks, liquidations are **on-chain facts**:
 
 | Data Point | Source | Verifiable |
 |------------|--------|------------|
-| Liquidation happened | Transaction hash | Yes |
-| Timestamp | Block number | Yes |
 | Amount | Event logs | Yes |
 | Health factor | Contract state | Yes |
+| Liquidation happened | Transaction hash | Yes |
+| Timestamp | Block number | Yes |
 
 No ambiguity. No disputes. Validators verify facts, not opinions.
 
@@ -431,10 +431,10 @@ No ambiguity. No disputes. Validators verify facts, not opinions.
 
 | Customer | Product | Why They Pay |
 |----------|---------|--------------|
+| **Analytics platforms** | Data feed | Content for their users |
 | **Borrowers** | Alert subscription | Avoid liquidation penalty (5-15% savings) |
 | **Liquidators** | Prediction API | Better timing = more profit |
 | **Protocols** | Risk dashboard | Monitor systemic risk in real-time |
-| **Analytics platforms** | Data feed | Content for their users |
 
 ### 5.2 Why Liquidators Use Vigil (Not Just Self-Liquidate)
 
@@ -482,16 +482,16 @@ Miners who predict well but can't execute now have a way to monetize their intel
 | Subnet | Focus | Differentiation |
 |--------|-------|-----------------|
 | SN10 (Sturdy) | Yield optimization | Offense vs defense |
-| None | Liquidation prediction | **Novel - first mover** |
+| None | Liquidation prediction | **Novel: first mover** |
 
 ### 6.2 Outside Bittensor
 
 | Competitor | What They Do | Vigil's Edge |
 |------------|--------------|-----------------|
+| Chaos Labs | Risk simulation | Historical, not predictive |
 | DeFi Saver | Automated protection | Reactive, not predictive |
 | Gauntlet | Risk modeling | B2B only, not real-time, centralized |
 | Liquidation bots | Private prediction | Proprietary, not decentralized |
-| Chaos Labs | Risk simulation | Historical, not predictive |
 
 **Gap:** No decentralized, predictive liquidation intelligence exists.
 
@@ -554,16 +554,16 @@ No inflated token rewards — we attract quality participants through reputation
 
 ### 7.3 Phase 2: Adoption (Month 3-6)
 
-- Premium API tiers
-- Protocol partnerships (Aave governance proposal)
 - Borrower dashboard
 - Liquidator integrations
+- Premium API tiers
+- Protocol partnerships (Aave governance proposal)
 
 ### 7.4 Phase 3: Scale (Month 6+)
 
+- Advanced analytics products
 - Multi-chain (Arbitrum, Base, Optimism)
 - Multi-protocol (Compound, Morpho, Spark)
-- Advanced analytics products
 - Protection products built by third parties
 
 ---
@@ -686,10 +686,10 @@ This demonstrates mechanism correctness before mainnet deployment.
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
+| Few miners at launch | Medium | Medium | Reference implementation + documentation |
 | Low liquidation volume | Medium | Medium | Danger zone credit + 24-hour aggregation |
 | Miner collusion | Low | Medium | Commit-reveal + Yuma Consensus |
 | Oracle manipulation | Low | High | Multiple price source verification |
-| Few miners at launch | Medium | Medium | Reference implementation + documentation |
 | Testnet has no liquidations | High | High | Historical replay mode |
 
 ---
@@ -703,19 +703,28 @@ This demonstrates mechanism correctness before mainnet deployment.
 **The solution:** Miners compete to predict liquidations. Validators verify against on-chain facts. Best predictors earn TAO.
 
 **Key mechanisms:**
-- Rolling 24-hour scoring for statistical significance
+- 3-bin calibration system for noisy data
 - Danger zone partial credit for fair scoring
 - Lead time bonus with precision threshold to prevent gaming
-- 3-bin calibration system for noisy data
+- Rolling 24-hour scoring for statistical significance
 
 **Why Bittensor:**
-- Proof of intelligence (prediction is genuinely hard)
-- Objective verification (liquidations are on-chain facts)
 - Decentralized (no single entity controls predictions)
+- Objective verification (liquidations are on-chain facts)
+- Proof of intelligence (prediction is genuinely hard)
 
 **Why now:**
-- Novel use case - no Bittensor subnet does this
-- DeFi lending is growing
 - Clear path to paying customers
+- DeFi lending is growing
+- Novel use case: no Bittensor subnet does this
 
-**Round II:** Working testnet with historical replay, Aave V3 predictions, and complete scoring mechanism.
+**Round II:** Working testnet with historical replay, Aave V3 + Compound V3 + Morpho predictions, and complete scoring mechanism.
+
+---
+
+## Links
+
+| Resource | URL |
+|----------|-----|
+| **Pitch Deck** | https://vigil-pitch-deck.vercel.app |
+| **Twitter** | @faruukku |

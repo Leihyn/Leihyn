@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigil - Pitch Deck</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #0a1628;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #ffffff;
+        }
+
+        .deck-wrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a1628;
+        }
+
+        .deck {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+        }
+
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            padding: 80px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a1628 0%, #0d1f3c 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at top right, rgba(201, 169, 98, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 120px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #c9a962, #e8d5a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: #ffffff;
+        }
+
+        h3 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #c9a962;
+        }
+
+        p {
+            font-size: 36px;
+            line-height: 1.6;
+            color: #b0b0b0;
+        }
+
+        .subtitle {
+            font-size: 48px;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        .tagline {
+            font-size: 36px;
+            color: #666;
+            margin-top: 40px;
+        }
+
+        .big-number {
+            font-size: 200px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #c9a962, #e8d5a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .big-number-label {
+            font-size: 48px;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .flow-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            min-width: 280px;
+        }
+
+        .flow-box.highlight {
+            border-color: #c9a962;
+            background: rgba(201, 169, 98, 0.1);
+        }
+
+        .flow-box h4 {
+            font-size: 32px;
+            color: #c9a962;
+            margin-bottom: 15px;
+        }
+
+        .flow-box p {
+            font-size: 24px;
+            color: #a0a8b8;
+        }
+
+        .arrow {
+            font-size: 48px;
+            color: #c9a962;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #c9a962, #e8d5a3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #0a1628;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-size: 32px;
+            color: #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 40px 0;
+            font-size: 28px;
+        }
+
+        th {
+            background: rgba(201, 169, 98, 0.15);
+            padding: 25px 30px;
+            text-align: left;
+            font-weight: 600;
+            color: #c9a962;
+            border-bottom: 2px solid rgba(201, 169, 98, 0.3);
+        }
+
+        td {
+            padding: 25px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .cards-container {
+            display: flex;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px 40px;
+        }
+
+        .card h4 {
+            font-size: 32px;
+            color: #c9a962;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .card p {
+            font-size: 24px;
+            color: #a0a8b8;
+            line-height: 1.5;
+        }
+
+        .card .highlight-text {
+            color: #e8d5a3;
+            font-weight: 600;
+        }
+
+        .two-column {
+            display: flex;
+            gap: 80px;
+        }
+
+        .column {
+            flex: 1;
+        }
+
+        .callout {
+            background: rgba(201, 169, 98, 0.1);
+            border-left: 4px solid #c9a962;
+            padding: 40px;
+            border-radius: 0 16px 16px 0;
+            margin: 40px 0;
+        }
+
+        .callout h4 {
+            font-size: 28px;
+            color: #c9a962;
+            margin-bottom: 20px;
+        }
+
+        .callout p {
+            font-size: 26px;
+            color: #ccc;
+        }
+
+        .timeline {
+            display: flex;
+            gap: 20px;
+            margin: 50px 0;
+        }
+
+        .timeline-item {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 35px;
+            text-align: center;
+        }
+
+        .timeline-item h4 {
+            font-size: 24px;
+            color: #c9a962;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .timeline-item p {
+            font-size: 22px;
+            color: #999;
+            line-height: 1.4;
+        }
+
+        .summary-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px;
+            margin: 40px 0;
+        }
+
+        .summary-row {
+            display: flex;
+            margin-bottom: 25px;
+            align-items: baseline;
+        }
+
+        .summary-label {
+            width: 200px;
+            font-size: 28px;
+            color: #c9a962;
+            font-weight: 600;
+        }
+
+        .summary-value {
+            flex: 1;
+            font-size: 28px;
+            color: #ccc;
+        }
+
+        .bullet-list {
+            margin: 30px 0;
+        }
+
+        .bullet-list li {
+            font-size: 28px;
+            color: #ccc;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            list-style: none;
+        }
+
+        .bullet-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #c9a962;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .contact {
+            margin-top: 60px;
+            font-size: 28px;
+            color: #666;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 24px;
+            color: #444;
+        }
+
+        /* Navigation */
+        .nav-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255,255,255,0.5);
+            font-size: 16px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .back-link:hover {
+            color: #c9a962;
+        }
+
+        @media print {
+            .deck-wrapper {
+                display: block;
+                width: auto;
+                height: auto;
+            }
+            .deck {
+                transform: none !important;
+            }
+            .slide {
+                display: flex !important;
+                position: relative;
+                page-break-after: always;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .nav-hint, .slide-counter, .back-link {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<a href="../" class="back-link">← Back to Vigil</a>
+
+<div class="deck-wrapper">
+    <div class="deck">
+
+<!-- SLIDE 1: Title -->
+<div class="slide">
+    <div class="center">
+        <img src="../assets/vigil-logo.jpg" alt="Vigil Logo" style="width: 200px; margin-bottom: 40px; border-radius: 20px;">
+        <h1>VIGIL</h1>
+        <p class="subtitle">Decentralized Liquidation Prediction</p>
+        <p class="tagline">Bittensor Subnet Proposal</p>
+    </div>
+    <div class="slide-number">1</div>
+</div>
+
+<!-- SLIDE 2: The Problem -->
+<div class="slide">
+    <div class="center">
+        <div class="big-number">$2.4B</div>
+        <p class="big-number-label">liquidated in DeFi last year</p>
+    </div>
+    <div style="margin-top: 80px; text-align: center;">
+        <p style="font-size: 42px; color: #ccc; margin-bottom: 20px;">Borrowers had <strong style="color: #ff4444;">no warning</strong></p>
+        <p style="font-size: 42px; color: #ccc;">Liquidators with private bots <strong style="color: #e8d5a3;">won everything</strong></p>
+    </div>
+    <p style="text-align: center; margin-top: 80px; font-style: italic; font-size: 36px; color: #888;">
+        The prediction intelligence exists. It's locked in private bots.
+    </p>
+    <div class="slide-number">2</div>
+</div>
+
+<!-- SLIDE 3: User Journey -->
+<div class="slide" style="justify-content: flex-start; padding-top: 100px;">
+    <h2 class="center">What Happens Today</h2>
+    <div class="flow-container" style="flex-direction: column; gap: 15px; margin: 30px 0;">
+        <div class="flow-box" style="padding: 25px 40px;">
+            <p style="font-size: 26px; color: #ccc;">User deposits <strong style="color: #c9a962;">$100K</strong> collateral</p>
+        </div>
+        <div class="arrow" style="font-size: 36px;">↓</div>
+        <div class="flow-box" style="padding: 25px 40px;">
+            <p style="font-size: 26px; color: #ccc;">Market drops <strong style="color: #ff4444;">20%</strong></p>
+        </div>
+        <div class="arrow" style="font-size: 36px;">↓</div>
+        <div class="flow-box" style="padding: 25px 40px;">
+            <p style="font-size: 26px; color: #ccc;">Health factor crosses <strong style="color: #ff4444;">1.0</strong></p>
+        </div>
+        <div class="arrow" style="font-size: 36px;">↓</div>
+        <div class="flow-box" style="border-color: #ff4444; background: rgba(255, 68, 68, 0.1); padding: 25px 40px;">
+            <p style="font-size: 28px; color: #ff4444; font-weight: 700;">LIQUIDATED</p>
+            <p style="font-size: 22px; color: #ff8888; margin-top: 8px;">$10K penalty. No warning.</p>
+        </div>
+    </div>
+    <div class="slide-number">3</div>
+</div>
+
+<!-- SLIDE 4: The Solution -->
+<div class="slide">
+    <h2 class="center">The Solution</h2>
+    <p class="center" style="font-size: 42px; color: #ccc; margin-bottom: 60px;">Miners compete to predict liquidations</p>
+    <div class="flow-container">
+        <div class="flow-box highlight">
+            <h4>MINERS</h4>
+            <p>Predict which positions will liquidate</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="flow-box highlight">
+            <h4>VALIDATORS</h4>
+            <p>Verify against on-chain events</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="flow-box highlight">
+            <h4>TAO</h4>
+            <p>Rewards accurate predictors</p>
+        </div>
+    </div>
+    <div class="callout" style="max-width: 800px; margin: 50px auto 0; padding: 25px 35px;">
+        <h4 style="font-size: 24px;">Where does TAO come from?</h4>
+        <p style="font-size: 22px;">Bittensor network emissions — not users. Like Bitcoin mining rewards, TAO is emitted by the protocol itself and distributed to subnets based on value created.</p>
+    </div>
+    <div class="slide-number">4</div>
+</div>
+
+<!-- SLIDE 5: How It Works -->
+<div class="slide">
+    <h2>How It Works</h2>
+    <div class="two-column">
+        <div class="column">
+            <p style="font-size: 32px; color: #c9a962; margin-bottom: 30px;">Every hour:</p>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">Validators snapshot at-risk positions</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">Miners predict (10 min window)</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">6-hour observation (starts after predictions)</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-text">Match predictions to reality</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-text">Score miners → distribute TAO</div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <p style="font-size: 32px; color: #c9a962; margin-bottom: 30px;">Scoring:</p>
+            <table>
+                <tr>
+                    <th>Dimension</th>
+                    <th>Weight</th>
+                </tr>
+                <tr>
+                    <td>Precision</td>
+                    <td>40%</td>
+                </tr>
+                <tr>
+                    <td>Recall</td>
+                    <td>30%</td>
+                </tr>
+                <tr>
+                    <td>Lead Time</td>
+                    <td>20%</td>
+                </tr>
+                <tr>
+                    <td>Calibration</td>
+                    <td>10%</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="slide-number">5</div>
+</div>
+
+<!-- SLIDE 6: Key Innovations -->
+<div class="slide" style="justify-content: flex-start; padding-top: 80px;">
+    <h2>Key Innovations</h2>
+    <div class="cards-container" style="margin-top: 30px;">
+        <div class="card" style="padding: 35px 30px;">
+            <h4 style="font-size: 28px;">Danger Zone Credit</h4>
+            <p style="font-size: 20px; margin-top: 15px;">Miner predicts liquidation. User adds collateral. No liquidation.</p>
+            <p style="font-size: 20px; margin-top: 10px;">Was miner wrong? Not if HF dropped below 1.02.</p>
+            <p style="margin-top: 15px;"><span class="highlight-text" style="font-size: 22px;">→ Half credit for danger zone hits</span></p>
+        </div>
+        <div class="card" style="padding: 35px 30px;">
+            <h4 style="font-size: 28px;">HF History Tracking</h4>
+            <p style="font-size: 20px; margin-top: 15px;">Health Factor = liquidation risk metric.</p>
+            <p style="font-size: 20px; margin-top: 10px;">HF > 1 = safe. HF < 1 = liquidatable.</p>
+            <p style="margin-top: 15px;"><span class="highlight-text" style="font-size: 22px;">→ Track HF over time via archive nodes</span></p>
+        </div>
+        <div class="card" style="padding: 35px 30px;">
+            <h4 style="font-size: 28px;">Rolling 24h Aggregation</h4>
+            <p style="font-size: 20px; margin-top: 15px;">5-10 liquidations/day = too noisy for per-epoch scoring.</p>
+            <p style="font-size: 20px; margin-top: 10px;">24-hour window = 50-200 data points.</p>
+            <p style="margin-top: 15px;"><span class="highlight-text" style="font-size: 22px;">→ Statistical significance</span></p>
+        </div>
+    </div>
+    <div class="callout" style="margin-top: 30px; padding: 25px 35px;">
+        <h4 style="font-size: 22px;">Lead Time Threshold</h4>
+        <p style="font-size: 20px;">Earlier predictions earn bonus — but only if precision > 50%. Prevents wild early guesses.</p>
+    </div>
+    <div class="slide-number">6</div>
+</div>
+
+<!-- SLIDE 7: Why It's Verifiable -->
+<div class="slide" style="justify-content: flex-start; padding-top: 80px;">
+    <h2 class="center">Why It's Verifiable</h2>
+    <p class="center" style="font-size: 42px; margin: 40px 0; color: #c9a962;">
+        Liquidations are on-chain facts.
+    </p>
+    <table style="max-width: 1000px; margin: 0 auto;">
+        <tr>
+            <th>Data</th>
+            <th>Source</th>
+            <th>How</th>
+        </tr>
+        <tr>
+            <td>Did it liquidate?</td>
+            <td>Transaction hash</td>
+            <td style="font-size: 22px; color: #999;">LiquidationCall event logs</td>
+        </tr>
+        <tr>
+            <td>When?</td>
+            <td>Block timestamp</td>
+            <td style="font-size: 22px; color: #999;">Block header data</td>
+        </tr>
+        <tr>
+            <td>Danger zone hit?</td>
+            <td>HF history</td>
+            <td style="font-size: 22px; color: #999;">getUserAccountData() on archive node</td>
+        </tr>
+    </table>
+    <div class="callout" style="max-width: 900px; margin: 40px auto 0; padding: 25px 35px;">
+        <h4 style="font-size: 22px;">What's HF history?</h4>
+        <p style="font-size: 20px;">Health metric values over time. Validators query each protocol's risk function (Aave/Morpho: getUserAccountData, Compound: getAccountLiquidity) at historical blocks. If the position entered danger zone, we can prove it.</p>
+    </div>
+    <div class="center" style="margin-top: 40px;">
+        <p style="font-size: 32px; color: #888;">No subjectivity. No disputes.</p>
+        <p style="font-size: 32px; color: #e8d5a3; margin-top: 15px;">Validators verify facts, not judge quality.</p>
+    </div>
+    <div class="slide-number">7</div>
+</div>
+
+<!-- SLIDE 8: Business Model -->
+<div class="slide">
+    <h2>Business Model</h2>
+    <p style="font-size: 32px; color: #888; margin-bottom: 40px;">Who pays for Vigil?</p>
+    <div class="cards-container">
+        <div class="card">
+            <h4>Borrowers</h4>
+            <p>Alert subscriptions</p>
+            <p style="margin-top: 20px;"><span class="highlight-text">Avoid 5-15% penalty</span></p>
+        </div>
+        <div class="card">
+            <h4>Liquidators</h4>
+            <p>API access</p>
+            <p style="margin-top: 20px;"><span class="highlight-text">Better timing signals</span></p>
+        </div>
+        <div class="card">
+            <h4>Protocols</h4>
+            <p>Risk dashboards</p>
+            <p style="margin-top: 20px;"><span class="highlight-text">Real-time monitoring</span></p>
+        </div>
+    </div>
+    <div class="callout" style="margin-top: 50px;">
+        <p style="margin-bottom: 20px;"><strong style="color: #c9a962;">Prediction ≠ Execution</strong></p>
+        <p style="font-size: 24px;">Why don't miners just liquidate themselves? Different skills. Prediction requires analysis. Liquidation requires capital ($100K+), MEV infrastructure, and tolerance for failed transactions.</p>
+        <p style="margin-top: 20px; color: #e8d5a3;">Vigil commoditizes prediction. Liquidators compete on execution.</p>
+    </div>
+    <div class="slide-number">8</div>
+</div>
+
+<!-- SLIDE 9: Differentiation -->
+<div class="slide">
+    <h2>Differentiation</h2>
+    <p class="vs-label">vs SN10 (Sturdy)</p>
+    <table class="comparison-table">
+        <tr>
+            <th></th>
+            <th>Sturdy (SN10)</th>
+            <th>Vigil</th>
+        </tr>
+        <tr>
+            <td>Focus</td>
+            <td>Maximize yield (offense)</td>
+            <td style="color: #e8d5a3;">Predict risk (defense)</td>
+        </tr>
+        <tr>
+            <td>Task type</td>
+            <td>Continuous optimization</td>
+            <td style="color: #e8d5a3;">Discrete events</td>
+        </tr>
+        <tr>
+            <td>Verification</td>
+            <td>Performance over weeks</td>
+            <td style="color: #e8d5a3;">Hours to verify</td>
+        </tr>
+    </table>
+    <p class="center" style="margin-top: 60px; font-size: 36px; color: #c9a962;">
+        Sturdy helps you make money. Vigil helps you not lose money.
+    </p>
+    <div class="slide-number">9</div>
+</div>
+
+<!-- SLIDE 10: Round II Plan -->
+<div class="slide" style="justify-content: flex-start; padding-top: 50px;">
+    <h2>Round II Plan</h2>
+    <p style="font-size: 24px; color: #888; margin-bottom: 15px;">4 weeks. Protocol-agnostic architecture. <span style="color: #c9a962;">Aave + Compound + Morpho = 65% of lending market.</span></p>
+    <div class="timeline" style="margin: 15px 0;">
+        <div class="timeline-item" style="padding: 18px;">
+            <h4>WEEK 1</h4>
+            <p style="font-size: 16px;">Adapter interface<br/>Aave V3 adapter</p>
+        </div>
+        <div class="timeline-item" style="padding: 18px;">
+            <h4>WEEK 2</h4>
+            <p style="font-size: 16px;">Compound V3 adapter<br/>Morpho adapter</p>
+        </div>
+        <div class="timeline-item" style="padding: 18px;">
+            <h4>WEEK 3</h4>
+            <p style="font-size: 16px;">Validator scoring<br/>(works across all)</p>
+        </div>
+        <div class="timeline-item" style="padding: 18px;">
+            <h4>WEEK 4</h4>
+            <p style="font-size: 16px;">Testing + docs<br/>Historical replay</p>
+        </div>
+    </div>
+    <div class="two-column" style="gap: 25px; margin-top: 15px;">
+        <div class="callout" style="padding: 18px; margin: 0;">
+            <h4 style="font-size: 18px;">Protocol Adapter Interface</h4>
+            <p style="font-size: 16px;">Each protocol defines: prediction window, risk metric, liquidation events. Scoring logic is protocol-agnostic. Add new protocols by implementing one interface.</p>
+        </div>
+        <div class="callout" style="padding: 18px; margin: 0;">
+            <h4 style="font-size: 18px;">Future: Maker Support</h4>
+            <p style="font-size: 16px;">Maker uses auctions (not instant). Architecture supports 24h window + auction-start prediction. Documented, not built in Round II.</p>
+        </div>
+    </div>
+    <div class="slide-number">10</div>
+</div>
+
+<!-- SLIDE 11: Summary -->
+<div class="slide" style="justify-content: flex-start; padding-top: 60px;">
+    <div class="center" style="margin-bottom: 10px;">
+        <img src="../assets/vigil-logo.jpg" alt="Vigil Logo" style="width: 100px; border-radius: 12px;">
+    </div>
+    <h1 class="center" style="font-size: 64px;">VIGIL</h1>
+    <p class="center subtitle" style="font-size: 28px; margin-top: 10px;">Decentralized Liquidation Prediction</p>
+
+    <div class="summary-box" style="padding: 30px; margin: 25px 0;">
+        <div class="summary-row" style="margin-bottom: 15px;">
+            <div class="summary-label" style="font-size: 24px;">PROBLEM</div>
+            <div class="summary-value" style="font-size: 24px;">$2.4B liquidated with no warning</div>
+        </div>
+        <div class="summary-row" style="margin-bottom: 15px;">
+            <div class="summary-label" style="font-size: 24px;">SOLUTION</div>
+            <div class="summary-value" style="font-size: 24px;">Miners predict, validators verify, TAO rewards accuracy</div>
+        </div>
+        <div class="summary-row" style="margin-bottom: 15px;">
+            <div class="summary-label" style="font-size: 24px;">WHY NOW</div>
+            <div class="summary-value" style="font-size: 24px;">Novel use case, no existing subnet</div>
+        </div>
+        <div class="summary-row" style="margin-bottom: 0;">
+            <div class="summary-label" style="font-size: 24px;">WHY US</div>
+            <div class="summary-value" style="font-size: 24px;">DeFi expertise, buildable in 4 weeks</div>
+        </div>
+    </div>
+
+    <p style="font-size: 24px; color: #c9a962; margin-top: 15px;">Key Innovations:</p>
+    <ul class="bullet-list" style="margin: 10px 0;">
+        <li style="font-size: 20px; margin-bottom: 6px;">Protocol-agnostic adapter architecture (Aave + Compound + Morpho = 65% market)</li>
+        <li style="font-size: 20px; margin-bottom: 6px;">Danger zone partial credit for rescued positions</li>
+        <li style="font-size: 20px; margin-bottom: 6px;">Rolling 24-hour aggregation for statistical significance</li>
+        <li style="font-size: 20px; margin-bottom: 0;">Historical replay mode for testnet validation</li>
+    </ul>
+
+    <div class="contact center" style="margin-top: 30px;">
+        <p style="font-size: 24px;">Faruukku</p>
+        <p style="font-size: 22px;">@faruukku</p>
+    </div>
+    <div class="slide-number">11</div>
+</div>
+
+    </div><!-- end .deck -->
+</div><!-- end .deck-wrapper -->
+
+<div class="nav-hint">Use arrow keys or click to navigate</div>
+<div class="slide-counter"><span id="current">1</span> / <span id="total">11</span></div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const deck = document.querySelector('.deck');
+    const deckWrapper = document.querySelector('.deck-wrapper');
+    const currentSpan = document.getElementById('current');
+    const totalSpan = document.getElementById('total');
+    let currentSlide = 0;
+
+    totalSpan.textContent = slides.length;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        currentSpan.textContent = index + 1;
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function scaleDeck() {
+        const scaleX = window.innerWidth / 1920;
+        const scaleY = window.innerHeight / 1080;
+        const scale = Math.min(scaleX, scaleY) * 0.95; // 95% to add some padding
+
+        deck.style.transform = `scale(${scale})`;
+        deck.style.transformOrigin = 'center center';
+    }
+
+    // Initialize
+    showSlide(0);
+    scaleDeck();
+
+    // Event listeners
+    window.addEventListener('resize', scaleDeck);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextSlide();
+        }
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevSlide();
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        // Don't navigate if clicking on the back link
+        if (e.target.closest('.back-link')) return;
+
+        if (e.clientX > window.innerWidth / 2) nextSlide();
+        else prevSlide();
+    });
+</script>
+
+</body>
+</html>

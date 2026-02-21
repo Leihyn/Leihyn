@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>veTokens Presentation — Decentralized Masters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 40px 80px 140px 80px;
+            position: relative;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            font-size: 14px;
+            color: #666;
+            z-index: 99;
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #a855f7, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: #e2e8f0;
+        }
+
+        h3 {
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 30px;
+            color: #a855f7;
+        }
+
+        p {
+            font-size: 28px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+
+        .big-text {
+            font-size: 42px;
+            font-weight: 600;
+            color: #f1f5f9;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            color: #a855f7;
+            font-weight: 600;
+        }
+
+        .highlight-gold {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .highlight-green {
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        .highlight-red {
+            color: #f87171;
+        }
+
+        ul {
+            list-style: none;
+            font-size: 28px;
+            line-height: 2;
+        }
+
+        li {
+            margin-bottom: 15px;
+            padding-left: 40px;
+            position: relative;
+            color: #cbd5e1;
+        }
+
+        li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #a855f7;
+        }
+
+        .comparison {
+            display: flex;
+            gap: 60px;
+            margin-top: 40px;
+        }
+
+        .comparison-box {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .comparison-box.left {
+            border-color: rgba(248,113,113,0.3);
+        }
+
+        .comparison-box.right {
+            border-color: rgba(74,222,128,0.3);
+        }
+
+        .comparison-box h4 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #94a3b8;
+        }
+
+        .comparison-box.right h4 {
+            color: #4ade80;
+        }
+
+        .comparison-box ul {
+            font-size: 22px;
+        }
+
+        .formula-box {
+            background: rgba(168,85,247,0.1);
+            border: 1px solid rgba(168,85,247,0.3);
+            border-radius: 12px;
+            padding: 30px 40px;
+            margin: 30px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 24px;
+        }
+
+        .benefit-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-right: 20px;
+        }
+
+        .analogy-box {
+            background: rgba(251,191,36,0.1);
+            border-left: 4px solid #fbbf24;
+            padding: 25px 35px;
+            margin: 25px 0;
+            font-size: 26px;
+            font-style: italic;
+            color: #fef3c7;
+        }
+
+        .three-col {
+            display: flex;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .col {
+            flex: 1;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 35px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .col h4 {
+            font-size: 22px;
+            color: #a855f7;
+            margin-bottom: 20px;
+        }
+
+        .col p {
+            font-size: 20px;
+        }
+
+        .protocol-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .protocol-tag {
+            background: rgba(168,85,247,0.2);
+            border: 1px solid rgba(168,85,247,0.4);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 22px;
+        }
+
+        .speaker-note {
+            position: fixed;
+            bottom: 80px;
+            left: 40px;
+            background: rgba(0,0,0,0.9);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #94a3b8;
+            max-width: 50%;
+            border: 1px solid #333;
+            z-index: 99;
+        }
+
+        .speaker-note strong {
+            color: #fbbf24;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .controls button {
+            background: rgba(168,85,247,0.3);
+            border: 1px solid rgba(168,85,247,0.5);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .controls button:hover {
+            background: rgba(168,85,247,0.5);
+        }
+
+        .title-slide {
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title-slide h1 {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .title-slide .author {
+            font-size: 32px;
+            color: #94a3b8;
+            margin-top: 60px;
+        }
+
+        .end-slide {
+            text-align: center;
+            align-items: center;
+        }
+
+        .end-slide h1 {
+            margin-bottom: 50px;
+        }
+
+        .credentials {
+            margin-top: 40px;
+            font-size: 22px;
+            color: #94a3b8;
+            line-height: 2;
+        }
+
+        .tagline {
+            margin-top: 50px;
+            font-size: 28px;
+            color: #a855f7;
+            font-weight: 500;
+        }
+
+        .key-point {
+            font-size: 36px;
+            text-align: center;
+            padding: 60px;
+            background: rgba(168,85,247,0.1);
+            border-radius: 20px;
+            margin: 40px 0;
+            border: 1px solid rgba(168,85,247,0.2);
+        }
+
+        @media print {
+            .slide {
+                display: block !important;
+                page-break-after: always;
+                height: auto;
+                min-height: 100vh;
+            }
+            .controls, .speaker-note {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide title-slide active" id="slide1">
+    <h1>What Are veTokens?</h1>
+    <p class="subtitle">And How Do They Benefit the Investor</p>
+    <p class="author">Onatola Timilehin (Leihyn)</p>
+    <div class="speaker-note">
+        <strong>Say:</strong> Name, Blockchain / Full Stack Engineer at DeFiConnectCredit, UHI7 graduate (15% acceptance), Privacy Chronicles creator (70-page ZK comic), why you want Decentralized Masters
+    </div>
+    <div class="slide-number">1 / 12</div>
+</div>
+
+<!-- SLIDE 2: The Problem -->
+<div class="slide" id="slide2">
+    <h2>The Problem</h2>
+    <p class="big-text">You buy shares in a company...</p>
+    <ul style="margin-top: 40px;">
+        <li><span class="highlight-red">No voting rights</span></li>
+        <li><span class="highlight-red">No dividends</span></li>
+        <li><span class="highlight-red">CEO can dilute you anytime</span></li>
+    </ul>
+    <div class="key-point" style="margin-top: 50px;">
+        Why would you hold?<br>
+        <span class="highlight">You wouldn't. You'd sell.</span>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> This is what most governance tokens feel like. You hold, but there's no reason to keep holding. People buy, dump, price drops, everyone loses.
+    </div>
+    <div class="slide-number">2 / 12</div>
+</div>
+
+<!-- SLIDE 3: The Question -->
+<div class="slide" id="slide3">
+    <div style="text-align: center; padding-top: 100px;">
+        <h2 style="font-size: 52px; margin-bottom: 60px;">The Question</h2>
+        <p class="big-text" style="font-size: 48px; line-height: 1.5;">
+            How do you make people<br>
+            <span class="highlight">want to hold long-term</span><br>
+            instead of dumping immediately?
+        </p>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> Pose this as a genuine question. Pause for effect. Then transition to the answer.
+    </div>
+    <div class="slide-number">3 / 12</div>
+</div>
+
+<!-- SLIDE 4: Gym Analogy -->
+<div class="slide" id="slide4">
+    <h2>veTokens = Gym Membership</h2>
+    <div class="comparison">
+        <div class="comparison-box left">
+            <h4>Pay-Per-Visit</h4>
+            <ul>
+                <li>Basic equipment only</li>
+                <li>Full price</li>
+                <li>No say in decisions</li>
+            </ul>
+        </div>
+        <div class="comparison-box right">
+            <h4>1-Year Contract</h4>
+            <ul>
+                <li><span class="highlight-green">Priority access</span></li>
+                <li><span class="highlight-green">Discounts on classes</span></li>
+                <li><span class="highlight-green">Vote on new equipment</span></li>
+            </ul>
+        </div>
+    </div>
+    <p style="text-align: center; margin-top: 50px; font-size: 32px;">
+        <span class="highlight">Longer contract = More perks</span><br>
+        <span style="color: #94a3b8;">Can't cancel early — commitment is real</span>
+    </p>
+    <div class="speaker-note">
+        <strong>Say:</strong> Walk through both sides. Emphasize: the longer you commit, the more benefits. And you can't back out.
+    </div>
+    <div class="slide-number">4 / 12</div>
+</div>
+
+<!-- SLIDE 5: How It Works -->
+<div class="slide" id="slide5">
+    <h2>How It Works</h2>
+    <h3>"ve" = Vote-Escrowed</h3>
+    <div class="formula-box">
+        Lock CRV → Get veCRV
+    </div>
+    <div class="comparison" style="margin-top: 30px;">
+        <div class="comparison-box">
+            <p style="font-size: 24px; margin-bottom: 0;">Lock <span class="highlight">1,000 CRV</span> for <span class="highlight-gold">4 years</span></p>
+            <p style="font-size: 32px; color: #4ade80; margin-top: 10px;">→ 1,000 veCRV</p>
+        </div>
+        <div class="comparison-box">
+            <p style="font-size: 24px; margin-bottom: 0;">Lock <span class="highlight">1,000 CRV</span> for <span class="highlight-gold">1 year</span></p>
+            <p style="font-size: 32px; color: #fbbf24; margin-top: 10px;">→ 250 veCRV</p>
+        </div>
+    </div>
+    <ul style="margin-top: 40px;">
+        <li>Longer lock = More power</li>
+        <li>Power decays as lock expires</li>
+        <li><span class="highlight">Non-transferable</span> — can't sell or game the system</li>
+    </ul>
+    <div class="speaker-note">
+        <strong>Say:</strong> ve = vote-escrowed. Lock period determines power. Can't borrow voting power and dump — you have skin in the game.
+    </div>
+    <div class="slide-number">5 / 12</div>
+</div>
+
+<!-- SLIDE 6: Benefit 1 -->
+<div class="slide" id="slide6">
+    <h2><span class="benefit-number">1</span> Governance Power</h2>
+    <div class="analogy-box">
+        Renters live in the neighborhood.<br>
+        <strong>Homeowners vote on the rules.</strong>
+    </div>
+    <ul style="margin-top: 40px;">
+        <li>veCRV holders vote on which pools get rewards</li>
+        <li>This is called <span class="highlight">"gauge voting"</span></li>
+        <li>Vote to direct rewards to YOUR pool</li>
+    </ul>
+    <div class="formula-box" style="background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.3);">
+        <span class="highlight-gold">Protocols PAY veCRV holders to vote for their pools</span><br>
+        <span style="font-size: 20px; color: #94a3b8;">Convex, Votium = real bribe markets</span>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> Renter vs homeowner. Gauge voting = pointing rewards where you want. Bribe markets are real — protocols pay for votes.
+    </div>
+    <div class="slide-number">6 / 12</div>
+</div>
+
+<!-- SLIDE 7: Benefit 2 -->
+<div class="slide" id="slide7">
+    <h2><span class="benefit-number">2</span> Boosted Rewards</h2>
+    <div class="analogy-box" style="margin: 15px 0; padding: 18px 30px; font-size: 22px;">
+        Restaurant loyalty card. <strong>Regulars get 2.5x portions for the same price.</strong>
+    </div>
+    <div class="comparison" style="margin-top: 20px; gap: 40px;">
+        <div class="comparison-box left" style="padding: 25px;">
+            <h4 style="margin-bottom: 15px;">No veCRV</h4>
+            <p style="font-size: 42px; text-align: center; margin: 20px 0;">1x</p>
+            <p style="text-align: center; color: #94a3b8; font-size: 18px; margin: 0;">Base rewards</p>
+        </div>
+        <div class="comparison-box right" style="padding: 25px;">
+            <h4 style="margin-bottom: 15px;">Max veCRV</h4>
+            <p style="font-size: 42px; text-align: center; margin: 20px 0; color: #4ade80;">2.5x</p>
+            <p style="text-align: center; color: #4ade80; font-size: 18px; margin: 0;">Boosted rewards</p>
+        </div>
+    </div>
+    <p style="text-align: center; margin-top: 25px; font-size: 24px; margin-bottom: 0;">
+        Same pool. Same deposit. <span class="highlight">Committed investors earn more.</span>
+    </p>
+    <div class="speaker-note">
+        <strong>Say:</strong> Loyalty card analogy. If you hold veCRV while providing liquidity, you earn up to 2.5x more than someone without it.
+    </div>
+    <div class="slide-number">7 / 12</div>
+</div>
+
+<!-- SLIDE 8: Benefit 3 -->
+<div class="slide" id="slide8">
+    <h2><span class="benefit-number">3</span> Revenue Sharing</h2>
+    <div class="analogy-box">
+        Own a franchise, not a lottery ticket.<br>
+        <strong>You get a cut of the business revenue.</strong>
+    </div>
+    <div style="margin-top: 40px;">
+        <p style="font-size: 30px; margin-bottom: 30px;">
+            Every swap on Curve → <span class="highlight-gold">generates fees</span>
+        </p>
+        <p style="font-size: 30px; margin-bottom: 30px;">
+            A portion of those fees → <span class="highlight-green">goes to veCRV holders</span>
+        </p>
+    </div>
+    <div class="key-point">
+        <span class="highlight">Real Yield</span><br>
+        <span style="font-size: 24px; color: #94a3b8;">From actual protocol usage — not token inflation</span>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> Franchise analogy. This is REAL yield from REAL usage. Not printing new tokens. One of the few tokens that generates actual income.
+    </div>
+    <div class="slide-number">8 / 12</div>
+</div>
+
+<!-- SLIDE 9: Why It Matters -->
+<div class="slide" id="slide9">
+    <h2>Why This Model Works</h2>
+    <div class="comparison" style="margin-top: 20px;">
+        <div class="comparison-box left">
+            <h4 style="color: #f87171;">Before veTokens</h4>
+            <p style="font-size: 24px; text-align: center; line-height: 1.8;">
+                Earn token<br>↓<br>Dump token<br>↓<br>Price crashes<br>↓<br><span class="highlight-red">Everyone loses</span>
+            </p>
+        </div>
+        <div class="comparison-box right">
+            <h4>After veTokens</h4>
+            <p style="font-size: 24px; text-align: center; line-height: 1.8;">
+                Want rewards? <span class="highlight-green">Commit.</span><br><br>
+                Want governance? <span class="highlight-green">Commit.</span><br><br>
+                Want revenue? <span class="highlight-green">Commit.</span>
+            </p>
+        </div>
+    </div>
+    <p style="text-align: center; margin-top: 50px; font-size: 32px;">
+        <span class="highlight">Incentives aligned.</span><br>
+        <span style="color: #94a3b8;">Protocol and users win together.</span>
+    </p>
+    <div class="speaker-note">
+        <strong>Say:</strong> Farm-and-dump solved. The ve model says: if you want the good stuff, you have to commit. Turned passive holders into active stakeholders.
+    </div>
+    <div class="slide-number">9 / 12</div>
+</div>
+
+<!-- SLIDE 10: Adoption -->
+<div class="slide" id="slide10">
+    <h2>Who Uses This Model?</h2>
+    <div class="protocol-list">
+        <div class="protocol-tag"><strong>Curve</strong> → veCRV <span style="color: #94a3b8;">(pioneer)</span></div>
+        <div class="protocol-tag"><strong>Velodrome</strong> → veVELO <span style="color: #94a3b8;">(Optimism)</span></div>
+        <div class="protocol-tag"><strong>Aerodrome</strong> → veAERO <span style="color: #94a3b8;">(Base)</span></div>
+        <div class="protocol-tag"><strong>Balancer</strong> → veBAL</div>
+        <div class="protocol-tag"><strong>Frax</strong> → veFXS</div>
+    </div>
+    <p style="margin-top: 60px; font-size: 32px; text-align: center;">
+        <span class="highlight">Dozens of protocols.</span><br>
+        <span style="color: #94a3b8;">One proven model.</span>
+    </p>
+    <div class="speaker-note">
+        <strong>Say:</strong> Curve pioneered it. Now the model is everywhere — Velodrome on Optimism, Aerodrome on Base, Balancer, Frax. It works.
+    </div>
+    <div class="slide-number">10 / 12</div>
+</div>
+
+<!-- SLIDE 11: Summary -->
+<div class="slide" id="slide11">
+    <h2>3 Things to Remember</h2>
+    <div class="three-col">
+        <div class="col">
+            <h4>1. LOCK → VOTE</h4>
+            <p>Longer lock =<br>More voting power</p>
+        </div>
+        <div class="col">
+            <h4>2. LOCK → BOOST</h4>
+            <p>Committed investors<br>earn up to <span class="highlight-green">2.5x</span></p>
+        </div>
+        <div class="col">
+            <h4>3. LOCK → EARN</h4>
+            <p>Real revenue from<br>protocol fees</p>
+        </div>
+    </div>
+    <div class="key-point" style="margin-top: 60px;">
+        Not inflation. Not speculation.<br>
+        <span class="highlight">Real value for real commitment.</span>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> Three benefits, one action: lock. Voting power, boosted rewards, real revenue. That's why veTokens work.
+    </div>
+    <div class="slide-number">11 / 12</div>
+</div>
+
+<!-- SLIDE 12: Closing -->
+<div class="slide end-slide" id="slide12">
+    <h1>Thank You</h1>
+    <p style="font-size: 36px;">Onatola Timilehin (Leihyn)</p>
+    <div class="credentials">
+        Blockchain / Full Stack Engineer @ DeFiConnectCredit<br>
+        UHI7 Graduate (Uniswap Hook Incubator)<br>
+        Privacy Chronicles — Content Track Winner
+    </div>
+    <p class="tagline">I build DeFi. I teach DeFi.<br>That's why Decentralized Masters.</p>
+    <div class="speaker-note">
+        <strong>Say:</strong> Thank them for watching. Restate: you're at the intersection of building and teaching DeFi. That's exactly what this role needs.
+    </div>
+    <div class="slide-number">12 / 12</div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+    <button onclick="prevSlide()">← Previous</button>
+    <button onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 12;
+
+    function showSlide(n) {
+        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+        document.getElementById('slide' + n).classList.add('active');
+        currentSlide = n;
+    }
+
+    function nextSlide() {
+        if (currentSlide < totalSlides) {
+            showSlide(currentSlide + 1);
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 1) {
+            showSlide(currentSlide - 1);
+        }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+        }
+    });
+</script>
+
+</body>
+</html>

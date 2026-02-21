@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>veTokens — Decentralized Masters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #09090b; color: #fafafa; overflow: hidden; }
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, #8b5cf6, #6366f1); transition: width 0.3s ease; z-index: 1000; }
+        .slide { display: none; width: 100vw; min-height: 100vh; padding: 40px 60px 100px; position: relative; background: #09090b; flex-direction: column; justify-content: flex-start; overflow-y: auto; }
+        .slide.active { display: flex; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-label { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: #8b5cf6; margin-bottom: 16px; }
+        h1 { font-size: 72px; font-weight: 800; line-height: 1.1; margin-bottom: 24px; color: #fafafa; }
+        h1 .gradient { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        h2 { font-size: 42px; font-weight: 700; line-height: 1.2; margin-bottom: 24px; color: #fafafa; }
+        .subtitle { font-size: 18px; color: #a1a1aa; font-weight: 400; max-width: 700px; }
+        .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+        .card { background: linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(99,102,241,0.05) 100%); border: 1px solid rgba(139,92,246,0.2); border-radius: 12px; padding: 20px; }
+        .card.danger { background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(239,68,68,0.05) 100%); border-color: rgba(239,68,68,0.3); }
+        .card.success { background: linear-gradient(135deg, rgba(34,197,94,0.1) 0%, rgba(34,197,94,0.05) 100%); border-color: rgba(34,197,94,0.3); }
+        .card-icon { font-size: 24px; margin-bottom: 8px; }
+        .card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: #fafafa; }
+        .card p { font-size: 14px; color: #a1a1aa; line-height: 1.5; }
+        .versus { display: flex; align-items: stretch; gap: 20px; margin-top: 24px; }
+        .versus-side { flex: 1; padding: 24px; border-radius: 16px; position: relative; }
+        .versus-side.bad { background: linear-gradient(180deg, rgba(239,68,68,0.15) 0%, rgba(239,68,68,0.05) 100%); border: 1px solid rgba(239,68,68,0.3); }
+        .versus-side.good { background: linear-gradient(180deg, rgba(34,197,94,0.15) 0%, rgba(34,197,94,0.05) 100%); border: 1px solid rgba(34,197,94,0.3); }
+        .versus-label { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+        .versus-side.bad .versus-label { color: #ef4444; }
+        .versus-side.good .versus-label { color: #22c55e; }
+        .versus-content { font-size: 16px; line-height: 1.6; color: #d4d4d8; }
+        .versus-divider { display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #52525b; }
+        .flow { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 24px 0; flex-wrap: wrap; }
+        .flow-step { background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.3); border-radius: 10px; padding: 16px 24px; text-align: center; }
+        .flow-step.highlight { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); border: none; }
+        .flow-step .value { font-size: 20px; font-weight: 700; color: #fafafa; }
+        .flow-step .label { font-size: 12px; color: #a1a1aa; margin-top: 4px; }
+        .flow-step.highlight .label { color: rgba(255,255,255,0.8); }
+        .flow-arrow { font-size: 24px; color: #8b5cf6; }
+        .benefit-row { display: flex; gap: 20px; margin-top: 24px; }
+        .benefit-card { flex: 1; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; text-align: center; transition: all 0.3s ease; }
+        .benefit-card:hover { border-color: rgba(139,92,246,0.4); transform: translateY(-4px); }
+        .benefit-number { width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #6366f1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; margin: 0 auto 12px; }
+        .benefit-card h4 { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: #fafafa; }
+        .benefit-card p { font-size: 14px; color: #71717a; line-height: 1.4; }
+        .analogy { background: linear-gradient(90deg, rgba(251,191,36,0.1) 0%, rgba(251,191,36,0.02) 100%); border-left: 4px solid #fbbf24; padding: 16px 24px; margin: 20px 0; border-radius: 0 12px 12px 0; }
+        .analogy p { font-size: 16px; color: #fef3c7; font-style: italic; line-height: 1.4; }
+        .protocol-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+        .protocol-tag { background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); padding: 12px 20px; border-radius: 100px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+        .protocol-tag .chain { font-size: 14px; color: #71717a; font-weight: 400; }
+        .big-number-row { display: flex; gap: 40px; margin-top: 24px; }
+        .big-number-item { text-align: center; }
+        .big-number { font-size: 56px; font-weight: 800; color: #fafafa; }
+        .big-number.green { color: #22c55e; }
+        .big-number-label { font-size: 18px; color: #71717a; margin-top: 8px; }
+        .speaker-note { position: fixed; bottom: 70px; left: 40px; background: rgba(0,0,0,0.95); border: 1px solid #27272a; padding: 16px 24px; border-radius: 12px; font-size: 14px; color: #a1a1aa; max-width: 500px; z-index: 100; }
+        .speaker-note strong { color: #fbbf24; }
+        .slide-number { position: fixed; bottom: 28px; right: 40px; font-size: 14px; color: #52525b; font-weight: 500; z-index: 100; }
+        .controls { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 100; }
+        .controls button { background: rgba(139,92,246,0.2); border: 1px solid rgba(139,92,246,0.3); color: #fafafa; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; font-family: inherit; transition: all 0.2s; }
+        .controls button:hover { background: rgba(139,92,246,0.4); }
+        .title-slide { align-items: center; text-align: center; }
+        .title-slide h1 { font-size: 64px; }
+        .end-slide { align-items: center; text-align: center; }
+        .credentials-grid { display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+        .credential { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px 20px; border-radius: 10px; font-size: 14px; color: #a1a1aa; }
+        .tagline { margin-top: 24px; font-size: 22px; font-weight: 600; background: linear-gradient(135deg, #8b5cf6, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .centered { text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .text-purple { color: #8b5cf6; }
+        .text-green { color: #22c55e; }
+        .text-red { color: #ef4444; }
+        .text-gold { color: #fbbf24; }
+        .text-muted { color: #71717a; }
+        .key-point { background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(99,102,241,0.08) 100%); border: 1px solid rgba(139,92,246,0.3); border-radius: 12px; padding: 24px 32px; text-align: center; margin-top: 24px; }
+        .key-point p { font-size: 22px; font-weight: 600; color: #fafafa; line-height: 1.4; }
+        .key-point .sub { font-size: 16px; color: #a1a1aa; font-weight: 400; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<!-- SLIDE 1: About Me -->
+<div class="slide active" id="slide1">
+    <div class="slide-label">Introduction</div>
+    <h2>Hi, I'm <span class="text-purple">Onatola Timilehin</span></h2>
+    <p class="subtitle" style="margin-bottom: 32px;">Also known as Leihyn — Blockchain Developer & DeFi Educator</p>
+    <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="card">
+            <h3>What I Do Now</h3>
+            <p><strong>Blockchain / Full Stack Engineer</strong> at DeFiConnectCredit — integrating Aave V3, Uniswap, Curve, and GMX in production systems daily.</p>
+        </div>
+        <div class="card">
+            <h3>Education & Training</h3>
+            <p><strong>Uniswap Hook Incubator (UHI7)</strong> graduate — 15% acceptance rate. Built Sentiment, a dynamic fee hook for Uniswap V4. Currently studying DeFi security at <strong>Cyfrin Updraft</strong>.</p>
+        </div>
+        <div class="card" style="border-color: rgba(251,191,36,0.4); background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.02));">
+            <h3 class="text-gold">Content Creation</h3>
+            <p><strong>Privacy Chronicles</strong> — 70-page comic series explaining zero-knowledge proofs. Won the Content Creation track at Zypherpunk Hackathon.</p>
+        </div>
+        <div class="card success">
+            <h3>Why Decentralized Masters?</h3>
+            <p>I live at the intersection of <strong>building DeFi</strong> and <strong>teaching DeFi</strong>. I don't just understand these protocols — I explain them through stories people actually remember.</p>
+        </div>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> "Hi, I'm Timilehin — also known as Leihyn. I'm a blockchain developer who specializes in DeFi integrations, and I also create educational content. Let me tell you why I'm the right fit for Decentralized Masters..."
+    </div>
+    <div class="slide-number">1 / 11</div>
+</div>
+
+<!-- SLIDE 2: Title -->
+<div class="slide title-slide" id="slide2">
+    <div class="slide-label">Today's Topic</div>
+    <h1>What Are <span class="gradient">veTokens</span>?</h1>
+    <p class="subtitle">And how they benefit investors</p>
+    <div class="speaker-note">
+        <strong>Say:</strong> "Now let me show you how I teach complex DeFi concepts. Today's topic: veTokens — one of the most important innovations in DeFi tokenomics."
+    </div>
+    <div class="slide-number">2 / 11</div>
+</div>
+
+<!-- SLIDE 3: The Hook -->
+<div class="slide" id="slide3">
+    <div class="slide-label">The Problem</div>
+    <h2>Most governance tokens are <span class="text-red">worthless</span></h2>
+    <div class="card-grid">
+        <div class="card danger">
+            <div class="card-icon">🗳️</div>
+            <h3>Voting rights?</h3>
+            <p>Maybe. But most users never vote — and your vote barely moves the needle.</p>
+        </div>
+        <div class="card danger">
+            <div class="card-icon">💰</div>
+            <h3>Dividends?</h3>
+            <p>Almost never. Protocols keep the fees. You get nothing but price speculation.</p>
+        </div>
+        <div class="card danger">
+            <div class="card-icon">📉</div>
+            <h3>Hold incentive?</h3>
+            <p>Zero. So people earn tokens and dump them immediately. Price tanks. Everyone loses.</p>
+        </div>
+        <div class="card danger">
+            <div class="card-icon">🔄</div>
+            <h3>The result?</h3>
+            <p><strong>"Farm and dump"</strong> — a death spiral that killed countless protocols.</p>
+        </div>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> Imagine buying stock that gives you no dividends, no real voting power, and the CEO can dilute you anytime. Why would you hold? You wouldn't. That's most governance tokens.
+    </div>
+    <div class="slide-number">3 / 11</div>
+</div>
+
+<!-- SLIDE 4: The Insight -->
+<div class="slide centered" id="slide4">
+    <div class="slide-label">The Question</div>
+    <h2 style="max-width: 900px;">How do you make people <span class="text-purple">want to hold</span> instead of dump?</h2>
+    <div class="key-point" style="max-width: 800px;">
+        <p>Make commitment <span class="text-gold">rewarding</span>.</p>
+        <p class="sub">The longer you lock, the more you earn, vote, and own.</p>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> Pause here. Let the question land. Then: "Someone figured it out. Curve Finance. They invented veTokens."
+    </div>
+    <div class="slide-number">4 / 11</div>
+</div>
+
+<!-- SLIDE 5: The Analogy -->
+<div class="slide" id="slide5">
+    <div class="slide-label">The Analogy</div>
+    <h2>veTokens = Premium Gym Membership</h2>
+    <div class="versus">
+        <div class="versus-side bad">
+            <div class="versus-label">Pay-Per-Visit</div>
+            <div class="versus-content">
+                → Basic equipment only<br>
+                → Full price every time<br>
+                → No say in gym decisions<br>
+                → Leave anytime
+            </div>
+        </div>
+        <div class="versus-divider">VS</div>
+        <div class="versus-side good">
+            <div class="versus-label">Annual Contract</div>
+            <div class="versus-content">
+                → <strong>Priority</strong> equipment access<br>
+                → <strong>Discounts</strong> on classes<br>
+                → <strong>Vote</strong> on new equipment<br>
+                → Can't cancel early
+            </div>
+        </div>
+    </div>
+    <div class="analogy">
+        <p>"ve" = Vote-Escrowed. Lock your tokens for a set period. Longer lock = more power. Can't back out early — commitment is real.</p>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> Walk through both sides. The gym rewards loyal members. DeFi should too. veTokens do exactly that.
+    </div>
+    <div class="slide-number">5 / 11</div>
+</div>
+
+<!-- SLIDE 6: How It Works -->
+<div class="slide" id="slide6">
+    <div class="slide-label">The Mechanics</div>
+    <h2>Lock longer → Get more</h2>
+    <div class="flow">
+        <div class="flow-step">
+            <div class="value">1,000 CRV</div>
+            <div class="label">Your tokens</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step highlight">
+            <div class="value">LOCK</div>
+            <div class="label">1-4 years</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="value">veCRV</div>
+            <div class="label">Voting power</div>
+        </div>
+    </div>
+    <div class="big-number-row" style="justify-content: center;">
+        <div class="big-number-item">
+            <div class="big-number green">1,000</div>
+            <div class="big-number-label">veCRV for 4-year lock</div>
+        </div>
+        <div class="big-number-item">
+            <div class="big-number" style="color: #fbbf24;">250</div>
+            <div class="big-number-label">veCRV for 1-year lock</div>
+        </div>
+    </div>
+    <p style="text-align: center; margin-top: 32px; font-size: 20px; color: #71717a;">
+        <strong class="text-purple">Non-transferable.</strong> You can't sell your veTokens. No gaming the system. Real skin in the game.
+    </p>
+    <div class="speaker-note">
+        <strong>Say:</strong> Same 1,000 CRV. 4-year lock gives you 4x the power. And you can't sell veTokens — that's the point. Real commitment.
+    </div>
+    <div class="slide-number">6 / 11</div>
+</div>
+
+<!-- SLIDE 7: Benefit 1 -->
+<div class="slide" id="slide7">
+    <div class="slide-label">Benefit #1</div>
+    <h2><span class="text-purple">Governance</span> that actually matters</h2>
+    <div class="analogy">
+        <p>Renters live in the neighborhood. <strong>Homeowners vote on the rules.</strong></p>
+    </div>
+    <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="card">
+            <h3>Gauge Voting</h3>
+            <p>veCRV holders vote on which liquidity pools get CRV rewards. You can direct rewards to <strong>your own pool</strong>.</p>
+        </div>
+        <div class="card" style="border-color: rgba(251,191,36,0.4); background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.02));">
+            <h3 class="text-gold">Bribes Are Real</h3>
+            <p>Protocols <strong>pay veCRV holders</strong> to vote for their pools. Convex, Votium — real money for your votes.</p>
+        </div>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> This is real power. You decide where rewards flow. And other protocols will PAY you for your vote. Welcome to the Curve Wars.
+    </div>
+    <div class="slide-number">7 / 11</div>
+</div>
+
+<!-- SLIDE 8: Benefit 2 -->
+<div class="slide" id="slide8">
+    <div class="slide-label">Benefit #2</div>
+    <h2><span class="text-green">2.5x</span> boosted rewards</h2>
+    <div class="analogy">
+        <p>Loyalty card at your favorite restaurant. Regulars get <strong>2.5x portions</strong> for the same price.</p>
+    </div>
+    <div class="versus" style="margin-top: 32px;">
+        <div class="versus-side bad" style="text-align: center; padding: 48px;">
+            <div class="versus-label">Without veCRV</div>
+            <div style="font-size: 72px; font-weight: 800; margin: 24px 0;">1x</div>
+            <div style="color: #71717a;">Base LP rewards</div>
+        </div>
+        <div class="versus-divider">→</div>
+        <div class="versus-side good" style="text-align: center; padding: 48px;">
+            <div class="versus-label">With Max veCRV</div>
+            <div style="font-size: 72px; font-weight: 800; margin: 24px 0; color: #22c55e;">2.5x</div>
+            <div style="color: #22c55e;">Boosted rewards</div>
+        </div>
+    </div>
+    <p style="text-align: center; margin-top: 28px; font-size: 22px;">
+        Same pool. Same deposit. <strong class="text-purple">Committed investors earn more.</strong>
+    </p>
+    <div class="speaker-note">
+        <strong>Say:</strong> If you provide liquidity AND hold veCRV, you earn up to 2.5x more than someone without it. Loyalty pays.
+    </div>
+    <div class="slide-number">8 / 11</div>
+</div>
+
+<!-- SLIDE 9: Benefit 3 -->
+<div class="slide" id="slide9">
+    <div class="slide-label">Benefit #3</div>
+    <h2><span class="text-gold">Real yield</span> from real revenue</h2>
+    <div class="analogy">
+        <p>Own a franchise, not a lottery ticket. You get a <strong>cut of the business revenue</strong>.</p>
+    </div>
+    <div class="flow" style="margin-top: 40px;">
+        <div class="flow-step">
+            <div class="value">Swap on Curve</div>
+            <div class="label">Every trade</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="value">Generates fees</div>
+            <div class="label">Real revenue</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step highlight">
+            <div class="value">veCRV holders</div>
+            <div class="label">Get a cut</div>
+        </div>
+    </div>
+    <div class="key-point" style="max-width: 700px; margin: 40px auto;">
+        <p>This is <span class="text-gold">real yield</span></p>
+        <p class="sub">From actual protocol usage — not printing new tokens out of thin air</p>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> This is the big one. Every swap generates fees. veCRV holders get a share. Real money from real usage. One of the few tokens that generates actual income.
+    </div>
+    <div class="slide-number">9 / 11</div>
+</div>
+
+<!-- SLIDE 10: Why It Works + Adoption -->
+<div class="slide" id="slide10">
+    <div class="slide-label">The Result</div>
+    <h2>From death spiral to <span class="text-green">flywheel</span></h2>
+    <div class="versus" style="margin-top: 24px;">
+        <div class="versus-side bad">
+            <div class="versus-label">Before veTokens</div>
+            <div class="versus-content" style="font-size: 18px;">
+                Earn token → Dump immediately → Price crashes → Protocol dies
+            </div>
+        </div>
+        <div class="versus-divider">→</div>
+        <div class="versus-side good">
+            <div class="versus-label">With veTokens</div>
+            <div class="versus-content" style="font-size: 18px;">
+                Lock token → Earn more → Vote on future → Collect real revenue → <strong>Hold longer</strong>
+            </div>
+        </div>
+    </div>
+    <p style="margin-top: 36px; font-size: 20px; color: #a1a1aa;">Now adopted by the biggest DEXs on every major chain:</p>
+    <div class="protocol-grid">
+        <div class="protocol-tag"><strong>Curve</strong> → veCRV <span class="chain">(Pioneer)</span></div>
+        <div class="protocol-tag"><strong>Velodrome</strong> → veVELO <span class="chain">(Optimism)</span></div>
+        <div class="protocol-tag"><strong>Aerodrome</strong> → veAERO <span class="chain">(Base)</span></div>
+        <div class="protocol-tag"><strong>Balancer</strong> → veBAL</div>
+        <div class="protocol-tag"><strong>Frax</strong> → veFXS</div>
+    </div>
+    <div class="speaker-note">
+        <strong>Say:</strong> Farm-and-dump solved. Incentives aligned. Protocol and users win together. Now dozens of protocols use this model.
+    </div>
+    <div class="slide-number">10 / 11</div>
+</div>
+
+<!-- SLIDE 11: Closing -->
+<div class="slide end-slide" id="slide11">
+    <h2>3 reasons veTokens work</h2>
+    <div class="benefit-row" style="max-width: 900px;">
+        <div class="benefit-card">
+            <div class="benefit-number">1</div>
+            <h4>Vote</h4>
+            <p>Real governance power.<br>Direct rewards. Get paid for votes.</p>
+        </div>
+        <div class="benefit-card">
+            <div class="benefit-number">2</div>
+            <h4>Boost</h4>
+            <p>Up to 2.5x LP rewards.<br>Commitment pays.</p>
+        </div>
+        <div class="benefit-card">
+            <div class="benefit-number">3</div>
+            <h4>Earn</h4>
+            <p>Real revenue share.<br>From actual usage, not inflation.</p>
+        </div>
+    </div>
+    <div class="tagline" style="margin-top: 48px;">I build DeFi. I teach DeFi.<br>That's why Decentralized Masters.</div>
+    <div class="credentials-grid" style="margin-top: 32px;">
+        <div class="credential">DeFiConnectCredit</div>
+        <div class="credential">UHI7 Graduate</div>
+        <div class="credential">Privacy Chronicles Creator</div>
+    </div>
+    <p style="margin-top: 32px; font-size: 24px; color: #fafafa;">Thank you.</p>
+    <div class="speaker-note">
+        <strong>Say:</strong> Three benefits, one action: lock. I'm at the intersection of building and teaching DeFi — that's exactly what Decentralized Masters needs.
+    </div>
+    <div class="slide-number">11 / 11</div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+    <button onclick="prevSlide()">← Prev</button>
+    <button onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 11;
+
+    function updateProgress() {
+        const progress = (currentSlide / totalSlides) * 100;
+        document.getElementById('progress').style.width = progress + '%';
+    }
+
+    function showSlide(n) {
+        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+        document.getElementById('slide' + n).classList.add('active');
+        currentSlide = n;
+        updateProgress();
+    }
+
+    function nextSlide() {
+        if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        if (currentSlide > 1) showSlide(currentSlide - 1);
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { prevSlide(); }
+    });
+
+    updateProgress();
+</script>
+
+</body>
+</html>
