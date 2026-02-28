@@ -406,7 +406,7 @@ function ProtocolScene() {
 
   const protocols = [
     { name: "Exchange Art", logo: "logo-exchange-art.jpg" },
-    { name: "DRiP", logo: null },
+    { name: "DRiP", logo: "logo-drip.jpg" },
     { name: "Realms", logo: "logo-realms.jpg" },
     { name: "MagicBlock", logo: "logo-magicblock.jpg" },
     { name: "Tapestry", logo: "logo-tapestry.jpg" },
