@@ -412,11 +412,11 @@ function ProtocolScene() {
     { name: "Tapestry", logo: "logo-tapestry.jpg" },
     { name: "Audius", logo: "logo-audius.jpg" },
     { name: "Portals", logo: "logo-portals.jpg" },
-    { name: "KYD Labs", logo: null },
-    { name: "Torque", logo: null },
-    { name: "Sunrise", logo: null },
+    { name: "KYD Labs", logo: "logo-kyd-labs.jpg" },
+    { name: "Torque", logo: "logo-torque.jpg" },
+    { name: "Sunrise", logo: "logo-sunrise.jpg" },
     { name: "BIO", logo: null },
-    { name: "OrbitFlare", logo: null },
+    { name: "OrbitFlare", logo: "logo-orbitflare.jpg" },
   ];
 
   const CARD_COLORS = [
