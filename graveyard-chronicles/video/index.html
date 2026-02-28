@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graveyard Chronicles - The Last Stand</title>
+  <meta property="og:title" content="Graveyard Chronicles: The Last Stand">
+  <meta property="og:description" content="They declared these protocols dead. The builders never left.">
+  <meta property="og:type" content="video.other">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0c0c0c;
+      color: #e8e0d4;
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 1000px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #e8e0d4;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.25rem;
+      text-shadow: 0 0 15px rgba(196, 163, 90, 0.2);
+      animation: titleGlow 4s ease-in-out infinite;
+    }
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 2px 30px rgba(196, 163, 90, 0.15); }
+      50% { text-shadow: 0 2px 40px rgba(196, 163, 90, 0.35), 0 0 60px rgba(196, 163, 90, 0.1); }
+    }
+    .subtitle {
+      color: #c4a35a;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    .divider {
+      width: 80px;
+      height: 2px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(90deg, transparent 0%, transparent 30%, rgba(196, 163, 90, 0.6) 50%, transparent 70%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmerSweep 4s ease-in-out infinite;
+    }
+    @keyframes shimmerSweep {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(196, 163, 90, 0.12), 0 0 20px rgba(196, 163, 90, 0.08);
+      border: 1px solid rgba(196, 163, 90, 0.2);
+    }
+    video {
+      width: 100%;
+      display: block;
+      background: #000;
+    }
+    .footer {
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .footer a {
+      color: #c4a35a;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-family: monospace;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+    .footer a:hover { color: #e8c05a; text-shadow: 0 0 12px rgba(196, 163, 90, 0.3); }
+    .footer span {
+      color: #3a3a3a;
+      font-size: 0.75rem;
+    }
+    .credit {
+      color: #5a5a5a;
+      font-size: 0.8rem;
+      margin-top: 1rem;
+    }
+    /* Navbar-style glow border at top */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(196, 163, 90, 0.5), transparent);
+      animation: borderGlow 3s ease-in-out infinite;
+      z-index: 10;
+    }
+    @keyframes borderGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>GRAVEYARD CHRONICLES</h1>
+    <div class="subtitle">The Last Stand</div>
+    <div class="divider"></div>
+
+    <div class="video-wrap">
+      <video controls preload="metadata" playsinline poster="">
+        <source src="/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div class="footer">
+      <a href="https://website-seven-nu-47.vercel.app" target="_blank">Read the Comic</a>
+      <span>|</span>
+      <a href="https://github.com/Leihyn/graveyard-chronicles" target="_blank">GitHub</a>
+    </div>
+    <div class="credit">Solana Graveyard Hackathon 2026 | By Leihyn</div>
+  </div>
+</body>
+</html>
