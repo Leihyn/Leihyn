@@ -156,10 +156,11 @@ class Orchestrator:
                 self.log(f"External protocols: {', '.join(self.state.architecture.external_protocols)}")
 
     def run_phase_audit_intel(self) -> None:
-        """Phase 1.5: Audit Intel — detect prior audit reports + bounty known issues.
+        """Phase 0.5: Audit Intel — detect prior audit reports + bounty known issues.
 
-        Zero API cost: just pdftotext + regex. Populates state.known_findings
-        and state.priority_files; hunters dedupe via state.get_known_findings_prompt().
+        Runs BEFORE recon so it survives LLM-config failures. Zero API cost:
+        just pdftotext + regex + git. Populates state.known_findings and
+        state.priority_files; hunters dedupe via state.get_known_findings_prompt().
         """
         from ..core.audit_intel import (
             detect_audit_reports,
@@ -168,7 +169,7 @@ class Orchestrator:
             load_audit_intel,
         )
 
-        self.log("Phase 1.5: Audit Intel", style="bold magenta")
+        self.log("Phase 0.5: Audit Intel", style="bold magenta")
 
         # Honor explicit --audits-dir if given, else auto-detect
         if self.audits_dir is not None:
@@ -1819,14 +1820,15 @@ class Orchestrator:
                 self.state = AuditState.load_checkpoint(Path(resume_from))
                 self.log(f"Resumed from checkpoint: {len(self.state.findings)} findings loaded", style="bold green")
             else:
+                # Phase 0.5: Audit intel (zero API cost - pdftotext + regex).
+                # Runs BEFORE recon so it survives LLM misconfiguration and so
+                # downstream phases (recon, hunters) can use known_findings +
+                # priority_files for prompt-building from the start.
+                self.run_phase_audit_intel()
+
                 # Phase 1: Recon
                 await self.run_phase_recon()
                 self._print_cost_status("Recon")
-
-                # Phase 1.5: Audit intel (zero API cost - pdftotext + regex)
-                # Detects prior audit reports + acknowledged issues so hunters
-                # dedupe instead of re-reporting them.
-                self.run_phase_audit_intel()
 
                 # Generate vulnerability cheatsheet (zero API cost — pure YAML parsing)
                 from ..knowledge.vulnerability_registry import VulnerabilityRegistry
