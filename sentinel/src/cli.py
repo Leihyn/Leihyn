@@ -82,6 +82,24 @@ def audit(
         "--poc-only",
         help="Skip validation/synthesis, jump straight to PoC generation (use with --resume to save credits)",
     ),
+    pashov: Optional[bool] = typer.Option(
+        None,
+        "--pashov/--no-pashov",
+        help="Pashov Audit Group specialist hunters (Solidity only). "
+             "Default: ON for standard/deep, OFF for fast. Use --no-pashov to disable.",
+    ),
+    batched_hunters: bool = typer.Option(
+        False,
+        "--batched-hunters",
+        help="Swap eligible native hunters (currently: Slippage) for batched variants that analyze the whole bundle in one cached LLM call.",
+    ),
+    audits_dir: Optional[Path] = typer.Option(
+        None,
+        "--audits-dir",
+        help="Path to a directory of prior audit reports (PDF/MD). Sentinel "
+             "extracts known findings and tells hunters not to re-report them. "
+             "If omitted, auto-detects audits/ audit/ audit-reports/ in the target.",
+    ),
 ):
     """
     Run a security audit on smart contracts.
@@ -94,6 +112,11 @@ def audit(
     if depth not in ("fast", "standard", "deep"):
         console.print(f"[red]Invalid depth: {depth}. Must be fast, standard, or deep.[/red]")
         raise typer.Exit(1)
+
+    # Resolve --pashov default: ON for standard/deep, OFF for fast.
+    # Explicit --pashov / --no-pashov on the CLI always wins.
+    if pashov is None:
+        pashov = depth in ("standard", "deep")
 
     console.print(Panel(
         "[bold blue]Sentinel[/bold blue] - AI-Powered Smart Contract Auditor\n\n"
@@ -119,6 +142,9 @@ def audit(
             fork_block=fork_block,
             resume_from=resume,
             poc_only=poc_only,
+            include_pashov=pashov,
+            batched_hunters=batched_hunters,
+            audits_dir=audits_dir,
         ))
 
         # Print final stats
@@ -499,6 +525,46 @@ def version():
     """Show version information."""
     from . import __version__
     console.print(f"Sentinel v{__version__}")
+
+
+@app.command()
+def eval(
+    corpus: Path = typer.Option(
+        Path("eval/corpus/findings.parsed.jsonl"),
+        "--corpus", "-c",
+        help="Parsed corpus jsonl (run `python -m src.eval.parse_body` to generate).",
+    ),
+    sample: Optional[int] = typer.Option(
+        None, "--sample", "-n",
+        help="Deterministic sample of N targets (otherwise: full corpus).",
+    ),
+    depth: str = typer.Option(
+        "standard", "--depth",
+        help="Sentinel depth to use during the eval (fast/standard/deep).",
+    ),
+    live: bool = typer.Option(
+        False, "--live",
+        help="Actually clone + run sentinel. Defaults to dry-run.",
+    ),
+    workdir: Optional[Path] = typer.Option(
+        None, "--workdir",
+        help="Directory to clone repos into (default: <run_dir>/checkouts).",
+    ),
+):
+    """Replay the rewarded-finding corpus and score sentinel's recall."""
+    from .eval.runner import evaluate
+    if not corpus.exists():
+        console.print(f"[red]corpus not found:[/red] {corpus}")
+        console.print("Run [bold]python scripts/scrape_onebugperday.py[/bold] "
+                      "and [bold]python -m src.eval.parse_body[/bold] first.")
+        raise typer.Exit(2)
+    evaluate(
+        corpus_path=corpus,
+        sample=sample,
+        depth=depth,
+        dry_run=not live,
+        workdir=workdir,
+    )
 
 
 @app.command()

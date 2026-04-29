@@ -62,6 +62,11 @@ class Orchestrator:
         depth: str = "standard",
         fork_url: Optional[str] = None,
         fork_block: Optional[int] = None,
+        include_pashov: bool = False,
+        batched_hunters: bool = False,
+        max_concurrent_hunters: int = 3,
+        eval_mode: bool = False,
+        audits_dir: Optional[Path] = None,
     ):
         self.target_path = target_path
         self.docs_path = docs_path
@@ -70,6 +75,15 @@ class Orchestrator:
         self.depth = depth
         self.fork_url = fork_url
         self.fork_block = fork_block
+        self.include_pashov = include_pashov
+        self.batched_hunters = batched_hunters
+        self.max_concurrent_hunters = max(1, int(max_concurrent_hunters))
+        self.audits_dir = audits_dir
+        # eval_mode skips phases that are useful only for human-readable
+        # output (test plan, C4 gate, PoC, report). The audit still produces
+        # state.findings with full hunter attribution, which is all the
+        # eval runner needs for recall scoring.
+        self.eval_mode = bool(eval_mode)
 
         # Initialize state
         self.state = AuditState(
@@ -140,6 +154,62 @@ class Orchestrator:
             self.log(f"Architecture: {'DeFi' if self.state.architecture.is_defi else 'General'}")
             if self.state.architecture.external_protocols:
                 self.log(f"External protocols: {', '.join(self.state.architecture.external_protocols)}")
+
+    def run_phase_audit_intel(self) -> None:
+        """Phase 1.5: Audit Intel — detect prior audit reports + bounty known issues.
+
+        Zero API cost: just pdftotext + regex. Populates state.known_findings
+        and state.priority_files; hunters dedupe via state.get_known_findings_prompt().
+        """
+        from ..core.audit_intel import (
+            detect_audit_reports,
+            extract_all_known_findings,
+            detect_post_audit_changes,
+            load_audit_intel,
+        )
+
+        self.log("Phase 1.5: Audit Intel", style="bold magenta")
+
+        # Honor explicit --audits-dir if given, else auto-detect
+        if self.audits_dir is not None:
+            audit_dir = Path(self.audits_dir)
+            if not audit_dir.exists():
+                self.log(f"  --audits-dir not found: {audit_dir}", style="yellow")
+                return
+            reports = []
+            for ext in ("*.pdf", "*.md", "*.markdown"):
+                reports.extend(sorted(audit_dir.rglob(ext)))
+            findings = extract_all_known_findings(reports)
+            priority = detect_post_audit_changes(self.target_path, reports)
+        else:
+            audit_dir, findings, priority = load_audit_intel(self.target_path)
+
+        self.state.audit_dir = audit_dir
+        self.state.known_findings = findings
+        self.state.priority_files = priority
+
+        if audit_dir:
+            self.log(f"  audit dir: {audit_dir}")
+        if findings:
+            self.log(
+                f"  loaded {len(findings)} known findings from prior audits "
+                f"(hunters will dedupe)",
+                style="bold green",
+            )
+            # Show top 5 so the user sees what was loaded
+            for kf in findings[:5]:
+                sev = f"[{kf.severity}]" if kf.severity else ""
+                self.log(f"    {kf.id} {sev} {kf.title[:80]}")
+            if len(findings) > 5:
+                self.log(f"    ... and {len(findings) - 5} more")
+        else:
+            self.log("  no prior audit reports detected")
+        if priority:
+            self.log(
+                f"  {len(priority)} files changed since latest audit "
+                f"(highest-EV targets)",
+                style="bold green",
+            )
 
     async def run_phase_static_analysis(self) -> None:
         """Phase 2: Static Analysis."""
@@ -609,18 +679,161 @@ class Orchestrator:
                 except Exception as e:
                     self.log(f"Could not load protocol hunters: {e}", style="yellow")
 
+        # Opt-in: swap eligible native hunters for batched variants that do one
+        # cached-prefix LLM call over the full source bundle instead of a
+        # tool-use loop per contract. First-pass coverage: Slippage only.
+        if self.batched_hunters and self.language == Language.SOLIDITY:
+            try:
+                from .hunters.slippage_batched import SlippageBatchedHunter
+                swapped = 0
+                new_hunters = []
+                for h in hunters:
+                    if type(h).__name__ == "SlippageHunter":
+                        new_hunters.append(
+                            SlippageBatchedHunter(
+                                state=self.state,
+                                llm_client=self.llm,
+                                verbose=self.verbose,
+                                language=self.language,
+                                ultrathink=(self.depth != "fast"),
+                            )
+                        )
+                        swapped += 1
+                    else:
+                        new_hunters.append(h)
+                hunters = new_hunters
+                if swapped:
+                    self.log(f"Swapped {swapped} native hunter(s) for batched variants", style="cyan")
+            except Exception as e:
+                self.log(f"Could not swap to batched hunters: {e}", style="yellow")
+
+        # Opt-in: append Pashov Audit Group specialist personas (8 hunters).
+        # Only Solidity — vendored personas assume EVM.
+        if self.include_pashov and self.language == Language.SOLIDITY:
+            # Drop native hunters whose coverage is redundant with a Pashov persona.
+            # pashov-access-control subsumes AccessControlHunter; pashov-math-precision
+            # subsumes MathVerificationHunter; pashov-invariant subsumes InvariantFuzzerHunter.
+            # Saves ~30% of the hunter API budget on standard/deep audits.
+            _redundant_class_names = {
+                "AccessControlHunter",
+                "MathVerificationHunter",
+                "InvariantFuzzerHunter",
+            }
+            before = len(hunters)
+            hunters = [h for h in hunters if type(h).__name__ not in _redundant_class_names]
+            dropped = before - len(hunters)
+            if dropped:
+                self.log(
+                    f"Dropped {dropped} native hunter(s) redundant with Pashov personas",
+                    style="yellow",
+                )
+
+            try:
+                from .hunters.pashov import build_all_pashov_hunters
+                pashov_hunters = build_all_pashov_hunters(
+                    state=self.state,
+                    llm_client=self.llm,
+                    ultrathink=(self.depth != "fast"),
+                    thinking_budget=16000,
+                    verbose=self.verbose,
+                )
+                hunters.extend(pashov_hunters)
+                self.log(f"Added {len(pashov_hunters)} Pashov specialist hunters", style="cyan")
+            except Exception as e:
+                self.log(f"Could not load Pashov hunters: {e}", style="yellow")
+
+        # Soroban/Stellar specialist — auto-added when the target is a Stellar
+        # smart contract project. The Solana-flavored hunters (access_control,
+        # flash_loan, oracle) cover different primitives than Soroban, so the
+        # specialist compensates with TTL/require_auth/storage-tier coverage.
+        try:
+            from ..core.languages import Blockchain
+            is_soroban = getattr(self, "blockchain", None) == Blockchain.STELLAR
+        except Exception:
+            is_soroban = False
+
+        if is_soroban:
+            try:
+                from .hunters.soroban import SorobanHunter
+                from ..core.languages import Blockchain as _Bc
+                hunters.append(
+                    SorobanHunter(
+                        state=self.state,
+                        language=self.language,
+                        blockchain=_Bc.STELLAR,
+                        verbose=self.verbose,
+                    )
+                )
+                self.log("Added SorobanHunter (Stellar/Soroban specialist)", style="cyan")
+            except Exception as e:
+                self.log(f"Could not load SorobanHunter: {e}", style="yellow")
+
+        # Solana specialist — auto-added when the target is a Solana program.
+        # Loads safe-solana-builder rule packs (Anchor / Native / Pinocchio)
+        # based on framework markers detected in the target tree.
+        try:
+            from ..core.languages import Blockchain
+            is_solana = getattr(self, "blockchain", None) == Blockchain.SOLANA
+        except Exception:
+            is_solana = False
+
+        if is_solana:
+            try:
+                from .hunters.solana import SolanaHunter
+                from ..core.languages import Blockchain as _Bc
+                hunters.append(
+                    SolanaHunter(
+                        state=self.state,
+                        language=self.language,
+                        blockchain=_Bc.SOLANA,
+                        verbose=self.verbose,
+                    )
+                )
+                self.log("Added SolanaHunter (Anchor/Native/Pinocchio specialist)", style="cyan")
+            except Exception as e:
+                self.log(f"Could not load SolanaHunter: {e}", style="yellow")
+
         self.log(f"Running {len(hunters)} hunters for {self.language.value} (depth={self.depth})...")
 
+        # Snapshot per-hunter findings count + runtime so telemetry can attribute
+        # each finding to a specific hunter even when concurrent runs interleave.
+        import time as _time
+
+        async def _attributed_run(hunter):
+            label = hunter.name
+            pre_findings = len(self.state.findings)
+            t0 = _time.monotonic()
+            try:
+                with self.llm.attribute(label):
+                    result = await hunter.run()
+                ok = True
+                err = None
+            except Exception as e:
+                ok = False
+                err = e
+                result = e
+            dt = _time.monotonic() - t0
+            post_findings = len(self.state.findings)
+            telem = self.state.hunter_telemetry.setdefault(label, {})
+            telem["runtime_seconds"] = telem.get("runtime_seconds", 0.0) + dt
+            telem["findings"] = telem.get("findings", 0) + max(0, post_findings - pre_findings)
+            telem["status"] = "ok" if ok else f"error: {type(err).__name__ if err else ''}"
+            return result
+
         if self.parallel_hunters:
-            # Semaphore(1) = sequential execution with asyncio.gather error handling.
-            # Most Anthropic API tiers have 30-80k input tokens/min -- even 2 concurrent
-            # hunters with large contract contexts will cascade into 429 retries.
-            # Sequential execution is slower but reliable.
-            semaphore = asyncio.Semaphore(1)
+            # Real concurrency, gated by max_concurrent_hunters. The LLM client
+            # already retries on RateLimitError (core/llm.py:270), so cascading
+            # 429s self-heal — this used to be Semaphore(1) (sequential) out of
+            # paranoia. Tune via Orchestrator(max_concurrent_hunters=N).
+            semaphore = asyncio.Semaphore(self.max_concurrent_hunters)
+            self.log(
+                f"Parallel hunters: max_concurrent={self.max_concurrent_hunters}",
+                style="dim",
+            )
 
             async def rate_limited_run(hunter):
                 async with semaphore:
-                    return await hunter.run()
+                    return await _attributed_run(hunter)
 
             tasks = [rate_limited_run(hunter) for hunter in hunters]
             results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -631,55 +844,91 @@ class Orchestrator:
             for hunter in hunters:
                 self.log(f"Running {hunter.name}...")
                 try:
-                    await hunter.run()
+                    await _attributed_run(hunter)
                 except Exception as e:
                     self.log(f"{hunter.name} failed: {e}", style="red")
+
+        # Merge LLM-side per-attribution stats into hunter_telemetry so the
+        # eval can read tokens+cost+findings from a single state field.
+        for label, bucket in self.llm.per_attribution.items():
+            telem = self.state.hunter_telemetry.setdefault(label, {})
+            for k, v in bucket.items():
+                telem[k] = v
 
         self.log(f"Deep analysis complete: {len(self.state.findings)} total findings")
 
     def _deduplicate_findings(self) -> None:
-        """Merge findings with the same root cause into a single consolidated finding.
+        """Merge findings reporting the same site (multiple hunters firing on
+        the same vuln in the same function) into a single consolidated finding.
 
-        SLIPPAGE-001 through SLIPPAGE-004 (same vuln type, same root cause pattern)
-        become one finding with all affected locations listed. This saves 4x on
-        DevilsAdvocate/PoC API calls.
+        Key: (vuln_type, contract, function, line_bucket)
+          - line_bucket = first(line_numbers) // 10  — collapses near-line dupes
+            (hunter A reports L42, hunter B reports L45 → same bucket).
+          - When line_numbers is empty, the bucket is "" so we still merge by
+            (vuln_type, contract, function).
+
+        Cross-site *root-cause* dedup (e.g. one slippage bug pattern repeated
+        across 4 unrelated contracts) is handled later by DevilsAdvocate's
+        deduplicate_root_cause pass — this stage is intentionally local so we
+        don't collapse genuinely distinct findings before validation.
         """
         if not self.state.findings:
             return
 
         from collections import defaultdict
 
-        # Group by vulnerability_type + first 50 chars of recommendation (proxy for root cause)
-        groups = defaultdict(list)
+        def _line_bucket(f: Finding) -> str:
+            lns = getattr(f, "line_numbers", None) or []
+            if not lns:
+                return ""
+            return str(min(lns) // 10)
+
+        groups: dict[tuple, list[Finding]] = defaultdict(list)
         for f in self.state.findings:
-            # Key: same vuln type + similar recommendation = same root cause
-            rec_key = f.recommendation[:50] if f.recommendation else ""
-            key = (f.vulnerability_type.value, rec_key)
+            key = (
+                f.vulnerability_type.value,
+                (f.contract or "").lower(),
+                (f.function or "").lower(),
+                _line_bucket(f),
+            )
             groups[key].append(f)
 
-        deduped = []
-        for key, group in groups.items():
+        deduped: list[Finding] = []
+        severity_order = [
+            Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM,
+            Severity.LOW, Severity.INFORMATIONAL,
+        ]
+        for group in groups.values():
             if len(group) == 1:
                 deduped.append(group[0])
                 continue
 
-            # Merge group into one finding
-            primary = group[0]
-            other_contracts = [f.contract for f in group[1:]]
-            other_ids = [f.id for f in group[1:]]
+            # Pick the highest-severity, highest-confidence finding as primary
+            # so the merged record carries the strongest claim.
+            primary = sorted(
+                group,
+                key=lambda f: (
+                    severity_order.index(f.severity)
+                    if f.severity in severity_order else len(severity_order),
+                    -float(getattr(f, "confidence", 0.0) or 0.0),
+                ),
+            )[0]
+            others = [f for f in group if f is not primary]
+            other_ids = [f.id for f in others]
 
-            # Consolidate: keep primary, append other locations
-            primary.description += "\n\n**Also affects:** " + ", ".join(
-                f"{f.contract}:{f.function or 'N/A'}" for f in group[1:]
+            primary.description += (
+                "\n\n**Also reported by:** "
+                + ", ".join(f"{f.id} ({f.found_by.value if hasattr(f.found_by, 'value') else f.found_by})"
+                            for f in others)
             )
             primary.related_findings.extend(other_ids)
-            # Take highest severity and confidence from the group
-            severity_order = [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW, Severity.INFORMATIONAL]
-            primary.severity = min((f.severity for f in group), key=lambda s: severity_order.index(s))
-            primary.confidence = max(f.confidence for f in group)
+            primary.confidence = max(getattr(f, "confidence", 0.0) or 0.0 for f in group)
 
             deduped.append(primary)
-            self.log(f"  Deduped {len(group)} findings -> {primary.id} ({primary.title[:50]}...)")
+            self.log(
+                f"  Deduped {len(group)} findings (same site) -> {primary.id} "
+                f"({primary.title[:50]}...)"
+            )
 
         before = len(self.state.findings)
         self.state.findings = deduped
@@ -741,6 +990,96 @@ class Orchestrator:
             self.log(f"Call-chain enrichment failed: {e}", style="red")
             self.log("Continuing without call-chain context")
 
+    def _calibrate_finding_severities(self) -> None:
+        """Phase 3.27: Severity calibration via competitive_audit_intel.
+
+        Cross-checks each finding's severity against C4/Sherlock/Immunefi
+        keyword priors. If a finding's severity disagrees with the prior by
+        more than one tier, log it (do NOT silently override - LLM judgment
+        usually wins). Cheap: pure keyword matching, no LLM.
+        """
+        if not self.state.findings:
+            return
+        try:
+            from ..core.skills.competitive_audit_intel import (
+                CompetitiveAuditIntel, Platform,
+            )
+        except ImportError:
+            return
+
+        self.log("Phase 3.27: Severity Calibration", style="bold magenta")
+        intel = CompetitiveAuditIntel()
+        sev_order = {"critical": 4, "high": 3, "medium": 2, "low": 1, "info": 0}
+
+        adjusted = 0
+        for finding in self.state.findings:
+            try:
+                desc = (finding.description or "") + " " + (finding.title or "")
+                suggested = intel.calibrate_severity(desc, Platform.IMMUNEFI)
+                current = (finding.severity.value if hasattr(finding.severity, "value")
+                           else str(finding.severity)).lower()
+                if sev_order.get(suggested, -1) - sev_order.get(current, -1) >= 2:
+                    self.log(
+                        f"  severity gap: {finding.title[:60]} "
+                        f"(hunter={current}, prior={suggested})",
+                        style="yellow",
+                    )
+                    adjusted += 1
+            except Exception:
+                continue
+        if adjusted:
+            self.log(f"  flagged {adjusted} findings for severity review")
+        else:
+            self.log("  no severity gaps detected")
+
+    def _surface_finding_variants(self) -> None:
+        """Phase 3.28: For each finding, search the rest of the codebase for
+        similar patterns. Surfaces adjacent code that may have the same bug.
+        Output is appended to the finding's description as a 'Potential variants'
+        section so the report writer / downstream phases see it.
+
+        Pure ripgrep / regex - no LLM cost.
+        """
+        if not self.state.findings:
+            return
+        try:
+            from ..core.skills.variant_analyzer import (
+                VariantAnalyzer, VulnerabilityPattern, SearchTool,
+            )
+        except ImportError:
+            return
+
+        self.log("Phase 3.28: Variant Surface", style="bold magenta")
+        analyzer = VariantAnalyzer(target_path=self.target_path)
+
+        for finding in self.state.findings:
+            # Need a code snippet to anchor the search
+            snippet = finding.code_snippet or finding.affected_code or ""
+            if not snippet or len(snippet) < 20:
+                continue
+            try:
+                pattern = VulnerabilityPattern(
+                    name=finding.title[:80],
+                    original_code=snippet,
+                    root_cause=finding.description[:300] if finding.description else "",
+                    impact="theft" if "theft" in (finding.description or "").lower() else "loss",
+                    exploitability="high",
+                )
+                report = analyzer.find_variants(
+                    pattern, tool=SearchTool.RIPGREP, max_fp_rate=0.5,
+                )
+                # Filter to high/medium confidence only
+                hits = [v for v in report.variants
+                        if str(getattr(v.confidence, "value", v.confidence)).lower()
+                        in ("high", "medium")]
+                if hits:
+                    extra = "\n\n## Potential Variants (auto-surfaced)\n"
+                    for v in hits[:5]:
+                        extra += f"- {v.file_path}:{v.line_number} (confidence: {v.confidence})\n"
+                    finding.description = (finding.description or "") + extra
+            except Exception:
+                continue
+
     async def _confirm_findings(self) -> None:
         """Phase 3.3: Deterministic finding confirmation via Semgrep.
 
@@ -795,10 +1134,12 @@ class Orchestrator:
     async def run_phase_validation(self) -> None:
         """Phase 3.5: Unified validation - severity calibration + feasibility challenge + dedup.
 
-        Merges what was previously Phase 3.25 (SeverityCalibrator) and Phase 3.5
-        (DevilsAdvocate) into a single batched pass. Each batch of 3-5 findings
-        gets one ultrathink call that checks protections, calibrates severity,
-        challenges feasibility, and identifies root causes for dedup.
+        Pipeline:
+          1. Haiku triage — score each finding for plausibility in one cheap batch call.
+             Obvious FPs (score < 30) get dropped so the expensive Sonnet ultrathink
+             pass doesn't waste cycles re-examining them.
+          2. DevilsAdvocate on survivors — severity calibration, feasibility challenge,
+             root-cause dedup. Batches of 4 findings per ultrathink call.
         """
         self.log("Phase 3.5: Finding Validation (Calibration + Challenge)", style="bold magenta")
 
@@ -807,6 +1148,22 @@ class Orchestrator:
             return
 
         try:
+            pre_count = len(self.state.findings)
+
+            # Step 1: Haiku pre-triage — drop obvious false positives cheaply.
+            survivors = await self._haiku_triage_findings(self.state.findings)
+            triaged_out = pre_count - len(survivors)
+            if triaged_out:
+                self.log(
+                    f"Haiku triage dropped {triaged_out} obvious FPs before Sonnet validation",
+                    style="yellow",
+                )
+            self.state.findings = survivors
+
+            if not survivors:
+                self.log("All findings dropped by triage — skipping DevilsAdvocate")
+                return
+
             from .devils_advocate import DevilsAdvocateAgent, DevilsAdvocateConfig
 
             config = DevilsAdvocateConfig(
@@ -827,7 +1184,6 @@ class Orchestrator:
                 verbose=self.verbose,
             )
 
-            pre_count = len(self.state.findings)
             validated = await advocate.run(findings=self.state.findings)
             self.state.findings = validated
             post_count = len(self.state.findings)
@@ -838,6 +1194,70 @@ class Orchestrator:
         except Exception as e:
             self.log(f"Validation failed: {e}", style="red")
             self.log("Keeping all findings unvalidated")
+
+    async def _haiku_triage_findings(
+        self,
+        findings: list[Finding],
+        min_plausibility: int = 30,
+    ) -> list[Finding]:
+        """Cheap Haiku pass scoring each finding 0-100 for plausibility.
+
+        Returns the survivors (plausibility >= min_plausibility). Findings whose
+        score can't be parsed default to keep (fail-open: we'd rather pay for an
+        extra DevilsAdvocate call than silently drop a real bug).
+        """
+        if not findings:
+            return findings
+
+        from ..core.llm import HAIKU_MODEL
+
+        manifest_lines = []
+        for i, f in enumerate(findings):
+            desc = (f.description or "")[:400].replace("\n", " ")
+            manifest_lines.append(
+                f'{i}: [{f.severity.value}] {f.title} | contract={f.contract} | {desc}'
+            )
+        manifest = "\n".join(manifest_lines)
+
+        prompt = (
+            "For each finding below, rate how PLAUSIBLE it is that this is a real "
+            "exploitable bug (not a false positive or pattern-match without context). "
+            "Score 0-100 where:\n"
+            "  0-29  = obvious false positive (missing context, pattern only, no real impact)\n"
+            "  30-59 = uncertain — needs deeper review\n"
+            "  60-100 = likely real bug worth challenging\n\n"
+            "Do NOT judge severity — only plausibility. Err on the side of keeping findings.\n\n"
+            f"Findings:\n{manifest}\n\n"
+            "Output exactly one line per finding as `index:score` (no extra text). "
+            "Example: `0:75\\n1:20\\n2:55`."
+        )
+
+        try:
+            response = self.llm.chat(
+                messages=[{"role": "user", "content": prompt}],
+                system="You are a smart-contract security triage assistant. Be concise and numeric.",
+                max_tokens=256 + 8 * len(findings),
+                model_override=HAIKU_MODEL,
+                enable_prompt_cache=False,
+            )
+        except Exception as e:
+            self.log(f"Haiku triage failed: {e} — keeping all findings", style="yellow")
+            return findings
+
+        import re as _re
+        scores: dict[int, int] = {}
+        for line in (response.text or "").splitlines():
+            m = _re.match(r"\s*(\d+)\s*:\s*(\d+)", line)
+            if m:
+                idx, sc = int(m.group(1)), int(m.group(2))
+                if 0 <= idx < len(findings):
+                    scores[idx] = max(0, min(100, sc))
+
+        survivors: list[Finding] = []
+        for i, f in enumerate(findings):
+            if scores.get(i, 100) >= min_plausibility:
+                survivors.append(f)
+        return survivors
 
     async def run_phase_attack_synthesis(self) -> None:
         """Phase 5: Attack Synthesis - combine findings into attack chains."""
@@ -931,6 +1351,102 @@ class Orchestrator:
                 finding.confidence = finding.confidence * 0.5
                 self.log(f"  [UNVERIFIED] {finding.id}: PoC failed, confidence halved to {finding.confidence:.2f}", style="yellow")
 
+    def _run_soroban_poc_generation(self, eligible: list) -> None:
+        """
+        Emit Soroban PoC stubs for each eligible finding. Output is a
+        standalone Rust file per finding under `sentinel_pocs_soroban/`
+        that extends the C4 `tests/c4/src/lib.rs` template's
+        `test_submission_validity` function.
+
+        This is deliberately not an LLM-driven agent — PoC templates are
+        deterministic renderings indexed by finding.vulnerability_type.
+        A warden using the output is expected to tune argument values and
+        assertions to the specific bug; the generator provides the
+        scaffold, not the final exploit.
+        """
+        from ..core.poc_generator_soroban import (
+            SorobanPoCRequest,
+            generate_soroban_poc,
+            infer_poc_type,
+            patch_submission_file,
+            WARDEN_MARKER,
+        )
+
+        out_dir = self.target_path / "sentinel_pocs_soroban"
+        try:
+            out_dir.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            out_dir = Path.cwd() / f"sentinel_pocs_soroban_{self.state.target_name}"
+            out_dir.mkdir(parents=True, exist_ok=True)
+
+        # Locate the C4 submission template if present — then we also emit
+        # a ready-to-run patched copy for the top-severity finding.
+        c4_template = self.target_path / "tests" / "c4" / "src" / "lib.rs"
+
+        written = 0
+        for finding in eligible:
+            poc_type = infer_poc_type(finding.vulnerability_type)
+            target_contract = (finding.contract or "unknown").split("::")[0] or "unknown"
+            target_function = finding.function or finding.contract or "target_fn"
+
+            req = SorobanPoCRequest(
+                poc_type=poc_type,
+                title=finding.title,
+                target_function=target_function,
+                target_contract=target_contract,
+                attack_steps_narrative=finding.description.split("\n")[0][:240],
+            )
+            snippet = generate_soroban_poc(req)
+
+            snippet_path = out_dir / f"{finding.id}.rs"
+            try:
+                snippet_path.write_text(snippet)
+                written += 1
+            except OSError as e:
+                self.log(f"  [WRITE-FAIL] {finding.id}: {e}", style="red")
+                continue
+
+            # Attach the snippet to the finding so the reporter can include it.
+            try:
+                from ..core.types import PoC
+
+                finding.poc = PoC(
+                    finding_id=finding.id,
+                    code=snippet,
+                    language="rust",
+                    template_used=poc_type.value,
+                )
+            except Exception:
+                pass
+
+            # For the first finding (highest severity post-sort), also
+            # render a patched lib.rs so the warden can run it immediately.
+            if written == 1 and c4_template.exists():
+                try:
+                    patched = patch_submission_file(c4_template, snippet)
+                    patched_path = out_dir / f"{finding.id}_lib.rs"
+                    patched_path.write_text(patched)
+                    self.log(
+                        f"  [PATCHED] {finding.id}: {patched_path.relative_to(self.target_path)} "
+                        f"(drop-in replacement for tests/c4/src/lib.rs)",
+                        style="cyan",
+                    )
+                except ValueError:
+                    # WARDEN_MARKER missing — report once and keep going.
+                    self.log(
+                        f"Warden marker {WARDEN_MARKER!r} not found in "
+                        f"{c4_template}; skipping patched-template output",
+                        style="yellow",
+                    )
+                except OSError as e:
+                    self.log(f"Could not write patched template: {e}", style="yellow")
+
+        self.log(
+            f"Soroban PoC scaffolds written: {written}/{len(eligible)} "
+            f"-> {out_dir}",
+            style="bold green" if written else "yellow",
+        )
+
     async def run_phase_poc_generation(self) -> None:
         """Phase 6: PoC Generation - create and verify exploits for findings."""
         self.log("Phase 6: PoC Generation", style="bold magenta")
@@ -941,6 +1457,17 @@ class Orchestrator:
             return
 
         self.log(f"{len(eligible)} findings eligible for PoC generation")
+
+        # Soroban/Stellar projects bypass the Foundry PoC agent entirely —
+        # its output is Solidity/forge. Emit Rust/Soroban PoC stubs for the
+        # C4 `tests/c4/src/lib.rs` template instead.
+        try:
+            from ..core.languages import Blockchain
+            if getattr(self, "blockchain", None) == Blockchain.STELLAR:
+                self._run_soroban_poc_generation(eligible)
+                return
+        except Exception as e:
+            self.log(f"Soroban PoC gen dispatch failed: {e}", style="yellow")
 
         if not self.fork_url:
             self.log("WARNING: No --fork-url provided. PoC code will be generated but not executed.", style="yellow")
@@ -1296,6 +1823,11 @@ class Orchestrator:
                 await self.run_phase_recon()
                 self._print_cost_status("Recon")
 
+                # Phase 1.5: Audit intel (zero API cost - pdftotext + regex)
+                # Detects prior audit reports + acknowledged issues so hunters
+                # dedupe instead of re-reporting them.
+                self.run_phase_audit_intel()
+
                 # Generate vulnerability cheatsheet (zero API cost — pure YAML parsing)
                 from ..knowledge.vulnerability_registry import VulnerabilityRegistry
                 registry = VulnerabilityRegistry.get_instance()
@@ -1311,9 +1843,10 @@ class Orchestrator:
                     await self.run_phase_cross_contract_analysis()
                 self._print_cost_status("Static + Cross-Contract")
 
-                # Phase 2.6: Test Plan (~$0.10 — 2 LLM calls + free static analysis)
-                await self.run_phase_test_plan()
-                self._print_cost_status("Test Plan")
+                # Phase 2.6: Test Plan (~$0.10) — skipped in eval_mode (human-only output).
+                if not self.eval_mode:
+                    await self.run_phase_test_plan()
+                    self._print_cost_status("Test Plan")
 
                 # Phase 2.75: Protocol Intent (standard+)
                 if self.depth in ("standard", "deep"):
@@ -1333,6 +1866,13 @@ class Orchestrator:
             # Phase 3.25: Call-Chain Enrichment (all depths, free — no LLM)
             self._enrich_call_chains()
 
+            # Phase 3.27: Severity calibration vs C4/Sherlock/Immunefi priors (free)
+            self._calibrate_finding_severities()
+
+            # Phase 3.28: Surface adjacent variants of each finding (free, ripgrep)
+            if self.depth in ("standard", "deep"):
+                self._surface_finding_variants()
+
             # Phase 3.3: Semgrep confirmation (standard+, cheap — one Haiku batch + local Semgrep)
             if self.depth in ("standard", "deep"):
                 await self._confirm_findings()
@@ -1346,25 +1886,37 @@ class Orchestrator:
                     await self.run_phase_validation()
                     self._print_cost_status("Validation")
 
-                # Phase 3.75: C4 Severity Gate (all depths)
-                await self.run_phase_c4_gate()
-                self._print_cost_status("C4 Gate")
+                # Phase 3.75: C4 Severity Gate (all depths) — skip in eval_mode
+                # (we're not submitting; raw hunter severity is what eval scores).
+                if not self.eval_mode:
+                    await self.run_phase_c4_gate()
+                    self._print_cost_status("C4 Gate")
 
                 # Phase 5: Attack Synthesis (deep only)
                 if self.depth == "deep":
                     await self.run_phase_attack_synthesis()
                     self._print_cost_status("Attack Synthesis")
 
-            # Phase 6: PoC Generation (standard+ depth, when findings exist)
-            if self.depth in ("standard", "deep") and self.state.findings:
+            # Phase 6: PoC Generation — eval_mode skips this entirely (eval
+            # scoring is location/class-based, not PoC-validity-based, so the
+            # most expensive phase in the pipeline is dead weight here).
+            if (
+                not self.eval_mode
+                and self.depth in ("standard", "deep")
+                and self.state.findings
+            ):
                 await self.run_phase_poc_generation()
                 self._print_cost_status("PoC Generation")
 
             # Save checkpoint before reporting — all expensive work is done
             self._save_checkpoint("pre_report")
 
-            # Phase 7: Reporting
-            await self.run_phase_reporting()
+            # Phase 7: Reporting — skip in eval_mode (no markdown report needed).
+            if not self.eval_mode:
+                await self.run_phase_reporting()
+            else:
+                self.state.end_time = datetime.now()
+                self.print_summary()
 
         except Exception as e:
             error_msg = str(e)
@@ -1404,6 +1956,10 @@ async def run_audit(
     fork_block: Optional[int] = None,
     resume_from: Optional[str] = None,
     poc_only: bool = False,
+    include_pashov: bool = False,
+    batched_hunters: bool = False,
+    eval_mode: bool = False,
+    audits_dir: Optional[Path] = None,
 ) -> AuditState:
     """
     Convenience function to run a full audit.
@@ -1428,5 +1984,9 @@ async def run_audit(
         depth=depth,
         fork_url=fork_url,
         fork_block=fork_block,
+        include_pashov=include_pashov,
+        batched_hunters=batched_hunters,
+        eval_mode=eval_mode,
+        audits_dir=audits_dir,
     )
     return await orchestrator.run(resume_from=resume_from, poc_only=poc_only)

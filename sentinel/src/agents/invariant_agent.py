@@ -305,7 +305,7 @@ class InvariantAgent(HunterAgent, ReconMagicMixin):
 
     @property
     def system_prompt(self) -> str:
-        return """You are an expert at invariant-based smart contract analysis.
+        base = """You are an expert at invariant-based smart contract analysis.
 
 Your mindset:
 1. WHAT MUST ALWAYS BE TRUE? - Identify fundamental properties
@@ -328,7 +328,31 @@ For each invariant violation:
 4. Provide Foundry test concept
 5. Suggest the fix
 
-Focus on CRITICAL invariants - those whose violation leads to loss of funds."""
+Focus on CRITICAL invariants - those whose violation leads to loss of funds.
+
+When you generate Foundry/Echidna/Medusa tests, prefer the established
+reusable property suites over inventing your own:
+- ERC20  → crytic/properties (Trail of Bits ERC20 tests)
+- ERC721 → crytic/properties
+- ERC4626 → crytic/properties (vault security suite)
+- ERC7540 → Recon-Fuzz/erc7540-reusable-properties
+- General token compliance → runtimeverification/ercx-tests
+- ABDKMath64x64 → crytic/properties
+For invariant authoring style and methodology, follow the Recon Magic /
+Chimera approach (https://github.com/Recon-Fuzz/chimera).
+
+Prepend known findings (DO NOT re-report) when relevant."""
+
+        # Prepend audit-intel known findings so invariant generation skips
+        # already-reported surface and focuses on adjacent unexplored area.
+        prefix = ""
+        try:
+            prefix = self.state.get_known_findings_prompt()
+        except AttributeError:
+            pass
+        if prefix:
+            return prefix + "\n\n---\n\n" + base
+        return base
 
     def get_tools(self) -> list[Tool]:
         return []

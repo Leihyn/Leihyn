@@ -134,6 +134,19 @@ class VulnerabilityType(Enum):
     CAIRO_STORAGE = "cairo_storage"
     HINTS_ABUSE = "hints_abuse"
 
+    # Category 16b: Soroban/Stellar-Specific
+    MISSING_REQUIRE_AUTH = "missing_require_auth"
+    AUTH_SUBTREE_MISMATCH = "auth_subtree_mismatch"
+    STORAGE_TTL_EXPIRY = "storage_ttl_expiry"
+    WRONG_STORAGE_TYPE = "wrong_storage_type"  # Temporary/Persistent/Instance misuse
+    UNBOUNDED_INSTANCE_STORAGE = "unbounded_instance_storage"
+    EXTEND_TTL_GRIEFING = "extend_ttl_griefing"
+    UNPROTECTED_WASM_UPGRADE = "unprotected_wasm_upgrade"
+    TYPE_ROUNDTRIP_UNSAFE = "type_roundtrip_unsafe"  # Vec<T>/Map round-trip via Val
+    SOROBAN_BUDGET_EXHAUSTION = "soroban_budget_exhaustion"  # CPU/memory metering DoS
+    UNSAFE_UNWRAP_CRITICAL = "unsafe_unwrap_critical"  # unwrap/expect in state-changing path
+    PANIC_ON_CRITICAL_PATH = "panic_on_critical_path"
+
     # Category 17: Gas (Informational)
     GAS_OPTIMIZATION = "gas_optimization"
 
@@ -242,6 +255,7 @@ class Finding:
 
     # Metadata
     found_by: AgentRole = AgentRole.VULNERABILITY_HUNTER
+    found_by_hunter: str = ""  # Per-hunter class name (set automatically by add_finding)
     confidence: float = 0.0  # 0-1
     timestamp: datetime = field(default_factory=datetime.now)
 
@@ -347,6 +361,21 @@ class SlitherResult:
 
 
 @dataclass
+class KnownFinding:
+    """A vulnerability already known to the project (audit finding, acknowledged
+    bounty issue, etc.). Hunters get this list as a dedupe filter so they stop
+    re-discovering issues the team has already paid auditors to find.
+    """
+    id: str  # e.g. "L02", "TOB-M0V2-1", "Adevar M01"
+    title: str
+    severity: str = ""  # "Critical"/"High"/"Medium"/"Low"/"Acknowledged"
+    status: str = ""  # "Resolved", "Acknowledged", "Fixed", "Open"
+    source: str = ""  # "audits/adevar_v2.pdf", "bounty:immunefi/kast", etc.
+    description: str = ""  # short blurb if available
+    affected_files: list[str] = field(default_factory=list)
+
+
+@dataclass
 class AuditState:
     """Complete state of an ongoing audit."""
     # Target
@@ -362,6 +391,11 @@ class AuditState:
 
     # Findings
     findings: list[Finding] = field(default_factory=list)
+
+    # Audit intel (Phase 1.5) - drives hunter dedupe
+    audit_dir: Optional[Path] = None
+    known_findings: list[KnownFinding] = field(default_factory=list)
+    priority_files: list[str] = field(default_factory=list)  # post-audit-changed files
 
     # Invariants
     invariants: list[Invariant] = field(default_factory=list)
@@ -393,6 +427,12 @@ class AuditState:
     # Logs
     logs: list[str] = field(default_factory=list)
 
+    # Per-hunter telemetry — populated post-hunter from LLMClient.per_attribution.
+    # Schema per key (hunter name): {calls, input_tokens, output_tokens,
+    # thinking_tokens, cost, findings, findings_post_validation,
+    # findings_matched_corpus, runtime_seconds}.
+    hunter_telemetry: dict = field(default_factory=dict)
+
     def add_log(self, message: str) -> None:
         """Add a timestamped log entry."""
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -400,6 +440,15 @@ class AuditState:
 
     def add_finding(self, finding: Finding) -> None:
         """Add a finding, checking for duplicates."""
+        # Tag with current hunter attribution if not already set.
+        # Lazy import keeps types.py free of llm.py imports.
+        if not finding.found_by_hunter:
+            try:
+                from .llm import current_attribution
+                finding.found_by_hunter = current_attribution() or ""
+            except Exception:
+                pass
+
         # Simple dedup by title and contract
         for existing in self.findings:
             if existing.title == finding.title and existing.contract == finding.contract:
@@ -413,6 +462,45 @@ class AuditState:
     def get_validated_findings(self) -> list[Finding]:
         """Get all validated findings."""
         return [f for f in self.findings if f.validated and not f.false_positive]
+
+    def get_known_findings_prompt(self) -> str:
+        """Markdown block listing known findings, ready for hunter prompt injection.
+
+        Hunters that include this in their system prompt will dedupe against the
+        listed issues instead of re-reporting them. Empty string when no audit
+        intel was loaded.
+        """
+        if not self.known_findings:
+            return ""
+        lines = [
+            "## Already-Known Findings (DO NOT RE-REPORT)",
+            "",
+            "These vulnerabilities have already been documented by prior auditors or",
+            "acknowledged on the bounty page. Reporting any of these as a finding",
+            "wastes triage time and gets the report rejected as a duplicate.",
+            "Pivot AWAY from these surfaces toward adjacent unexplored code.",
+            "",
+        ]
+        for kf in self.known_findings:
+            sev = f" [{kf.severity}]" if kf.severity else ""
+            status = f" ({kf.status})" if kf.status else ""
+            src = f" — {kf.source}" if kf.source else ""
+            lines.append(f"- **{kf.id}**{sev}{status}: {kf.title}{src}")
+            if kf.description:
+                lines.append(f"  - {kf.description[:200]}")
+            if kf.affected_files:
+                lines.append(f"  - files: {', '.join(kf.affected_files[:3])}")
+        if self.priority_files:
+            lines.append("")
+            lines.append("## Priority Files (post-latest-audit changes)")
+            lines.append("")
+            lines.append("Lines in these files were modified AFTER the latest audit.")
+            lines.append("They are the highest-EV targets — auditors have not seen them.")
+            lines.append("")
+            for pf in self.priority_files[:30]:
+                lines.append(f"- {pf}")
+        lines.append("")
+        return "\n".join(lines)
 
     def save_checkpoint(self, path: Path) -> None:
         """Serialize state to JSON for resume after credit exhaustion."""
