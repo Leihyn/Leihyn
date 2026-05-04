@@ -1,0 +1,21 @@
+{
+  "title": "Wrong assumption that the input token will be WETH",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  ULTI accepts any ERC20 token as the input token and in the constructor, the input token number of decimals is stored in the `inputTokenDecimals` variable.  ```solidity 219:     /// @notice Address of the input token (e.g. WETH, DAI, etc.) 220:     address public immutable inputTokenAddress;     (...) 451:         inputTokenDecimals = IERC20(_inputTokenAddress).decimals(); ```  However, this value is never used and some constants and calculations are based on the assumption that the input token will be WETH, using the expected",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

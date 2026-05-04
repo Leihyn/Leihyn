@@ -1,0 +1,23 @@
+{
+  "title": "Looping over unbounded array can result in a state of DoS",
+  "platform": "pashov-audits",
+  "program": "LizardStarking-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the contract will be in a state of DoS, without a way for anyone to withdraw NFTs or claim rewards  **Likelihood:** Low, as it requires a lot of pools added or a malicious owner  ## Description  The `claimCalculation` and `getCurrentShareRaw` methods both loop over the `pool` array to do proper calculations. The problems is that there is no way to pop elements out of the array, but there is no upper bound on the length of the array. Each time the `currentRewards` are more than or equal to the `minResetValue`, the `createPool` method will be called, adding a ne",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/LizardStarking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

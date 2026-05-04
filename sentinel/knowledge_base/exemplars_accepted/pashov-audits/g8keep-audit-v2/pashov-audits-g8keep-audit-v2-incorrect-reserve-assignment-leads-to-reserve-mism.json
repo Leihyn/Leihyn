@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect reserve assignment leads to reserve mismatch and fund mismanagement",
+  "platform": "pashov-audits",
+  "program": "g8keep-audit-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  Upon handling a failed migration in the `g8keepBondingCurve::_handleMigrationFailed` function, the reserves for ETH and tokens are incorrectly assigned. The `tokenAmount` is wrongly assigned to `bReserve.reserve0`, which is intended for the native token (ETH), and the `ethAmount` is assigned to `bReserve.reserve1`, which should hold the token amount.  ```solidity File: g8keepBondingCurve.sol 942:     function _handleMigrationFailed(uint256 ethAmount, uint112 tokenAmount) internal { 943:         curveStatus = curveStatus | S",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/g8keep-security-review_2024-12-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

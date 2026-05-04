@@ -1,0 +1,22 @@
+{
+  "title": "First vault depositor can steal subsequent depositors\u2019 tokens",
+  "platform": "pashov-audits",
+  "program": "0xTK421-ninja-core-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  Imagine the following scenario:  1. A new vault has been deployed and configured, no depositors yet 2. Alice wants to deposit 10 ether(10e18) worth of `underlying` and sends a transaction to the public mempool 3. A MEV bot sees Alice\u2019s transaction and front runs it by depositing 1 wei(1e-18) of `underlying`, resulting in him receiving 1 wei(1e-18) of vault tokens (shares) 4. The MEV bot also front runs Alice\u2019s transaction with a transfer of 10 ether(10e18) of `underlying` to the vault via `ERC20::transfer` 5. Now the code calculates Alice\u2019s shares as `shares = (_amount * t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NinjaYielder-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "The fee calculation is inconsistent",
+  "platform": "pashov-audits",
+  "program": "cryptoLteam-rivus-contract-audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `RivusCOMAIN::approveMultipleUnstakes` function allows users with the `hasApproveWithdrawalRole` role to approve `requestUnstake` requests and send the requested `wCOMAIN` assets. Users can then call the `RivusCOMAIN::unstake` function to receive the corresponding `wCOMAIN` tokens.  The issue arises because fees can change between the approval of `requestUnstake` and when users perform `unstake`, affecting the actual amount required. Consider the following scenario:  1. A `requestUnstake` for `1 wCOMAI` in exchange fo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Rivus-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

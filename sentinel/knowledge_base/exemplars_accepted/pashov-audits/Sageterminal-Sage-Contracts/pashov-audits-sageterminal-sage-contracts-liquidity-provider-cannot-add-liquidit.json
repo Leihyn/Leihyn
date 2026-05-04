@@ -1,0 +1,19 @@
+{
+  "title": "Liquidity Provider cannot add liquidity after removing liquidity",
+  "platform": "pashov-audits",
+  "program": "Sageterminal-Sage-Contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When liquidity is removed using `removeLiquidity` - `_opt.liquidityAdded` is not set to `false`. Therefore `addLiquidity` cannot be called again due to the check: `require(_opt.liquidityAdded == false, \"Liquidity already added\");`.  ```solidity     function addLiquidity(         uint32 _timeTillUnlockLiquidity     ) public payable onlyLiquidityProvider {         require(_opt.liquidityAdded == false, \"Liquidity already added\");          _opt.liquidityAdded = true; -----------     }      function removeLiquidity() public on",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/EVTerminal-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

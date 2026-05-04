@@ -1,0 +1,22 @@
+{
+  "title": "Players may not get paid if liquidity is less than winnings",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When `flip()` is called, the function checks whether there is available liquidity to pay the potential winnings of a game:  ```         // require staked amount > maximum payout using calculatePayout         (uint256 grossPayout, uint256 netPayout,) = calculatePayout(betAmount, numberOfCoins, headsRequired); // TODO check use grossPayout?          uint256 stakingBalance = IERC20(token).balanceOf(address(stakingContract));         uint256 availableLiquidity = (stakingBalance * maxLiquidityPercentage) / 10000;         require(lo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

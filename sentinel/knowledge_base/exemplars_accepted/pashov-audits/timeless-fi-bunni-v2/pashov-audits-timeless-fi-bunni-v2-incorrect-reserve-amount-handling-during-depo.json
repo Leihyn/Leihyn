@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect reserve amount handling during deposit",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `BunniHubLogic` contract, there is an issue concerning the usage of outdated reserve amounts during the deposit process. Specifically, when the hooklet is invoked at line 193, the `amount` parameter sent does not reflect the actual deposited amount calculated at line 144. This discrepancy arises because the `amount` still references the old `reserveAmount` value, which has not been updated to account for the recent deposit in lines 144 and 153.  Additionally, the slippage check in line 167, which also relies on thi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

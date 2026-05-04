@@ -1,0 +1,22 @@
+{
+  "title": "Supporting fee-on-transfer tokens can lead to bad debt",
+  "platform": "pashov-audits",
+  "program": "Arcadia-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, FOT tokens will incur bad debt  **Likelihood**: Low, FOT tokens are rare  ## Description  The protocol claims it can support fee-on-transfer (FOT) tokens if necessary. According to the pre-audit questionlist,  ``` - The Accounts will indeed be overvalued, since we store the \u2018amount transferred\u2019 (which would be higher than the amount received on the account) to calculate the value of the Account. - If enabled, the collateral and liquidation factors (haircut on the value) will be adjusted to accommodate for the value loss due to fees. ```  The issue is that changin",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

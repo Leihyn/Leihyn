@@ -1,0 +1,23 @@
+{
+  "title": "Griefing the launch to UniswapV3 by creating the pool first",
+  "platform": "pashov-audits",
+  "program": "ControlCplusControlV-groupcoin",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "multisig",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Once x amount of coins are bought and the value of the coin reaches a certain threshold, `launchGroupCoinToUniswapV3` can be called. This will transition the trading of coins to a different bonding curve.  In `launchGroupCoinToUniswapV3()`, the function will call `uniswapV3Factory.createPool` without checking the existence of the pool.  ```         address pool = uniswapV3Factory.createPool(address(token), WETH, config.fee);         IUniswapV3Pool(pool).initialize(config.sqrtPriceX96); ```  In UniswapV3Factory.createPool,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Groupcoin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

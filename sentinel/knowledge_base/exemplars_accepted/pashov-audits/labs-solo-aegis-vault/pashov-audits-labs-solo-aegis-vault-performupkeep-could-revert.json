@@ -1,0 +1,22 @@
+{
+  "title": "`performUpkeep` could revert",
+  "platform": "pashov-audits",
+  "program": "labs-solo-aegis-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When `performUpkeep` is called, it will withdraw a percentage of shares from the deposit vault and then deposit the withdrawn tokens into the deposit and target vaults accordingly.  ```solidity     function _rebalance(uint256 rebalancePct) private {         require(rebalancePct > 0 && rebalancePct <= maxRebalanceThreshold, \"IIN\");          // don't do rebalance during high volatility         (uint256 depositSpotPrice,) = _checkVolatility();          // don't rebalance if there are too few target tokens in the depositVault",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AegisVault-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

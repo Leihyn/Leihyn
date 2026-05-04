@@ -1,0 +1,23 @@
+{
+  "title": "Staking won't work correctly with non-standard ERC20 tokens",
+  "platform": "pashov-audits",
+  "program": "Topia-Game-token-lp-staking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can lead to a loss of value  **Likelihood:** Low, as such tokens are not so common  ## Description  Some tokens do not revert on failure in `transfer` or `transferFrom` but instead return `false` (example is [ZRX](https://etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498#code)). While such tokens are technically compliant with the standard it is a common issue to forget to check the return value of the `transfer`/`transferFrom` calls. With the current code, if such a call fails but does not revert it can result in users unstaking without claim",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/TopiaStaking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

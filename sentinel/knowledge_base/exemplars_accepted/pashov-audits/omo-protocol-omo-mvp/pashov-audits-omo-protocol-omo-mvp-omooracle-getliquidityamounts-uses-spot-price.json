@@ -1,0 +1,22 @@
+{
+  "title": "OmoOracle `getLiquidityAmounts()` uses spot price making it manipulatable",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "amm"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  `getPositionValue()` / `getLiquidityAmounts()` in `OmoOracle` rely on the spot price on Uniswap to calculate token amounts in a position. It makes the system vulnerable to **price manipulation**.  ```solidity     function getLiquidityAmounts(         address positionManager,         uint256 tokenId,         uint128 liquidity     ) internal view returns (uint256 amount0, uint256 amount1) {  --snip--          IUniswapV3Pool pool = IUniswapV3Pool(nftManager.factory());         (uint160 sqrtPriceX96,,,,,,) = pool.slot0();",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

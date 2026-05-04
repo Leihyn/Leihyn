@@ -1,0 +1,22 @@
+{
+  "title": "Funds not always in vault lead to share price calculation mess",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  At any point, the funds could be outside of `OmoVault.sol` and still not a UniswapV3 position in dynamic accounts. the funds could be in the agent address, in dynamic accounts as tokens (not UniV3 positions) or UniswapV3 positions but still owned by the agent.  This will affect the return value of the total assets in the vault from `OmoVault.so#totalAssets()` and it will corrupt all the logic of deposit/mint and redeem.  ## Recommendations  The only fix I can find (but not efficient) is to lock the vault in this case.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

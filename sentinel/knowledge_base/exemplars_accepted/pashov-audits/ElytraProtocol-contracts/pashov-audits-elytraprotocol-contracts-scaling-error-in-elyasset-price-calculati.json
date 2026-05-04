@@ -1,0 +1,21 @@
+{
+  "title": "Scaling error in `elyAsset` price calculation leads to fee loss",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `updateElyAssetPrice()` function in `ElytraOracleV1` contains a calculation error where the elyAsset price is computed without proper decimal scaling. The formula `totalValueInProtocol / elyAssetSupply` fails to account for the 18-decimal precision expected for price calculations.  ```solidity         {             uint256 tempElyAssetPrice = totalValueInProtocol / elyAssetSupply;             if (tempElyAssetPrice > oldElyAssetPrice) {                 uint256 increaseInElyAssetPrice = tempElyAssetPrice - old",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

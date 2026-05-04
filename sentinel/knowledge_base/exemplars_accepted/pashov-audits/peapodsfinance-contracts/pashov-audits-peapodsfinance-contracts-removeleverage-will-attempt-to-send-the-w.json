@@ -1,0 +1,23 @@
+{
+  "title": "`removeLeverage` will attempt to send the wrong token to the user",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When `removeLeverage` is called and the position is using the self-lending pod, the `_pairedAmtReceived` obtained from the unstake and remove LP process will be unwrapped from the self-lending pod. The received lending pair's share will then be redeemed to acquire the underlying borrowed token.  ```solidity     function _removeLeverage(bytes memory _userData)         internal         returns (uint256 _podAmtRemaining, uint256 _borrowAmtRemaining)     {         // ...          LeveragePositionProps memory _posProps = positionP",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

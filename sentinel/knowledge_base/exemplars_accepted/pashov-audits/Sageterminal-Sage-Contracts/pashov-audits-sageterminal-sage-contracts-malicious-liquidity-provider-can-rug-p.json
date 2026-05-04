@@ -1,0 +1,21 @@
+{
+  "title": "Malicious liquidity provider can rug-pull users",
+  "platform": "pashov-audits",
+  "program": "Sageterminal-Sage-Contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multisig"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  There are a few ways for malicious liquidity to rug-pull users:  #### Calling `removeLiquidity` without previously calling `addLiquidity`  A token owner can call `enableTrading` to allow trading without liquidity. After some time, when funds accumulated in the contract - a malicious liquidity provider can call `removeLiquidity` to send all the funds to himself.  #### Setting a low `timeTillUnlockLiquidity`  There is no restriction to a minimum `timeTillUnlockLiquidity`. Therefore a malicious liquidity provider can set `timeTil",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/EVTerminal-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

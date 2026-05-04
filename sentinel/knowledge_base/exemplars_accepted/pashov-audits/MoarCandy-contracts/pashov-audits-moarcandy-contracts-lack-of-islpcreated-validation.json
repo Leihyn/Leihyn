@@ -1,0 +1,21 @@
+{
+  "title": "Lack of `isLpCreated` validation",
+  "platform": "pashov-audits",
+  "program": "MoarCandy-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The lack of `isLpCreated` variable validation in the `ContinuosBondingERC20Token` contract functions makes it possible to return the bonding token to the purchase phase. This can cause unexpected behavior such as secondary involving `_createPair` or withdrawing treasury fees but it is almost always economically inefficient. The `isLpCreated` variable is set to `true` in the `_createPair` function but is never checked.  ```solidity     function _createPair() internal {         uint256 currentTokenBalance = getReserve();",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/MoarCandy-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

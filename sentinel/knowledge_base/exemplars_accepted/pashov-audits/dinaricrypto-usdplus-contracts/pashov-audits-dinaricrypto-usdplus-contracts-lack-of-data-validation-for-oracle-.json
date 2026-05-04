@@ -1,0 +1,19 @@
+{
+  "title": "Lack of data validation for oracle price feed",
+  "platform": "pashov-audits",
+  "program": "dinaricrypto-usdplus-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  There are several issues with the validation of price feed data in the `USDPlusMinter` and `USDPlusRedeemer` (when using Chainlink's `latestRoundData()`):  - Missing Validation for Price > 0:   There is no check to ensure the price is greater than 0, which could allow invalid price data.  - Price Staleness Not Checked:   The contracts do not verify whether the price feed data is up-to-date, risking reliance on stale or outdated prices.  - Sequencer Downtime Handling:   The `GRACE_PERIOD` following sequencer downtime is not enf",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dinari-security-review_2024-12-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

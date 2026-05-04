@@ -1,0 +1,22 @@
+{
+  "title": "Any tokens or eth in Magnetar can be drained",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, funds can be stolen, approvals can be given out to random addresses  **Likelihood**: Low, Magnetar is not designed to hold user funds  ## Description  The Magnetar contract issues approvals to certain contracts such as the YieldBox contract and the Singularity and BigBang market contracts to do token transfers. The issue is that it takes all these addresses as user inputs. Thus a malicious user can exploit this to give approvals to malicious contracts which can then drain any tokens present in the Magnetar contract.  While the Magnetar contract itself is not desi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

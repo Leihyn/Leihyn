@@ -1,0 +1,21 @@
+{
+  "title": "Sum of fee percentages might not be equal to the admin provided `total` value",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-SuperExpress",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it will mess the accounting of the contract, resulting in stuck/lost funds  **Likelihood:** Low, as it requires a mistake or an error on the admin side  ## Description  The input validation for the `newFeePercents` in the `_changeFee` method looks like this:  ```solidity        if (             (newFeePercents.lp + newFeePercents.front + newFeePercents.dao) >             FixedMath.ONE ||             newFeePercents.total > FixedMath.ONE         ) revert IncorrectValue(); ```  While both the sum of the fee percentages and the total value are validated that they",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Azuro-third-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

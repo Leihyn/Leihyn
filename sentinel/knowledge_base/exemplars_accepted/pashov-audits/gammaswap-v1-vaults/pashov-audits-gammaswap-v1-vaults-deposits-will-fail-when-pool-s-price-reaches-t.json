@@ -1,0 +1,22 @@
+{
+  "title": "Deposits will fail when pool's price reaches the min/max tick",
+  "platform": "pashov-audits",
+  "program": "gammaswap-v1-vaults",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "amm"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  During the deposit, code calls `calculateTokenRatio()` to calculate the `ratio0` and `ratio1`. If the pool's prices reaches the upper or lower price then `ratio0` or `ratio1` would be 0:  ```solidity         } else if (price <= priceLower) {             ratio0 = 0;             ratio1 = decimals1;         } else if (price >= priceUpper) {             ratio0 = decimals0;             ratio1 = 0;         } ```  Later, code uses the `ratio0` and `ratio1` to calculate the max deposit amount by calling `calculateMaxDeposit()`. T",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GammaSwap-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

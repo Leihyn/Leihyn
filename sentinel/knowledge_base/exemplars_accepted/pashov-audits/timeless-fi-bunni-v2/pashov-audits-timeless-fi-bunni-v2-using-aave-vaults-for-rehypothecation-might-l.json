@@ -1,0 +1,24 @@
+{
+  "title": "Using AAVE vaults for rehypothecation might lead to an underestimation of the value of the reserve",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  For pools that support rehypothecation, the `previewRedeem` function of the vaults is called to obtain the value of the reserves represented in underlying assets.  Both the whitepaper and the documentation website mention that one of the yield-generating protocols that can be used for rehypothecation is AAVE. However, the `previewRedeem` function of AAVE vaults does not completely adhere to the [EIP-4626 specification](https://eips.ethereum.org/EIPS/eip-4626), as it fails to comply with the following requirement:  > MUST",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

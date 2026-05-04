@@ -1,0 +1,22 @@
+{
+  "title": "Front-end owner can steal all bets balance",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-SuperExpress",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it results in 100% loss for the protocol & its users  **Likelihood:** High, as any Azuro SuperExpress front-end owner can exploit this  ## Description  The Azuro protocol allows any front-end owner to add his address in each bet placed through his UI. In `SuperExpress`, this address will be able to withdraw a fee amount that is taken from each bet, some small percentage. The problem is that the `withdrawFrontFee` method, from where this happens, is flawed - it can be called multiple times in a loop until there is no more bet token balance in the contract.  The",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Azuro-third-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

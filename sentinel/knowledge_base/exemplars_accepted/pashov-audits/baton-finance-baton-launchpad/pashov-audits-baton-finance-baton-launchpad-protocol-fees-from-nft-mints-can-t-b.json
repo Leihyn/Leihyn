@@ -1,0 +1,21 @@
+{
+  "title": "Protocol fees from NFT mints can't be claimed in `BatonLaunchpad`",
+  "platform": "pashov-audits",
+  "program": "baton-finance-baton-launchpad",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it results in a loss of value for the protocol  **Likelihood:** High, as it certain to happen  ## Description  In `Nft::mint` the `msg.value` expected is the price of an NFT multiplied by the amount of NFTs to mint plus a protocol fee. This protocol fee is sent to the `BatonLaunchpad` contract in the end of the `mint` method like this:  ```solidity if (protocolFee != 0) {     address(batonLaunchpad).safeTransferETH(protocolFee); } ```  `BatonLaunchpad` defines a `receive` method that is marked as `payable`, which is correct. The problem is that in `BatonLaunch",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BatonLaunchpad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

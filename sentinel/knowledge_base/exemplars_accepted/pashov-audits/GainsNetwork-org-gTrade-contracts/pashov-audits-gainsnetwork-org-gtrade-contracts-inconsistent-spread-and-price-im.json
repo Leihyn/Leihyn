@@ -1,0 +1,22 @@
+{
+  "title": "Inconsistent spread and price impact charges",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The protocol implements different spread and price impact charging mechanisms for trades opened before and after v9.2. However, inconsistency in these mechanisms allows users to exploit pre-v9.2 trades to avoid full spread and price impact charges when modifying their positions.  When increasing position sizes, the spread and price impact percentage are charged 50% regardless of trade opened before or after v9.2.  ```solidity     function prepareCallbackValues(         ITradingStorage.Trade memory _existingTrade,         IT",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-July2.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

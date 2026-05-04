@@ -1,0 +1,21 @@
+{
+  "title": "The User can deny paying slashed tokens",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Slash tokens only get transferred when `startSnapshot()` is called by the user or by others when the snapshot is expired. The issue is that if the user has no active validator then it won't be possible to call `validateExpiredSnapshot()` and slash tokens would stuck in the native node. This is the POC:  1. User1 withdraws all his validator's balance into the native node and updates the snapshot. 2. There's a slash event and native vault's users get slashed. 3. Now if User1 won't call `startSnapshot()` and the snapshot expires",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Option NFTs that go in the money after liquidation can be locked",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The liquidation of option NFTs is handled in `HegicModule.liquidate`. This function loops over all the token ids and processes the liquidation if the option is in the money, active and not expired. At the end of this processing the NFT is transferred back to the account's owner. This means that in case the option is not in the money, not active or expired, the NFT remains in `MarginAccount` contract.  ```solidity File: HegicModule.sol  45:     function liquidate(uint[] memory value, address holder) external onlyRole(MODULAR_SW",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

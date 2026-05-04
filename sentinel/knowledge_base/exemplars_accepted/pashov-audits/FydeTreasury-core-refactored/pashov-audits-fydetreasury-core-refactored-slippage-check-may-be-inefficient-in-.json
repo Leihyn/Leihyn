@@ -1,0 +1,21 @@
+{
+  "title": "Slippage check may be inefficient in `deposit()` when `_keepGovRights=True`",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In `deposit()` function code checks that `slippageChecker` with the sum of the minted shares `sharesToMint`, the issue is that when `_keepGovRights = True` then the code sends users different sTrsy tokens and there is no slippage check for their values. So even so some of the tokens may be higher than `slippageChecker` but the user may receive unfavorable sTrsy tokens. This is an issue because the token prices in the Fyde can be higher/lower than real token prices and the code would mint more/less sTrsy tokens for those t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

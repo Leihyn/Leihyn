@@ -1,0 +1,23 @@
+{
+  "title": "Working with signatures - nonce and expiry",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-wallet",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, some signers can extract personal benefits  **Likelihood:** Low, required mistakes and unique parity of voting power  ## Description  There are some not protected attack vectors.  - if controllers signed two transactions, msg.sender can decide on the ordering of these two transactions, which one two prioritize - if some signers refused to sign, but some other signers signed - their signatures can be used months later, for some modified set of controller, or signers who refused can find a moment to sign when they see it beneficial  Some simplified example:  1. We",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYTOPIAWallet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

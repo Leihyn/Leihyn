@@ -1,0 +1,19 @@
+{
+  "title": "Bypass `minimumDeployVestTime` due to vestingEnd overflow",
+  "platform": "pashov-audits",
+  "program": "g8keep-audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "arithmetic",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `g8keepFactory` contract implements a minimum vesting period for token deployers through the `minimumDeployVestTime` parameter. However, an error in the g8keepVester contract allows this check to be bypassed due to potential timestamp overflow.  In the `deployToken` function of `g8keepFactory`, there's a check to ensure the vesting time meets the minimum requirement:  ```solidity     function deployToken(         uint256 _initialLiquidity,         string memory _name,         string memory _symbol,         uint256 _to",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/g8keep-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

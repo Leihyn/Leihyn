@@ -1,0 +1,22 @@
+{
+  "title": "Missing division leads to massively deflated stored product",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  During a swap, the product of the virtual balances needs to be adjusted for the fee. This is done in the following line. (Line 286)  ```solidity _virtualBalanceProd = (_virtualBalanceProd * PRECISION)                 / _powDown(                     (_virtualBalanceX + _changeInVirtualBalanceTokenIn)                     * PRECISION,                     _wnX                     ); ```  This expression is incorrect. The power should be raised on the percentage change, while here it is raised on the total change. So instead of do",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

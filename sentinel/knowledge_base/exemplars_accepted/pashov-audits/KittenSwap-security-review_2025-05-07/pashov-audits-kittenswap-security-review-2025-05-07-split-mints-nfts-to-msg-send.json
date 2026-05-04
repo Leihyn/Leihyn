@@ -1,0 +1,21 @@
+{
+  "title": "split() mints NFTs to msg.sender not the original owner",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  VotingEscrow implementation, the split() function mints new NFTs to the msg.sender, regardless of whether msg.sender is the original owner or just an approved operator. This is inconsistent with the behavior of other functions, such as merge(), increase_amount(), and increase_unlock_time(), which preserve ownership and rely on \\_isApprovedOrOwner() to allow operations but does not alter the ownership.  ```solidity     function split(         uint _from,         uint _amount     ) external returns (uint _tokenId1, uint _to",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

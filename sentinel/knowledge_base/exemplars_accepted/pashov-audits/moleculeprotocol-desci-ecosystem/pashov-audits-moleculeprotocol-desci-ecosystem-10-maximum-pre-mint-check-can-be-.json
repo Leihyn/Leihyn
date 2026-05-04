@@ -1,0 +1,21 @@
+{
+  "title": "10% maximum pre-mint check can be bypassed",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-desci-ecosystem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When users create market, it will need to be checked by `LinearCurve.checkParameters` if the provided configuration is correct. `m` must within the predefined range and `p` (pre-mint) amount must not exceed 10% of total supply.  ```solidity   function checkParameters(bytes32 curveParameters, uint256 fundingGoal) external pure override {     (uint256 m, uint256 p) = decodeParameters(curveParameters);     if ((m < 1e4) || (m >= 1e19)) {       revert CurveParametersOutOfRange();     }      uint256 fundingGoalInTokens = suppl",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Catalyst-security-review-april.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

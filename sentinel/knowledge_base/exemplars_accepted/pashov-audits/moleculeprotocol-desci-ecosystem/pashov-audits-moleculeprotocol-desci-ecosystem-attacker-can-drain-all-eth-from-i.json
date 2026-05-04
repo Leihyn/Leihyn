@@ -1,0 +1,21 @@
+{
+  "title": "Attacker can drain all ETH from IPSeed due to malicious `IIPSeedCurve` implementation",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-desci-ecosystem",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  Impact: High. Attacker can drain all ETH.  Likelihood: High. Nothing prevents from exploiting.  ## Description  Currently user can specify arbitrary implementation of `IIPSeedCurve`:  ```solidity   function spawn(     uint256 tokenId,     string calldata name,     string calldata symbol,     string calldata projectId,     IIPSeedCurve curve,     bytes32 curveParameters,     address sourcer   ) public {     ...      Metadata memory newMetadata = @>    Metadata(sourcer, sourcer, name, symbol, projectId, curve, curveParameters);     tokenMeta[tokenId] = newMetadata;      emit Spawned",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Catalyst-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

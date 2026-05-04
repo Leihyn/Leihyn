@@ -1,0 +1,19 @@
+{
+  "title": "`_validateSpotMarket` incorrectly validates spot market",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The _validateSpotMarket() function is intended to ensure that the given spotMarket is valid for the provided assetIndex_, by checking if the market contains both the asset and USDC (as the system assumes all assets are priced against USDC). However, the current logic uses an OR condition:  ```solidity if (spotInfo.tokens[i] == USDC_SPOT_INDEX || spotInfo.tokens[i] == assetIndex_) {     return true; } ``` Since all valid spot markets pair assets against USDC, USDC_SPOT_INDEX (0) will always appear in one of the tokens. Thi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

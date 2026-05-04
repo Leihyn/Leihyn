@@ -1,0 +1,19 @@
+{
+  "title": "Bonding Curve DOS through escrow pre-funding",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-pump-science-contract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The sol_escrow account can be preemptively funded with SOL by an attacker before the bonding curve is created. Since the `create_bonding_curve` instruction initializes `real_sol_reserves` to 0, but the invariant check verifies that the actual SOL balance matches this value, the presence of any SOL in the escrow account will cause the curve creation to fail.  This is possible because:  - The sol_escrow PDA address is deterministic and can be calculated by anyone who knows the mint address - Anyone can send SOL to this addres",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/PumpScience-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

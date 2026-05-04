@@ -1,0 +1,21 @@
+{
+  "title": "Some of the expected rewards are not distributed",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `transferPlayerRewards()` function recalculates the rewards to be distributed to the player and their referral.  In the case there is no referral, only 80% are expected to be distributed.  If there exists a referral all the rewards are expected to be distributed, but only 99% are distributed due to how they are calculated.  Example for 100_000 tokens: 90_000 for the player + 9_000 for the referrer + 1_000 not distributed  ```solidity     (bool isReferrerSet, address referrer) = checkReferrer(_player);      if (!isReferrerS",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

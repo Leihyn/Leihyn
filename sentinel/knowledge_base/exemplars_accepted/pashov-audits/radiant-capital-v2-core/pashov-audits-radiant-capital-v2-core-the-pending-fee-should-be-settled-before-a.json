@@ -1,0 +1,19 @@
+{
+  "title": "The pending fee should be settled before adjusting the fee",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Functions related to fees, such as `setFeeRecipient`, `setBaseFee`, `setBaseFeeSplit`, and `setAffiliate`, will affect the distribution target and the amount of the fee. Before the changes take effect, the pending fee should be settled. Otherwise, it may lead to errors in settling the pending fees.  For example, if the current `affiliate` is Alice, the pending fee is 100. After changing the affiliate to Bob, this fee will be allocated to Bob instead of Alice during the rebalance.  ## Recommendations  Before adjusting the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

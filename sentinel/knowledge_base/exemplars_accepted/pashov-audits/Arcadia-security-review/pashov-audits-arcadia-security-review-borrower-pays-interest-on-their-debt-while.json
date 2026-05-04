@@ -1,0 +1,25 @@
+{
+  "title": "Borrower pays interest on their debt while liquidation is running",
+  "platform": "pashov-audits",
+  "program": "Arcadia-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "staking",
+    "auction"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, because the additional interest is limited by the auction cut off time.  **Likelihood:** Medium, only an issue if the user is fully liquidated.  ## Description  The LendingPool doesn't pause interest payments while a user's position is liquidated. When the liquidation is initiated, the user's debt position is increased to cover the initiation + termination reward as well as the liquidation penalty.  ```solidity     function startLiquidation(address initiator, uint256 minimumMargin_)         external         override         whenLiquidationNotPaused         proc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

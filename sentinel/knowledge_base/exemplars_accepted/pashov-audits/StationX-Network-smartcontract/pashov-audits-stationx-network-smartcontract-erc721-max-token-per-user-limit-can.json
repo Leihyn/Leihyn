@@ -1,0 +1,19 @@
+{
+  "title": "ERC721 max token per user limit can always be bypassed by one",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  Both `transferFrom()` and `safeTransferFrom()` functions in `ERC721DAO` have an off-by-one error when calculating the max amount of tokens a user can have:  ```solidity require(balanceOf(to) <= erc721DaoDetails.maxTokensPerUser); ```  This is also inconsistent with the limit validation performed in `mintToken()`, where it is applied correctly.  This leads to users being able to have more tokens than they should. For example, a DAO that would like to limit their tokens to one per user would allow them to have two instead.  ## R",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

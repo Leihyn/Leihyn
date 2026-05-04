@@ -1,0 +1,23 @@
+{
+  "title": "DoS on the `deposit` function due to excessively low slippage tolerance",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "amm"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  On deposits, part of the input tokens and newly minted ULTI tokens are added to the pool as liquidity. As a slippage protection mechanism, adding liquidity reverts when the difference between the TWAP and the spot price is greater than `MAX_ADD_LP_SLIPPAGE_BPS` basis points.  The value of this constant is set to 33 basis points. This means that for very small variations in the spot price, the transaction will revert, not allowing users to deposit input tokens.  ## Proof of Concept  ```solidity function test_depositSlippag",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

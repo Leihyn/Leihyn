@@ -1,0 +1,21 @@
+{
+  "title": "Non-standard tokens not properly accounted for",
+  "platform": "pashov-audits",
+  "program": "overload-labs-farm",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When depositing into the farm, the shares minted to the depositor are equal to the `amount` specified. However, for fee-on-transfer tokens, the actual amount of tokens that are deposited into the contract will be less than the amount specified in the transfer (since the fee is yet to be taken). As such the depositor receives more shares than they should.  If the protocol wants to support fee-on-transfer tokens then the balance of the transferred token should be checked before and after the `transferFrom` call, and the correspo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Overload-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

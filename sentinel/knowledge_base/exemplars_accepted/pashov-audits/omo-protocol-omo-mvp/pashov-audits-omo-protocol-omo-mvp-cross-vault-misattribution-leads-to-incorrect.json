@@ -1,0 +1,22 @@
+{
+  "title": "Cross-vault misattribution leads to incorrect `OmoVaults` valuation",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  - The `OmoAgent` agents will interact with multiple `OmoVault` vaults, borrowing assets and depositing liquidity positions back into the dynamic account (`OmoAgent`), however, the `OmoVault.totalAssets()` function accounts for **all** liquidity positions deposited in the `OmoAgent`, without tracking whether these positions were generated from assets borrowed from that specific vault.  ```javascript function totalAssets() public view virtual override returns (uint256) {         uint256 vaultHoldings = _totalAssets;         u",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

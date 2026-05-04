@@ -1,0 +1,21 @@
+{
+  "title": "Initializing SOL price makes trading unfair",
+  "platform": "pashov-audits",
+  "program": "pump-fun-fixed-price-token-sale",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `initialize_global_state` instruction, the SOL price is initialized at 200 USD/SOL.   ```rust pub fn initialize_global_state_ix(     ctx: Context<InitializeGlobalState>,     start_time: i64,     end_time: i64,     tokens_for_sale: u64, ) -> Result<()> {     ...     oracle_account.mint = constants::DEPOSIT_MINT3;     oracle_account.price = 200_00000;     Ok(()) } ``` However, the actual SOL price may differ significantly.  For example, at the time of writing the report, the SOL price is 128.7 USD/SOL.   This allows",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Pump-security-review_2025-03-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

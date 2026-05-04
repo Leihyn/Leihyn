@@ -1,0 +1,22 @@
+{
+  "title": "Claims from the Merkl distributor can fail",
+  "platform": "pashov-audits",
+  "program": "labs-solo-aegis-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `AegisVaultCore.claim` allows the admin to claim rewards from the Merkl distributor contract and transfers the claimed tokens to the `recipient` address.  ```solidity 735     IMerklDistributor(merkleDistributor).claim(users, tokens, amounts, proofs); 736 737     // Iterate over the list of token addresses and transfer the corresponding amounts to the recipient 738     for (uint256 i = 0; i < tokens.length; i++) { 739         IERC20(tokens[i]).safeTransfer(recipient, amounts[i]); 740     } ```  As we can see, the amounts c",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AegisVault-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

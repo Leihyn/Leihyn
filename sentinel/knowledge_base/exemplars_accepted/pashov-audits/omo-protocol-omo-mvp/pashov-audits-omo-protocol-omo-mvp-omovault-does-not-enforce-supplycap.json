@@ -1,0 +1,21 @@
+{
+  "title": "OmoVault does not enforce supplyCap",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `OmoVault.sol` contract has a `supplyCap` state variable and setter function, but this cap is not enforced in the `deposit()` or `mint()` functions.  ```solidity     function deposit(         uint256 assets,         address receiver     ) public virtual override onlyWhitelisted returns (uint256 shares) {         address msgSender = msg.sender;          // Check for rounding error since we round down in previewDeposit.         require((shares = _convertToShares(assets, false)) != 0, \"ZERO_SHARES\");         // require(supply",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Max price deviation is too high",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `MAX_PRICE_DEVIATION_FROM_PREVIOUS_ROUND` parameter is intended to safeguard against price manipulation. It is utilized within the `_chainlinkPriceChangeAboveMax()` function to verify if the price has undergone a substantial change between consecutive rounds:  ```solidity     function _chainlinkPriceChangeAboveMax(         ChainlinkResponse memory _currentResponse,         ChainlinkResponse memory _prevResponse     ) internal pure returns (bool) {         // code ...          // Return true if price has more than doubled,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

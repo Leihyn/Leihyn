@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect formula for token ratio balancing before adding liquidity",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  A portion of the paired tokens are swapped into the pTKN before adding the pair of tokens to a V2 liquidity pool. The amount to swap is not calculated correctly, leading to a small amount of leftover tokens that were not able to be deposited into the liquidity pool.  There is no refunding mechanism so these funds are lost forever.  The current formula being used is:  ``` return (_sqrt(_r * (_r * 3988000 + _fullAmt * 3988009)) - (_r * 1997)) / 1994; ```  However, the current formula is:  ```solidity uint256 correct_way = (_sqrt",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Share price increases can lead to sandwiching attacks when using only one vault",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The surge fee is a mechanism to avoid sandwiching attacks during autonomous liquidity modifications, which can happen due to LDF updates, rehypothecation yields, or autonomous rebalances.  The `beforeSwap` function in `BunniHookLogic` checks for these changes in liquidity and the check for changes in rehypothecation yields is done in the `_shouldSurgeFromVaults` function. This function performs the check only when both vaults are being used, assuming that when using only one vault, the total liquidity will not change. Howev",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Using hardcoded gas for cross-chain message",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Contracts LayerZeroImpl and LayerZeroDeployer uses hardcoded gas amounts when they send cross-chain messages through LayerZero bridges. The issue is that different destination chains may require different amount of gas and also the message itself can cause different amount of gas. When users create DAO they specify multiple lists and the length of those lists can have impact in the cross-chain message gas fee. As result the cross-chain DAO deployment would be lost for some chains and some DAOs.  ## Recommendations  Have s",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "`Pool.removeLiquidityV2()` uses incorrect token to send",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `Pool.sol` will contain rUSD as quoteToken and deUSD, sdeUSD as supporting collaterals. The update introduces v2 versions of deposit and withdraw functions. It allows the deposit/withdraw of any following tokens: rUSD, deUSD, sdeUSD.  The problem is that by mistake `Pool.removeLiquidityV2()` always transfers quoteToken instead of withdrawing token. As a result, deUSD and sdeUSD cannot be withdrawn.  ## Recommendations  ```diff     function removeLiquidityV2(         Data storage self,         address owner,         RemoveLiqu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Reya-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

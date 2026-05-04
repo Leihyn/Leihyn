@@ -1,0 +1,21 @@
+{
+  "title": "Funds in vault can be temporarily locked by spamming dust deposits and withdrawals",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, funds in vault will be temporarily locked  **Likelihood:** High, can always occur  ## Description  `finalizeVaultEndedWithdrawals()` is required to be called to finalize all fixed withdrawals, including on-going fixed withdrawals.  The issue is that it iterates through `fixedOngoingWithdrawalUsers`, which can be manipulated and become unbounded. An attacker can make `fixedOngoingWithdrawalUsers` extremely large by spamming dust fixed deposits of 100 wei (with multiple EOA) and then withdraw them when vault is on-going. This will cause `finalizeVaultEndedWithdra",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

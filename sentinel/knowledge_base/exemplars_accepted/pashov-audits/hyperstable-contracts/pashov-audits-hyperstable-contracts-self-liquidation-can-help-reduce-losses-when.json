@@ -1,0 +1,23 @@
+{
+  "title": "Self-liquidation can help reduce losses when health factor is low",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When the user's collateral is insufficient to cover the liquidation reward, tokens will be withdrawn from the LiquidationBuffer to pay the liquidator. If the LiquidationBuffer also lacks sufficient tokens to cover the liquidation reward, tokens will be withdrawn from the Vault to pay the liquidator.  If the user's collateral is insufficient to pay the liquidation reward, they can opt for self-liquidation, which allows the protocol to absorb part of their loss, as compared to the normal repayment method.  For example, if the cu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

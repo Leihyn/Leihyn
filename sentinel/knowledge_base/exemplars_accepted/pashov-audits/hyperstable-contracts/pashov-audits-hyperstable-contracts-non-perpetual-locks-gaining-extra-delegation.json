@@ -1,0 +1,21 @@
+{
+  "title": "Non-perpetual locks gaining extra delegation power",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `vePeg._delegate()` function requires that the source token (`_from`) must be perpetually locked before allowing delegation. However, the `_moveAllDelegates()` function ignores this restriction and moves ALL tokens owned by the user to the new delegate, including non-perpetual locks.  This completely bypasses the intention where only perpetual locks should have delegation power.  ```solidity function _delegate(uint256 _from, uint256 _to) internal {     LockedBalance memory currentLock = locked[_from];     require(curren",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-03-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

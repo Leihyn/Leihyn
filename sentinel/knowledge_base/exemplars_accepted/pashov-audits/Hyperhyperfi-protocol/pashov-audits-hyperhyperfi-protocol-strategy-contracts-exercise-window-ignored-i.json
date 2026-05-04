@@ -1,0 +1,19 @@
+{
+  "title": "`strategy` contracts: exercise window ignored in premium calculation",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The protocol currently allows options to be exercised within a **window after the maturity date** (i.e., `exerciseWindowDuration`):  ```solidity     function isPayoffAvailable(uint256 positionID, address caller, address /*recipient*/ )         external         view         virtual         override         returns (bool)     {         --snip--         return strg.setUp.treasury.manager().isApprovedOrOwner(caller, positionID)             && _calculateStrategyPayOff(positionID) > 0 && block.timestamp >= maturity @>",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

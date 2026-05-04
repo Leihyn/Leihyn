@@ -1,0 +1,24 @@
+{
+  "title": "Free flashloans due to the lack of fee or interest charges",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "flashloan",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `LiquidityPool.sol` is designed for LP providers to deposit tokens which can then be borrowed by `marginAccounts` through the function `LiquidityPool::borrow()`. However, the current implementation allows for borrowing and repaying within the same transaction without incurring any fees or interest, effectively providing a mechanism for free flash loans.  The issue arises in the function `LiquidityPool::getDebtWithAccruedInterest`, which calculates the accrued interest based on the time tokens are borrowed:  ```solidit",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

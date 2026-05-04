@@ -1,0 +1,19 @@
+{
+  "title": "Missing slippage protection on sellCredits()",
+  "platform": "pashov-audits",
+  "program": "noodles-fun-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Users trading credit tokens are prone to slippage by bots. Since VisibilityCredits.sol utilises a bonding curve, the price of credit tokens increase and decrease as the total supply increases and decreases.    **Slippage on sell:**  - Alice submits sellCredits() transaction.  - The transaction remains the mempool for sometime.  - During this period, another sellCredits() transaction executes (unintentionally by other users or intentionally by bots), thus decreasing the trading cost.  - Alice's transaction goes through but",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Noodles-security-review_2025-03-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

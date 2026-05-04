@@ -1,0 +1,22 @@
+{
+  "title": "The price would be accepted even with bad price from DIA Oracle",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description:  1.) The getPriceUSD18 function from DIAOracleV2SinglePriceOracle.sol ->  ```solidity function getPriceUSD18(         address _clBaseConversionPoolPriceFeed,         address _quoteToken,         address _quoteDIAOracle,         uint256     ) external view virtual override returns (bool _isBadData, uint256 _price18) {         string memory _symbol = IERC20Metadata(_quoteToken).symbol();         (uint128 _quotePrice8, uint128 _refreshedLast) =             IDIAOracleV2(_quoteDIAOracle).getValue(string.concat(_symbol, \"/USD\"));",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "First `bond` caller could cause DoS",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The first `bond` caller could cause DoS by providing a dust amount of token if they provide `_amount` that is enough to make `_tokensMinted` but cause the rest of `_transferAmt` to be 0.  ```solidity     function _bond(address _token, uint256 _amount, uint256 _amountMintMin, address _user) internal {         require(_isTokenInIndex[_token], \"IT\");         uint256 _tokenIdx = _fundTokenIdx[_token];          bool _firstIn = _isFirstIn();         uint256 _tokenAmtSupplyRatioX96 =             _firstIn ? FixedPoint96.Q96 : (_amount",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

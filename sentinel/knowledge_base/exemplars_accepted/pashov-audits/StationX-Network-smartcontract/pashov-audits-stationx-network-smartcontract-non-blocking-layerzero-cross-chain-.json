@@ -1,0 +1,21 @@
+{
+  "title": "Non-blocking LayerZero cross-chain buy operations can be blocked",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a cross-chain buy operation is performed, a LayerZero message is sent with a fixed `600_000` gas limit to execute in the destination chain:  ```solidity     endpoint.send{value: msg.value}(         _dstChainId,         abi.encodePacked(dstCommLayer[uint16(_dstChainId)], address(this)),         _payload,         payable(refundAd),         address(0x0), @>      abi.encodePacked(uint16(1), uint256(600_000))     ); ```  LayerZero v1 has a blocking behavior by default, and `LayerZeroImpl` attempts to implement the non-blo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

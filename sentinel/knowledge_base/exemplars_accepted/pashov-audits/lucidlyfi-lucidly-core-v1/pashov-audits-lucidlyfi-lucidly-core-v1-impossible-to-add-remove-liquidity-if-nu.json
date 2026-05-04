@@ -1,0 +1,21 @@
+{
+  "title": "Impossible to add/remove liquidity if numTokens < MAX_NUM_TOKENS",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  ``` function addLiquidity(         uint256[MAX_NUM_TOKENS] calldata amounts_,         uint256 minLpAmount_,         address receiver_         )         external         nonReentrant         returns (uint256)     { ```  Here it required \\_amount to be provided with the length of 32. On the other hand, later it requires a different thing:  ``` if (amounts_.length != _numTokens) revert Pool__InvalidParams(); ```  So, these two requirements conflict when we have \\_numTokens below 32. Thus, it is impossible to provide liquidity",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

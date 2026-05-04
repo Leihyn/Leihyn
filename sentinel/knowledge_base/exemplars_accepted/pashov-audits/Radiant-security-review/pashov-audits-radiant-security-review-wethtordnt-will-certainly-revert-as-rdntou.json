@@ -1,0 +1,21 @@
+{
+  "title": "`_wethToRdnt()` will certainly revert as `rdntOut` is always zero",
+  "platform": "pashov-audits",
+  "program": "Radiant-security-review",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `BalancerPoolHelper._swap()` always returns `0` because it lacks a return statement or return parameter assignment. Hence, `rdntOut = poolHelper_.swapWethToRdnt(_wethIn, 0);` will always be 0, causing the slippage check to fail.  ## Recommendations  ```diff - IVault(vaultAddr).swap(singleSwap, funds, _minAmountOut, block.timestamp); + return IVault(vaultAddr).swap(singleSwap, funds, _minAmountOut, block.timestamp); ```",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

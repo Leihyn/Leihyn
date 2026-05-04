@@ -1,0 +1,23 @@
+{
+  "title": "`UniV3TokenizedLp` can be attacked by an initial donation",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When `UniV3TokenizedLp` has no user deposit, the first user can mint `1` wei LP, and then transfer `1e18` WETH to the `UniV3TokenizedLp` contract. This results in `totalSupply` being 1 while the value of the assets in the pool is very high.  Then, after the new user transfers the asset, it may mint 0 LP due to division loss. These assets will all be counted as assets held by the 1wei LP and will eventually be stolen when the attacker calls `withdraw`.  ```solidity \t\tif (totalSupply() != 0) { \t\t\t// Price the pool0 in token1",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

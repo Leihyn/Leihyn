@@ -1,0 +1,23 @@
+{
+  "title": "TWAP price manipulation",
+  "platform": "pashov-audits",
+  "program": "dragon-software-devs-TitanX-Farms",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle",
+    "amm"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `_getTwaPrice` function in FarmKeeper and `getQuote` function in UniversalBuyAndBurn are vulnerable to price manipulation in Uniswap V3 pools with low observation cardinality. This vulnerability can lead to inaccurate price calculations, potentially resulting in unfair token swaps or liquidity provisions.  When getting the twap price to prevent slippage in liquidity providing and swapping, the `_getTwaPrice` and `getQuote` functions fallback to the oldest observation if the requested time window is greater than the availab",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TitanX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

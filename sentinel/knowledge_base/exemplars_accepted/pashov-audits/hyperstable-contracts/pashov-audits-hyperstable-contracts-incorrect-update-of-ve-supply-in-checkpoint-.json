@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect update of `ve_supply` in `checkpoint_total_supply()`",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In the `RewardsDistributor.sol` contract, the `checkpoint_total_supply()` function is responsible for storing the total supply at a given time `t` in the `ve_supply[t]` mapping. This value is used for future reward distribution calculations. The relevant code is as follows:  ```solidity  File: RewardsDistributor.sol 158:                 ve_supply[t] = FixedPointMathLib.max(uint256(int256(pt.bias - pt.slope * dt)), 0); ```  The `ve_supply[t]` value should only be updated when the week corresponding to time `t` has ended, whe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

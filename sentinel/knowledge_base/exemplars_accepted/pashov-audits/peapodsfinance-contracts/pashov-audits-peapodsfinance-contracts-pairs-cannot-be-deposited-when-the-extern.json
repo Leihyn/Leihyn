@@ -1,0 +1,22 @@
+{
+  "title": "Pairs cannot be deposited when the externalAssetVault has not been set",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `FraxlendPairCore._repayAsset()` function has this check before making external calls to the external vault:  ```solidity         if (address(externalAssetVault) != address(0)) { ```  However, this check is not included in `FraxlendPairCore._deposit()` before it makes an external call to the `externalAssetVault`.  This means that depositing will always revert when the `externalAssetVault` has not been set, so lending pairs cannot function independently of the lending asset vault.  ## Recommendations  In `_deposit()`,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

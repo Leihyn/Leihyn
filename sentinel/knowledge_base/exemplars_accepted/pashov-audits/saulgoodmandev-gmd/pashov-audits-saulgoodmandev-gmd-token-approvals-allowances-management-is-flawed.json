@@ -1,0 +1,21 @@
+{
+  "title": "Token approvals & allowances management is flawed",
+  "platform": "pashov-audits",
+  "program": "saulgoodmandev-gmd",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Medium, because it will be problematic only with special type of tokens  **Impact:** Medium, because it can lead to a limited loss of funds  ## Description  There are a few problems related to approvals & allowances in the contract. One is that the `swaptoGLP` method approves another contract to spend tokens, but some tokens (like `USDT`) have approval race condition protection, which requires the allowance before a call to `approve` to already be either 0 or `UINT_MAX`. If this is not the case, the call reverts, which can lead to a DoS situation with `swaptoGLP`.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/GMD-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

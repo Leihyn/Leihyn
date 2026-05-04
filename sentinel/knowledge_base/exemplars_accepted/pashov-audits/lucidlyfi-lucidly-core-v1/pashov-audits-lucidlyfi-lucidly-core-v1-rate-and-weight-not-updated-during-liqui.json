@@ -1,0 +1,21 @@
+{
+  "title": "Rate and weight not updated during liquidity removal",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When users remove liquidity, the amount of tokens they receive will be calculated based on each token's `_rate`. Additionally, `virtualBalanceProd` will be recalculated using each token's weight.  ```solidity     function removeLiquidity(uint256 lpAmount_, uint256[] calldata minAmounts_, address receiver_)         external         nonReentrant     {         uint256 _numTokens = numTokens;          if (minAmounts_.length != _numTokens || minAmounts_.length > MAX_NUM_TOKENS) revert Pool__InvalidParams();         // update supply",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

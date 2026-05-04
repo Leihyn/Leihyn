@@ -1,0 +1,22 @@
+{
+  "title": "Arbitrage opportunity using different prices in the same block",
+  "platform": "pashov-audits",
+  "program": "NablaFinance-contracts-audit-07-2024",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The current implementation of the `PythAdapter` contract allows using different prices for the same token in the same block. This can be exploited by a malicious user to make a profit with zero risk.  There are different ways of performing an operation without updating the price feed of a certain token:  - Omit the target token in the array sent to `updatePriceFeeds`. - Submit an outdated price for the target token (`updatePriceFeeds` does not revert in this case). - Swap through `swapExactTokensForTokensWithoutPriceFeedU",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nabla-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

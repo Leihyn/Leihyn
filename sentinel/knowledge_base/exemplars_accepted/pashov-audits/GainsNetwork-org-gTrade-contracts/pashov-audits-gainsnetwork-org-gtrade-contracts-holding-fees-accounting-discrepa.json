@@ -1,0 +1,22 @@
+{
+  "title": "Holding fees accounting discrepancy when collateral is less than fees",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "invariant-violation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When a highly leveraged trade accumulates positive PnL over time, an accounting discrepancy occurs in how holding fees are handled, leading to potential fund loss for the protocol.  The issue arises in the `realizeHoldingFeesOnOpenTrade` function when `holdingFeesCollateral` exceeds `availableCollateralInDiamond`. In this scenario, only the available collateral is sent to the vault, but the full amount is recorded in `realizedTradingFeesCollateral`:  ```solidity     function realizeHoldingFeesOnOpenTrade(address _trader, ui",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Risk of unaccounted asset removal",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `MarginAccount.availableErc20` list is crucial for functions like `MarginAccount::preparationTokensParams`, which helps in valuing the account, and `MarginAccount::liquidate`. Removing a token from the `availableErc20` list can lead to users being liquidated using only the remaining active tokens to cover debts:  ```solidity File: MarginAccount.sol 217:     function liquidate(uint marginAccountID, address baseToken, address marginAccountOwner) external onlyRole(MARGIN_TRADING_ROLE) { 218:         IModularSwapRouter.ERC20Po",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Using a permit together with an external call allows for griefing attacks",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low, the function caller will be frontrun but no funds will be lost  **Likelihood:** High, anyone can grief a permit.  ## Description  When calling a permit, the data of the permit will be logged in the blockchain, and anyone is able to frontrun the permit by duplicating the TX arguments. This is not an issue according to the EIP since the permit creator can just create another permit.  However, if the permit is used in conjunction with an external function call, like a `transfer()` call, frontrunning the permit will cause the function to be griefed.  Reference: https:",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

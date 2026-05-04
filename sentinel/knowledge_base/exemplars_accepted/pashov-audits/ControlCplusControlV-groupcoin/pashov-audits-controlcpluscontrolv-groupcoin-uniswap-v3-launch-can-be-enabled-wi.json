@@ -1,0 +1,23 @@
+{
+  "title": "Uniswap v3 launch can be enabled without raising enough ETH",
+  "platform": "pashov-audits",
+  "program": "ControlCplusControlV-groupcoin",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `enableUniswapV3Launch` can only be executed if `unitPrice >= config.thresholdPrice`, which is implicitly intended to enforce that at least `config.token1Amount` ETH has been paid to purchase the given token. It's important that enough ETH has been paid so that we have enough to supply liquidity. However, users only need to buy ~8,200,000 tokens for the `unitPrice` to meet the `thresholdPrice`, which is ~155,000 tokens less than we need to sell to have sufficient ETH. We can prove this with the following test:  ```solidity fu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Groupcoin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

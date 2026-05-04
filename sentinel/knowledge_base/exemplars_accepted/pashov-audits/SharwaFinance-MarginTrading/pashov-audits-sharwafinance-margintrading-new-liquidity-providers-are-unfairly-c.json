@@ -1,0 +1,23 @@
+{
+  "title": "New liquidity providers are unfairly charged",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When a user provides liquidity to `LiquidityPool` the total liquidity is calculated as the sum of the pool token balance and the total borrows. The total borrows include the net debt and the accrued interest. However, it is not taken into account that a percentage of the interest is sent to the insurance pool.  By including the interest sent to the insurance pool in the total liquidity calculation, part of this amount is subtracted from the share of the new liquidity providers.  ```solidity File: LiquidityPool.sol  097:     fu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Manipulatable oracle and breaking slippage protection",
+  "platform": "pashov-audits",
+  "program": "avierauy-buyburner",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The buying of BEAM by the protocol can be affected by external parties. The expected amount of BEAM received is calculated as `UNISWAP_V2_ROUTER_02.getAmountsOut(...)` which [depends on the token reserves](https://github.com/Uniswap/v2-periphery/blob/master/contracts/libraries/UniswapV2Library.sol#L62-L70) in related pairs.  ```solidity     function _getTokenAmountPrice(uint256 tokenAmount, address token0, address token1)         internal         view         returns (uint256)     {         ...  @>      uint256[] memory ret",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BuyBurner-security-review_2024-12-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

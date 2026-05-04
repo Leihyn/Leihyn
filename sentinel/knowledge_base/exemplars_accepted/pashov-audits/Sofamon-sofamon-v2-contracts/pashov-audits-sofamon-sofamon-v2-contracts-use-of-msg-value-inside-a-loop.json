@@ -1,0 +1,23 @@
+{
+  "title": "Use of `msg.value` inside a loop",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "signature",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `batchCommitToMint` function attempts to call the `commitToMint` function multiple times within a loop, each time using the same `msg.value` that was provided when `batchCommitToMint` was called. While the `commitToMint` function works correctly on its own, it fails when invoked within the loop because the same `msg.value` is used multiple times. On the first iteration, the `msg.value` is transferred, but subsequent iterations fail because the `msg.value` has already been sent, causing the transaction to revert due to i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

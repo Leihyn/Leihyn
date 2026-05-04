@@ -1,0 +1,19 @@
+{
+  "title": "Unused freeze authority revocation creates token lock risk",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-pump-science-contract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The codebase includes a `revoke_freeze_authority` function in `locker.rs` that is not being called during pool creation, despite being necessary to prevent tokens from being frozen after migration.  If the freeze authority is not revoked:  - The bonding curve program retains the ability to freeze token accounts - This could potentially be used to lock user tokens after migration - Goes against the intended design where locking should only be possible during pre-trading  **Code Location :** [locker.rs#L83](https://github.com",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/PumpScience-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

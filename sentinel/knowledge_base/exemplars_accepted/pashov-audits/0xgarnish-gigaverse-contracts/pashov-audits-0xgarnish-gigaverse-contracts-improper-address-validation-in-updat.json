@@ -1,0 +1,19 @@
+{
+  "title": "Improper address validation in update function",
+  "platform": "pashov-audits",
+  "program": "0xgarnish-gigaverse-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  In the `GigaNameNFTBeforeUpdateHandler` contract, the `update` function does not properly check if the `to` address is `address(0)`, which is critical for handling cases where the NFT is being burned. The code currently attempts to set the username for `to` without verifying if to is `address(0)` This can result in an inconsistent or invalid state in the `AccountSystem`  ## Recommendations  ```solidity function update(     address tokenContract,     address to,     uint256 tokenId,     address //auth ) external override {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gigaverse-security-review_2025-01-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

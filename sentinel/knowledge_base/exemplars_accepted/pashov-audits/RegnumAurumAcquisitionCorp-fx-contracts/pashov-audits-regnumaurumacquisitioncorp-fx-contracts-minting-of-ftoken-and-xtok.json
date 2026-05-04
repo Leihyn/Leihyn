@@ -1,0 +1,24 @@
+{
+  "title": "Minting of `fToken` and `xToken` allowed during stability mode",
+  "platform": "pashov-audits",
+  "program": "RegnumAurumAcquisitionCorp-fx-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "proxy",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium    **Likelihood:** Medium    ## Description  The `Market.mint()` function mints both fToken and xToken [based on the current collateral ratio](https://github.com/RegnumAurumAcquisitionCorp/fx-contracts/blob/main/contracts/f(x)/math/FxLowVolatilityMath.sol#L293-L307).   In the original Aladdin implementation, this function could be called only once. However, RegnumFx [removed this restriction](https://github.com/RegnumAurumAcquisitionCorp/fx-contracts/compare/bbb461cba879349c24c02d87872e93ec0a1a1975...f6e865df2dd46d67a49391d94e54b26e6a8af43c#diff-2c8d",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RWf(x)-security-review_2025-08-20.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

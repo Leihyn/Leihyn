@@ -1,0 +1,19 @@
+{
+  "title": "Tokens sent to old `cached receiver address` in `OfframpRegistry`",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-gateway",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `OfframpRegistry` contract, when an offramp owner accepts an order, the current receiver address is cached in the order details:  ```solidity     function offrampAcceptOrder(uint256 orderId) external {         ...         offrampOrder.receiver = offrampDetails.receiver; // update receiver so even if offramp gets deregister current valid orders are process         ...     } ```  This is done to ensure orders can still be processed even if the offramp is deregistered. However, this creates a vulnerability when the re",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-security-review_2025-03-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

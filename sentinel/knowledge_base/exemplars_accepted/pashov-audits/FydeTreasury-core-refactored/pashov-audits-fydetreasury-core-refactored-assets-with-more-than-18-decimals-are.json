@@ -1,0 +1,23 @@
+{
+  "title": "Assets with more than 18 decimals are incorrectly handled in UniswapAdaptor",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Function `_getUniswapPrice()` is supposed to handle cases when the quote token has more than 18 decimals by downscaling the price. However, it will just revert on the first line because `factor` is `uint`:  ```solidity   function _getUniswapPrice(address asset, AssetInfo calldata assetInfo, uint32 twapPeriod)     internal     view     returns (uint256)   {     uint256 baseAmount = 10 ** assetInfo.assetDecimals; @>  uint256 factor = (18 - assetInfo.quoteTokenDecimals); // 18 decimals     uint256 finalPrice;      uint32[] memory",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

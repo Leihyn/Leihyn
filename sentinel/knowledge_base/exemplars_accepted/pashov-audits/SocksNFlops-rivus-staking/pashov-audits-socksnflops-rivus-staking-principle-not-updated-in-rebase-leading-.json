@@ -1,0 +1,22 @@
+{
+  "title": "`principle` not updated in `rebase()` leading to underflow and withdrawal failures",
+  "platform": "pashov-audits",
+  "program": "SocksNFlops-rivus-staking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "arithmetic",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `principle` variable in the `StakingToken` contract is intended to track the total amount of underlying tokens deposited into the contract. However, within the `rebase` function, which adjusts the total supply of tokens (e.g., to reflect accrued interest or rewards), the `principle` variable is not updated to match the new total supply.  This mismatch leads to a critical issue: when the total supply increases due to a rebase, but `principle` remains the same, subsequent calculations that rely on `principle` can underflo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Rivus-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

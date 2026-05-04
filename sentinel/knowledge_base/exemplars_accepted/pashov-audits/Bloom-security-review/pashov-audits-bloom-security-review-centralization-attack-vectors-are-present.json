@@ -1,0 +1,21 @@
+{
+  "title": "Centralization attack vectors are present",
+  "platform": "pashov-audits",
+  "program": "Bloom-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can break the protocol for users  **Likelihood:** Low, as it requires a malicious or a compromised owner  ## Description  The `owner` of `SwapFacility` can change the `pool` variable any time, meaning it can be set to `address(0)` for example, breaking the protocol's `swap` functionality. Another such issue is that the `setSpreadPrice` method does not do any input validation, meaning the `spreadPrice` can be set to a huge number that is bigger than the token prices, which will make the spread subtraction revert the `swap` transactions every time.  ## Recomm",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Bloom-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

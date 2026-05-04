@@ -1,0 +1,21 @@
+{
+  "title": "Attacker can drain Periphery by specifying big `socketPayloadSize`",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When a user withdraws funds from protocol, tokens are bridged to another chain to address `receiver`. The fee to pay for bridging is based on `gasLimit` and `payloadSize`:  ```solidity     function getFees(...)         internal         view         returns (uint256 feeInToken, uint256 nativeFees)     { @>      nativeFees = controller.getMinFees(connector, gasLimit, payloadSize);         feeInToken = Configuration.getStaticWithdrawFee(token, connector);     } ```  User can just set very high `payloadSize` and protocol will pay",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

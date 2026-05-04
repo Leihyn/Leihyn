@@ -1,0 +1,23 @@
+{
+  "title": "`votingReward` not set on `Gauge`",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-06-12",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `Gauge` contract does not set the `votingReward` during its initialization and does not have a setter function for it.  As a result, when `notifyRewardAmount()` is called and fees are claimed from the pair, the transaction will revert.  ```solidity         (claimed0, claimed1) = IPair(address(lpToken)).claimFees();         (address _token0, address _token1) = IPair(address(lpToken)).tokens();         if (claimed0 > 0) {             IERC20(_token0).approve(address(votingReward), claimed0);     @>      votingReward.notify",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-06-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

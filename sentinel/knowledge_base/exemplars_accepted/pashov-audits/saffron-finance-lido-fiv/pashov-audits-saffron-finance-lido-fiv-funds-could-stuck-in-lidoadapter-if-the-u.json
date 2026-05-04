@@ -1,0 +1,23 @@
+{
+  "title": "Funds could stuck in `lidoAdapter` if the user requests withdrawal before `adminSettleDebt()` execution and finalized af",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, users could lose their deposits  **Likelihood:** Medium, scenario requires admin settle debt execution and specific order of transactions  ## Description  When the admin calls `initiatingAdminSettleDebt` users have a timelock period to withdraw their deposits. They will use the `withdraw` function for this. Depending on what stage the vault is, the contact would burn the appropriate user's tokens balance, request a withdrawal from Lido using `lidoAdapter`, and save request IDs in the associate array slot:  ```solidity File: LidoVault.sol 458:   function withdraw(",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

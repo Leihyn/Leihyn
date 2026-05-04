@@ -1,0 +1,19 @@
+{
+  "title": "`_assetsUtilized` is obtained without calling `whitelistUpdate()`",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  `assetsUtilized` is obtained with the following calculation:  ```solidity     uint256 _assetsUtilized = externalAssetVault.vaultUtilization(address(this)); ```  However, it does not call `whitelistUpdate()` on the vault to update the stored utilization values, so `_assetsUtilized` is out of date.  ## Recommendations  Call `externalAssetVault.whitelistUpdate(true)` before obtaining `_assetsUtilized` to ensure it is up to date.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

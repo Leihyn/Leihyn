@@ -1,0 +1,22 @@
+{
+  "title": "`getLiqPnlThresholdP` could revert",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** low  ## Description  When liquidation parameters are configured, it is possible for `startLeverage` and `endLeverage` to have the same value. This can be useful for an asset group where a constant liquidation threshold is desired, regardless of leverage.  However, when `getLiqPnlThresholdP` is called and the provided `_leverage` is equal to `startLeverage` / `endLeverage`, it will revert if `startLeverage` equal to `endLeverage` due to division by 0.  ```solidity     function getLiqPnlThresholdP(         IPairsStorage.GroupLiquidationParams memory",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-July2.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "DOS of CreateBondingCurve",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-pump-science-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `CreateBondingCurve` instruction requires passing `bonding_curve_token_account`:  ```rust     #[account(         init,         payer = creator,         associated_token::mint = mint,         associated_token::authority = bonding_curve,     )]     bonding_curve_token_account: Box<Account<'info, TokenAccount>>, ```  `bonding_curve_token_account` uses `associated_token::mint` and `associated_token::authority`, so the `TokenAccount` can be created in advance. If this already exists, creating the function will fail because",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/PumpScience-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

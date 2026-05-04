@@ -1,0 +1,19 @@
+{
+  "title": "The protocol uses `_msgSender()` extensively, but not everywhere",
+  "platform": "pashov-audits",
+  "program": "florence-finance-florence-finance-protocol-v3",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low, because protocol will still function normally, but an expectedly desired types of transactions won't work  **Likelihood:** High, because it is certain that he issue will occur as code is  ## Description  The code is using OpenZeppelin's `Context` contract which is intended to allow meta-transactions. It works by using doing a call to `_msgSender()` instead of querying `msg.sender` directly, because the method allows those special transactions. The problem is that the `onlyDelegate` and `onlyFundApprover` modifiers in `LoanVault` use `msg.sender` directly instead o",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/FlorenceFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

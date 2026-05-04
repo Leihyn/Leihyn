@@ -1,0 +1,21 @@
+{
+  "title": "The `maxWallet` variable can be bypassed",
+  "platform": "pashov-audits",
+  "program": "Sageterminal-Sage-Contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `maxWallet` variable helps determine the maximum number of `ERC` tokens a user can purchase. In the `ERC314Implementation::buy()` function, it is validated that the user does not exceed `maxWallet`.  ```solidity File: EvFactoryProxyOptFee.sol 443:     function buy(uint256 amountOutMin) public payable { ... ... 461:         if (_opt.maxWalletEnable) { 462:             require( 463:                 tokenAmount + _balances[msg.sender] <= maxWallet, 464:                 \"Max wallet exceeded\" 465:             ); 466:         }",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/EVTerminal-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

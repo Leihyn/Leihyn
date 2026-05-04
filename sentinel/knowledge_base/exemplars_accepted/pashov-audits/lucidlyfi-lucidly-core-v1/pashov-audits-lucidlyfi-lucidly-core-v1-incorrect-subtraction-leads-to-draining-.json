@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect subtraction leads to draining of the pool",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The function `removeLiquiditySingle` calculates the amount of tokens to be taken out when removing liquidity.  It calculates this by calculating the change in the virtual balance before and after liquidity removal.  ```solidity         uint256 _changeInVirtualBalance = _prevVirtualBalance = _virtualBalance; ```  However, as seen above, it uses an equality `=` operator instead of the minus `-` operator. Thus instead of calculating the difference, it sets the difference as `_virtualBalance`, which is the amount of liquidity tha",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

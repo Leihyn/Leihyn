@@ -1,0 +1,23 @@
+{
+  "title": "`updateXP` can be omitted during liquidation",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Though the `liquidate` function invokes `dyad.burn` the `updateXP` can be omitted in case the liquidated note has no `KEROSENE_VAULT` or `depositAmount == 0`. This way liquidated note's `balanceOfNote` will be incorrect.  ```solidity     function liquidate(uint256 id, uint256 to, uint256 amount)         external         isValidDNft(id)         isValidDNft(to)         returns (address[] memory, uint256[] memory)     {         uint256 cr = collatRatio(id);         if (cr >= MIN_COLLAT_RATIO) revert CrTooHigh();         uint25",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

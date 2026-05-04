@@ -1,0 +1,22 @@
+{
+  "title": "ongoing withdrawals from variable side hurts variable earnings",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as it can be argued that his is part of the risk on the variable side  **Likelihood:** Medium, as it also hurts the one withdrawing  ## Description  When the vault is active, a variable side staker can chose to withdraw their share of the, so far, accrued earnings:  ```solidity 571:          (uint256 currentState, uint256 ethAmountOwed) = calculateVariableWithdrawState( 572:            (lidoStETHBalance - fixedETHDeposits) + withdrawnStakingEarnings + totalProtocolFee, 573:            variableToWithdrawnStakingEarnings[msg.sender] 574:          ); 575: 576:",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

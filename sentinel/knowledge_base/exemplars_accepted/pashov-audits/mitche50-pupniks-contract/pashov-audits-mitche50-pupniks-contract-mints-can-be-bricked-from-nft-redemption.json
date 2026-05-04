@@ -1,0 +1,21 @@
+{
+  "title": "Mints can be bricked from NFT redemptions",
+  "platform": "pashov-audits",
+  "program": "mitche50-pupniks-contract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, prevents subsequent Pupnik sales  **Likelihood:** Medium, can be easily performed by malicious parties  ## Description  Pupnik NFTs can be redeemed at any point in time after it has been minted. Redeeming a Pupnik whose ID is strictly less than `amountMinted` while the sale is ongoing will cause subsequent sales to revert, because the redemption decrements `amountMinted`, which the sale relies on.  The decrement will attempt to mint the existing ID of `amountMinted` before it is decremented.  ```solidity uint256 currentAmount = amountMinted;  for (uint256 i = 1;",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Pupniks-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

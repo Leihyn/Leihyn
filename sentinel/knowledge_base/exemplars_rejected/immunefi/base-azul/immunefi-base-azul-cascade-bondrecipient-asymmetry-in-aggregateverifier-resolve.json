@@ -1,0 +1,23 @@
+{
+  "title": "Cascade bondRecipient asymmetry in AggregateVerifier.resolve",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Medium",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "documented-design",
+  "surface_tags": [
+    "bridge",
+    "proxy",
+    "vault"
+  ],
+  "bug_class": "trust-boundary",
+  "mental_operation": "value_flow",
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "Identified that resolve() cascade branch (parent CHALLENGER_WINS) sets status=CHALLENGER_WINS but does NOT update bondRecipient when counteredByIntermediateRootIndexPlusOne>0. Honest challenger of child gets no reward when parent fails first.",
+  "key_lesson": "Pashov Multiproof Audit 1 #1 documented this resolve branch and the FIX intentionally lets the cascade branch fast-resolve so proposer reclaims bond. The bondRecipient-stays-as-gameCreator behavior is the INTENDED remediation, not a bug. Pre-flight rule 6: when audit fix commits document the divergent behavior, do NOT file. Cantina dd587c9 is the documented-design anchor.",
+  "contest_url": "https://immunefi.com/audit-competition/audit-comp-base-azul",
+  "submission_url": null,
+  "captured_at": "2026-05-04T18:47:01"
+}

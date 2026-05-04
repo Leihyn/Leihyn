@@ -1,0 +1,22 @@
+{
+  "title": "No slippage checks when removing leverage",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When removing leverage in the `LeverageManager`, it swaps the pod token for the borrow token:  ```solidity _podAmtRemaining = _swapPodForBorrowToken(_pod, _borrowToken, _podAmtReceived, _borrowAmtNeededToSwap); ```  This is an exact output swap, and `amountInMax` is set as the number of pod tokens available. This means there is 0 slippage protection in the swap. A malicious attacker can sandwich this transaction to cause maximal usage of the pod tokens when swapping to borrow tokens.  In the end, `_podAmtRemaining` will be",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

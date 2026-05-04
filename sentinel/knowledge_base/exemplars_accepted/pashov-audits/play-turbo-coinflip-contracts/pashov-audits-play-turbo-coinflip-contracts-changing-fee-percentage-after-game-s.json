@@ -1,0 +1,19 @@
+{
+  "title": "Changing fee percentage after game start can block payouts",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In `Flip.sol`, the `flip()` function calculates the `netPayout` and locks the amount to ensure that the contract has enough funds to pay the winner.  However, when the game is completed, in case the player wins, the `netPayout` is recalculated.  ```solidity 230:         if (won) { 231:             (uint256 grossPayout, uint256 netPayout, uint256 fee) = 232:                 calculatePayout(game.betAmount, game.numberOfCoins, game.headsRequired); ```  The `feePercentage` is used in the calculation of `netPayout`, so if the owner",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

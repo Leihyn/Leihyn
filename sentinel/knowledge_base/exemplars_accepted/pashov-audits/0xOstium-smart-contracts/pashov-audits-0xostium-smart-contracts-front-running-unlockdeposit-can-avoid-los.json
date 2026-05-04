@@ -1,0 +1,21 @@
+{
+  "title": "Front-running `unlockDeposit()` can avoid loss distribution",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When users deposits token with a lock, the code gives them bonus shares, and after the lock expires, the bonus is socialized among the share token holders in function `unlockDeposit()`: ```solidity         int256 accPnlDelta = d.assetsDiscount.mulDiv(PRECISION_18, totalSupply(), Math.Rounding.Ceil).toInt256();          accPnlPerToken += accPnlDelta;         if (accPnlPerToken > maxAccPnlPerToken().toInt256()) {             revert NotEnoughAssets();         }          lockedDepositNft.burn(depositId);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

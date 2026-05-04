@@ -1,0 +1,21 @@
+{
+  "title": "Flawed risk allocation mechanism in Metavault",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The Metavault (LendingAssetVault) implements a max allocation mechanism for each lending vault that it supplies to. This is to ensure that in a situation where a lending vault is compromised, the maximum loss is well-defined and limited.  However, due to a flaw in this mechanism, a compromised lending vault can steal ALL of the funds in the metavault, exceeding the maximum allocation that was set.  The max risk allocation mechanism works by ensuring that `vaultUtilization[_vault]` cannot exceed `vaultMaxAllocation[_vault]`",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

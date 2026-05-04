@@ -1,0 +1,22 @@
+{
+  "title": "Users will miss some rewards when they add liquidity",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In `UniswapV3Staking.stake`, the current liquidity is stored when a note is staked:  ```solidity     function stake(uint256 noteId, uint256 tokenId) external {         require(dnft.ownerOf(noteId) == msg.sender, \"You are not the Note owner\");          StakeInfo storage stakeInfo = stakes[noteId];         require(!stakeInfo.isStaked, \"Note already used for staking\");          (,,,,,,, uint128 liquidity,,,,) = positionManager.positions(tokenId);         require(liquidity > 0, \"No liquidity\");          positionManager.safeTr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

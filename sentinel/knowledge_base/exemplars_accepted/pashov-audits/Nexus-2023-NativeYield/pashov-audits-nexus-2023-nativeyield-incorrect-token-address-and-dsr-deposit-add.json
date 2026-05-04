@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect `TOKEN_ADDRESS` and `DSR_DEPOSIT_ADDRESS`",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `DSRStrategy` declares incorrect contract addresses for `TOKEN_ADDRESS` and `DSR_DEPOSIT_ADDRESS`, which are intended to represent the `sDAI` contract for depositing `DAI` tokens and earning yield.  ```solidity //mainnet address public constant TOKEN_ADDRESS=0x3F1c547b21f65e10480dE3ad8E19fAAC46C95034;  address public constant DSR_DEPOSIT_ADDRESS=0x3F1c547b21f65e10480dE3ad8E19fAAC46C95034; ```  The `DSRStrategy` is primarily used as the implementation strategy for the DepositUSD contract on the Ethereum mainnet. However, th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

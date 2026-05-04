@@ -1,0 +1,22 @@
+{
+  "title": "Liquidated users are wrongly protected from slashing due to incorrect XP update",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  On a base level, liquidating a vault functions as both a `withdraw` and `deposit` function and upon withdrawing from a kerosene vault, the note's xp is slashed. However, during liquidations, this is not done for the liquidated note, as `updateXP` is used instead, rather than the `beforeKeroseneWithdrawn`. As a result, the note xp is not affected even during the pseudowithdrawal.  ```solidity                 vault.move(id, to, asset);                 if (address(vault) == KEROSENE_VAULT) {                     dyadXP.update",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

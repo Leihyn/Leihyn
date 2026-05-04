@@ -1,0 +1,19 @@
+{
+  "title": "Any wallet can self-assign as super_admin for arbitrary mint",
+  "platform": "pashov-audits",
+  "program": "pump-fun-pump_transfer_hook",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  An arbitrary signer is accepted as super_admin at initialize_extra_account_metas and does not verify any relationship between that signer and the target mint:  ``` #[account(init, seeds = [TRANSFER_HOOK_STATE_SEED.as_bytes(), mint.key().as_ref()], ...)] pub transfer_hook_state: Account<'info, TransferHookState>, ```  There is no constraint on mint.mint_authority or mint.freeze_authority. No additional account (e.g., extension authority) is required to sign. Once the PDA at [TRANSFER_HOOK_STATE_SEED, mint] is initialized,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Pump-security-review_2025-06-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

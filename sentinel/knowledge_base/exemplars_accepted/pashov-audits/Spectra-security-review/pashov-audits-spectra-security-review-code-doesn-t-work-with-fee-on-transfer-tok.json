@@ -1,0 +1,19 @@
+{
+  "title": "Code doesn't work with fee on transfer tokens",
+  "platform": "pashov-audits",
+  "program": "Spectra-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, core functionality would be broken.  **Likelihood:** Low, having fee-on-transfer token is a probable scenario.  ## Description  There are some places in the code that assume the ERC20 transfer function will transfer a specified `amount` and this is not true for tokens with fee. This will cause wrong calculation results in those cases. Some of the places where this issue happens:  1. In `_addInitialLiquidity()` code assumes it transfers `_initialLiquidityInIBT` tokens and tries to transfer them to the Curve pool. 2. In `_dispatchPreviewRate()` code assumes it woul",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Spectra-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

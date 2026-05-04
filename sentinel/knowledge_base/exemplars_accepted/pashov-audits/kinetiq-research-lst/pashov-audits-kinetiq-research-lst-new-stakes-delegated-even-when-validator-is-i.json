@@ -1,0 +1,21 @@
+{
+  "title": "New stakes delegated even when validator is inactive",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `StakingManager` contract manages staking operations and validator delegation in the HYPE staking system. When users stake HYPE tokens through the `stake()` function, the funds are distributed via the internal `_distributeStake()` function, which handles both buffer management and delegation to validators.  Currently, `_distributeStake()` delegates funds to the validator address returned by `validatorManager.getDelegation()` without verifying if that validator is still active. This creates a risk where user funds coul",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

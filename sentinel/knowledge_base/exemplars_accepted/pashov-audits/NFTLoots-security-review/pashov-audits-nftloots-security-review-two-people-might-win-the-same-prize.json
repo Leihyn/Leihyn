@@ -1,0 +1,22 @@
+{
+  "title": "Two people might win the same prize",
+  "platform": "pashov-audits",
+  "program": "NFTLoots-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as people might not get their prizes  **Likelihood:** Low, as it requires same `prizeIndex` wins  ## Description  The current way in `NFTLootbox` to decide if a player wins and what it wins is the `getPrizeIndex` method, which has the following implementation:  ```solidity uint256[] storage _probabilities = lootboxes[_lootboxId].probabilities; uint256 sum;  // Calculate the cumulative sum of probabilities and find the winning prize for (uint256 i; i < _probabilities.length; ++i) {     sum += _probabilities[i];     if (_randomNumber <= sum) {         return i;",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NFTLoots-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

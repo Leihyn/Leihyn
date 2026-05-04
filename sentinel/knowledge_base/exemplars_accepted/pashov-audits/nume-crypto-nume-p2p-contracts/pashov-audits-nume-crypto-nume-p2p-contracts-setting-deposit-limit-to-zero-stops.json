@@ -1,0 +1,22 @@
+{
+  "title": "Setting deposit limit to zero stops all new deposits",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, new deposit will be stopped (DoS)  **Likelihood:** Low, zero input by mistake or with the intention to cancel/disable deposit limit  ## Description  Deposit limits are managed with functions `setDepositsLimit()` and `setNftDepositsLimit()`. They set `depositsLimit` and `nftDepositsLimit` without zero input checks. Zero can be inputted either by mistake, or with the intention to disable limits.  ## Recommendations  We recommend requiring that the new value is not zero.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

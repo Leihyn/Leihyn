@@ -1,0 +1,22 @@
+{
+  "title": "Staking contract is not EIP-4626 compliant",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The current staking implementation charges fees on assets deposited into the vault, as shown below:  ```solidity     function _deposit(address by_, address to_, uint256 tokens_, uint256 shares_) internal virtual override {         SafeTransferLib.safeTransferFrom(asset(), by_, address(this), tokens_);         uint256 _fee = (shares_ * depositFeeBps) / 1e4;         _mint(to_, shares_ - _fee);         _mint(protocolFeeAddress, _fee);          emit Deposit(by_, to_, tokens_, shares_);          _afterDeposit(tokens_, shares_)",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

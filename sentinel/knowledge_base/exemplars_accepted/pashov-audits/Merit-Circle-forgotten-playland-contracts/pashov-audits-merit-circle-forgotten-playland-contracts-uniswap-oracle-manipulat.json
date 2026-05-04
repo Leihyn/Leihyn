@@ -1,0 +1,21 @@
+{
+  "title": "Uniswap oracle manipulation to buy for a lower price",
+  "platform": "pashov-audits",
+  "program": "Merit-Circle-forgotten-playland-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `uniswapV2Router.getAmountsIn()` is used to calculate the amount of `paymentToken` required for the amount in `referenceToken`. This feed is easily manipulated by a large swap in Uniswap pairs. So the attacker can in one transaction:  1. Flashloan `referenceToken` 2. Sell this `referenceToken` in the Uniswap pair buying `paymentToken`. The price of `referenceToken` is decreased up to almost zero. 3. Paying using `paymentToken` to mint in TokenBox. The manipulated price will help to spend a very small amount of `paymentToken`",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ForgottenPlayland-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

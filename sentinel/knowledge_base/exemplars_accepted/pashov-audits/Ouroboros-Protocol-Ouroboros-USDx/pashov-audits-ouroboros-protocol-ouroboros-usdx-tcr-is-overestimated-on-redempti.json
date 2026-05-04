@@ -1,0 +1,23 @@
+{
+  "title": "TCR is overestimated on redemptions",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The system uses different price types (lowest, highest, and weighted average) depending on the nature of the operation. As such, in some operations, the most conservative price from the point of view of the protocol safety is used.  For example, using the lowest price for debt creation makes sure that the amount of debt created is not higher than it should be.  In the same way, using the highest price for redemptions makes sure that the amount of collateral withdrawn from the protocol is not higher than it should be. Howe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

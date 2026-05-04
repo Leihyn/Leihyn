@@ -1,0 +1,21 @@
+{
+  "title": "Protocol will not work on ZkSync and Celo",
+  "platform": "pashov-audits",
+  "program": "stake-dao-laposte",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Every chain contains a single version of LaPoste.sol, Adapter.sol, TokenFactory.sol.  When a message is received, it assumes that LaPoste.sol shares the same address across all the chains:  ```solidity     /// @notice Receives a message from another chain     /// @param message The received message     function ccipReceive(Client.Any2EVMMessage calldata message) external override onlyRouter {         address source = abi.decode(message.sender, (address)); @>      if (source == address(0) || source != laPoste) revert Inval",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LaPoste-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

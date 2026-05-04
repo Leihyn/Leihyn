@@ -1,0 +1,23 @@
+{
+  "title": "`MIN_GNS_WEI_IN` is too small leading to zero rewards",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When `sellGnsForCollateral` is executed, the caller can trade their gns for the provided collateral, as long as there is enough `collateralBalances` and the calculated `gnsAmount` is greater than `MIN_GNS_WEI_IN` (100).  ```solidity  function sellGnsForCollateral(uint8 _collateralIndex, uint256 _collateralAmount) internal {  IOtc.OtcStorage storage s = _getStorage();   uint256 availableCollateral = s.collateralBalances[_collateralIndex];  uint256 gnsPriceCollateral = getOtcRate(_collateralIndex);  uint256 gnsAmount = _cal",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-July.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

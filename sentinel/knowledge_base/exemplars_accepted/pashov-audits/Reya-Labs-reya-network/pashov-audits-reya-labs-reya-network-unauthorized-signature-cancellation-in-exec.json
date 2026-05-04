@@ -1,0 +1,23 @@
+{
+  "title": "Unauthorized signature cancellation in `ExecutionModule`",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy",
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `ExecutionModule.sol` contract, the `cancelSignature` function allows an authorized user to cancel a signature by marking a nonce as used. This functionality is intended to invalidate any signed messages associated with that nonce, preventing further execution. However, the current implementation permits any user authorized under the same `accountId` to cancel signatures, which can lead to potential misuse.  ```solidity     function cancelSignature(uint128 accountId, uint256 nonce) external override {         Featu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

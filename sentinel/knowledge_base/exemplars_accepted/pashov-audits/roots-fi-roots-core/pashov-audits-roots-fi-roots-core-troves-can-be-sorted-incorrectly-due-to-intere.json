@@ -1,0 +1,24 @@
+{
+  "title": "Troves can be sorted incorrectly due to interest accrual",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `SortedTroves` contract is expected to keep troves sorted by descending nominal ICR. This is a crucial invariant for the system, as it determines the order in which troves are liquidated and redeemed. However, the interest accrual mechanism can cause troves to be sorted incorrectly.  The NICR is calculated as `collateral / debt` for each trove, and the `collateral` and `debt` values are calculated as follows:  ```solidity     function getEntireDebtAndColl(address _borrower)         public         view         returns (uint",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

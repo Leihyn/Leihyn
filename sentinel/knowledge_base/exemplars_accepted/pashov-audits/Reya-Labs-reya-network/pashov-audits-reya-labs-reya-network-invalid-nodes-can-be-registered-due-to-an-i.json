@@ -1,0 +1,19 @@
+{
+  "title": "Invalid Nodes can be registered due to an incorrect check",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  DivReducer node is supposed to have 2 parent nodes. During registration node is checked to be valid, however it does nothing if parents are invalid:  ```solidity     function _isValidNodeDefinition(NodeDefinition.Data memory nodeDefinition) internal view returns (bool valid) {         if (nodeDefinition.nodeType == NodeDefinition.NodeType.DIV_REDUCER) {             //check if parents are processable @>          _hasValidParentNodeDefinitions(nodeDefinition);         }          ...     }      function _hasValidParentNodeDe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

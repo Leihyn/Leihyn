@@ -1,0 +1,19 @@
+{
+  "title": "Mint function `mekHoneyJarWithETH` will revert every time",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as there is an option to mint with ERC20 tokens too  **Likelihood:** High, as the function will just revert every time  ## Description  The `HoneyBox` contract exposes a way for users to mint `HoneyJar` NFTs with `ETH` in a public sale by the `mekHoneyJarWithETH` method. The problem is that the method uses `msg.value` to calculate the expected price, as the name suggest, that would have been paid with ETH, but the method is missing the `payable` keyword. Every call with `msg.value != 0` to the method will revert.  ## Recommendations  ```diff -    function mekHo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

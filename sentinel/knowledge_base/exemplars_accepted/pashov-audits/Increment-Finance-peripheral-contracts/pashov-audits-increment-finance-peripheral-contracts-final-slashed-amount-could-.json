@@ -1,0 +1,23 @@
+{
+  "title": "Final slashed amount could be much lower than expected",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, lower final slash amount could require further slashing, causing remaining stakers to lose more  **Likelihood:** Medium, happens when slashed  ## Description  `slashAndStartAuction()` allows governance to slash a percentage of the `StakedToken` to settle protocol deficits. A slash percentage is provided as a parameter and derived from the absolute value required to cover the deficits.  However, as the slash transaction is executed based on the relative percentage value, it could cause the final slashed value to end up less than expected, when there are multiple",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

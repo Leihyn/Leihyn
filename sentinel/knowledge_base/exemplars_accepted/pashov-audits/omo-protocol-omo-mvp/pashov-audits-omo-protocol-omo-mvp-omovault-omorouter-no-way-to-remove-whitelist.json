@@ -1,0 +1,19 @@
+{
+  "title": "OmoVault/OmoRouter: no way to remove whitelist restriction",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Right now, the `onlyWhitelisted` modifier only allows approved addresses to call vault functions. The documentation says that the whitelist system will be removed in the future, but there is no functionality to do this in the code.  ## **Recommendations**  A simple `whitelistEnabled` flag can let the owner turn off the whitelist when needed:  ```solidity bool public whitelistEnabled = true;  modifier onlyWhitelisted() {     require(!whitelistEnabled || whitelisted[msg.sender], \"Not whitelisted\");     _; }  // Owner can tu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

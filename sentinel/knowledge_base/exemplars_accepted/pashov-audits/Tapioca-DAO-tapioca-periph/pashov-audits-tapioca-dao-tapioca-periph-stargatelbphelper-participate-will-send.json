@@ -1,0 +1,23 @@
+{
+  "title": "`StargateLbpHelper.participate()` will send tokens to the wrong address",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Med, as the tokens incorrectly sent to `msg.sender` may not be recoverable if the caller do not have control over it (when caller is using a multisig wallet contract)  **Likelihood:** High, as the `StargateLbpHelper` will perform a stargate swap to the wrong address  ## Description  `StargateLbpHelper.participate()` is called on the non-host chain to send tokens via Stargate to `StargateLbpHelper` on host chain for depositing into Balancer Liquidity Bootstrapping Pool.  This will cause an issue for `participate()` as it will perform Stargate `router.swap()` to destinat",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

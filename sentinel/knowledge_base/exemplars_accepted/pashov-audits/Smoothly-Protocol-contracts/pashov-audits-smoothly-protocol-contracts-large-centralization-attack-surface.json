@@ -1,0 +1,24 @@
+{
+  "title": "Large centralization attack surface",
+  "platform": "pashov-audits",
+  "program": "Smoothly-Protocol-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as multiple authorized actors can act maliciously to steal funds  **Likelihood:** Medium, as it requires malicious or compromised actors, but it's not just the protocol `owner`  ## Description  1. The `owner` of `PoolGovernance` can add a big number of operators, resulting in a block gas limit DoS of `proposeEpoch`, because the method loops over all operators 2. Operators can group their voting and claim all of `SmoothlyPool`'s balance as a `fee` 3. Operators can allow an unregistered account to claim rewards from `SmoothlyPool` by adding it to one of the `withdr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Smoothly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

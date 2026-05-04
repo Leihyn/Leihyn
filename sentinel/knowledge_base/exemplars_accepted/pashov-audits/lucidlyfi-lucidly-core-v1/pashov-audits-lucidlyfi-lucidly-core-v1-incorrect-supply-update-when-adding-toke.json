@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect supply update when adding token",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The function `add_token` calculates the supply, and then mints to the caller the appropriate number of LP tokens. The function also takes in `amplification_`, the new pool state's amplification factor.  To calculate the new supply, the pool must use this new amplification value, since it is the new pool state.  ```solidity function addToken(         uint256 amplification_,         // ...     ) external onlyOwner {         (__supply, _virtualBalanceProd) = _calculateSupply(             _numTokens,             _virtualBalance",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "`createVestingSchedule` can be front-ran by another holder of `ROLE_CREATE_SCHEDULE` role",
+  "platform": "pashov-audits",
+  "program": "HairDAO-token-vesting-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as vesting token balance can be stolen  **Likelihood:** Medium, as it requires front-running  ## Description  The `createVestingSchedule` method of `TokenVestingV2` expects to have a pre-transferred balance before initializing a vesting schedule. The problem with the current contract version is that multiple accounts can hold the `ROLE_CREATE_SCHEDULE` role. Since two transactions are expected to create a vesting schedule (transferring funds to the `TokenVestingV2` contract and then calling `createVestingSchedule`) this means that between them another holder of t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/yHairVesting-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

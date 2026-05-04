@@ -1,0 +1,21 @@
+{
+  "title": "Some orders can be executed multiple times",
+  "platform": "pashov-audits",
+  "program": "ethena-labs-ethena-mint-contract-audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Functions `_deduplicateOrder()` and `verifyNonce()` are in charge of deduplicating orders and making sure that the same nonce can't be used twice. The issue is that in `verifyNonce()` code converts `invalidatorBit` to `uint128` with unsafe cast and the value of `invalidatorBit` could become 0 while overflow happens and in that case, the `invalidator` won't be set to 1 and that order can be executed multiple times by minter and redeemer role. The issue impact is that users' funds can be manipulated without their consent which c",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ethena-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

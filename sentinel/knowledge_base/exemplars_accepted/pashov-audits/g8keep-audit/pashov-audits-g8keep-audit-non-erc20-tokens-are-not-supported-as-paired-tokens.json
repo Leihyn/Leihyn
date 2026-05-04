@@ -1,0 +1,21 @@
+{
+  "title": "Non-ERC20 tokens are not supported as paired tokens",
+  "platform": "pashov-audits",
+  "program": "g8keep-audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In order to transfer funds from the deployer to the factory, `g8keepFactory.deployToken()` function uses erc20 `transferFrom()` function.  ```solidity IERC20(_pairedToken).transferFrom(msg.sender, address(this), _initialLiquidity); ```  In case if there is a need to add non erc20 token as a paired token, then such a call will revert, thus such tokens are not supported by the factory.  Another place in the code, where erc20 functions are used is `g8keepFactory.withdrawToken` and `g8keepToken.withdrawToken` functions. Those",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/g8keep-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

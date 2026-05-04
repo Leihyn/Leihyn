@@ -1,0 +1,23 @@
+{
+  "title": "First depositor attack is possible",
+  "platform": "pashov-audits",
+  "program": "Andalusia-Labs-karak-restaking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "share-inflation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  It is a classic attack with the following flow:  1. The user is the first to interact with the vault, he sends a deposit transaction. 2. Attacker frontruns user's tx by performing 2 actions: 1) deposit 1 wei asset thus minting 1 wei share; 2) donate a big amount of asset to the vault. 3. User's transaction executes and the user mints 0 shares because of rounding in a formula that is used inside ERC4626: `shares = assets * sharesSupply / totalAssets`. That is because `sharesSupply` is 1 and `totalAssets` is large due to donatio",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

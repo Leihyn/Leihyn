@@ -1,0 +1,21 @@
+{
+  "title": "Centralization vulnerabilities are present in the protocol",
+  "platform": "pashov-audits",
+  "program": "baton-finance-baton-launchpad",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can lead to a rug pull  **Likelihood:** Low, as it requires a compromised or a malicious owner  ## Description  The `owner` of `BatonLaunchpad` has total control of the `nftImplementation` and `feeRate` storage variable values in the contract. This opens up some attack vectors:  1. The `owner` of `BatonLaunchpad` can front-run a `create` call to change the `nftImplementation` contract to one that also has a method with which he can withdraw the mint fees from it, resulting in a \"rug pull\" 2. The `owner` of `BatonLaunchpad` can change the fee to a much highe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BatonLaunchpad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Tier Removal in `setRarityWeights()` Can Invalidate Active Stakes",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-hybux-staking-audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `setRarityWeights()` function allows the contract owner to update the `rarityWeights` array. However, the function contains a critical flaw: it does not check whether the new, shorter array is removing rarity tiers that currently have active NFT stakes.  [NFTStaking.sol#L100-L104](https://github.com/hytopiagg/hybux-staking-audit/blob/735e5a99d4797482b4a85dc355dc8817ea2184ca/src/staking/NFTStaking.sol#L100-L104): ```solidity     function setRarityWeights(         uint256[] calldata _rarityWeights     ) public on",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYBUX-security-review_2025-11-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

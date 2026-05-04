@@ -1,0 +1,19 @@
+{
+  "title": "`updateBitFlag` does not update the index of the base asset",
+  "platform": "pashov-audits",
+  "program": "Storm-Labs-Inc-cove-contracts-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `updateBitFlag` function allows the basket's asset list to be updated, with the restriction that the new `bitFlag` must be a superset of the previous `bitFlag`. During the `updateBitFlag` process, if all validations pass, the function iterates over the new asset list and updates `basketAssetToIndexPlusOne`. However, it does not update `basketTokenToBaseAssetIndexPlusOne`.  Updating a `bitFlag` that is a superset of the previous `bitFlag` can still potentially impact `basketTokenToBaseAssetIndexPlusOne`. Consider the follow",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cove-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

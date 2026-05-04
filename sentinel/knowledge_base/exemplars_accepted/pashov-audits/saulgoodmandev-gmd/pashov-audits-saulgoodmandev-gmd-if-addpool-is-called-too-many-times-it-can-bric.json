@@ -1,0 +1,21 @@
+{
+  "title": "If `addPool` is called too many times it can brick core functionality",
+  "platform": "pashov-audits",
+  "program": "saulgoodmandev-gmd",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Low, because it requires a malicious admin or a big admin error  **Impact:** High, because it bricks core protocol functionality  ## Description  The `addPool` method pushes an entry to the `poolInfo` array. Methods like `swapGLPout` and `recoverTreasuryTokensFromGLP` have internal calls (`GLPbackingNeeded`) that iterate over the whole array. If too many pools are added then all calls to those methods will need too much gas to iterate over the array and if this cost is over the block gas limit it will lead to a DoS situation of core functionality.  ## Recommendatio",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/GMD-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

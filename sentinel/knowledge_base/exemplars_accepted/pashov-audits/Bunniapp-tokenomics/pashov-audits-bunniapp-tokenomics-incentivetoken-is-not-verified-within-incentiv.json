@@ -1,0 +1,23 @@
+{
+  "title": "`incentiveToken` is not verified within `incentivizeRecurPool`",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When `incentivizeRecurPool` is called, it will iterate through params and update `state.rewardRate` based on the provided `incentiveAmount`.  ```solidity    function incentivizeRecurPool(RecurIncentiveParams[] calldata params, address incentiveToken)         external         returns (uint256 totalIncentiveAmount)     {         address msgSender = LibMulticaller.senderOrSigner();         for (uint256 i; i < params.length; i++) {             /// -----------------------------------------------------------------------",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

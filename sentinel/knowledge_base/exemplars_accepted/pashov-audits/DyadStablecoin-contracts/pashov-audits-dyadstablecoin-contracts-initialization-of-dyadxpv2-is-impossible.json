@@ -1,0 +1,21 @@
+{
+  "title": "Initialization of DyadXPv2 is impossible",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  `DyadXPv2.initialize()` loops across the supply of `DNFT`:  ```solidity for (uint256 i = 0; i < dnftSupply; ++i) {             noteData[i] = NoteXPData({                 lastAction: uint40(block.timestamp),                 keroseneDeposited: uint96(KEROSENE_VAULT.id2asset(i)),                 lastXP: noteData[i].lastXP,                 totalXP: noteData[i].lastXP,                 dyadMinted: DYAD.mintedDyad(i)             });         } ```  The current total supply of `DNFT` is 882.  gas used in 88 iterations is 3.130682e6",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

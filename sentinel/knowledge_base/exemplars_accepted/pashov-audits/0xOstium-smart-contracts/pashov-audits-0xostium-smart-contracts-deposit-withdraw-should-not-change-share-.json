@@ -1,0 +1,22 @@
+{
+  "title": "Deposit/withdraw should not change share price",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Low  **Likelihood:** High  ## Description  In ERC4626, deposit and withdraw operation shouldn't change the share price, otherwise, if one user deposits or withdraw tokens, it would effect the other users. Right now, in the current implementation, the share price is calculated based on `accPnlPerToken`, which is also responsible for keeping the accumulated PnL. This creates contradicted situation: 1. During deposit/withdraw the `accPnlPerToken` should be scaled to reflect the correct accumulated PnL. 2. During deposit/withdraw the share price shouldn't b",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

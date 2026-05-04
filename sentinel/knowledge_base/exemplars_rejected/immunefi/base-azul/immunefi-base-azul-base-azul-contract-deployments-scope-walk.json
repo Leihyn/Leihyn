@@ -1,0 +1,22 @@
+{
+  "title": "Base Azul contract-deployments scope walk",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "out-of-scope",
+  "surface_tags": [
+    "multisig",
+    "proxy"
+  ],
+  "bug_class": "meta-process",
+  "mental_operation": "spec_skeptic",
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "Walked /contract-deployments/zeronet active-Azul deploy bundles (activate-multiproof, upgrade-tee-registry-nitro, fix-nitro-verifier, fix-tee-image-hash). All 4 are MultisigScripts gated on PROXY_ADMIN_OWNER. DeployMultiproofStack uses atomic Proxy + upgradeToAndCall pattern: impl constructor calls initialize with dEaD addresses (consumes initializer modifier), proxy without impl no-op delegates to address(0), no frontrun window. MockVerifier in zeronet is documented testnet design. Mainnet planned May 13, not yet deployed.",
+  "key_lesson": "Deploy scripts in well-engineered codebases (OP Stack derivatives) are atomic-by-design via the OZ Proxy + upgradeToAndCall pattern. Frontrun analysis on these is usually wasted effort; the surface is feasibility-gated by the multisig threshold. Skip deploy-script walks for OP Stack forks UNLESS the contest explicitly elevates them above multisig-mandate carve-out.",
+  "contest_url": "https://immunefi.com/audit-competition/audit-comp-base-azul",
+  "submission_url": null,
+  "captured_at": "2026-05-04T18:49:58"
+}

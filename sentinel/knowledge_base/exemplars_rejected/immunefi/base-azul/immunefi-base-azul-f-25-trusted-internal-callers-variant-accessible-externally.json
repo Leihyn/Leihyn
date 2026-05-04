@@ -1,0 +1,21 @@
+{
+  "title": "F-25 trusted internal callers variant accessible externally",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "High",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "documented-design",
+  "surface_tags": [
+    "l2-client"
+  ],
+  "bug_class": "trust-boundary",
+  "mental_operation": "trust_mapper",
+  "language": "rust",
+  "file_paths": [],
+  "summary": "Variant marked 'trusted internal callers only' reachable from external context.",
+  "key_lesson": "Trait doc-comment explicitly says 'trusted internal callers only' \u2014 same documented-intent kill as F-23.",
+  "contest_url": null,
+  "submission_url": null,
+  "captured_at": "2026-05-04T03:26:33"
+}

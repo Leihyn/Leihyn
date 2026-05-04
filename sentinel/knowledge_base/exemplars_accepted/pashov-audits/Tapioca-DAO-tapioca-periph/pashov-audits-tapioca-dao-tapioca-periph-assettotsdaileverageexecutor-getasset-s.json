@@ -1,0 +1,22 @@
+{
+  "title": "AssetTotsDaiLeverageExecutor.getAsset() should use `redeem(collateralAmountIn)` instead of `redeem(convertToShares(colla",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, users will get lesser DAI when converting their sDAI.  **Likelihood:** High, will happen every time `getAsset()` is called.  ## Description  sDai is an ERC4626 contract. Dai is the native asset and sDai is the share. When withdrawing assets, if `withdraw()` is called, the function takes in the asset value and returns the amount of the underlying asset. When `redeem()` is called, the function takes in the share value and returns the amount of the underlying asset. Usually, the shares are worth more than the asset, eg 1 sDai : 1.05 Dai.  In AssetTotsDaiLeverageEx",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

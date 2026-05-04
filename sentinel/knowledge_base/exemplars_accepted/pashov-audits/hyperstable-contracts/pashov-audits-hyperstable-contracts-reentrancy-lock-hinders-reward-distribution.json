@@ -1,0 +1,22 @@
+{
+  "title": "Reentrancy lock hinders reward distribution",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "reentrancy",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  A reentrancy lock conflict exists in the reward distribution flow between `GaugeV2` and `Voter` contracts.   1. User calls `GaugeV2.getReward()`. The first `nonReentrant` lock is acquired when `getReward` is called:  ```solidity function getReward(address account, address[] memory tokens) external nonReentrant {     require(msg.sender == account || msg.sender == voter);     IVoter(voter).distribute(address(this));     // ... rest of the function } ```  2. This calls `Voter.distribute()` which then calls back to GaugeV2:",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-06-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Staked WITHDRAWAL_STAKE cannot be withdrawn during the exodusMode",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, a portion of user funds lost  **Likelihood:** Medium, exodusMode is a scenario, but not so likely  ## Description  `submitWithdrawalRequest()` requires provided `msg.value`=`WITHDRAWAL_STAKE` in order to have a pending withdrawal. It is designed to be returned when a withdrawal request is approved via `notarizeSettlement()`. But during the mass exit scenario, there is no way to return staked `WITHDRAWAL_STAKE`. Only pending deposits and verified Nume balance can be withdrawn, but not `WITHDRAWAL_STAKE` if any.  ## Recommendations",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

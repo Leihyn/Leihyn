@@ -1,0 +1,23 @@
+{
+  "title": "Cross contract reentrancy bug in `withdrawHYPE`",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "reentrancy",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Users can withdraw native HYPE from the `ElytraDepositPoolV1` by calling `withdrawHYPE`, as shown here:  ```solidity     function withdrawHYPE(         uint256 elyAssetAmount,         address receiver     )         // ...     {         // ...          // Burn elyAsset tokens         address elyAssetToken = elytraConfig.getElyAsset();         IElyERC20(elyAssetToken).burnFrom(msg.sender, elyAssetAmount);          // Unwrap WHYPE to native HYPE and transfer to receiver         IWHYPE(WHYPE_TOKEN).withdraw(whypeA",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

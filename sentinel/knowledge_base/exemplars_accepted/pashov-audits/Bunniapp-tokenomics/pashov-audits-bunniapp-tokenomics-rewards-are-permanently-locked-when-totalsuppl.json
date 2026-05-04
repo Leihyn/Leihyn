@@ -1,0 +1,23 @@
+{
+  "title": "Rewards are permanently locked when totalSupply = 0 in RecurPools",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the MasterBunni contract, when calculating rewards for RecurPools using the `_rewardPerToken` function, any rewards allocated during periods where `totalSupply = 0` become permanently locked in the contract. This occurs because:  1. When `totalSupply = 0`, the function simply returns the existing rewardPerTokenStored without accounting for the elapsed time:  ```solidity     function _rewardPerToken(         uint256 rewardPerTokenStored,         uint256 totalSupply,         uint256 lastTimeRewardApplicable,         uint",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

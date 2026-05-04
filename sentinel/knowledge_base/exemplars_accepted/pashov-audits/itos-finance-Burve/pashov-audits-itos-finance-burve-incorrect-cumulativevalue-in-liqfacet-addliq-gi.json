@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect `cumulativeValue` in `LiqFacet::addLiq` gives less shares to users",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "oracle"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Upon adding liquidity, we compute the shares to give to the user using the following code:  ```solidity  uint256 addedBalance = tokenBalance - preBalance[idx];  uint256 cumulativeValue = tokenBalance;          TokenRegistry storage tokenReg = Store.tokenRegistry();          for (uint256 i = 0; i < n; ++i) {              if (i == idx) {                  continue;              } else if (preBalance[i] != 0) {                  address otherToken = tokenReg.tokens[i];                  Edge storage e = Store.edge(token, otherToken",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-01-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

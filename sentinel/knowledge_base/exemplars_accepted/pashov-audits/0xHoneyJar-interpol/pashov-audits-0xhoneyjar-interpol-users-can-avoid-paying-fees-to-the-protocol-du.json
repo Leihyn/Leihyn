@@ -1,0 +1,22 @@
+{
+  "title": "Users can avoid paying fees to the protocol due to rounding",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "multisig"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When the owner of a `HoneyLocker` initiates a withdrawal of funds through the `withdrawERC20` or `withdrawBERA` methods, a fee is required to be paid to both the referral and the treasury. However, the owner can take advantage of the rounding down in the EVM to avoid paying any fees at all. The root cause of the issue is in `HoneyQueen::computeFees`:  ```solidity uint256 public fees = 200; // in bps // ... function computeFees(uint256 amount) public view returns (uint256) {     return (amount * fees) / 10000; } ```  To ex",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

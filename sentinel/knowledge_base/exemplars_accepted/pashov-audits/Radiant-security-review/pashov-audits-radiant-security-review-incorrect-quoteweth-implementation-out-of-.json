@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect `quoteWETH()` implementation (out-of-scope)",
+  "platform": "pashov-audits",
+  "program": "Radiant-security-review",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  `UniswapPoolHelper.quoteWETH()` is used to calculate the WBNB (denoted as WETH) required for LP-ing into the WBNB-RDNT pool on BSC. There are 2 issues with its implementation:  `neededWeth` is derived from the wrong reserve  ```solidity uint256 weth = lpToken.token0() != address(rdntAddr) ? reserve0 : reserve1; uint256 rdnt = lpToken.token0() == address(rdntAddr) ? reserve0 : reserve1; uint256 lpTokenSupply = lpToken.totalSupply();  uint256 neededWeth = (rdnt * lpAmount) / lpTokenSupply; ```  The `neededWeth` should be usin",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

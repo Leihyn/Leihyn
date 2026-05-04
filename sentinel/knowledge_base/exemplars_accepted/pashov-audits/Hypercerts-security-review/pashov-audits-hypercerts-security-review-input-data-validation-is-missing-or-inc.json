@@ -1,0 +1,19 @@
+{
+  "title": "Input & data validation is missing or incomplete",
+  "platform": "pashov-audits",
+  "program": "Hypercerts-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because in some cases this can lead to DoS and unexpected behaviour  **Likelihood:** Low, as it requires malicious user or a big error on the user side  ## Description  Multiple methods are missing input/data validation or it is incomplete.  1. The `splitValue` method in `SemiFungible1155` has the `maxIndex[_typeID] += len;` code so should also do a `notMaxItem` check for the index 2. The `createAllowlist` method accepts a `units` argument which should be the maximum units mintable through the allowlist - this should be enforced with a check on minting claims fro",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Hypercerts-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

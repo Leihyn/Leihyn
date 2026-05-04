@@ -1,0 +1,21 @@
+{
+  "title": "Breaking the deposit limit with different msg.value and \\_user",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, a daily limit bypassed (invariant broken)  **Likelihood:** High, easily available behavior  ## Description  Nume tries to limit the number of deposits per day for a user in two contracts - `NFTDepositsFacet` and `DepositsFacet`. During the deposit, we have this code (slightly rewritten for simplicity):  ``` ... uint256 currentTime = block.timestamp; if (currentTime - ns.userDepositTimestamp[_user] >= 1 days) {             delete ns.userDepositCount[_user];             ns.userDepositTimestamp[_user] = currentTime;         } require ( ns.userDepositCount[msg.send",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

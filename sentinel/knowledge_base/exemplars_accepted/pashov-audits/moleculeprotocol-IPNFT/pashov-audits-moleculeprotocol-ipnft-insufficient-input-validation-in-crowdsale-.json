@@ -1,0 +1,19 @@
+{
+  "title": "Insufficient input validation in `CrowdSale` configuration",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-IPNFT",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can lock up valuable tokens almost permanently  **Likelihood:** Low, as it requires a fat-finger or a big configuration error  ## Description  There are two flaws in the configuration validation of a new `CrowdSale`. It is currently possible to create a never ending `Sale` as the `closingTime` field does not have a max value check. It is also possible that a never ending lock or a 0 duration lock is used in `VestedCrowdSale` as the `cliff` argument of `startSale` is not validated as in `StakedVestedCrowdSale::startSale`. Both can result in almost permanentl",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/IPNFT-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

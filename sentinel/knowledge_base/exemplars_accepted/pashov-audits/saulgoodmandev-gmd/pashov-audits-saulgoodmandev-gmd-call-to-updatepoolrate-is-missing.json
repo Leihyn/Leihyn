@@ -1,0 +1,22 @@
+{
+  "title": "Call to `updatePoolRate` is missing",
+  "platform": "pashov-audits",
+  "program": "saulgoodmandev-gmd",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Medium, because it happens only for a paused and then resumed pool  **Impact:** Medium, because it can hardly lead to big losses  ## Description  Every time the `totalStaked` amount of a pool is updated, the `updatePoolRate` method is called to update the `EarnRateSec`. This is not true for the `pauseReward` method, which calls `updatePool` that changes the `totalStaked` amount. Now if a pool is paused, when it gets resumed again and `updatePool` is called it will calculate less rewards than it should had, because `EarnRateSec` was not updated.  ## Recommendations",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/GMD-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

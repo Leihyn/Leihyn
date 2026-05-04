@@ -1,0 +1,19 @@
+{
+  "title": "`ReferralsUtils.updateReferralsOpenFeeP()` implements wrong check",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  At L75 in the `updateReferralsOpenFeeP` function comparing sign is wrongly set to <=, while it should be >, resulting in an inability to set openFeeP to value in the correct range:  ```solidity File: ReferralsUtils.sol 74:     function updateReferralsOpenFeeP(uint256 _value) internal { 75:         if (_value <= MAX_OPEN_FEE_P) revert IGeneralErrors.AboveMax(); 76: 77:         _getStorage().openFeeP = _value; 78: 79:         emit IReferralsUtils.UpdatedOpenFeeP(_value); 80:     } ```  ## Recommendations  Consider updating th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

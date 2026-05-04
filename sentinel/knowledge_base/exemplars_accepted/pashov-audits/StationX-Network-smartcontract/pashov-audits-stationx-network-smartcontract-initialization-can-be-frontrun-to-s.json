@@ -1,0 +1,19 @@
+{
+  "title": "Initialization can be frontrun to set the owner",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Contracts utilizing an initialization function are vulnerable to frontrunning attacks during deployment. An attacker could intercept the deployment process and assign themselves as the contract owner, as ownership is granted to the msg.sender. While StationX could redeploy the compromised contracts, this would incur financial costs. Additionally, if StationX deploys contracts without realizing they have been pre-initialized by an attacker, users could unknowingly engage with a compromised system from the outset.  Affected",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

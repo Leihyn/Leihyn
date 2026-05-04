@@ -1,0 +1,23 @@
+{
+  "title": "Vault curator can force `operator.claimReward()` to revert with precision",
+  "platform": "pashov-audits",
+  "program": "moondance-labs-tanssi-symbiotic",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "multisig"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High    **Likelihood:** Low  ## Description  A vault curator can allocate a **very small amount** of stake to an operator. Due to precision loss (e.g., rounding errors) in `_getRewardsAmountPerVault()`, the vault may end up with a **reward amount of zero**. ```solidity     function _getRewardsAmountPerVault(         address[] memory operatorVaults,         uint256 totalVaults,         uint48 epochStartTs,         address operator,         address middlewareAddress,         uint256 stakerAmount     ) private view returns (uint256[] memory amountPerVault) {         --Sni",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tanssi-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

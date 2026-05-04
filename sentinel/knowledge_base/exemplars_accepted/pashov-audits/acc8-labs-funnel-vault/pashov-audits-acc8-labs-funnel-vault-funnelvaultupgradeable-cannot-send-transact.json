@@ -1,0 +1,22 @@
+{
+  "title": "`FunnelVaultUpgradeable` cannot send transactions to HyperCore",
+  "platform": "pashov-audits",
+  "program": "acc8-labs-funnel-vault",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy",
+    "veToken"
+  ],
+  "bug_class": "initializer-upgrade",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  `sendNativeTokenToLayer1()` bridges `HYPE` from HyperEVM to HyperCore. These funds are credited to the vault contract address in HyperCore, so it is required that the contract implements the logic to send transactions from the HyperEVM to HyperCore.  As `FunnelVaultUpgradeable` does not implement a mechanism to send transactions to HyperCore, the funds will be locked in HyperCore until the contract is upgraded, adding the required logic.  ## Recommendations  Implement the logic to send transactions from the Hype",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Funnel-security-review_2025-08-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

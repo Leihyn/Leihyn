@@ -1,0 +1,22 @@
+{
+  "title": "No approvals from Helper to TokenizedLP",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The money flow goes through LockZap to `UniV3PoolHelper.zapETH()` or to `UniV3PoolHelper.zapTokens()`. But later tokens should be deposited to `UniV3TokenizedLp.deposit()`.  ```solidity \tfunction zapWETH(uint256 amount) public onlyLockZap returns (uint256 liquidity) { \t\tIERC20(weth9Addr).safeTransferFrom(msg.sender, address(this), amount); \t\tuint256 token0Amt = token0 == weth9Addr ? amount : 0; \t\tuint256 token1Amt = token1 == weth9Addr ? amount : 0; \t\tliquidity = tokenizedLpToken.deposit(token0Amt, token1Amt, msg.sender); \t}",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

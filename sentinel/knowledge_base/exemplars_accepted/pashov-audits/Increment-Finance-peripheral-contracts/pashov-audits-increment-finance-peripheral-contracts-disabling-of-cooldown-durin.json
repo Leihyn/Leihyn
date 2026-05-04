@@ -1,0 +1,21 @@
+{
+  "title": "Disabling of cooldown during post-slash can be bypassed",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as staker can bypass disabling of cooldown  **Likelihood:** Medium, during the post slash period  ## Description  When `StakedToken` is in the post-slashing state, the cooldown function is disabled, preventing the staker from activating it by setting `_stakersCooldowns[msg.sender] = block.timestamp`.  However, the staker can possibly bypass the disabling of the cooldown function by transferring to another account that has a valid cooldown timestamp.  That is because when `fromCooldownTimestamp` is expired/not-set and `toCooldownTimestamp` is valid, the weighted",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

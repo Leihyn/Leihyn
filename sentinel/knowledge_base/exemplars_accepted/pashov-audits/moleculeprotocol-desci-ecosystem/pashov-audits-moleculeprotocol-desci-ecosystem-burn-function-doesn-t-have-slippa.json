@@ -1,0 +1,21 @@
+{
+  "title": "`burn()` function doesn't have slippage control",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-desci-ecosystem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  Impact: Medium. User receives less collateral than expects.  Likelihood: Medium. Price must go down after submitting transaction to mempool.  ## Description  Currently there is no mechanism for user to specify accepted price on selling tokens.  Therefore following scenario is possible:  1. User submits transaction to sell 2. Price goes down    As a result, user receives less collateral for sell than expects. And there is no mechanism to set expected amount.  ## Recommendations  Introduce argument like `minOutputAmount`:  ```diff - function burn(address account, uint256 tokenId, ui",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Catalyst-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

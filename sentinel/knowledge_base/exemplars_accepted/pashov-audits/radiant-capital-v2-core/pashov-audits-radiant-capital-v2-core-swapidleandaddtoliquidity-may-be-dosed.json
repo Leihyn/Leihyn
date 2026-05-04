@@ -1,0 +1,22 @@
+{
+  "title": "`swapIdleAndAddToLiquidity` may be DoSed",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `swapIdleAndAddToLiquidity` function allows the rebalancer to input `swapQuantity` to swap a certain amount of tokens. Assume that the rebalancer uses the balance as `swapQuantity`, that is, he wants to swap all tokens. The user can withdraw some tokens in advance, which will cause the contract balance to be less than `swapQuantity`, and then the swap will fail.  ## Recommendations  Take the smaller value of `swapQuantity` and balance as the swap input.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-July.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

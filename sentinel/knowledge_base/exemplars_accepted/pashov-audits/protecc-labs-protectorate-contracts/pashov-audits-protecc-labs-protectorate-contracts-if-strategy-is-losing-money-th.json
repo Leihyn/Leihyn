@@ -1,0 +1,22 @@
+{
+  "title": "If strategy is losing money the last person left to claim from vault will handle all losses",
+  "platform": "pashov-audits",
+  "program": "protecc-labs-protectorate-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "auction"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as some users will bear substantial value losses  **Likelihood:** High, as it is possible that strategy is losing money at a given time  ## Description  Currently, the way that `LendingVault` is designed, is that the funds in the vault are transferred out to chosen strategies. Due to the fact that users can still withdraw funds from the vault's balance while some of the funds are lent out to a strategy, the following scenario can happen:  1. Alice deposits 100 ETH to the Vault 2. Bob deposits 100 ETH to the Vault 3. Strategy requests 200 ETH from the Vault - now",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Protectorate-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

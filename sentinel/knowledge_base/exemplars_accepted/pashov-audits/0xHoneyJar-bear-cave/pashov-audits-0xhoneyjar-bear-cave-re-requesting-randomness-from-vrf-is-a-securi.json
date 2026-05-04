@@ -1,0 +1,19 @@
+{
+  "title": "Re-requesting randomness from VRF is a security anti-pattern",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the VRF service provider has control over who wins the game  **Likelihood:** High, as there is an incentive for a VRF provider to exploit this and it is not hard to do from his side  ## Description  The `forceHoneyJarSearch` method is used to \"kick off another VRF request\", as mentioned in its NatSpec. This goes against the security standards in using VRF, as stated in the [docs](https://docs.chain.link/vrf/v2/security#do-not-re-request-randomness):  ``` Re-requesting randomness is easily detectable on-chain and should be avoided for use cases that want to be",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Malicious recipient can gas grief the relayer",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-onramp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "bridge"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When a user sends BTC on the Bitcoin mainnet, the relayer attempts to execute the swap on BoB network with onramp contract  ```solidity     function proveBtcTransfer(         BitcoinTx.Info memory _txInfo,         BitcoinTx.Proof memory _txProof,         address payable _recipient,         Onramp _onramp     ) external onlyOwner {         require(getOnramp[address(_onramp)], \"Onramp does not exist\");          bytes32 txHash = relay.validateProof(txProofDifficultyFactor, _txInfo, _txProof);          uint256 outputValueSat = Bit",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Onramp-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

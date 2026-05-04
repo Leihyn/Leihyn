@@ -1,0 +1,21 @@
+{
+  "title": "trust_mapper limitation: inline guards",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "other",
+  "surface_tags": [
+    "bridge"
+  ],
+  "bug_class": "meta-tooling",
+  "mental_operation": "trust_mapper",
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "trust_mapper classifies (anyone, internal, mod:onlyX, role:Y) by reading modifiers + visibility only. Functions with INLINE access guards (status checks, require msg.sender ==, initialized flag) get tagged 'anyone' incorrectly. On Base Azul multiproof produced 11 false-alarm hypotheses on AggregateVerifier (challenge/nullify/resolve all status-guarded but flagged anyone) and 5 on NitroEnclaveVerifier (mixing internal _set helpers with onlyOwner setters).",
+  "key_lesson": "Tune trust_mapper: scan first 200 bytes of body for revert/require patterns referencing msg.sender, status, initialized, paused. Treat as effective modifier. Reduces FP rate on bridge/dispute systems where state-machine guards dominate over modifier guards.",
+  "contest_url": null,
+  "submission_url": null,
+  "captured_at": "2026-05-04T17:10:57"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "The entire kerosene supply can be drained by claiming rewards",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  This is the current formula used to calculate rewards when a note is staked:  ```solidity \tfunction _calculateRewards(uint256 noteId, StakeInfo storage stakeInfo) internal view returns (uint256) { \t    uint256 timeDiff = block.timestamp - stakeInfo.lastRewardTime;  \t    uint256 xp = dyadXP.balanceOfNote(noteId);  ->\t    return timeDiff * rewardsRate * stakeInfo.liquidity * xp; \t} ```  The issue is that rewards can be extremely high, as the XP values are really big.  Kerosene has a total supply of: `1_000_000_000 1e18`, but mo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

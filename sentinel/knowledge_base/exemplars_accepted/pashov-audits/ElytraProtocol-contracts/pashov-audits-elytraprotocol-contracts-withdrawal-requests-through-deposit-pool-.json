@@ -1,0 +1,22 @@
+{
+  "title": "Withdrawal requests through deposit pool lost permanently",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `requestWithdrawal()` function in `ElytraDepositPoolV1` creates withdrawal requests that will be permanently lost due to incorrect user address tracking. When a user calls `requestWithdrawal()`, the deposit pool transfers the user's elyAsset tokens to itself and then calls the unstaking vault's `requestWithdrawal()` function:  ```solidity     function requestWithdrawal(         address asset,         uint256 elyAssetAmount     )         external         nonReentrant         whenNotPaused         onlySupportedA",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

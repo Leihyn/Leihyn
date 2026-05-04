@@ -1,0 +1,19 @@
+{
+  "title": "Funds in subscription may be drained",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description In SpinLottery, users can participate in the spin activity to win one prize card. Users can choose their win possibility. If users choose one higher win possibility, users have to pay one higher payment for this spin.  When users trigger one spin, we will request one randomness from Chainlink VRF. In RIP, we choose the Subscription mode. Chainlink VRF will charge the related fees from our subscription balance. Each time, we trigger one spin, Chainlink VRF will charge the related fees from our subscription balance",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

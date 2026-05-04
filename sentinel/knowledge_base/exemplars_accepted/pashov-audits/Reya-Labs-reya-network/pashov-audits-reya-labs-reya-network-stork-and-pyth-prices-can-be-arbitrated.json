@@ -1,0 +1,21 @@
+{
+  "title": "Stork and Pyth prices can be arbitrated",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `fullfillOracleQueryStork` and `fullfillOracleQueryPyth` functions are used to update the price of the Stork and the Pyth oracles, respectively.  Given that both oracles work with a pull model, this opens the opportunity to arbitrage a price update by performing a trade, setting the new price, and closing the position, all in the same transaction.  What is more, the price can be updated multiple times in the same block, so the attacker can choose both the initial and final price, as long as they satisfy the following cond",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Sentinel post-calibration full pipeline run on Base Azul multiproof",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge",
+    "proxy",
+    "vault"
+  ],
+  "bug_class": "meta-pipeline",
+  "mental_operation": "value_flow",
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "Post-calibration end-to-end: think 40-to-9 (78pct cut), surface-tag selected 7 specialists from 11, dispatcher fired 8 hyp-to-specialist matches (4 spec_divergence, 3 parameter_validation, 1 signature_replay). All 8 walked: 4 spec NatSpec claims match code (onlyOwner/onlyOwnerOrRevoker), 1 TEEProverRegistry init duplicate-element idempotent (true negative same shape as ASTROSSC-290 but not exploitable), 1 known TEE setGameType asymmetry OOS. ZERO new fileable findings, confirms exhaustion.",
+  "key_lesson": "Post-calibration pipeline runs in seconds and surfaces only high-precision hypotheses. The dispatcher is the gate that turns 9 hypotheses into 8 specialist-relevant targets, each with a clear bug-class-shaped reason for inspection. Without it, 5 LLM specialists would have surveyed the entire surface for nothing.",
+  "contest_url": "https://immunefi.com/audit-competition/audit-comp-base-azul",
+  "submission_url": null,
+  "captured_at": "2026-05-04T18:30:26"
+}

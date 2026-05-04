@@ -1,0 +1,23 @@
+{
+  "title": "Multiple onramps can have the same scriptPubKeyHash",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-onramp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Each onramp contract has `scriptPubKeyHash` address which users deposit to those addresses to bridge their BTC, the issue is that the code doesn't check to make sure different onramp contracts have the different `scriptPubKeyHash` address. This would create issues and have multiple impacts based on the off-chain relay implementation:  1. Users can deposit and receive tokens multiple times from onramp contracts that have the same `scriptPubKeyHash`. 2. LP provider can set duplicate `scriptPubKeyHash` for his onramp contracts an",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Onramp-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

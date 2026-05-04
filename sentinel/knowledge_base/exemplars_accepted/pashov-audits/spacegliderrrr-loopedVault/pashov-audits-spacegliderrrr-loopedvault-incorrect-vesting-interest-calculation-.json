@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect vesting interest calculation enables MEV attacks",
+  "platform": "pashov-audits",
+  "program": "spacegliderrrr-loopedVault",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Given that the value of the positions is updated only when `updateInterval` time has passed, the interest is vested to prevent MEV attacks.  However, the implementation of `_vestingInterest()` is incorrect, as it returns 0 when `block.timestamp == lastUpdate` and increases linearly until `vestingDuration` is reached. This means that calling `totalAssets()` just after an update will include all the interest accrued, which makes the update subject to MEV attacks.  ```solidity     function totalAssets() public view override re",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LoopVaults-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

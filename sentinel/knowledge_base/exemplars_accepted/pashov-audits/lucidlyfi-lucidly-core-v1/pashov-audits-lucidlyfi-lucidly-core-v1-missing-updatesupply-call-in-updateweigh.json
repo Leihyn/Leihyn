@@ -1,0 +1,21 @@
+{
+  "title": "Missing `_updateSupply` Call in `updateWeights`",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `updateWeights` function updates the virtual balance product (`vb_prod`) but does not include a call to `_updateSupply`. This inconsistency can result in the use of a stale `supply`, affecting the accuracy of swaps and liquidity adjustments within the pool.  The issue is that this function does not update the supply. Since the weights and balances are updated, the supply also needs to be updated to sync up the state of the pool. The supply update is present in the yETH pool here: [link](https://github.com/yearn/yETH/blo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "ERC20 tokens that have a fee-on-transfer mechanism require special handling",
+  "platform": "pashov-audits",
+  "program": "hananbeer-zerem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  Some tokens take a transfer fee (`STA`, `PAXG`) and there are some that currently do not but might do so in the future (`USDT`, `USDC`). Since Zerem might be integrated with a protocol that works with all types of ERC20 tokens, and Zerem should too, this can lead to problems.  Let\u2019s look at the following scenario:  1. Alice tries to claim tokens that have a fee-on-transfer mechanism from a protocol that is integrated with Zerem 2. The integrated protocol calls `Zerem::transferTo` method but the `amount` argument passed does not take the fee into consideration 3. The `requi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Zerem-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

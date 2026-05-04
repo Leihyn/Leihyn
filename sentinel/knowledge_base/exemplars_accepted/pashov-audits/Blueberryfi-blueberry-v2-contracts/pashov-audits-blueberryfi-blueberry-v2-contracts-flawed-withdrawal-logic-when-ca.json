@@ -1,0 +1,22 @@
+{
+  "title": "Flawed withdrawal logic when caller differs from share owner",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Withdrawals in HyperEvmVault have a custom behavior. Users need to first call `requestRedeem()` to move funds from L1 back to the EVM side. After this, available funds to be withdrawn are stored in the `redeemRequests` mapping.  These mechanics lead to a specialization of the `previewWithdraw()` and `previewRedeem()` functions. Instead of operating with the global supply or TVL values, these functions are implementended using the `redeemRequests` mapping:  ```solidity function previewWithdraw(uint256 assets_) public view ov",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

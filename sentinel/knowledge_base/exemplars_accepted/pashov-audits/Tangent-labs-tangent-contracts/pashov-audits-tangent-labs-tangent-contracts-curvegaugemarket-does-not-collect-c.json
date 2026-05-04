@@ -1,0 +1,22 @@
+{
+  "title": "`CurveGaugeMarket` does not collect CRV allocation as reward",
+  "platform": "pashov-audits",
+  "program": "Tangent-labs-tangent-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description The `gauge::claim_rewards()` function only claims permissionless rewards (according to the [`LiquidityGaugeV6`](https://docs.curve.finance/liquidity-gauges-and-minting-crv/gauges/LiquidityGaugeV6/#claiming-rewards) docs). The problem here is the fact, that except the permissionless rewards, the gauges are eligible to receive CRV allocation, and some of them will receive such. If CRV rewards are accumulated by the gauges, it will be impossible to claim them since the contract doesn't implement such functionality",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tangent-security-review_2025-12-08.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

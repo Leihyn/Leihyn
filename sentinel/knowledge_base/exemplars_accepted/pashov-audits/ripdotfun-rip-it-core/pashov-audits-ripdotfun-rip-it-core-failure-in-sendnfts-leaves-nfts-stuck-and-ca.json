@@ -1,0 +1,22 @@
+{
+  "title": "Failure in `sendNFTs()` leaves NFTs stuck and causes asset loss",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `CardAllocationPool` contract, when random card NFTs are being allocated to the owner (the owner of the `packetId`), if the `sendNFTs` function fails to transfer the selected cards, **these cards will be permanently stuck in the contract**:  ```solidity  function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal {         //...          // Select random cards using the provided randomness         uint256[] memory selectedCards = selectRandomCards(cardBundles, randomWords[0]);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-05-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

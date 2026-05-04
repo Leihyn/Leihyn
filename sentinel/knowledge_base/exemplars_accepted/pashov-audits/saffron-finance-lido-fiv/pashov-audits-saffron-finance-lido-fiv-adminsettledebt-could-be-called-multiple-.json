@@ -1,0 +1,21 @@
+{
+  "title": "`adminSettleDebt()` could be called multiple times leading to the loss of funds",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, since some users could lose their funds by others users claiming these funds  **Likelihood:** Low, since multiple call of `adminSettleDebt()` could be done only accidently or by malicious admin  ## Description  `adminSettleDebt` lack of check if it was already called:  ```solidity File: LidoVault.sol 712:   function adminSettleDebt(address adminLidoAdapterAddress) external onlyAdmin { 713:     require(block.timestamp > adminSettleDebtLockPeriodEnd, \"ANM\"); 714: 715:     vaultEndedWithdrawalsFinalized = true; 716:     adminSettledDebt = true; 717: 718:     vaultEn",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

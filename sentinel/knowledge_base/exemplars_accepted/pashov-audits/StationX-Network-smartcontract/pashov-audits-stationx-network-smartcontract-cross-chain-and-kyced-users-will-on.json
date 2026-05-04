@@ -1,0 +1,21 @@
+{
+  "title": "Cross-Chain and KYCed users will only pay a portion of the fees",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The factory contract calculates fees for cross-chain DAOs and KYC users as follows:  ```solidity     function checkDepositFeesSent(address _daoAddress, uint256 _totalAmount) internal {         if (ccDetails[_daoAddress].depositChainIds.length > 1 || isKycEnabled[_daoAddress]) {             require(msg.value >= _totalAmount + ((depositFees * platformFeeMultiplier) / 100), \"Insufficient fees\");         } else {             require(msg.value >= _totalAmount + depositFees, \"Insufficient fees\");         }     } ```  For exampl",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

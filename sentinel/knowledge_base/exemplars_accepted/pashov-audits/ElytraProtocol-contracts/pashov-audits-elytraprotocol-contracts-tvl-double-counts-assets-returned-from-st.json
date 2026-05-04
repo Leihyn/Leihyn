@@ -1,0 +1,22 @@
+{
+  "title": "TVL double-counts assets returned from strategy to vault",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When assets are allocated to a strategy, `ElytraDepositPoolV1.assetsAllocatedToStrategies[asset]` is incremented. Later, the strategy can return funds to the unstaking vault via:  ```solidity     /// @notice Receives assets from strategy for withdrawal processing     /// @param asset Asset address     /// @param amount Amount received     function receiveFromStrategy(address asset, uint256 amount) external onlyStrategy {         claimableAssets[asset] += amount;         emit AssetsReceivedFromStrategy(asset, amo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

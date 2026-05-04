@@ -1,0 +1,19 @@
+{
+  "title": "Records minted to an address that is a smart contract that can't handle ERC721 tokens will be stuck forever",
+  "platform": "pashov-audits",
+  "program": "metalabel-metalabel-contracts-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as records will be stuck forever  **Likelihood:** Low, as it requires the engine to allow smart contracts as minters and that contracts should not support handling of ERC721 tokens  ## Description  Both `mintRecord` methods in `Collection` use the `_mint` method of `ERC721` which is missing a check if the recipient is a smart contract that can actually handle ERC721 tokens. If the case is that the recipient can't handle ERC721 tokens then they will be stuck forever. For this particular problem the `safe` methods were added to the ERC721 standard and `Solmate` has",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Metalabel-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

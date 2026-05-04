@@ -1,0 +1,23 @@
+{
+  "title": "`borrow()` should decrease `totalAssets` value",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `OmoVault.sol` contract has a `borrow()` used only by the agent, which transfers assets to the Agent. It has no tracking system for those debts (it depends on off-chain security). Also, it does not update the `_totalAssets` variable  ```solidity File: OmoVault.sol  403:     function borrow(uint256 assets, address receiver) external nonReentrant onlyAgent { 407:         address msgSender = msg.sender; 409:         require(assets != 0, \"ZERO_ASSETS\"); 411:         asset.safeTransfer(receiver, assets); 414:     }  ```  This",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

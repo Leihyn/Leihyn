@@ -1,0 +1,21 @@
+{
+  "title": "The winner of a bid can brick the auction house",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Whenever an auction is over, `_settleAuction()` is called. We have 2 main flows there - when no one has bid for the auction and when there is a bidder for the auction. We will focus on the latter. One of the lines we have for that flow is this one:  ```solidity apiologyToken.safeTransferFrom(address(this), _auction.bidder, _auction.apdaoId); ```  It uses `safeTransferFrom()` to transfer the NFT from the contract to the bidder. Thus, if the bidder is a contract that either maliciously or accidentally doesn't properly implement",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

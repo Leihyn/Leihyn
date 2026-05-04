@@ -1,0 +1,23 @@
+{
+  "title": "Accrued fees become stuck when gauge is killed",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-06-12",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The internal `_claimFees()` function, responsible for claiming these fees, is only invoked during reward notifications via `notifyRewardAmount()`. However, once the gauge is killed, new rewards are redirected to the minter, and `notifyRewardAmount()` is no longer called for the gauge:  ```solidity         claimable[_gauge] = 0;         if (_claimable > 0) kitten.transfer(minter, _claimable); ```  ```solidity                 if (isAlive[_gauge]) {                     claimable[_gauge] += _share;                 } else {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-06-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

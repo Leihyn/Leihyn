@@ -1,0 +1,23 @@
+{
+  "title": "SwapPool's are vulnerable to flashloan attacks",
+  "platform": "pashov-audits",
+  "program": "NablaFinance-contracts-audit-07-2024",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "flashloan",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  SwapPool allows users to provide liquidity (LP) and earn fees. However, the ability for liquidity providers to deposit and withdraw within the same block makes the system vulnerable to flash loan attacks, which can exploit other LPs' rewards. A malicious user can front-run a legitimate deposit with a flash loan deposit and then back-run it with a withdrawal in the same block, effectively siphoning a portion of the LP fees. Below is a proof-of-concept demonstrating the attack:  ```solidity     function testFlahloan()         pu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nabla-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

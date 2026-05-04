@@ -1,0 +1,19 @@
+{
+  "title": "`removeHook` should attempt to remove the context if it exists.",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Within the `runExecutionHooks` modifier, it iterates through all registered execution hooks, triggers the `preExecutionHook`, and sets the hook's `context`. Then, at the end of execution, it iterates again, triggers the `postExecutionHook` if the `context` exists, and finally deletes the context.  ```solidity     modifier runExecutionHooks(Transaction calldata transaction) {         mapping(address => address) storage executionHooks = _executionHooksLinkedList();          address cursor = executionHooks[AddressLinkedList.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-11-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

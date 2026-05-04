@@ -1,0 +1,21 @@
+{
+  "title": "`UniswapV3Swapper` should not use the same `poolFee` for all token pairs",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, swap will fail when pool fee is wrong **Likelihood:** Medium, only occur for swap where pool fee is not 3000 (default value)  ## Description  UniswapV3Swapper uses the same `poolFee` for all token pairs.  The issue is that Uniswap V3 pool address is tied to both token addresses and the pool fee as shown in UniswapV3 `SwapRouter.getPool()` below. This means that the swap may fail if the token pair to swap is not available for the configured `poolFee`.  ```     /// @dev Returns the pool for the given token pair and fee. The pool contract may or may not exist.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "The ERC4626 standard is not followed correctly",
+  "platform": "pashov-audits",
+  "program": "florence-finance-florence-finance-protocol-v3",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as functionality is not working as expected but without a value loss  **Likelihood:** Medium, as multiple methods are not compliant with the standard  ## Description  As per EIP-4626, the `maxDeposit` method \"MUST factor in both global and user-specific limits, like if deposits are entirely disabled (even temporarily) it MUST return 0.\". This is not the case currently, as even if the contract is paused, the `maxDeposit` method will still return what it usually does.  When it comes to the `decimals` method, the EIP says: \"Although the convertTo functions should",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/FlorenceFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

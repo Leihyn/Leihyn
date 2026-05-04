@@ -1,0 +1,21 @@
+{
+  "title": "User `withdraw_variable` can be called after admin_fixed_withdraw is set",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-orca-saffron",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium   ## Description  When the admin has already run `admin_withdraw_fixed` (step 1 of admin close), the vault has no position (`has_position()` is false) and `admin_fixed_withdrawn == 1`. The user-facing `withdraw_variable` handler does not check `admin_fixed_withdrawn`. So a variable depositor can still call `withdraw_variable`, trigger settlement, receive 100% of net variable-side earnings, and burn their bearer token:  **`variable_handler`** has no check on `admin_fixed_withdrawn`. It only requires vault ended and `!vault.has_",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review_2026-03-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

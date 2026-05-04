@@ -1,0 +1,23 @@
+{
+  "title": "Admin could incur a loss with debt settlement",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, admin will incur a loss as he will pay more than required to settle debts  **Likelihood:** Medium, occurs when admin settles debt  ## Description  An admin of LidoVault can perform a debt settlement to end the vault early due to unexpected issues with Lido. The process is initiated using `initiatingAdminSettleDebt()` with the `adminSettleDebtAmount` paid by admin in ETH. After the timelock, the debt is settled upon calling `adminSettleDebt()`, which will transfer the stETH balance to admin, in exchange for what was paid with `adminSettleDebtAmount`.  Basically wi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

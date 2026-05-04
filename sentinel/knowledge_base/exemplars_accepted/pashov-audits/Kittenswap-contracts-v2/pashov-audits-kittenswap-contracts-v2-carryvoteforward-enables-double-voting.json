@@ -1,0 +1,22 @@
+{
+  "title": "`carryVoteForward()` enables double voting",
+  "platform": "pashov-audits",
+  "program": "Kittenswap-contracts-v2",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `Voter.carryVoteForward()` function allows voters to reuse their previous period's votes (pools and weights) for the upcoming period. However, this function does not mark the token as voted for the next period (does not set `period[nextPeriod].voted[_tokenId] = true`) :  ```solidity function carryVoteForward(uint256 _tokenId, uint256 _fromPeriod) public {         IVoter.Period storage ps = period[_fromPeriod];         uint256 nextPeriod = getCurrentPeriod() + 1;          // fetch weights from previous period",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-07-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

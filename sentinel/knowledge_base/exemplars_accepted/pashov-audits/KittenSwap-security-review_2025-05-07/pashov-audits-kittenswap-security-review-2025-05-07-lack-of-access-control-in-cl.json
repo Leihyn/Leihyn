@@ -1,0 +1,24 @@
+{
+  "title": "Lack of access control in `CLGauge` creation allows unauthorized `Pools`",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "proxy",
+    "veToken"
+  ],
+  "bug_class": "access-control",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `CLGaugeFactory.createGauge` function can be called by anyone, which creates a front-running vulnerability. An attacker can monitor the mempool for legitimate `Voter.createCLGauge` transactions and front-run them, calling `CLGaugeFactory.createGauge` with the same pool address before the transaction from Voter contract is processed.  ```solidity     function createGauge(         address _pool,         address _internal_bribe,         address _kitten,         bool _isPool     ) external returns (address) {         CLGaug",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

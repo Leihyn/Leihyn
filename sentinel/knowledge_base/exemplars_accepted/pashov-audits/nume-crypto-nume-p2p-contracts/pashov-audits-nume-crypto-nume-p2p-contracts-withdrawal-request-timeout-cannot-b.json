@@ -1,0 +1,19 @@
+{
+  "title": "WITHDRAWAL_REQUEST_TIMEOUT cannot be too short",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, the protocol will stop  **Likelihood:** Low, the variable has a default value and unlikely to be revised  ## Description  `OwnershipFacet` has `setWithdrawalRequestTimeout()` which sets `WITHDRAWAL_REQUEST_TIMEOUT`.  `WITHDRAWAL_REQUEST_TIMEOUT` is a highly risky parameter. If it is too low, there will be more likely to fall into exodusMode - which means the protocol is disabled (no functions to get back from the exodusMode, the protocol will require deploying a new Diamond or adding new facets).  ## Recommendations  We recommend setting a minimum allowed value f",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

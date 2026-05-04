@@ -1,0 +1,22 @@
+{
+  "title": "`_depositable` and `_withdrawable` return if paused",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-ion-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The Vault operates by using deposit and withdrawal queues. It starts from the first pool in the queue and checks the amount of assets available to process. If the amount is not enough, it moves to the next pool until all user's assets are used. The functions `_depositable` and `_withdrawable` are used for this task:  ```solidity      function _withdrawable(IIonPool pool) internal view returns (uint256) {         uint256 currentSupplied = pool.getUnderlyingClaimOf(address(this));         uint256 availableLiquidity = uint25",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/IonProtocol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

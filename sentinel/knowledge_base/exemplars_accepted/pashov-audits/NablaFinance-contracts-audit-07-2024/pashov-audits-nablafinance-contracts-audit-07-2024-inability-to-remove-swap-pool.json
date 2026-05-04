@@ -1,0 +1,22 @@
+{
+  "title": "Inability to remove swap pools from the backstop pool",
+  "platform": "pashov-audits",
+  "program": "NablaFinance-contracts-audit-07-2024",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In the backstop pool, once a swap pool is added to the list of covered pools, it cannot be removed.  If the Pyth network deprecated the price feed for the asset of one of the covered pools, or it began returning bad data, the execution of `_getAllTokenPrices` would revert, making it impossible to deposit or withdraw from the backstop pool and, consequently, locking the funds of the LPs in the covered pool.  ## Recommendations  Give to the owner of the backstop pool the ability to remove swap pools from the list of covered swap",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nabla-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

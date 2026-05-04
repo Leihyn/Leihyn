@@ -1,0 +1,21 @@
+{
+  "title": "User can lose the right to claim tokens when calling `claim`",
+  "platform": "pashov-audits",
+  "program": "MTXstudio-bio-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In case of emergency the `DEFAULT_ADMIN_ROLE` can withdraw `BIO_TOKEN` balance from the contract. At the same time there are no restrictions for users to try `claim` tokens. Since the `_safeClaimTransfer` can transfer the actual balance instead of the amount users will receive 0 `BIO_TOKEN` and lose the right to claim tokens again. Moreover the `VBIO_TOKEN` contract also will receive 0 but will accept a vesting schedule with the correct amount. So there will not be enough tokens in the `VBIO_TOKEN` contract balance for all ves",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bio-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

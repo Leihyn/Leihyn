@@ -1,0 +1,19 @@
+{
+  "title": "Frontrunning `fulfillQuery()` to cancel queries",
+  "platform": "pashov-audits",
+  "program": "spaceandtimelabs-sxt-token",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description In ZKPay, users send one query request, the related merchant monitors this event and the related oracle will fulfill this request via `fulfillQuery` and get the related fee.  The problem here is that the query's owner can cancel this request at any time. According to the sponsor's information, this contract will be deployed on Ethereum. On Ethereum, the malcious users can monitor the `fulfillQuery` transaction and frontrun this transaction to cancel this query. After this frontrun, the malicious users can get back the pay",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SXT-security-review_2025-03-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

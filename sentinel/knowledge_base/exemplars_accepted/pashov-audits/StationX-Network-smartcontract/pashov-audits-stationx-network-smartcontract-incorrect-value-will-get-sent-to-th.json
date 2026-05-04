@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect value will get sent to the commLayer",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `factory.createERC20DAO()` function creates cross-chain DAOs using LayerZero. Users can specify msg.value, which is distributed across multiple chains. For example, if there are 5 chains and msg.value is 1000, each chain receives 200. This value is forwarded to the commLayer.  The \\_depositChainIds array is intended to manage the distribution across chains. For instance, if a user wants to create a DAO on the primary chain and 2 secondary chains:  - Bob wants to create a DAO on the primary chain (Ethereum) and 2 secondary",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

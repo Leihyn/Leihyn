@@ -1,0 +1,22 @@
+{
+  "title": "Sale creator can possibly steal bidders' claimable tokens",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-IPNFT",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it results in a loss of funds for bidders  **Likelihood:** Medium, as it requires to claim before cliff expires  ## Description  In `StakedVestedCrowdSale` the sale creator can give the address to his own `TokenVesting` & `TimelockedToken` contracts. Same in `VestedCrowdSale` but only for `TimelockedToken`. Now if the sale creator is malicious he can give the addresses of his own deployed contracts that inherit from either `TokenVesting` or `TimelockedToken` but add functionality to pull the funds out on demand, while they are still locked in them. This is eve",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/IPNFT-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

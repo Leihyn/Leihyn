@@ -1,0 +1,21 @@
+{
+  "title": "User address may not be accessible on other chains",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  A smart wallet is deployed in one chain and has a specific address. But it is possible that trying to deploy a smart wallet with the same address won't be possible on other chains. For example, if the deployer is not available on the destination chain, or if it is not possible to set the same salt/noce. Also on chains like zkSync that `create` operations will always lead to different addresses with the same deployment parameters. In any of these cases, the user won't be able to control the same address on both chains.  Some",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

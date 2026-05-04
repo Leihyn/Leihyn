@@ -1,0 +1,21 @@
+{
+  "title": "Loss of fees due to rounding down",
+  "platform": "pashov-audits",
+  "program": "dragon-software-devs-TitanX-Farms",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `FarmKeeper` contract uses a `SCALE_FACTOR` of `1e12` when accumulating fees per share of liquidity. For tokens with low decimals (e.g. USDC with 6 decimals) and large liquidity amounts, this can lead to precision loss and rounding down to 0, resulting in permanent loss of fees for users.  Let's consider a token with 6 decimals such as USDC.  The issue occurs because:  - amount0/amount1 can be as low as 1 unit (e.g. 1e6 for USDC) - liquidity is a uint128, so can be up to ~3.4e38 - SCALE_FACTOR is only 1e12  This means t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TitanX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

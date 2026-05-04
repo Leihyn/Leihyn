@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect fee due to double subtracting `requestSum.assets`",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `_calculateFee` function in the `HyperEvmVault` contract incorrectly subtracts `$.requestSum.assets` from `grossAssets`, even though this subtraction has already been performed upstream in `_totalEscrowValue`. This results in an underestimation of `eligibleForFeeTake`, leading to incorrect fee calculations. ```solidity     function _calculateFee(V1Storage storage $, uint256 grossAssets) internal view returns (uint256 feeAmount_) {         if (grossAssets == 0 || block.timestamp <= $.lastFeeCollectionTimestamp) {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

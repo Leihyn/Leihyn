@@ -1,0 +1,21 @@
+{
+  "title": "Inability to vest and claim `saleTokens`",
+  "platform": "pashov-audits",
+  "program": "defi-app-defi-app-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `PublicSale::claimAndStartVesting` function is responsible for initiating the vesting process for users who have already deposited. It calls the function `VestingManager::createVesting`:  ```solidity File: PublicSale.sol 583:     function _setVestingHook(address _user, uint256 _amount, uint256 _vesting, uint32 _start) private { 584:         saleToken.safeTransferFrom(treasury, address(this), _amount); 585:         saleToken.forceApprove(vestingContract, _amount); 586:         uint32 numberOfSteps = uint32(_vesting) / DEFAU",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/DefiApp-security-review_2025-01-08.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

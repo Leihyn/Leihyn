@@ -1,0 +1,21 @@
+{
+  "title": "`_settleCurrency` does not properly interact with the `poolManager` when calling `settle`",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  After the swap is performed within the executor's `unlockCallback`, it will settle all the currency by triggering `_settleCurrency`. However, when settling currency on Uniswap V4's `poolManager`, the correct `settle` function is not used, causing the interaction with Uniswap V4 to always fail.  ```solidity     function _settleCurrency(Currency currency) internal {         int256 amount = poolManager.currencyDelta(address(this), currency);         if (amount < 0) {             // address(this) owes PoolManager currency",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect user accounting in `withdraw` method",
+  "platform": "pashov-audits",
+  "program": "0xTK421-ninja-core-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "invariant-violation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  The `withdraw` method in `NYProfitTakingVaultBaseV1` does incorrect user accounting in the following line:  ```solidity user.amount = user.amount - _shares; ```  In the `deposit` method we use the `user.amount` to store the amount of `underlying` tokens deposited, but in `withdraw` instead of subtracting the `underlying` tokens the code subtracts the shares burned.  ## Impact  Since `shares` are not 1:1 with `underlying` this will completely mess up the user accounting on each withdraw. It is possible to be in two directions - if `_shares` was less than the amount withdraw",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NinjaYielder-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Wrong usage of revBp() in deposit() in fee calculation",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low, because wrong accounting of fee  **Likelihood:** High, because it will happen in each call to deposit/mint  ## Description  In `_deposit()` function code calculates fee like this:  ```solidity         // slice the fee from the amount (gas optimized)         if (!exemptionList[_receiver])             claimableAssetFees += _amount.revBp(fees.entry); ```  And the `revBp()` logic is:  ```solidity     function revBp(         uint256 amount,         uint256 basisPoints     ) internal pure returns (uint256) {         return mulDiv(amount, basisPoints, BP_BASIS - basisPoi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

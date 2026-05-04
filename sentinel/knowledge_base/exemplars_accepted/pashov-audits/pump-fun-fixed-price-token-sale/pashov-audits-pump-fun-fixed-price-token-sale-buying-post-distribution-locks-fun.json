@@ -1,0 +1,19 @@
+{
+  "title": "Buying post-distribution locks funds",
+  "platform": "pashov-audits",
+  "program": "pump-fun-fixed-price-token-sale",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity    **Impact:** Medium    **Likelihood:** Medium    ## Description    Allowing users to purchase tokens after distribution can result in a permanent loss of funds. The `distribute` function can only be called once per user, meaning any additional purchases made afterward will leave the funds locked indefinitely, as distribution cannot be re-executed.    The relevant code snippet:    ```rust     if user_state.tokens_received > 0 {         // Only one distribute per user         return Err(SaleError::AlreadyDistributed.into());     } ```    Since users can buy multiple times and acros",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Pump-security-review_2025-03-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

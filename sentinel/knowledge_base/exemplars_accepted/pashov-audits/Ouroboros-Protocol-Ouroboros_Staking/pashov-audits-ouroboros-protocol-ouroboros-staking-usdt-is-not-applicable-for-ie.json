@@ -1,0 +1,21 @@
+{
+  "title": "USDT is not applicable for IERC20Minimal interface",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros_Staking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When users want to increase liquidity, users can do liquidity via the function `_executeLiquidityIncrease`. In function `_executeLiquidityIncrease`, we will transfer assets to UniswapV3Staker, and then approve asset token to the `nonfungiblePositionManager`. The problem here is that USDT token does not support `IERC20Minimal(token0).approve` interface. This will cause this transaction to be reverted.  In FunnRangeZap, we add some special logic to process USDT case. In UniswapV3Staker, we should process USDT ca",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2025-06-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "ETWAP logic allows grief attacks on redeem flow",
+  "platform": "pashov-audits",
+  "program": "covenant-labs-covenant-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The  ETWAP's implementation is used to ensure that users can redeem approximately 25% every 1 hour. The `_calculateMarketState()` updates the `lastETWAPBaseSupply` logically when the base token supply drops and sets it immediately when `baseTokenSupply` is greater than or equal to `lastETWAPBaseSupply`: ```solidity             // If baseTokenSupply has decreased since the last update, then decrease the ETWAPBaseSupply tracker         if (marketState.baseTokenSupply < marketState.lexState.lastETWAPBaseSupply)",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Covenant-security-review_2025-08-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

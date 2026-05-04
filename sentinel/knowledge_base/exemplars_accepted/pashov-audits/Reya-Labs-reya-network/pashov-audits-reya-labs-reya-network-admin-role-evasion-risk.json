@@ -1,0 +1,19 @@
+{
+  "title": "Admin role evasion risk",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The function `AccountModule::revokeAccountPermission` is designed to remove permissions from a user. However, a malicious admin could preemptively execute a front-run by calling `AccountModule::grantAccountPermission` to assign admin permissions to another controlled account before their own permissions are revoked. Consider this scenario:  1. Permissions are being revoked for an admin using the function `AccountModule::revokeAccountPermission`. 2. The malicious admin performs a front-run, executing the function `AccountModule",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-June2.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

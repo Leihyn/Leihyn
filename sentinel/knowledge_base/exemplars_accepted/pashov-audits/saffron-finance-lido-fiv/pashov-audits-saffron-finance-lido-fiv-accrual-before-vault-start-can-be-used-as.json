@@ -1,0 +1,22 @@
+{
+  "title": "Accrual before vault start can be used as honeypot",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** : low, as you can argue that the victim should know better  **Likelihood:** : high, as it is very easy to perform at low risk for the attacker  ## Description  As soon as a fixed side staker deposits, their funds are sent to lido and start accruing rewards:  ```solidity 397:      // Stake on Lido 398:      uint256 shares = lidoAdapter.stakeFunds{value: amount}(msg.sender); ```  Anyone on the fixed side can chose to unstake before the vault starts and receive their share _and_ the accrued rewards:  ```solidity 489:          fixedToVaultNotStartedWithdrawalRequestIds[msg",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

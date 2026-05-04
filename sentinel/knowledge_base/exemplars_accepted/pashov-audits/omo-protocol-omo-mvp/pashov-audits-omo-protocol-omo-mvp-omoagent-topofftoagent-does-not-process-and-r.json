@@ -1,0 +1,19 @@
+{
+  "title": "OmoAgent: `topOffToAgent()` does not process and remove all positions",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `topOffToAgent()` function, positions are removed from the `_positionIds` array while iterating over it.  ```solidity         for (uint256 i = 0; i < OmoAgentStorage.data()._positionIds.length; i++) {             uint256 tokenId = OmoAgentStorage.data()._positionIds[i];             require(nftManager.getApproved(tokenId) == OmoAgentStorage.data().agents[_agentId], \"Not approved\");              nftManager.transferFrom(address(this), OmoAgentStorage.data().agents[_agentId], tokenId);             _removePositionId(tok",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

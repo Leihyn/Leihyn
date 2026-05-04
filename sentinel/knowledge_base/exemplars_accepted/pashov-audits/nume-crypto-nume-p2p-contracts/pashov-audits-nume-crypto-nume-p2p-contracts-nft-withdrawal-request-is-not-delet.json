@@ -1,0 +1,21 @@
+{
+  "title": "NFT Withdrawal request is not deleted after successful withdrawal",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High. Attacker can steal user's nfts.  **Likelihood:** Medium. It requires re-deposit of NFT  ## Description  Withdrawal backend nft request is incorrectly deleted after performing withdrawal.  Here you can see that delete is performed on memory array instead of storage:  ```solidity     function withdrawNFT(         address _user,         address _nftContractAddress,         uint256 _tokenId,         bool _mintedNft,         uint256 _queueIndex,         bool _isContractWithdrawal     ) external nonReentrant {         AppStorage.enforceExodusMode();          AppStorage",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

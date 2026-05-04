@@ -1,0 +1,22 @@
+{
+  "title": "`withdrawAssets` will always revert",
+  "platform": "pashov-audits",
+  "program": "superseed-xyz-community-raise-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  While the contract is not expected to receive any assets, the `withdrawAssets` function is provided to allow the admin to withdraw any assets that the contract may have received, presumable by mistake.  `withdrawAssets` uses the `fromStage` modifier to ensure that the contract is in the `Completed` stage.  ```solidity     function withdrawAssets(address recipient, IERC20 asset)         external         onlyRole(ADMIN_ROLE)   @>    fromStage(Stages.Completed) ```  However, this modifier reverts when the current stage is `Comple",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SuperSale-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

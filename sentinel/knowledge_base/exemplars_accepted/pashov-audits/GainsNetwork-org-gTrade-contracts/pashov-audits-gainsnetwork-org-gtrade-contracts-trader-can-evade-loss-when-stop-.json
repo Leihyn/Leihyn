@@ -1,0 +1,21 @@
+{
+  "title": "Trader can evade loss when Stop order is not fulfilled in time",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  For Stop orders, inexact executions (`exactExecution == false`) could occur in certain scenarios, which will fulfill the orders based on market price instead of open/stop-loss price.  One of these scenarios is a price gap during market re-opening, such that the market open price has gone far over the open/stop-loss price while `_a.low == 0 && _a.high == 0`. In this scenario, the Stop orders will be fulfilled based on the market price instead of open/stop-loss price as there have been no prices in the past 1 hour due to market",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Potential protocol insolvency due to lido slashing events",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `DepositETH` fails to properly handle potential reductions in the Lido stETH balance due to slashing events. This results in an inflated share price, which can lead to users being able to withdraw more than the actual funds in the protocol, risking insolvency.  To demonstrate the issue, the `DepositETH.updateRewards()` currently only records positive rewards, but it doesn't handle the scenario where the `stETH` balance may decrease due to slashing or other negative events.  This means that the rewards are never reduced, an",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

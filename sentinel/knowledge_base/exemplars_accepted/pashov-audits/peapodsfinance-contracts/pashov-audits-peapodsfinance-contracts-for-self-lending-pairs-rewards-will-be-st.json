@@ -1,0 +1,24 @@
+{
+  "title": "For self-lending pairs rewards will be stuck",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  For self-lending pods, the paired LP token of the pod is a fToken, which is a share of a lending pair.  In the `AutoCompoundingPodLp`, it converts the reward token into the paired LP token. However for self-lending pods, instead of converting to the fToken, it converts to the underlying token since it is a more liquid asset. (With the intention of later depositing the asset into the lending pair to receive the fToken)  ```solidity // if self lending pod, we need to swap for the lending pair borrow token, // then deposit into",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

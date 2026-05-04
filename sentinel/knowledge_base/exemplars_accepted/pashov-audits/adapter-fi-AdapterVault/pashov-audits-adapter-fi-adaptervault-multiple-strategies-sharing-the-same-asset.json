@@ -1,0 +1,21 @@
+{
+  "title": "Multiple strategies sharing the same asset",
+  "platform": "pashov-audits",
+  "program": "adapter-fi-AdapterVault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  AdapterVault design assumes that each strategy has a unique asset (e.g. PT token). Otherwise, key accounting functions would return overinflated values.  E.g. \\_totalAssetsNoCache() which goes through each strategy and calls `balanceOf()` for their related underlying and sums them up.  ```python @internal @view def _totalAssetsNoCache() -> uint256:     assetqty : uint256 = ERC20(asset).balanceOf(self)     for adapter in self.adapters:         assetqty += IAdapter(adapter).totalAssets()      return assetqty ```  `IAdapter(adapt",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AdapterFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

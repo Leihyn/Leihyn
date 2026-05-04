@@ -1,0 +1,21 @@
+{
+  "title": "Late participation advantage in `MemePredictionMarket`",
+  "platform": "pashov-audits",
+  "program": "ilijasdev-mcp-market",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The current design of MemePredictionMarket allows users to make predictions for most of the round's duration (e.g., a 24-hour round with prediction open for 23 hours), which unintentionally benefits late participants. These users can observe more price action and make better-informed decisions than early participants, leading to an unfair advantage.  Example scenario:  - At the beginning of the round, the token price is 10. - A user joins early and makes a prediction. - Near the deadline (e.g., hour 23), the p",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/MCP-security-review_2025-08-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

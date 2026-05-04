@@ -1,0 +1,22 @@
+{
+  "title": "Rewards from `RebaseReward` unclaimable after `veKITTEN` changes",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-06-12",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Voting for pools generates rewards in `VotingReward` and `RebaseReward` for the next period. This means that when a vote is reset, there might be rewards pending from the current and previous periods.  If `withdraw()`, `merge()`, or `split()` is called on a `veKITTEN` token, `locked[_tokenId]` gets `amount` and `end` set to 0, but the token is not burned. This will allow the owner of the token to claim rewards from `VotingReward`, but not from `RebaseReward`, as this contract executes the `VotingEscrow.deposit_for()` function,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-06-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

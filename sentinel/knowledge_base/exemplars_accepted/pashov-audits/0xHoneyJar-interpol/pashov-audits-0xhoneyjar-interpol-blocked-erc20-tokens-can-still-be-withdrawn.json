@@ -1,0 +1,21 @@
+{
+  "title": "Blocked ERC20 tokens can still be withdrawn",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Some ERC20 tokens are expected to be blocked in the contract with the `onlyUnblockedTokens` modifier, and the owner shouldn't be able to withdraw them. That's the reason this check is implemented for `withdrawERC20()`:  ```solidity function withdrawERC20(address _token, uint256 _amount) external onlyUnblockedTokens(_token) onlyOwner { ... }  modifier onlyUnblockedTokens(address _token) {     if (!unlocked && HONEY_QUEEN.isTokenBlocked(_token)) revert TokenBlocked();     _; } ```  The issue lies in that it is possible to wit",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

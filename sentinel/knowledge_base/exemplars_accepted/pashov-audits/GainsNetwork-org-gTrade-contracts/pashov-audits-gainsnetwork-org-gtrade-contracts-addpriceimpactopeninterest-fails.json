@@ -1,0 +1,22 @@
+{
+  "title": "`addPriceImpactOpenInterest()` fails to scale `expiredOiUsd`",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `addPriceImpactOpenInterest()` will keep track of the expired OI when adding OI so that closing of trade will not reduce more OI than necessary.  However, it fails to scale the OI USD value by the current collateral/usd price. As the `tradeInfo.collateralPriceUsd` will be updated with the current collateral/usd price, it will cause the removal of OI to be incorrect as the expired OI is based on the previous collateral/usd price and not the last updated collateral/usd price.  ```Solidity      function addPriceImpactOpenInt",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

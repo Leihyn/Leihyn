@@ -1,0 +1,22 @@
+{
+  "title": "TVL errors by including pending withdrawal assets",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `getTotalAssetTVL()` function incorrectly includes assets that are backing **pending withdrawal requests** in its TVL calculation. This results in an inflated `elyAsset` price, leading to exploitable pricing errors.  **Root Issue**  When a user initiates a withdrawal via `requestWithdrawal()`, their `elyAssets` are **burned immediately**, reducing total supply. However, the corresponding assets are moved to the **unstaking vault**, and are **not removed from TVL calculations**. These assets remain counted unti",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

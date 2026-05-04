@@ -1,0 +1,21 @@
+{
+  "title": "Reversion in `ApiologyDAOToken` transfer due to insufficient governance tokens",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `ApiologyDAOToken` contract allows for the dynamic adjustment of the number of governance tokens associated with each NFT through the `ApiologyDAOToken::changeGovTokensPerNFT` function.  ```solidity File: ApiologyDAOToken.sol 333:     function changeGovTokensPerNFT(uint256 _newAmount) external onlyOwner { 334:         require(_newAmount > 0, \"Amount must be greater than 0\"); 335:>>>      GOVERNANCE_TOKENS_PER_NFT = _newAmount; 336:     } ```  This function directly impacts the `ApiologyDAOToken::_burnGovernanceTokens` f",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect deposit limit check order",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `depositHYPE()` function wraps native `HYPE` into `WHYPE` and store it in the pool before checking if the deposit amount exceeds the current deposit limit. This means the subsequent check:  ```solidity // Check deposit limit if (_checkIfDepositAmountExceedsCurrentLimit(asset, depositAmount)) {     revert MaximumDepositLimitReached(); } ``` Operates on a `balanceOf()` that already includes the newly deposited tokens, so as a result, the limit check is ineffective. In contrast, `depositAsset()` correctly per",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

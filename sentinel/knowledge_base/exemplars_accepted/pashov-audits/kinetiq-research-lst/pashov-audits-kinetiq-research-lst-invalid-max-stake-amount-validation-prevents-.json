@@ -1,0 +1,21 @@
+{
+  "title": "Invalid max stake amount validation prevents setting when no staking limit exists",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `StakingManager` contract implements staking limits through three key parameters: - `stakingLimit`: Maximum total stake allowed (0 = unlimited) - `minStakeAmount`: Minimum stake per transaction - `maxStakeAmount`: Maximum stake per transaction (0 = unlimited)  These parameters can be configured by accounts with the `MANAGER_ROLE` through dedicated setter functions. However, there is a logical error in the `setMaxStakeAmount()` function that prevents setting a valid max stake amount when there is no staking limit confi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

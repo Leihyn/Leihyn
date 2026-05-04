@@ -1,0 +1,21 @@
+{
+  "title": "Lack of `isSmartContract` check",
+  "platform": "pashov-audits",
+  "program": "0xPolycode-klaster-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `initForSmartAccount` function in the `KlasterEcdsaModule` contract is responsible for initializing the module for a Smart Account and setting the EOA owner. However, it doesn't include a check to ensure that the provided `eoaOwner` address is not a smart contract.  ```solidity function initForSmartAccount(address eoaOwner) external returns (address) {     if (_smartAccountOwners[msg.sender] != address(0)) {         revert AlreadyInitedForSmartAccount(msg.sender);     }     if (eoaOwner == address(0)) revert ZeroAddre",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Klaster-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Redeem function active when vault is paused",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High - Allows unauthorized withdrawal of assets during critical situations when the vault is paused.  **Likelihood:** Low - This issue occurs only when the vault is in a paused state.  ## Description  The vault's deposit, mint, and withdraw functionalities are halted when it is paused. This is implemented through the `whenNotPaused` modifier in the following functions:          function deposit(             uint256 _amount,             address _receiver         ) public whenNotPaused returns (uint256 shares) {          function safeDeposit(             uint256 _amount,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

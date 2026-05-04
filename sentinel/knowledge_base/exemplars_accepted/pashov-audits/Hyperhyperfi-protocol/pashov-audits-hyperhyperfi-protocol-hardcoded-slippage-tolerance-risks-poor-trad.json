@@ -1,0 +1,21 @@
+{
+  "title": "Hardcoded slippage tolerance risks poor trading or DOS",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `PositionInteractionFacet.sol` contract, the slippage tolerance is hardcoded to 2% in the `_applySlippage` function:  ```solidity function _applySlippage(uint256 amountIn) internal pure returns (uint256) {     // 2% slippage from quoter estimation     return amountIn + (amountIn * 20_000) / DEX_PRECISION; } ```  This implementation presents several critical issues:  1. The fixed 2% slippage tolerance doesn't account for varying market conditions and liquidity pool depths. 2. During periods of high market volatility",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

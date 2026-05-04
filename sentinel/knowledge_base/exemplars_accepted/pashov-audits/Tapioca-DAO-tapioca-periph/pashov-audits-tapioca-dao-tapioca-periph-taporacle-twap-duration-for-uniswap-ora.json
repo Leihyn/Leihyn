@@ -1,0 +1,22 @@
+{
+  "title": "`TapOracle` TWAP duration for Uniswap Oracle should be at least 30 mins",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, will cost loss of funds for oTAP options exercise  **Likelihood:** Low, this could occur when liquidity is not spread over a wide range (e.g. during protocol launch)  ## Description  `TapOracle` uses a single price feed based on Uniswap V3 TWAP oracle for TAP/USDC pool.  However, the deploy script for `TapOracle` indicates a TWAP duration of 600 secs (10mins), which is lower than typical 1,800 secs (30mins) that is used by Euler[1] and Uniswap[2] in their studies. This puts `TapOracle` at a higher risk of price manipulation when liquidity of the TAP/USDC pool is",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Reward rates can be reset to 0 and future rewards can be stolen from voters",
+  "platform": "pashov-audits",
+  "program": "Kittenswap-contracts-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `Voter.distribute(uint256 _period, address _gauge)` function allows callers to specify any valid past period when distributing emissions to a gauge in the current period. This is meant to allow any missed distributions for gauges to be distributed in the current period.   However, the `_distribute` function does not consider the case where the supplied `gauge` did not exist for the supplied period and therefore, `ps.gaugeTotalVotes[_gauge] == 0`. For this case, the `emissions` will be calculated as `0`, sinc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-07-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

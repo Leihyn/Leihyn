@@ -1,0 +1,19 @@
+{
+  "title": "Anyone can re-mint a token that was burned by the owner",
+  "platform": "pashov-audits",
+  "program": "yuga-labs-NFTMIrror",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The minting of tokens is restricted to the beacon contract by enforcing in the `_beforeTokenTransfer` hook that only the beacon can transfer locked tokens. As the default status of a token is locked, non-existing tokens are expected to be locked.  ```solidity     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal view override {         if (msg.sender != BEACON_CONTRACT_ADDRESS) { @>          if (tokenIsLocked(tokenId)) revert CallerNotBeacon();         } ```  However, it has not been taken into",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/NFTMirror-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

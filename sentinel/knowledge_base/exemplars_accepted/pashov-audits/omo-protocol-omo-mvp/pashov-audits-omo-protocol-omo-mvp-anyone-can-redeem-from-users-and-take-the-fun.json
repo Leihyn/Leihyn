@@ -1,0 +1,21 @@
+{
+  "title": "Anyone can redeem from users and take the funds",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `redeem()` function in `OmoRouter.sol` contract is triggered by the user to request redeem shares for the equivalent assets. `owner` should set approval for the router address to transfer the shares  ```solidity File: OmoRouter.sol      function redeem(uint256 vaultId,uint256 shares, address receiver,address owner)      /*code*/          // Transfer shares from owner to router first          IOmoVault(vault).transferFrom(owner, address(this), shares);  ```  An attacker can drain any allowance for the router address in a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "`AmpleEarn.setMerkleRoots` can set incorrect `merkle` root",
+  "platform": "pashov-audits",
+  "program": "layer3xyz-ample-earn",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `AmpleEarn.setMerkleRoots` sets the `designatedRecipientsRoot` and it contains the claim amount.  In `AmplePayoutLib.claimPayout`:  ```solidity \tuint256 payoutAmount = designatedRecipientLeaf.payoutAmount; \tbytes32 leaf = keccak256( \t\tabi.encode(designatedRecipientLeaf.user, payoutAmount, designatedRecipientLeaf.designatedRecipientIndex) \t); \tif (!MerkleProof.verify(designatedRecipientProof, pool.designatedRecipientsRoot, leaf)) { \t\trevert AmpleErrorsLib.MerkleProofInvalid(); \t} ```  When admin sets `setMerkle",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AmpleEarn-security-review_2025-12-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

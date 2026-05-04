@@ -1,0 +1,19 @@
+{
+  "title": "The protection check for `maxRecordsPerTransaction` can be gamed",
+  "platform": "pashov-audits",
+  "program": "metalabel-metalabel-contracts-v1_1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, because a protocol invariant can be broken and the code gives a false sense of security  **Likelihood:** Medium, because the attack is easy to do and we have seen such attacks in the past  ## Description  Let's look at the following example scenario:  1. Collection creates a drop where `maxRecordsPerTransaction` is 1 and total supply is 10 2. It is expected that many people will be able to mint 3. A malicious actor writes a script that loads different wallets with enough value and bundles transactions for 10 mints 4. Only the malicious actor minted, no one else",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Metalabel-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

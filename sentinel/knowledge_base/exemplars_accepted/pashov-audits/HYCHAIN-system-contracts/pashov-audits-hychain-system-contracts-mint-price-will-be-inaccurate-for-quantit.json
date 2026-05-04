@@ -1,0 +1,21 @@
+{
+  "title": "Mint price will be inaccurate for quantities that jumped more than one price tier",
+  "platform": "pashov-audits",
+  "program": "HYCHAIN-system-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, prices can be significantly different and not considering the in-between price tier.  **Likelihood:** Medium, it is possible for users that buy the token in high quantity or when the current token id is near the end of the current price tier.  ## Description  When users mint the `HychainNodeKey`, it will eventually calculate the price that needs to be paid by the users, given the current token id and the quantity of tokens that the user wants to mint by calling `getPriceForQuantity`.  ```solidity   function getPriceForQuantity(uint256 _startingId, uint256 _qty) p",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hytopia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

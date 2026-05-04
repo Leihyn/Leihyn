@@ -1,0 +1,21 @@
+{
+  "title": "Missing deadline check in swap functions",
+  "platform": "pashov-audits",
+  "program": "astralparrot-KekotronRouter",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  Impact: Low, the user would not be at a loss and would only miss positive slippage.  Likelihood: High, deadline parameter is missing.  ## Description  Swap functions don't have deadline parameter. This parameter can provide the user an option to limit the execution of their pending transaction. Without a deadline parameter, users can execute their transactions at unexpected times when market conditions are unfavorable.  However, this is not a big problem in this case because the functions have slippage protection. Even though the users will get at least as much as they set, they m",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kekotron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

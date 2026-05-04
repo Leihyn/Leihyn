@@ -1,0 +1,22 @@
+{
+  "title": "`getTotalProtocolHype()` includes pending withdrawal amounts",
+  "platform": "pashov-audits",
+  "program": "etherfi-protocol-BeHYPE",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `getTotalProtocolHype()` function in `StakingCore.sol` calculates the total HYPE owned by the protocol, but fails to account for HYPE that has already been requested for withdrawal but not yet finalized. This leads to inflated TVL calculations when used during instant withdrawal flow.  When users queue withdrawals via `WithdrawManager.withdraw()`, the `hypeRequestedForWithdraw` amount increases, but `getTotalProtocolHype()` still includes this HYPE in its calculation. This creates a window where users",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperbeat-security-review_2025-09-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

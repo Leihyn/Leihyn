@@ -1,0 +1,19 @@
+{
+  "title": "DoS attack on initialization is possible",
+  "platform": "pashov-audits",
+  "program": "florence-finance-token-distributor",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the initialization can be blocked  **Likelihood:** Low, as it a front-running type of an attack with no benefit for the attacker  ## Description  The `initializeDistributor` method in `TokenDistributor` has the following check:  ```solidity require(token.balanceOf(address(this)) == _totalTokensToDistribute, \"totalTokensToDistribute must match token balance of contract\"); ```  This gives the expectation that the owner will pre-transfer let's say 10 tokens to the contract and then set the `_totalTokensToDistribute` argument to 10 when calling `initializeDistribu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/TokenDistributor-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

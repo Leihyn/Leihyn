@@ -1,0 +1,22 @@
+{
+  "title": "No refund nor retry mechanism for failing cross-chain transactions",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When performing cross-chain transactions, the transaction may always revert to the destination chain under certain circumstances or for certain values.  Users will deposit tokens or pay fees in the source chain that will be lost when those reverts occur on the destination chain and can't be recovered by them.  For the cross-chain buy operation: The user will deposit tokens on the source chain via `crossChainBuy()`. If `crossChainMint()` reverts, no DAO token will be minted. This may happen for different reasons:  - If the a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

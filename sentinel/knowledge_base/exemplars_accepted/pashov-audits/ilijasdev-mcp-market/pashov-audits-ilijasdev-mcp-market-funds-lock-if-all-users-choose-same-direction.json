@@ -1,0 +1,23 @@
+{
+  "title": "Funds lock if all users choose same direction and price is incorrect",
+  "platform": "pashov-audits",
+  "program": "ilijasdev-mcp-market",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description The only way to withdraw tokens from the contract (excluding the fees sent to the treasury) is through `claimReward()`. ```solidity function claimReward(uint256 marketId, uint256 roundId) external {         Round memory round = marketRounds[marketId][roundId];         require(round.ended, \"Round not ended\");         require(!hasClaimed[marketId][roundId][msg.sender], \"Already claimed\");          Prediction[] memory preds = predictions[marketId][roundId];                  // Determine winning direction (bullish if en",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/MCP-security-review_2025-08-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

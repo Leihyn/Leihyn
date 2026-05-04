@@ -1,0 +1,21 @@
+{
+  "title": "`MIN_NOTIONAL_WEI` would DOS users sells in an edge case",
+  "platform": "pashov-audits",
+  "program": "SoccerEth-TopstrikePashovContractReview",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In `_sellSharesUnits()`, there is a check for `MIN_NOTIONAL_WEI` if enabled, the check is made on buy and sell operations, but it overlook a case where the following can happen: 1. A big whale buy a very large amounts of `player x`, increasing its price. 2. Some users buys `player x` shares at the border of `MIN_NOTIONAL_WEI` value. 3. The big whale sells his shares making the share price go lower. 4. Other users can't sell now cause their shares are worth less than `MIN_NOTIONAL_WEI` users will have to buy mo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TopStrike-security-review_2025-12-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

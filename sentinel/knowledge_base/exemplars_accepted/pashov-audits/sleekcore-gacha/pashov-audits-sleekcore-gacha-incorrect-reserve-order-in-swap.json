@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect reserve order in `_swap()`",
+  "platform": "pashov-audits",
+  "program": "sleekcore-gacha",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In the `GachaTickets::_swap` function, reserves are retrieved from the UniswapV2Pair contract as follows:  ```solidity address pair = factory.getPair($.paymentToken, token); (uint256 wethReserve, uint256 tokenReserve, ) = IUniswapV2Pair(pair)     .getReserves(); if (wethReserve == 0 || tokenReserve == 0) revert InvalidPair(); ```  However, `there is no validation` to ensure that `wethReserve` and `tokenReserve` are correctly assigned based on the actual token pair order.  Uniswap V2 reserves `must be retrieved in a consiste",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gacha-security-review_2025-01-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

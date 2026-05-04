@@ -1,0 +1,21 @@
+{
+  "title": "Value of `leaf` argument when calling `addReserve` is hardcoded incorrectly",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-Azuro-v2",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because liquidity won't be returned to the LiquidityTree  **Likelihood:** High, because the incorrect value is hardcoded and can't be changed  ## Description  In `BetExpress::resolvePayout` we can see the following code:  ```solidity uint128 reward = lp.addReserve(     0,     fullPayout - amount,     fullPayout - payout,     0     ); ```  where the last argument is 0 sent as a value for the `leaf` parameter. Since the leafs counting begins at 1, this will always be wrong and the liquidity won't be returned to the LiquidityTree.  ## Recommendation  The value of `l",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Azuro-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

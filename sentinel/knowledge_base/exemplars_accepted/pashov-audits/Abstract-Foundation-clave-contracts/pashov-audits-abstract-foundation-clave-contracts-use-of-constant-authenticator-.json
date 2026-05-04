@@ -1,0 +1,21 @@
+{
+  "title": "Use of constant authenticator data in WebAuthn Protocol",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `PasskeyValidator` contract's `_validateSignature` function is responsible for verifying signatures derived from the WebAuthn protocol. This verification process constructs a message hash that includes the transaction hash, specific WebAuthn protocol strings, and a constant `AUTHENTICATOR_DATA`:  ```solidity clientData = bytes.concat(     bytes(ClIENT_DATA_PREFIX),     challengeBase64,     bytes(IOS_ClIENT_DATA_SUFFIX) );  bytes32 message = _createMessage(AUTHENTICATOR_DATA, clientData); ```  The `AUTHENTICATOR_DATA`",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-11-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

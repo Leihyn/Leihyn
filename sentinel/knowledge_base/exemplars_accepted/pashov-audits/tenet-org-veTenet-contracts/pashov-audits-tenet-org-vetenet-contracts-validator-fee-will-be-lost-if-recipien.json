@@ -1,0 +1,22 @@
+{
+  "title": "Validator fee will be lost if recipient is not set",
+  "platform": "pashov-audits",
+  "program": "tenet-org-veTenet-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it will result in a loss of yield for a validator  **Likelihood:** Low, as it requires a specific scenario  ## Description  In `GaugeProxy::distributeToken` rewards are distributed to gauges based on validator activity. Also some fee is taken, called a `validatorFee`, and sent to a different recipient for each validator. The problem is that the code doesn't check if a `validatorFeeRecipient` has been set - if it hasn't been then the `fee` would be burned (sent to the zero address).  ## Recommendations  Before doing `IERC20Metadata(tenet).transfer(validatorFeeR",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/veTenet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

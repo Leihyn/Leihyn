@@ -1,0 +1,22 @@
+{
+  "title": "`Staking` vault is susceptible to initial grief attack",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The initial deposit attack is largely mitigated due to the usage of virtual shares. However, the initial depositor grief attack is still possible, causing the first depositor to lose assets at a relatively low cost for the griefer.  ```solidity contract PoolSwap is Test {      Staking staking;     MockToken public token;     address alice = makeAddr(\"alice\");     address bob = makeAddr(\"bob\");      function setUp() public {         token = new MockToken(\"token\", \"t\", 18);          // deploy staking contract         staking = n",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

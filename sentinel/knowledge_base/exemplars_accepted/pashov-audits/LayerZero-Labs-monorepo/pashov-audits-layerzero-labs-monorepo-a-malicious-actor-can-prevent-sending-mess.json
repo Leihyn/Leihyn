@@ -1,0 +1,19 @@
+{
+  "title": "A malicious actor can prevent sending messages through the executor and ULN",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-monorepo",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `Executor` program has an `acl` that is checked against when calling `quote`:  ```rust impl Quote<'_> {     pub fn apply(ctx: &Context<Quote>, params: &QuoteExecutorParams) -> Result<u64> {         require!(!ctx.accounts.executor_config.paused, ExecutorError::Paused);         let config = &ctx.accounts.executor_config;          config.acl.assert_permission(&params.sender)?; ----------------- ```  The permission is revoked through the `SetDenylist` function. The function allows the caller to set addresses that will be in",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LayerZero-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

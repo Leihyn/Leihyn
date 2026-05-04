@@ -1,0 +1,22 @@
+{
+  "title": "Users cannot stake in `UniV3Staking`",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  `UniswapV3Staking.stake()` pulls NFTs from the user in the following way:  ```solidity         positionManager.safeTransferFrom(msg.sender, address(this), tokenId); ```  However, this will end up calling the `onERC721Received()` function on the `UniswapV3Staking` contract, and expect a return value. However since that function is not implemented in this contract, the ERC721 transfer will fail, reverting the execution of `stake()`.  ## Recommendations  Implement the following function to ensure that ERC721's can be received",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

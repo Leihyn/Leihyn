@@ -1,0 +1,23 @@
+{
+  "title": "Debt calculation should be rounded up during repayment",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  In case of partial repayment of the debt `LiquidityPool#repay` function calculates the user's debt that is left based on current debt and amount of repayment (line 171):  ```solidity File: LiquidityPool.sol 155:     function repay(uint marginAccountID, uint amount) external onlyRole(MARGIN_ACCOUNT_ROLE) { 156:         uint newTotalBorrows = totalBorrows(); 157:         uint newTotalInterestSnapshot = newTotalBorrows - netDebt; 158:         uint accruedInterest = (newTotalInterestSnapshot * shareOfDebt[marginAccountID]) / debtS",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

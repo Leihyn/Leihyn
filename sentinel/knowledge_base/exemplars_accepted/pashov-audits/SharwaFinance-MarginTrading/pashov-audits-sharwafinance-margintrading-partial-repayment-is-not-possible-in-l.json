@@ -1,0 +1,22 @@
+{
+  "title": "Partial repayment is not possible in liquidation if no funds on the insurance pool",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  At the end of the liquidation process, all debts of the account being liquidated are cleared. This is done by repaying the debt in each liquidity pool with the account's funds. If the account is underwater, the remaining funds required to repay the debt are taken from the insurance pool.  If the insurance pool does not have enough funds to cover the debt, none of the debt is repaid, and the account collateral can only be used to repay the debt partially if the account's owner calls the `repay` function. However, there is no in",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

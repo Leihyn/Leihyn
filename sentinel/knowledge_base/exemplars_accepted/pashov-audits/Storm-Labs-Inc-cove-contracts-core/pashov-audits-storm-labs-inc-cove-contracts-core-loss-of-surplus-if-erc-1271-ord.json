@@ -1,0 +1,22 @@
+{
+  "title": "Loss of surplus if ERC-1271 order allows arbitrary data",
+  "platform": "pashov-audits",
+  "program": "Storm-Labs-Inc-cove-contracts-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  [CoWSwapClone::isValidSignature()](https://github.com/Storm-Labs-Inc/cove-contracts-core/blob/6b607d137f898c0f421b4ba4e748f41b09b41518/src/swap_adapters/CoWSwapClone.sol#L86) do not check app data field.  This applies to all ERC-1271 orders where the app data field can be changed by an adversary in a way that keeps the signature valid for that order (for example, because isValidSignature ignores the appData field in the order).  An adversary can manipulate vulnerable ERC-1271 orders, thereby transferring part of the expected s",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cove-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

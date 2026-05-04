@@ -1,0 +1,21 @@
+{
+  "title": "`getCollaterals()` does not return the last collateral",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `getCollaterals()` function is used to retrieve all the existing collaterals in the protocol. And as evident in `addCollateral()`, the `collateralIndex` for existing collateral starts from 1, while 0 is not used for any collateral.  However, `getCollateral()` accesses the `Collateral[]` incorrectly and retrieves the collaterals from index 0. This will cause it to return the empty collateral at index 0 and also fail to return the last collateral.  ```Solidity     function getCollaterals() internal view returns (ITradingStor",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

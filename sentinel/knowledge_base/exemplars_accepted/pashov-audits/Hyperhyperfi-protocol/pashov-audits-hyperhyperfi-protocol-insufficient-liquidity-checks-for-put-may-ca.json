@@ -1,0 +1,23 @@
+{
+  "title": "Insufficient liquidity checks for `PUT` may cause exercise failures",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The protocol checks **total stablecoin value** when opening `PUT` positions and processing stablecoin withdrawals. However, **payouts during position exercise require a specific stablecoin (`pos.buyToken`)** to be available. This discrepancy can cause `PUT` positions to become unexercisable even when the overall pool appears solvent.  Consider the following scenarios: Assume:  - `OperationalTreasury.baseSetUp.token`: `USDC` (`buyToken`) - Pool's stablecoin: `USDC` (listed & reward), `USDXL` (listed) - Stable coin price is 1",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Attack surface in the middle of the execute()",
+  "platform": "pashov-audits",
+  "program": "Spectra-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, user would lose approved tokens.  **Likelihood:** Low, execution flow should reach a malicious address which is hard to reach  ## Description  Users can execute multiple commands through Router contract's `execute()` function. These commands allow to transfer funds from `msg.sender` which is set as `msgSender` in the first `execute()` call. The issue is that if during the `execute()` execution, the execution reaches a malicious address, the attacker can perform a variety of actions leading to funds stolen.  The condition \"execution flow reaches a malicious addres",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Spectra-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Contract lacks graceful retirement feature",
+  "platform": "pashov-audits",
+  "program": "Arcadia-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: Medium, Users can still borrow assets from pools deemed too unsafe or unstable  **Likelihood**: Medium, retirements of pools are common on other platforms  ## Description  Commonly in lending platforms, when a certain token or lending pool has been deemed to be too risky or have been hacked, it is retired. This means that all deposits and borrows from the pool are stopped, however the pool is still kept in the system for users to withdraw and repay their loans. This is a common feature in lending platforms and is a good way to deleverage the system from risky assets wh",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

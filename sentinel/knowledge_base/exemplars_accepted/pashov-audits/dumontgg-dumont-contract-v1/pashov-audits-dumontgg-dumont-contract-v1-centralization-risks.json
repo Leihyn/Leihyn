@@ -1,0 +1,23 @@
+{
+  "title": "Centralization Risks",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Given a malicious or compromised owner, user assets may be at risk in the following scenarios:  - USDT to pay rewards for ongoing games can be withdrawn from the Vault via `withdraw()` at any time. - The vault can also be depleted by operators playing themselves and making them always win with big guess rate multipliers. - The `gameFactory` from the Vault can be changed at any time via `setGameFactory()` to later call `transferPlayerRewards()` with deceiving game information to claim any amount of rewards. - The `montRewardMan",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Redeem cap bypassed using `swap()`",
+  "platform": "pashov-audits",
+  "program": "covenant-labs-covenant-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  A critical vulnerability exists where the `swap()` function can be used to bypass the `_checkRedeemCap()` safety mechanism, which is designed to limit large, rapid withdrawals of the base asset over short periods. This allows a user to obtain baseToken via `swap()` without triggering the redeem-cap checks that `redeem()` enforces.  The `redeem()` function in `LatentSwapLEX.sol` properly calls `_checkRedeemCap()` to limit the amount of base assets that can be withdrawn over a short period, protecting the market",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Covenant-security-review_2025-08-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

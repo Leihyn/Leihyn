@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect limit check in `setWeightBands` function",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `setWeightBands` function is used to set the weight bands of tokens. It takes in a `tokens` array, which contains the list of indices of the tokens to operate on.  So to check the limits, the value of `tokens[i]` should be checked.  ```solidity  for (uint256 t = 0; t < MAX_NUM_TOKENS; t++) {             //...             if (t >= _numTokens) revert Pool__IndexOutOfBounds(); ```  In the code, `t` is the iterator which is used to take out the indices from `tokens` array. The issue is that the limit check is done on the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

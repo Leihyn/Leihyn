@@ -1,0 +1,21 @@
+{
+  "title": "Wrong trade price impact calculation when closing trades",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When calculating the price impact for closing trades, the function `_getTradePriceImpact` adds the trade's open interest to the existing open interest, instead of subtracting it. This leads to an overestimation of the price impact when closing trades, as it incorrectly assumes that closing a position increases market impact in the same direction as opening a position.  ```solidity     function _getTradePriceImpact(         uint256 _marketPrice,         bool _long,         uint256 _startOpenInterestUsd,         uint256 _tradeOp",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-July2.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

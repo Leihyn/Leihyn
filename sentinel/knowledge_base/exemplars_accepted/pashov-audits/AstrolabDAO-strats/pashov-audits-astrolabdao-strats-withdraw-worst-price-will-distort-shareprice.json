@@ -1,0 +1,21 @@
+{
+  "title": "`withdraw()` worst price will distort `sharePrice()`",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because inaccurate price will cause long term value leaking, and can not be fixed  **Likelihood:** Medium, because every time `withdraw()` with existing request will bring in error into the system  ## Description  The worst price is used in `_withdraw()`, which means the actual withdraw price is different from `last.sharePrice`.  ```solidity File: src\\abstract\\As4626.sol 149:     function _withdraw() internal nonReentrant returns (uint256) { 159:         last.sharePrice = sharePrice();  161:         uint256 price = (claimable >= _shares) 162:             ? AsMath",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

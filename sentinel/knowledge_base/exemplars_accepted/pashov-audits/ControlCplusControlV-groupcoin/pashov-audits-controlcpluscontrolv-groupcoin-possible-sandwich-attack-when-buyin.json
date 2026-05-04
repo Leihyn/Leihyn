@@ -1,0 +1,21 @@
+{
+  "title": "Possible sandwich attack when buying a coin",
+  "platform": "pashov-audits",
+  "program": "ControlCplusControlV-groupcoin",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "oracle"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When buying a coin through `buy()` in GroupcoinFactory.sol, the buyer will attach some `msg.value` to the function in order to buy a certain number of coins. In `buy()`, there is no slippage protection, so a malicious user can buy  For example,  - Alice wants to buy 1000 Acoin. She is the first buyer and she calculates that she needs about 3434501 wei of ETH to buy (amount calculated from the `getPrice()` function. Alice knows that the protocol will refund any excess ETH that she sends in, so she simply passes in 1e18 worth of",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Groupcoin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

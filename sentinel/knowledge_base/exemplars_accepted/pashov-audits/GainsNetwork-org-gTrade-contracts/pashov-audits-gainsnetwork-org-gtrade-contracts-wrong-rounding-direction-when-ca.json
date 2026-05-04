@@ -1,0 +1,22 @@
+{
+  "title": "Wrong rounding direction when calculating leverage delta for counter trades",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  In `IncreasePositionSizeUtils.prepareCallbackValues`, when a counter trade increases position size by increasing leverage and exceeds the available position size needed to neutralize skew, the function calculates a leverage delta reduction to bring the skew to 0.  However, the calculation `(values.exceedingPositionSizeCollateral * 1e3) / _existingTrade.collateralAmount` uses integer division which rounds down. This downward rounding means the leverage reduction is insufficient to completely neutralize the skew, leaving a small",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

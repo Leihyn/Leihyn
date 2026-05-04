@@ -1,0 +1,22 @@
+{
+  "title": "`instantWithdraw()` does not transfer `_amountForContract`, locking tokens",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-staking",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description `instantWithdraw()` is used to immediately withdraw all staked tokens, applying a penalty for the early withdrawal. ```solidity function instantWithdraw(address _receiver) external nonReentrant {         if (stakers[_stakeMsgSender()].unlockTimestamp > block.timestamp) {             revert TokensLocked();         }          if (unbondEndTimes[_stakeMsgSender()] != 0) {             revert UnbondAlreadyStarted();         }          _claimRewards(_stakeMsgSender(), false);          uint256 amount = stakers[_stakeMsgSe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Staking-security-review_2025-10-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

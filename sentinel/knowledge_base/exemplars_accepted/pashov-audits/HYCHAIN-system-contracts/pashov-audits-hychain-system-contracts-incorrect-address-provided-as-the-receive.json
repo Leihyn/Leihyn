@@ -1,0 +1,23 @@
+{
+  "title": "Incorrect address provided as the receiver when bridging and minting the Node Key token on the L2",
+  "platform": "pashov-audits",
+  "program": "HYCHAIN-system-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge",
+    "amm",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, The user may not expect the `msg.sender` to receive the token on L2 instead of the `_to` address provided.  **Likelihood:** Medium, as this will happen all the time when users mint Node Key token and `_mintAndBridge` is triggered and `msg.sender` is not the same with `_to` address provided.  ## Description  When users mint Node Key token, it will eventually trigger `_mintAndBridge`, which mints the token to the `_to` address provided and bridges the mint information to the L2. However, inside the calldata provided to L2, it provides `msg.sender` instead of `_to",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hytopia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

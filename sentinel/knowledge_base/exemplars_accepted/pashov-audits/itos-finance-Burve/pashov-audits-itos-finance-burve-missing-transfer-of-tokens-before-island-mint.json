@@ -1,0 +1,21 @@
+{
+  "title": "Missing transfer of tokens before island.mint()",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The Burve contract allows users to provide liquidity to both the island pool and Uniswap V3 pools. When adding liquidity to the island pool, it will transfer tokens in from the sender (which is the Burve contract itself) before providing liquidity to Uniswap.  ```solidity     function mint(address recipient, uint128 liq) external {         for (uint256 i = 0; i < distX96.length; ++i) {             uint128 liqAmount = uint128(shift96(liq * distX96[i], true));             mintRange(ranges[i], recipient, liqAmount);         }",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-01-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Deposit fees are not transferred to fee recipient in `ElytraDepositPoolV1`",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `ElytraDepositPoolV1` contract has an inconsistency in fee handling between deposits and withdrawals. While withdrawal fees are correctly transferred to the `feeRecipient`, deposit fees are calculated and deducted from user deposits but never actually transferred to the fee recipient.  In the `_beforeDeposit` function:  ```solidity // Calculate fee uint256 fee = (depositAmount * depositFee) / BASIS_POINTS; uint256 amountAfterFee = depositAmount - fee; ``` The fee is calculated and subtracted from the depos",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

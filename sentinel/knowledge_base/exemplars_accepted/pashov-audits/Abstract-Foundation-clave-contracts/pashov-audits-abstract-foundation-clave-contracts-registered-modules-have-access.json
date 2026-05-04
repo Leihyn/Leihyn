@@ -1,0 +1,19 @@
+{
+  "title": "Registered modules have access to critical functions",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Registered modules have access to several critical functions, such as `addModule` / `removeModule`, `r1AddOwner` / `k1AddOwner`, `r1RemoveOwner` / `k1RemoveOwner` / `resetOwners`, `r1AddValidator` / `k1AddValidator`, and `r1RemoveValidator` / `k1RemoveValidator` through `onlySelfOrModule` modifier. This excessive access could allow a maliciously registered module to hijack the wallet by changing its owner or validator.  ## Recommendations  Consider restricting the mentioned function to `onlySelf`, to avoid providing excessive",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-11-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

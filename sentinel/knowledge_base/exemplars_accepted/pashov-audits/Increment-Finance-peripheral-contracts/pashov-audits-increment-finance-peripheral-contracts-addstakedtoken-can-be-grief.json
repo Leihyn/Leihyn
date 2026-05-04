@@ -1,0 +1,21 @@
+{
+  "title": "`addStakedToken()` can be griefed",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, prevent adding of StakedToken  **Likelihood:** Medium, can be conducted by staking 1 wei  ## Description  When a `StakedToken` is added to the `SafetyModule` via `addStakedToken()`, it will call `initMarketStartTime(StakedToken)` to set `_timeOfLastCumRewardUpdate[StakedToken] = block.timestamp`. If `_timeOfLastCumRewardUpdate` was already set for that `StakedToken`, a check will cause a revert to ensure that the start time has not been initialized.  ```Solidity     function initMarketStartTime(address _market) external onlySafetyModule {         //@audit When",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Potential asset loss during liquidation",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the liquidation process of a `MarginAccount`, when repaying debts to `LiquidityPools` using the `_clearDebtsWithPools` function, `UniswapModule::swapInput#L291` is invoked to convert the user's USDC into the required liquidity pool token:  ```solidity File: MarginAccount.sol 283:     function _clearDebtsWithPools(uint marginAccountID, address baseToken) private { 284:         for (uint i; i < availableTokenToLiquidityPool.length; i++) { 285:             address liquidityPoolAddress = tokenToLiquidityPool[availableToken",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

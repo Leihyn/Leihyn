@@ -1,0 +1,23 @@
+{
+  "title": "Emissions stuck if `Voter.notifyRewardAmount()` is called without voters",
+  "platform": "pashov-audits",
+  "program": "Kittenswap-contracts-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `Voter` contract, the `notifyRewardAmount()` function allows anyone to donate `KITTEN` tokens for the current period, which are distributed among registered gauges based on their share of the total votes. This function is also invoked by `Minter.updatePeriod()` to mint and allocate emissions starting from the next epoch period after the `Voter.start()` call.  However, the function does not validate whether the current period has any active voters; it does not check if `period[_period].globalTotalVotes >",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-07-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "`_removeLeverage()` provides incorrect amounts when swapping pods",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When `_removeLeverage` is triggered, if `_pairedAmtReceived` is lower than `_repayAmount`, it triggers `_acquireBorrowTokenForRepayment`.  ```solidity     function _removeLeverage(bytes memory _userData)         internal         returns (uint256 _podAmtRemaining, uint256 _borrowAmtRemaining)     {         // ....          // pay back flash loan and send remaining to borrower         uint256 _repayAmount = _d.amount + _d.fee;         if (_pairedAmtReceived < _repayAmount) { >>>         _podAmtRemaining = _acquireBorrowTokenF",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

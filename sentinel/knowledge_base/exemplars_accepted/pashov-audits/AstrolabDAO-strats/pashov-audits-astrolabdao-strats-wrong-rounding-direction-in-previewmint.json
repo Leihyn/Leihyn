@@ -1,0 +1,22 @@
+{
+  "title": "Wrong rounding direction in previewMint()",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low, because it violates EIP and also cause revert in mint()  **Likelihood:** High, because division happens in every mint() call  ## Description  According to the EIP4626 function `previewMint()` should round up when calculating assets:  > Finally, EIP-4626 Vault implementers should be aware of the need for specific, opposing rounding directions across the different mutable and view methods, as it is considered most secure to favor the Vault itself during calculations over its users: > > If (1) it\u2019s calculating how many shares to issue to a user for a certain amount o",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

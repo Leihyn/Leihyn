@@ -1,0 +1,21 @@
+{
+  "title": "DoS of staking due to unguarded receiver lock period",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-staking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `BobStaking::stake()` and `BonusWrapper::stake()` allow users to stake in order to earn rewards and bonuses. These functions allow anyone to stake on behalf of the receiver, and if a stake contains a non-zero lock period, further stake calls would be required to use a similar lock period configuration:  ```solidity     function stake(uint256 _amount, address receiver, uint80 lockPeriod) external nonReentrant {         if (_amount == 0) revert ZeroTokenStake();         // lock period must be valid         i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Staking-security-review_2025-10-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Not maximizing `Glp` in `GlpOracle` miscalculates `_minGlp` when adding liquidity",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  Impact: Medium. The rounding will be incorrect affecting the price.  Likelihood: High. False is hardcoded so it is very likely it will happen.  ## Description  Currently, in the `GlpOracle` contract, there is a function that fetches Glp price from the Glp Manager:  ```  function _get() internal view returns (uint256) {         return glpManager.getPrice(false);     } ```  The price maximation is set to false `glpManager.getPrice(false);` . This price is then fetched from the `GlpStrategy` in the Yieldbox module. In this case, the price has a part on the amountOut or the `_minGlp`",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

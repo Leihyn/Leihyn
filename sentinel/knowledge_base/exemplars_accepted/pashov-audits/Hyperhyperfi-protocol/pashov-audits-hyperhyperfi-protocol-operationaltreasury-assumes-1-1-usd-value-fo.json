@@ -1,0 +1,22 @@
+{
+  "title": "`operationalTreasury`: assumes 1:1 USD value for base token",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In `OperationalTreasury`, the protocol calculates fees and premium amounts in USD, but it assumes that the `baseSetUp.token` (buy token) value is always equal to 1 USD. This assumption can lead to a wrong collection of funds if the token is valued at less than 1 USD, or worse if it becomes depegged.  `_takeFeesLockLiquidity` function:  ```solidity function _takeFeesLockLiquidity(Position memory pos, uint256 amount, uint256 premium, uint8 tokenDecimals)     internal     returns (uint256 fees) {     OperationalTreasuryStorage.Ba",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

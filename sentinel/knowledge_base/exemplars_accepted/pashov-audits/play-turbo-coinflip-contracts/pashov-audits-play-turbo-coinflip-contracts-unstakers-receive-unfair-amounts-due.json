@@ -1,0 +1,21 @@
+{
+  "title": "Unstakers receive unfair amounts due to dynamic balance changes",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `Staking` contract, users can finalize their unstake via the `finalizeUnstake()` function, where they will receive their `amountOwed` based on the available balance of the contract. However, the issue arises because the available balance dynamically changes when the game contracts interact with the contract to pay winners or transfer game losers' bits. This results in an unexpected amount of assets being transferred to the user. Additionally, this could be exploited by users who have passed their `unstakeDelay` and",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

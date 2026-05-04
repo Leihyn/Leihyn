@@ -1,0 +1,21 @@
+{
+  "title": "Freezing the deposit in MetaVault indefinitely",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description:  Consider the following -->  1.) Victim has deposited into the LendingAssetVault.sol (what we call the Meta Vault), let's say when the victim deposited the  block.number = 50 i.e. `_lastDeposit[victim] = 50`  2.) Now at block 80 the victim wants to withdraw, he calls the withdraw function providing the assets he wants to withdraw.  3.) The attacker sees this tx in the mempool, frontruns the withdraw call of the victim and calls the deposit function with just 1 wei of assets,  (or the minimum amount required so that the shar",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

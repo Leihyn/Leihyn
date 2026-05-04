@@ -1,0 +1,19 @@
+{
+  "title": "Unused function parameters can lead to false assumptions on user side",
+  "platform": "pashov-audits",
+  "program": "Hypercerts-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low, because the caller still controls the minted token  **Likelihood:** High, because users will provide values to those parameters and their assumptions about their usage will always be false  ## Description  The `units` parameter in `mintClaimWithFractions` is used only in the event emission. This is misleading as actually `fractions.length` number of fractions will be minted. If `units != fractions.length` this can have unexpected consequences for a user. The same is the problem with the `account` parameter in both `mintClaim` and `mintClaimWithFractions` - it is n",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Hypercerts-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

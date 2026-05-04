@@ -1,0 +1,21 @@
+{
+  "title": "Price change limit can cause system DoS",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In Elytra, we will have one default price percentage limit, 10%. If the difference between the current price and updated price exceeds the price limit, deposit/withdraw will be blocked.  If there is something wrong with one LST, which causes the share's price drops, e.g 10%. This will block deposit/withdraw. This is one expected behavior.   As the admin, we wish to increase the price percentage or remove the limit to allow users withdraw their assets. The problem here is that in the function `setPricePercentageLimi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

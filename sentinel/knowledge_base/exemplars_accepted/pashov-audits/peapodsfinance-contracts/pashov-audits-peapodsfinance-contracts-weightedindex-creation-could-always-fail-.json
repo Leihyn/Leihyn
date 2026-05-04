@@ -1,0 +1,22 @@
+{
+  "title": "`WeightedIndex` creation could always fail if pool is already created",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** HIgh  **Likelihood:** Low  ## Description  When `WeightedIndex` is first created, it will attempt to create a V2 pool with the pod and index tokens.  ```solidity     constructor(         string memory _name,         string memory _symbol,         Config memory _config,         Fees memory _fees,         address[] memory _tokens,         uint256[] memory _weights,         bool _stakeRestriction,         bool _leaveRewardsAsPairedLp,         bytes memory _immutables     )         DecentralizedIndex(             _name,             _symbol,             IndexType.WEIGHTED,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Slippage in `GlpStrategy` will impact the value of shares for different users",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, since the value of shares changes depending on market conditions and the ordering of withdrawals  **Likelihood:** Medium, since this behavior will be induced at every withdrawal/harvest, but the impact is dependent on the current slippage  ## Description  When users want to withdraw their assets from the `GlpStrategy`, the value of their shares is calculated based on their portion of shares and the current balance of the strategy:  ```solidity function _currentBalance() internal view override returns (uint256 amount) {         amount = sGLP.balanceOf(address(th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

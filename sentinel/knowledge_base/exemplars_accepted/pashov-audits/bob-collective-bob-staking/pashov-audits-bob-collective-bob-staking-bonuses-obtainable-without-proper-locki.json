@@ -1,0 +1,23 @@
+{
+  "title": "Bonuses obtainable without proper locking due to flawed lock period",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-staking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High    **Likelihood:** Medium  ## Description  `stake()` in BonusWrapper allows users to lock their tokens for a specified duration in exchange for a staking bonus. ```solidity function stake(uint256 amount, address receiver, uint80 lockPeriod) external nonReentrant {         // If the bonus period has ended, the lock period must be 0         if (lockPeriod != 0 && bonusEndTime < block.timestamp) {             revert BonusPeriodEnded();         }          // First transfer the user's tokens to this contract         uint256 balanceBefore = IERC20(stakingTok",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Staking-security-review_2025-10-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

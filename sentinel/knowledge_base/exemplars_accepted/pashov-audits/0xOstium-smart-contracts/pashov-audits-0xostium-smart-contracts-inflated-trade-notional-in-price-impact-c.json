@@ -1,0 +1,22 @@
+{
+  "title": "Inflated trade notional in price impact calculations",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `getDynamicTradePriceImpact()` function uses inflated value of `tradeNotional` when called by `openTradeMarketCallback()` or `executeAutomationOpenOrderCallback()` because opening fees, oracle fee, and builder fee have not yet been subtracted from collateral. This inflated notional is used to calculate `priceImpactP` and update `decayedBuyVolume`/`decayedSellVolume`.  The issue causes multiple impacts: 1. Inflated price impact leads to less favorable execution prices, which also affects vault accounting th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

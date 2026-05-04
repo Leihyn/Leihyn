@@ -1,0 +1,23 @@
+{
+  "title": "Base Azul C2+C3 deep walk + diff review",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge",
+    "proxy",
+    "vault"
+  ],
+  "bug_class": "meta-process",
+  "mental_operation": "value_flow",
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "(C2) Deep walked AnchorStateRegistry (370 LoC), DisputeGameFactory (355), DelayedWETH (130), OptimismPortal2 (674) = 1529 LoC. Found owner-only setImplementation overload-asymmetry in DGF (gameArgs not cleared on no-args overload) but OOS per Immunefi privileged-address rule. (C3) Audited gh PR list on base/contracts: PR #261 OPEN draft 2026-05-04 18:08 UTC adding TDX verifier (feature, not bugfix); PR #264 merged 2026-05-01 removes legacy dispute games + renames ASR IFaultDisputeGame->V2 (interface-only, no logic). All POST-AUDIT diffs analyzed for the Reserve M-02 primary-attack-surface lesson: zero exploitable changes in rc.28 in-scope code.",
+  "key_lesson": "Differential review on POST-AUDIT-2 PRs surfaced two large iterations: feature-add (TDX) and legacy-removal (-14K lines). Both touched in-scope files but neither introduces a vulnerability path. Active iteration alone does NOT mean a bug exists; inspect the actual diff hunks against the in-scope commit. The 14K-deletion PR was a clean removal of dead code, not a refactor that could leave dangling references.",
+  "contest_url": "https://immunefi.com/audit-competition/audit-comp-base-azul",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:16:30"
+}

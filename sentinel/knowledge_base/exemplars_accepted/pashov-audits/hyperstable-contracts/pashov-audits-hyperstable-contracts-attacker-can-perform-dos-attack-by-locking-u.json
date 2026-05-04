@@ -1,0 +1,21 @@
+{
+  "title": "Attacker can perform DOS attack by locking user",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  An attacker can use `create_lock_for()` to create locks on behalf of other users using just 1 wei and `MAXTIME`, reaching `MAX_DELEGATES`. As a result, when the affected user attempts to create a lock, the transaction will revert with `\"dstRep would have too many tokenIds\"` preventing them from creating new locks.  ```solidity function create_lock_for(uint256 _value, uint256 _lock_duration, address _to)         external         nonreentrant         returns (uint256)     {         return _create_lock(_value, _lock_duration",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-03-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

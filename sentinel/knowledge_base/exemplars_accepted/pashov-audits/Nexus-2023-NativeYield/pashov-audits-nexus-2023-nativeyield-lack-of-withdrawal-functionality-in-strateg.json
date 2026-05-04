@@ -1,0 +1,22 @@
+{
+  "title": "Lack of withdrawal functionality in strategy contracts",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `LidoStrategy` and `DSRStrategy` contracts are responsible for managing `ETH` and `DAI` deposits into `Lido` and `sDAI`, respectively, to earn yields.  These strategies are integrated with the `DepositETH` and `DepositUSD` contracts, which handle user deposits and facilitate interactions with `Lido` and `sDAI`.  ```solidity function executeStrategies(StrategyExecution[] memory _executionData) external override {     if(msg.sender!=strategyExecutor) revert IncorrectStrategyExecutor(msg.sender);     unchecked{         for",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

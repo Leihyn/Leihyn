@@ -1,0 +1,21 @@
+{
+  "title": "Gateway creator can steal all tokens from the GatewayRegistry",
+  "platform": "pashov-audits",
+  "program": "subsquid-subsquid-network-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, user's funds will be stolen  **Likelihood:** High, can be exploited by anyone and easy to implement  ## Description  `GatewayRegistry` contract allows users to register and stake tokens into gateways to receive computation units CUs. First, the user registers a gateway,  ```solidity   function register(bytes calldata peerId, string memory metadata, address gatewayAddress) public whenNotPaused {     require(peerId.length > 0, \"Cannot set empty peerId\");     bytes32 peerIdHash = keccak256(peerId);     require(gateways[peerIdHash].operator == address(0), \"PeerId alr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Subsquid-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

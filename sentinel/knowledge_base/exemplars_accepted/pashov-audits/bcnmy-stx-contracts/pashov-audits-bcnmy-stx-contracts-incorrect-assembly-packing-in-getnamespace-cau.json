@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect assembly packing in `getNamespace` causes collisions",
+  "platform": "pashov-audits",
+  "program": "bcnmy-stx-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High    **Likelihood:** Medium  ## Description  The `getNamespace` function contains incorrect assembly code that can lead to namespace collisions due to improper memory packing.  ```solidity function getNamespace(address account, address _caller) public pure returns (bytes32 result) {     assembly {         mstore(0x00, account)         mstore(0x14, _caller)         result := keccak256(0x0c, 0x28)     } } ```  **Memory Layout Analysis:**  `mstore(0x00, account)` writes 32 bytes:  - Positions 0x00-0x0b: 12 zero bytes (padding). - Positions 0x0c-0x1f: 20 byt",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Biconomy-security-review_2025-11-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

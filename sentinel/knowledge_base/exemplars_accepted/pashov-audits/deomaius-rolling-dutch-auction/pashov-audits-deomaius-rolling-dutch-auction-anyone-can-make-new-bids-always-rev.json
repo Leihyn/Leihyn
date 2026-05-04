@@ -1,0 +1,21 @@
+{
+  "title": "Anyone can make new bids always revert after a window expires",
+  "platform": "pashov-audits",
+  "program": "deomaius-rolling-dutch-auction",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as all new bidding will revert until auction ends  **Likelihood:** High, as anyone can execute the attack without rare preconditions  ## Description  The `fulfillWindow` method is a `public` method that is also called internally. It sets `window.processed` to `true`, which makes it callable only once for a single `windowId`. The problem is that the `commitBid` function has the following logic:  ```solidity if (hasExpired) {     window = _window[auctionId][windowExpiration(auctionId)]; } ```  Where `windowExpiration` calls `fulfillWindow` with the latest `windowId",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/RollingDutchAuction-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Price manipulation risk in GammaVault collateral calculation",
+  "platform": "pashov-audits",
+  "program": "gammaswap-v1-vaults",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "multisig",
+    "amm"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The GammaVault contract calculates external collateral for GammaPool positions using the current spot price from Uniswap V3, rather than a more manipulation-resistant price source. This creates a potential vulnerability where an attacker could manipulate the spot price to affect collateral calculations and force unfair liquidations.  ```solidity     function _getCollateral(address _gammaPool, uint256 _tokenId) internal override virtual view returns(uint256 collateral) {         uint160 sqrtPriceX96 = getCurrentPrice(); //",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GammaSwap-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Lack of `lastMintedPeriod` update allows unlimited minting of Kitten",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-06-12",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `Minter.updatePeriod()` is meant to mint Kitten tokens for the `RebaseReward` and `Voter` contracts once per period. However, this function misses updating the `lastMintedPeriod` variable. As a result, once the first period has passed, the following condition will always be true:  ```solidity         if (currentPeriod > lastMintedPeriod) { ```  This will allow minting Kitten tokens indefinitely, leading to an unlimited supply of Kitten tokens.  ### Proof of concept  Add the following code to the file `TestVoter.t.sol` and run",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-06-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

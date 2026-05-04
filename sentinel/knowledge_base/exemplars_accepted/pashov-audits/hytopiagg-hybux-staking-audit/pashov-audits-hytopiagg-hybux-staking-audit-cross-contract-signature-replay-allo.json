@@ -1,0 +1,22 @@
+{
+  "title": "Cross-contract signature replay allows users to inflate rewards",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-hybux-staking-audit",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The signature verification in `NFTStaking._stakeNFTs()` does not include the contract address in the hash, allowing signatures to be replayed across the three different NFTStaking contracts (WORLDS_STAKING, GRAYBOYS_STAKING, AVATARS_STAKING).  ```solidity bytes32 hash = keccak256(abi.encode(_sender, _tokenIds, _rarityWeightIndexes)); ```  An attacker who owns the same token ID across different NFT collections can obtain a signature for a high-rarity NFT in one collection, then replay that signature when staking",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYBUX-security-review_2025-11-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

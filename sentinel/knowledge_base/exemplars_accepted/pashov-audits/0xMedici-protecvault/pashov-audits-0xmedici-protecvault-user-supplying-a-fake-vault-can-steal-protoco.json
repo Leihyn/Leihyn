@@ -1,0 +1,22 @@
+{
+  "title": "User supplying a fake vault can steal protocol assets as a grief attack",
+  "platform": "pashov-audits",
+  "program": "0xMedici-protecvault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as a malicious actor can drain protocol assets  **Likelihood:** Low, as it is a common attack vector and it requires no preconditions  ## Description  The `_vault` argument in the `repay` method (and in all others) has no input validation, meaning a user can supply a fake vault which he himself created. By calling `repay` with a fake `_vault` argument for an NFT borrowing position he owns, when `amountBorrowed > repayment` he will go through this code:  ```solidity PETH.approve(address(_vault), tokensWithdrawn); // Approve JPEGD to take PETH _vault.repay(_id, tok",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NFTCapsule-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

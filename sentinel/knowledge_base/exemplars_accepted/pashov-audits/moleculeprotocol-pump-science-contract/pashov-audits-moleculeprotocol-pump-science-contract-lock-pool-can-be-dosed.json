@@ -1,0 +1,21 @@
+{
+  "title": "Lock pool can be DoSed",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-pump-science-contract",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  In the lock_pool instruction, the creation of an Associated Token Account (ATA) for LP tokens relies on checking the lamport balance to determine if the account exists. The check `ctx.accounts.escrow_vault.get_lamports() == 0` is used to decide whether to create the ATA.  ```rust if ctx.accounts.escrow_vault.get_lamports() == 0 {     associated_token::create(CpiContext::new(         ctx.accounts.associated_token_program.to_account_info(),         associated_token::Create {             payer: ctx.accounts.payer.to_account_info",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/PumpScience-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

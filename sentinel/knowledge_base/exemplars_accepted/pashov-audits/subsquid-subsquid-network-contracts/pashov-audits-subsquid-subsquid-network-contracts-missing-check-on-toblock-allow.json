@@ -1,0 +1,21 @@
+{
+  "title": "Missing check on `toBlock` allows distributors to change past rewards",
+  "platform": "pashov-audits",
+  "program": "subsquid-subsquid-network-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, Breaks sequential rewards, can reward same epoch multiple times  **Likelihood**: Medium, Requires malicious distributor/s  ## Description  The function `commit` in `DistributedRewardDistribution.sol` is used to save a reward commit. However this function does not check if the `toBlock` is larger than the `fromBlock`. Thus distributors can set `toBlock` to 0 even.  ```solidity require(     recipients.length == workerRewards.length,     \"Recipients and worker amounts length mismatch\" ); require(     recipients.length == _stakerRewards.length,     \"Recipients and st",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Subsquid-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

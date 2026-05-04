@@ -1,0 +1,19 @@
+{
+  "title": "Fee calculation uses full instead of net amount for pool impact",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  [Link](https://github.com/Hyperhyperfi/protocol/blob/212acfdcd4066334ff5ea06ce46b0bbca7ca212f/src/core/pool/facets/LiquidityFacet.sol#L318-L319)  In the `_calcAddLiquidity` function, there exists a discrepancy between the amount used for fee calculation(`_amountIn`) and the actual amount added to the pool(`netAmount`). The issue occurs in the following sequence:  ```solidity // In _calcAddLiquidity: valueChange = (_amountIn * tokenPrice).toDecimals(tokenDecimals + provDecimals, 18); (, pFee) = _calcFeeRate(_token, _amount",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

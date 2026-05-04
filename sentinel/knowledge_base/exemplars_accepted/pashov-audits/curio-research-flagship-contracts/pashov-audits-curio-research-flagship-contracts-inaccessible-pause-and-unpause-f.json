@@ -1,0 +1,19 @@
+{
+  "title": "Inaccessible pause and unpause functions",
+  "platform": "pashov-audits",
+  "program": "curio-research-flagship-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `Game` contract inherits from `PausableUpgradeable`, a feature designed to allow the pausing and unpausing of contract functionalities in emergency situations or for maintenance. However, the contract does not expose the `pause` and `unpause` functions to contract administrators. As a result, despite inheriting the pausability feature, administrators are unable to utilize these critical controls to pause or resume the contract's operations when needed, potentially leading to issues during periods requiring immediate i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Curio-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

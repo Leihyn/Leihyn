@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect fee calculation",
+  "platform": "pashov-audits",
+  "program": "MoarCandy-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `ContinuosBondingERC20Token.buyTokens` charges less fees for the case when `tokensToReceive > maxTokenToReceive` than for the common flow.  ```solidity     function buyTokens(uint256 minExpectedAmount) external payable nonReentrant returns (uint256) {         if (liquidityGoalReached()) revert LiquidityGoalReached();         if (msg.value == 0) revert NeedToSendETH();  >>      uint256 ethAmount = msg.value; >>      uint256 feeAmount = (ethAmount * buyFee) / PERCENTAGE_DENOMINATOR;         uint256 remainingAmount = eth",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/MoarCandy-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

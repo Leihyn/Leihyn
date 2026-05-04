@@ -1,0 +1,19 @@
+{
+  "title": "DOS for removal of delegates",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The delegation system on `vePeg.sol` has the feature that `MAX_DELEGATES` is a hardcoded value  On the other hand, users can create locks with only 1 wei LP because `_create_lock()` only has this check `require(_value > 0);`  Now, take this scenario:  Alice owns vePeg_NFT_01 (with big weight) and she decides to delegate it to Bob  Malicious user back-run Alice transaction and delegated to Alice a `MAX_DELEGATES` vePeg_NFT (only 1 wei LP)  After a period, Alice will try to move her delegates of the vePeg_NFT_01 from Bob, but it",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

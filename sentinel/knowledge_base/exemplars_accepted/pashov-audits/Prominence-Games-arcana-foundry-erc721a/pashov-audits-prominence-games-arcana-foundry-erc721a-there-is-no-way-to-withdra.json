@@ -1,0 +1,21 @@
+{
+  "title": "There is no way to withdraw the ETH paid by minters",
+  "platform": "pashov-audits",
+  "program": "Prominence-Games-arcana-foundry-erc721a",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  There is currently no possible way for the contract deployer/owner to withdraw the ETH that was paid by miners. This means that value will be stuck & lost forever. This is also the case for the `ERC721A` standard, which this project actually extends as well, but it was verified in a conversation with the developer that the `ArcanaPrime` contract is expected to be used as-is, without a need for inheritance/extension.  ## Impact  This will mean hundreds of thousands of dollars (since `MAX_SUPPLY = 10_000` and `MINT_PRICE = 0.08 ether`) will be irretrievable, essentially dryi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Arcana-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "`totalXP` is wrongly calculated for existing users",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In `src/staking/DyadXPv2.sol`, the contract must be initialized through the `initialize` function, and the `totalXP` of each user is also calculated here:  ```solidity     function initialize(address owner) public reinitializer(2) {         __UUPSUpgradeable_init();         __Ownable_init(msg.sender);          uint256 dnftSupply = DNFT.totalSupply();          for (uint256 i = 0; i < dnftSupply; ++i) {             noteData[i] = NoteXPData({                 lastAction: uint40(block.timestamp),                 keroseneDeposite",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

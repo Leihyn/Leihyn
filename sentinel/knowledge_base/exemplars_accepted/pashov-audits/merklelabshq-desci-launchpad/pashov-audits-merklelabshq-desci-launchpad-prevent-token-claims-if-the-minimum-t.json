@@ -1,0 +1,22 @@
+{
+  "title": "Prevent token claims if the minimum threshold is not surpassed",
+  "platform": "pashov-audits",
+  "program": "merklelabshq-desci-launchpad",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Allowing users to either **claim tokens** or **withdraw payment tokens** when the `min_threshold` is not met can result in locked funds. If some users claim their tokens while others withdraw, this creates a scenario where uncollected payments remain in the contract, leading to fund loss.  To prevent this, token claims should be restricted if the minimum revenue threshold has not been surpassed.  ## Recommendations  Add the following check to the `claim_tokens` function to ensure tokens can only be claimed when the revenu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/DesciLaunchpad-security-review_2025-02-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Insecure initialization functions",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Throughout the codebases, there are many initialization functions that do not have any access control. This means that an attacker can initialize them before the true caller does.  Some of these initialization functions have sensitive parameters that are set during the call such as admin keys. These include:  1. `ULN::init_uln` 2. `pricefeed::init_price_feed` 3. `oft::init_oft` 4. `oft::init_adapter_oft` 5. `executor::init_executor` 6. `endpoint::init_endpoint` 7. `dvn::init_dvn`  Here is an example of the ULN initializat",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LayerZero-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

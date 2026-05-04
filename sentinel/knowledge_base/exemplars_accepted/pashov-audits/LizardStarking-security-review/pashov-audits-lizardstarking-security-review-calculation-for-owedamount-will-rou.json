@@ -1,0 +1,22 @@
+{
+  "title": "Calculation for `owedAmount` will round down to zero",
+  "platform": "pashov-audits",
+  "program": "LizardStarking-security-review",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as this will result in 0 claimable rewards for users when they should have been able to claim some  **Likelihood:** High, as this will happen any time the user's share is smaller than the pool's cached global share, which is almost always  ## Description  The `claimCalculation` method calculates the `owedAmount` that is about to be send to the user in the form of `USDC` rewards with the following calculation:  ```solidity owedAmount = (currentShareRaw / pool[_poolNumber].currentGlobalShare) * pool[_poolNumber].value; ```  This happens both if the `_poolNumber ==",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/LizardStarking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

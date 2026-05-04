@@ -1,0 +1,19 @@
+{
+  "title": "Missing ERC20Permit init call in `initialize()`",
+  "platform": "pashov-audits",
+  "program": "Storm-Labs-Inc-cove-contracts-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the Solidity smart contract BasketToken, which inherits from ERC20PermitUpgradeable, there seems to be an omission in the initialization process. The initialize function, intended to set up the contract\u2019s initial state, does not include a call to `__ERC20Permit_init()`. This function is critical for initializing the ERC20 Permit feature, which is part of the BasketToken contract. The ERC20 Permit feature allows for gasless transactions by enabling users to sign approvals for token transfers with their private keys. Not c",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cove-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

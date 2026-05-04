@@ -1,0 +1,22 @@
+{
+  "title": "`depositAndBridge()` fails when shareLockPeriod is active",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-nucleus-boring-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `depositAndBridge` function attempts to perform a deposit followed immediately by a bridge operation, but this sequence fails when share locking is enabled due to contradictory security checks.  - `depositAndBridge` first calls `_afterPublicDeposit` which sets: `shareUnlockTime[user] = block.timestamp + shareLockPeriod;`  ```solidity     function depositAndBridge(         ERC20 depositAsset,         uint256 depositAmount,         uint256 minimumMint,         BridgeData calldata data     )         external         paya",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nucleus-security-review_2024-12-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

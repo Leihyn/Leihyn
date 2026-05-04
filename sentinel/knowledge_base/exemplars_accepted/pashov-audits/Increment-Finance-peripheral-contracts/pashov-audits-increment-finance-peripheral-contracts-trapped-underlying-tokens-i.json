@@ -1,0 +1,24 @@
+{
+  "title": "Trapped underlying tokens in the auction",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because there will be `underlying tokens` that cannot be returned to the `staked token` contract, trapping those underlying tokens within the `AuctionModule` contract. Additionally, the auction cannot be closed, preventing the entire lot from being bought. The `staked token` would become unusable as there is no way to stake due to `isInPostSlashingState` being true.  **Likelihood:** Medium, because there are no restrictions for users to redeem all their tokens. If users decide to redeem all their tokens, the `staked token` will be left with zero supply.  ## Descr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

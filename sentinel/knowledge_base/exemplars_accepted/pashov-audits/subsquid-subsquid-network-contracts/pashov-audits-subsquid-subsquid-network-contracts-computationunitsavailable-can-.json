@@ -1,0 +1,21 @@
+{
+  "title": "`computationUnitsAvailable` can overestimate number of available units if staking duration is too small",
+  "platform": "pashov-audits",
+  "program": "subsquid-subsquid-network-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, can lead to inflated compute unit allocation  **Likelihood**: Medium, can be easily exploited by a malicious user at no cost  ## Description  The `computationUnitsAvailable` function computes the amount of computation units available to a `peerId`. This is defined in the `GatewayRegistry.sol` contract as shown below.  ```solidity for (uint256 i = 0; i < _stakes.length; i++) {     Stake memory _stake = _stakes[i];     if (         _stake.lockStart <= blockNumber && _stake.lockEnd > blockNumber     ) {         total +=             (_stake.computationUnits * epochLe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Subsquid-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

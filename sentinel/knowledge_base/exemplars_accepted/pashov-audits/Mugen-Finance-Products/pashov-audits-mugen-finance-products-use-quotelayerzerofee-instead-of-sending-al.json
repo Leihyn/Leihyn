@@ -1,0 +1,21 @@
+{
+  "title": "Use `quoteLayerZeroFee` instead of sending all native asset balance as gas fee for `swap` call",
+  "platform": "pashov-audits",
+  "program": "Mugen-Finance-Products",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** High, because the wrong value will be sent always  **Impact:** Low, because the `swap` function has a gas refund mechanism  ## Description  Currently in `StargateArbitrum::stargateSwap` when doing a call to the `swap` method of `stargateRouter`, all of the contract's native asset balance is sent to it so it can be used to pay the gas fee. The [Stargate docs](https://stargateprotocol.gitbook.io/stargate/developers/cross-chain-swap-fee) show that there is a proper way to calculate the fee and it is by utilizing the `quoteLayerZeroFee` method of `stargateRouter`.  ##",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Mugen-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

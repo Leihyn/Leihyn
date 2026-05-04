@@ -1,0 +1,21 @@
+{
+  "title": "Lack of approval before depositing DAI into DSR contract",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The DSRStrategy contract's `deposit` function attempts to deposit DAI tokens into the DSR (Dai Savings Rate) contract to receive sDAI, but fails to implement the required ERC20 approval step. Since ERC20 tokens require approval before a contract can transfer them on behalf of the owner, it leads to deposit transactions to revert.  ```solidity    function deposit(uint256 _value) public returns(uint256){         sDAI(DSR_DEPOSIT_ADDRESS).deposit(_value,address(this));         return 100;     } ```  ## Recommendations  Add the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

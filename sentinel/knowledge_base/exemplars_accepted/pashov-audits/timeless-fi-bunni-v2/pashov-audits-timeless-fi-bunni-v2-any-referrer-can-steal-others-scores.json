@@ -1,0 +1,22 @@
+{
+  "title": "Any referrer can steal others scores",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `BunniHub.deposit` function allows the user to pass in his `referrer` and use it as a parameter to mint `BunniToken`. The `BunniToken` contract is a subcontract of `ERC20Referrer` contract. It inherits a mechanism of the `ERC20Referrer` contract: the user's referrer will be changed after mint.  ```solidity     function _mint(address to, uint256 amount, uint24 referrer) internal virtual { --snip--             // Revert if updated balance overflows uint232             if gt(updatedToBalance, _MAX_BALANCE) {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

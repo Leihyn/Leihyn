@@ -1,0 +1,22 @@
+{
+  "title": "Inadequate Verification of `tokenAmount` Leads to Potential Dust Theft",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The Periphery's functionality allows bridging of funds between the source chain and the protocol, encompassing integration with the deposit, withdrawal, and transfer functionalities of the Core and Passive Pool. An issue arises when the deposit action fails on the destination chain; the `DepositsFallbackModule` is designed to catch this failure and refund the user on the source chain via the Socket bridge. The problem occurs when the `tokenAmount` is lower than the `tokenFees` (a static fee), leading to a transaction reve",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

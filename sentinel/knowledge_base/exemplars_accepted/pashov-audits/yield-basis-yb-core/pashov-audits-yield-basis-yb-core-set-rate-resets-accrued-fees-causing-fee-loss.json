@@ -1,0 +1,23 @@
+{
+  "title": "`set_rate()` resets accrued fees causing fee loss",
+  "platform": "pashov-audits",
+  "program": "yield-basis-yb-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `AMM::set_rate` function is used to change the interest rate applied to borrowed debt over time. Internally, it resets the rate multiplier (`rate_mul`) based on the current time and accrued interest up to that point.  ```python # File: AMM.vy 172: def set_rate(rate: uint256) -> uint256: ... 178:     assert msg.sender == DEPOSITOR, \"Access\" 179:     rate_mul: uint256 = self._rate_mul() 180:@>   self.rate_mul = rate_mul 181:@>   self.rate_time = block.timestamp 182:     self.rate = rate 183:     log SetRate(rate=",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YieldBasis-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

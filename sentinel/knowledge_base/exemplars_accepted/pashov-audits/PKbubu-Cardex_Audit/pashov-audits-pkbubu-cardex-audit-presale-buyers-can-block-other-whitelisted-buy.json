@@ -1,0 +1,23 @@
+{
+  "title": "Presale buyers can block other whitelisted buyers from purchases",
+  "platform": "pashov-audits",
+  "program": "PKbubu-Cardex_Audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Per the information provided by the sponsors during the audit  > In Cardex, each card will have a one-day presale stage, and after that will be changed to public > The presale stage is a reward for eligible users. Cardex backend will determine eligible users. Card owner doesn\u2019t have any privileges  Now the presale mechanism uses a nonce-based signature system to authorize buyers. The preSaleSigner signs messages for whitelisted buyers that include a sequential nonce. However, the nonce is only incremented after a successf",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cardex-security-review_2025-01-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

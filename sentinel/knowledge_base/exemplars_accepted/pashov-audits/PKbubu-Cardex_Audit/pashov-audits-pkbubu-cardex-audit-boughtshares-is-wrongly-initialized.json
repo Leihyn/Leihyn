@@ -1,0 +1,21 @@
+{
+  "title": "`boughtShares` is wrongly initialized",
+  "platform": "pashov-audits",
+  "program": "PKbubu-Cardex_Audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When creating an IPO card, initial shares are allocated to the initial owner:  ```solidity              card.initialOwnerShares = _card.initialOwnerShares; ..snip             sharesBalance[cardID][_card.cardInitialOwner] = _card                 .initialOwnerShares;  ```  But these shares are not accounted for in the `boughtShares` mapping. This creates an accounting mismatch that leads to permanent fund loss, causing later when users try to sell shares, the contract checks:  ```solidity require(     boughtShares[id] >= amount,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cardex-security-review_2025-01-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

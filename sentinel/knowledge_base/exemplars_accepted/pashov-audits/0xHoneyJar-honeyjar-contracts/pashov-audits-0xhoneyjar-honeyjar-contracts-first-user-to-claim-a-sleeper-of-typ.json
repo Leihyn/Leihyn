@@ -1,0 +1,21 @@
+{
+  "title": "First user to claim a sleeper of type `NATIVE_TYPE` gets all rewards",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-honeyjar-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Sleepers held by the `Den` contract can be of different types. The type `NATIVE_TYPE` rewards the holder of a fermented jar with the native token of the chain (e.g. ether).  There can be multiple sleepers of the same type in a party, each of them with a different `amount` of rewards. However, when a sleeper of the type `NATIVE_TYPE` is transferred out, the amount transferred is the total balance of the contract, not the amount of the specific sleeper.  This means that the first user that claims a sleeper of the type `NATIVE_TY",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HoneyJar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Users cannot burn their TRSY in exchange for assets when RelayerV2.withdraw() is paused",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In RelayerV2.sol, the guard, which is appointed by the keeper, can pause the protocol through `pauseProtocol()`.  ```   function pauseProtocol() public onlyGuard {     paused = true;     emit Pause(block.timestamp);   } ```  When the protocol is paused, functions with the `whenNotPaused` modifier, such as `withdraw()` and `governanceWithdraw()` cannot be used.  ```   function withdraw(UserRequest[] calldata _userRequest, uint256 _maxTRSYToPay)     external     payable >   whenNotPaused     onlyUser   { ```  Most of the time, u",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

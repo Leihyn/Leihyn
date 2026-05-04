@@ -1,0 +1,21 @@
+{
+  "title": "Users are penalized when operators are inactive",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When operators are inactive and don't call `revealCard()` in a timely manner, users can still claim their win via `claimWin()`.  This triggers `transferPlayerRewards()` with the conditional that the player shouldn't receive reward tokens:  ```solidity function claimWin(uint256 _index) external onlyPlayer onlyInitialized {     ...      vault.transferPlayerRewards(         gameId, _card.betAmount, _card.totalAmount, _card.houseEdgeAmount, true, !SHOULD_RECEIVE_REWARDS     ); } ```  The problem is that house edge fees were alread",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

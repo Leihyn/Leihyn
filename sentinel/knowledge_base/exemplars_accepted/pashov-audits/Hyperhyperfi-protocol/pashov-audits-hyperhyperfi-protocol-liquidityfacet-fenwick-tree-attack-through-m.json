@@ -1,0 +1,22 @@
+{
+  "title": "`liquidityFacet`: fenwick tree attack through multiple deposits",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the current implementation of the `addLiquidity()` function, a malicious user can exploit the Fenwick Tree structure by adding liquidity multiple times on behalf of another user, effectively filling the tree and potentially preventing legitimate deposits from occurring. The Fenwick Tree has a `maxDepositEntries` limit, and once this limit is reached, no more entries can be added. This enables griefing behavior, where an attacker could manipulate the system by adding multiple deposits for a single user, thus locking out",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

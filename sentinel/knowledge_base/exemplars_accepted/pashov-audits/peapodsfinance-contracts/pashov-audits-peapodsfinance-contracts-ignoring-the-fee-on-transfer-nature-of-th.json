@@ -1,0 +1,22 @@
+{
+  "title": "Ignoring the fee-on-transfer nature of the `pod` token",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `LeverageManager.addLeverage` function does not check the actual amount of the `_pod` tokens being received from a user. Since the `pod` token contract owner can set nonzero transfer fee, the actual received amount might be less than `_pTknAmt` value, which is used as a parameter for the `indexUtils.addLPAndStake` invoke. This can cause an insufficient balance error because the `indexUtils` implementation will try to transfer `_pTknAmt` form the `LeverageManager` contract.  ```solidity     function addLeverage(",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

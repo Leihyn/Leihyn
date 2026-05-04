@@ -1,0 +1,19 @@
+{
+  "title": "`donateAndClaim()` will not work for remote donate and claim",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-ZROClaim",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Users can utilize `donateAndClaim()` to make a donation in native token via `msg.value` and then perform a ZRO claim.  However, this will not work as it does not pass the LZ fee in the `value` parameter for `claim()` to perform the remote claim.  ```Solidity     function donateAndClaim(         Currency currency,         uint256 amountToDonate,         uint256 _zroAmount,         bytes32[] calldata _proof,         address _to,         bytes calldata _extraBytes     ) external payable returns (MessagingReceipt memory recei",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LayerZeroZROClaim-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

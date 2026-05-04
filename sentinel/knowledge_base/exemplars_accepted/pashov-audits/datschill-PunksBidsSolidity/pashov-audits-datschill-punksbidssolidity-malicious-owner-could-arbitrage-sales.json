@@ -1,0 +1,22 @@
+{
+  "title": "Malicious owner could arbitrage sales",
+  "platform": "pashov-audits",
+  "program": "datschill-PunksBidsSolidity",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it will charge users more than the should be charged  **Likelihood:** Low, as it requires a malicious/compromised owner  ## Description  Currently, the `setFeeRate` and `setLocalFeeRate` methods do not have an upper bound on the fee rate being set by the owner. This opens up a centralization attack vector, where the owner can front-run trades by setting a bigger fee. Consider the following scenario:  1. Alice puts a 100 ETH bid for an Alien Punk, considering fee is 1% and she actually is bidding 99 ETH 2. Bob puts an Alien Punk for sale for 98 ETH 3. Now inste",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/PunksBids-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

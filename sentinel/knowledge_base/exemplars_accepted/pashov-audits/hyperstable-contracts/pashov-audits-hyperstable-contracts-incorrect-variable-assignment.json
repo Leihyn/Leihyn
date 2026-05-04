@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect variable assignment",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The constructor in `GaugeV2.sol` contains a critical logic error where the internal and external bribe contract addresses are incorrectly swapped during assignment. This results in the internal bribe contract being assigned the external bribe address, and vice versa.  Vulnerable Code: ```solidity     constructor(         address _stake,         address _internalBribe,         address _externalBribe,       /***/     ) {         stake = _stake;         internal_bribe = _externalBribe;         external_bribe = _internalBribe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-06-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

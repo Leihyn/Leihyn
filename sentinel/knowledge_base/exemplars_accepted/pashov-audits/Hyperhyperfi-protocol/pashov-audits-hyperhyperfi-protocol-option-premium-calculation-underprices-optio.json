@@ -1,0 +1,21 @@
+{
+  "title": "Option premium calculation underprices options",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The option premium is calculated using the input `period`, while the actual duration until the maturity date is rounded up to the end of the day which is typically longer than the given `period`. This allows traders to get longer option durations than what they pay for.  The premium calculation in `Strategy._calculatePremium()` uses the input `period` in seconds to calculate the option price:  ```solidity function _calculatePremium(uint256 amount, uint256 period, uint256 preciseCurrentPrice, uint256 strike, uint256 iv)",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

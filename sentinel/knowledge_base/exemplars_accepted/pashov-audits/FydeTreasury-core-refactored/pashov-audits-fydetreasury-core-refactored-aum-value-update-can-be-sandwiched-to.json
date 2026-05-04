@@ -1,0 +1,21 @@
+{
+  "title": "AUM value update can be sandwiched to extract value from the protocol",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Protocol requires the off-chain bot to update AUM value so it can compute the share amount in deposited/withdrawal function and the attacker can use this to his advantage and perform the sandwich attack to extract value from the protocol. This is the POC:  1. Suppose the price of T1 token is 1 and protocol's `AUM` is $98K and `totalShare` is $98K. 2. Attacker monitoring mempool saw the off-chain bot AUM update transaction to set AUM as $102K. 3. Now attacker would perform this sandwich attack: 4. Before AUM update attacker wou",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

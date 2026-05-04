@@ -1,0 +1,22 @@
+{
+  "title": "Funds can be redirected",
+  "platform": "pashov-audits",
+  "program": "Enclave-Money-solver-fund-pool-anchor",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  ```rust  #[account(mut)]     pub user_token_account: Account<'info, TokenAccount> ```  In `programs/solver-fund-pool-anchor/src/instructions/borrow.rs:142-143`, the `user_token_account` is only required to be writable; the program never checks whether `owner == user.key()`. The signed message also omits the `user_token_account`, and the contract does not validate that `user_token_account.owner` equals `user`, nor that it is the user\u2019s associated token account (ATA).  As a result, an attacker can obtain a legitimat",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Enclave-security-review_2025-10-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

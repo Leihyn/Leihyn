@@ -1,0 +1,19 @@
+{
+  "title": "Missing index updates in `burnPacketFromInventory()` cause failures",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In `PacketStore`, the `_packetInventoryIdx` mapping tracks the position of each packet in its type's inventory array, `_packetInventory`. When burning a packet, the function moves the last packet to replace the burned one **but fails to update the `_packetInventoryIdx` mapping of packets**.   ```solidity function addPacketsToInventory(uint256[] calldata packetIds) external onlyRole(INVENTORY_MANAGER_ROLE) {     uint256 length = packetIds.length;     for (uint256 i = 0; i < length; i++) {         --- SNIPPED ---",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-05-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

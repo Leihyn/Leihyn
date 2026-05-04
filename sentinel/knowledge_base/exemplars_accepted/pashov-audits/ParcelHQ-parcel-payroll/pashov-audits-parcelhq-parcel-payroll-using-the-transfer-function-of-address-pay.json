@@ -1,0 +1,21 @@
+{
+  "title": "Using the `transfer` function of `address payable` is discouraged",
+  "platform": "pashov-audits",
+  "program": "ParcelHQ-parcel-payroll",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as payroll will revert and Merkle Trees & approvals would have to be done again  **Likelihood:** Medium, as it happens any time the recipient is a smart contract or a multisig wallet that has a receive function taking up more than 2300 gas  ## Description  The `executePayroll` function uses the `transfer` method of `address payable` to transfer native asset funds to a recipient address. This address is set by the caller but is also encoded in the leaf of a Merkle Tree that is created off-chain. It is possible that this recipient is a smart contract that has a `",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/ParcelPayroll-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

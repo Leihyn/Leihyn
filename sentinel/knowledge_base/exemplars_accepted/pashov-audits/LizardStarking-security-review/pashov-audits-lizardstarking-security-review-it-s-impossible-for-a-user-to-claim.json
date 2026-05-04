@@ -1,0 +1,21 @@
+{
+  "title": "It's impossible for a user to claim his rewards, as `claimReward` will never send out `USDC`",
+  "platform": "pashov-audits",
+  "program": "LizardStarking-security-review",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because users will never receive rewards from the contract  **Likelihood:** High, because the code just uses the ERC20 API incorrectly  ## Description  The `claimReward` method should be used by a staker to receive `USDC` rewards for his locked NFTs. This won't ever work, as the transfer of the rewards is implemented with this code:  ```solidity USDc.transferFrom(msg.sender, address(this), claimableRewards); ```  This is wrong as it will transfer `USDC` from the staker to the staking contract instead of the other way around.  ## Recommendations  Change the code i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/LizardStarking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

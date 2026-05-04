@@ -1,0 +1,22 @@
+{
+  "title": "Stale share price usage leading to fund loss and unfair distribution",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The share conversion is a critical operation in the `DepositETH` and `DepositUSD` contracts, where deposits and withdrawals are based on the current share price. The share price can fluctuate over time due to the yield received from `Lido` and `sDAI`, respectively.  However, the `DepositETH` and `DepositUSD` contracts do not properly update the share price when users perform deposits, withdrawals, or quote LayerZero fees. This failure to update the share price can result in the use of stale share prices, leading to a loss o",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

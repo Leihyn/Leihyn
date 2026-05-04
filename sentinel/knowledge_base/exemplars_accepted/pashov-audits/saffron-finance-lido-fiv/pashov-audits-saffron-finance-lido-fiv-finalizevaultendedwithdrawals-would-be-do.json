@@ -1,0 +1,21 @@
+{
+  "title": "`finalizeVaultEndedWithdrawals` would be DOSed if at least one fixed participant would withdraw from the ongoing vault",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, since withdrawing from the vault would be blocked temporarily  **Likelihood:** High, since withdraws from ongoing vault could be expected as regular user flow  ## Description  Fixed participants can request a withdrawal from the ongoing vault using the `withdraw` function. It would invoke a withdrawal request on Lido on behalf of the user and push the address of such user to the `fixedOngoingWithdrawalUsers` array at L549:  ```solidity File: LidoVault.sol 458:   function withdraw(uint256 side) external nonReentrant { .. 516:       // Vault started and in progre",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

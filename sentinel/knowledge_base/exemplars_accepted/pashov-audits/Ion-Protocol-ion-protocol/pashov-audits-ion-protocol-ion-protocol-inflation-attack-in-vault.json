@@ -1,0 +1,22 @@
+{
+  "title": "Inflation attack in Vault",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-ion-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The Vault contract uses `_decimalsOffset` to add more precision to share values. The issue is that the value of the `_decimalsOffset` would be 0 if the underlying token had 18 decimals (which is the case for WETH and most tokens). So share calculation would be:  ```solidity           assets.mulDiv(newTotalSupply + 1, newTotalAssets + 1, rounding) ```  And because the code uses `balanceOf(address(this))` to calculate IDLE pool allocation it would be possible to mint 1 wei share by depositing 1 wei token and then donate 100e18 t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/IonProtocol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

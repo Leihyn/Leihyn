@@ -1,0 +1,21 @@
+{
+  "title": "Wrong fee estimate in `getlzFee()` function",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  Function `getlzFee()` is supposed to calculate the Layerzero bridge message fee inside deposit contracts. The issue is that the code uses the wrong `dataSend` value to estimate the bridge fee:  ```solidity         bytes memory dataSend = abi.encode(1, _receiver,nETHShares); ```  The correct data sent through Layerzero has 4 variable and the estimated fee will be lower which can cause the bridge transaction to fail.  ```solidity         bytes memory data = abi.encode(ASSET_ID,1, _receiver,nETHShares); ```  This happens in all t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

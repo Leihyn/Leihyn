@@ -1,0 +1,19 @@
+{
+  "title": "Stale `SigningStargateClient` when changing accounts",
+  "platform": "pashov-audits",
+  "program": "initia-labs-widget",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `clientCache` keys only by chainId. If the user switches to a different wallet address, the cached client, tied to the old `OfflineSigner` instance, will be reused, causing all subsequent transactions to be signed by the previous account. a) Client Cache Implementation: ``` // packages/widget-react/src/data/signer.ts const clientCache = new Map<string, SigningStargateClient>(); // Problem: Only chains are cached  export function useCreateSigningStargateClient() {   const findChain = useFindChain();   const registry = useR",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Initia-security-review_2025-06-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "`OmoVault` malicious accounts can permanently disable the vault",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  - The `OmoVault` contract allows whitelisted users to register accounts (`OmoAgent`) without requiring approval from the vault owner or manager.   A malicious actor can exploit this by registering an `OmoAgent` account that is configured with an invalid oracle for price retrieval, this would cause the `OmoVault.totalAssets()` function to revert whenever it is called, leading to a **permanent denial of service (DoS) for the vault**:  ```javascript function totalAssets() public view virtual override returns (uint256) {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

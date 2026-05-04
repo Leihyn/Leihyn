@@ -1,0 +1,21 @@
+{
+  "title": "Operator key change might cause loss of access to unclaimed rewards",
+  "platform": "pashov-audits",
+  "program": "moondance-labs-tanssi-symbiotic",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High    **Likelihood:** Low  ## Description  The `claimRewards()` function in the `ODefaultOperatorRewards` contract relies on `operatorByKey()` to resolve the operator's address from the provided `operatorKey`. However, this approach is fragile when operator keys are updated. ```solidity function claimRewards(         ClaimRewardsInput calldata input     ) external nonReentrant returns (uint256 amount) {         OperatorRewardsStorage storage $ = _getOperatorRewardsStorage();         EraRoot memory eraRoot_ = $.eraRoot[input.eraIndex];         address tokenAddress = e",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tanssi-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

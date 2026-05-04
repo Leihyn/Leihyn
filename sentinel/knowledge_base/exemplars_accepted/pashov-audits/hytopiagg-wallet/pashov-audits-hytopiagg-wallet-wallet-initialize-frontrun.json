@@ -1,0 +1,22 @@
+{
+  "title": "Wallet initialize frontrun",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-wallet",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, attack to secretly own new wallets of other users  **Likelihood:** Medium, frontrun required  ## Description  The deploy script does 2 transactions to deploy a wallet:  1. deploy contract 2. call initialize() (which accepts the first controller)    (foundry, every call is a transaction)  ```         address _newWalletAddr = _factory.createProxy(_testWalletSalt);         Main(payable(_newWalletAddr)).initialize(deployer); ```  Wallet deployments can be tracked and awaited. An attacker can frontrun and call `initialize()` with malicious input.  One of the ideas:  1",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYTOPIAWallet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

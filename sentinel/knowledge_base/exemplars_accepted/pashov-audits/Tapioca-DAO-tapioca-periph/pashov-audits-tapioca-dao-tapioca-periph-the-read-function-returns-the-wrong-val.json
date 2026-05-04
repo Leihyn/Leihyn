@@ -1,0 +1,22 @@
+{
+  "title": "The `read()` function returns the wrong value because it is not properly scalable",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, because price data will be very inaccurate.  **Likelihood**: High, because it will always happen.  ## Description  In `OracleUniSolo.sol` we have the function `read()`:  ```solidity \u00a0 \u00a0 function read() external view override returns (uint256) { \u00a0 \u00a0 \u00a0 \u00a0 return _readUniswapQuote(10 ** inBase); \u00a0 \u00a0 } ```  This function returns the current exchange rate between two tokens from Uniswap. It's also extremely important because provides price data. But there is a big mistake in the argument.  You can see how is `inBase` variable:  ```solidity inBase = 10 ** (inCur.decimal",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

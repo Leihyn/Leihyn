@@ -1,0 +1,21 @@
+{
+  "title": "Deactivated validator retains old balance after reactivation",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When a validator is deactivated via `ValidatorManager::deactivateValidator`, the validator\u2019s balance is not updated. However, since a rebalance withdrawal request is created for this validator, their **actual** balance becomes 0.  ```solidity      function deactivateValidator(address validator) external whenNotPaused nonReentrant validatorExists(validator) {          // ...          Validator storage validatorData = _validators[index];          require(validatorData.active, \u201cValidator already inactive\u201d);          // Create",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

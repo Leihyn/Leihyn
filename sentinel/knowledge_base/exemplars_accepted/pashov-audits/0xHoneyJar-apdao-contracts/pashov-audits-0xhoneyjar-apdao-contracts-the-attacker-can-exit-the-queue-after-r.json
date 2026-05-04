@@ -1,0 +1,21 @@
+{
+  "title": "The attacker can exit the queue after requesting a random",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  There are two situations when the `ApiologyAuctionHouse` contract creates an auction:  1. When there are seats in the `auctionQueue`, it will request a random number from Pyth. After Pyth generates the random number, it will call back the `entropyCallback` function to create the auction. The specific process is as follows.    1. (tx1) User calls `ApiologyAuctionHouse.settleCurrentAndCreateNewAuction`    2. (tx1) `ApiologyAuctionHouse` requests random numbers from Pyth and pay some fees to Pyth    3. (off-chain) Pyth generat",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

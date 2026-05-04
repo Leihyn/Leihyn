@@ -1,0 +1,21 @@
+{
+  "title": "Broken mint if market pre-mint less than `p`",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-desci-ecosystem",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When market is created, it is allowed that `params.premint` and the `p` configured inside `params.curveParameters` is different, as long as `params.premint` is lower and result in 0 when provided to `getBuyPrice`.  ```solidity   function checkParameters(MarketParameters memory params) public view virtual {     if (!trustedCurves[address(params.priceCurve)]) {       revert UntrustedCurve();     }      // reverts if parameters are out of sanity range     params.priceCurve.checkParameters(params.curveParameters, params.funding",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Catalyst-security-review-april.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

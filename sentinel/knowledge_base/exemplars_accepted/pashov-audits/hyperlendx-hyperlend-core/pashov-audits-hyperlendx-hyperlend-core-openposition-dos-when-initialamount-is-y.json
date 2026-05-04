@@ -1,0 +1,21 @@
+{
+  "title": "`openPosition()` DoS when `_initialAmount` is `_yieldAsset`",
+  "platform": "pashov-audits",
+  "program": "hyperlendx-hyperlend-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  - The `Looping.openPosition()` function enables users to provide a flashloan premium payment (`_initialAmount`) either in `yieldAsset` or in `debtAsset`:  ```solidity function openPosition(         address _pool,         address _swapper,         address _debtAsset,         address _yieldAsset,         uint256 _initialAmount,         uint256 _flashloanAmount,         uint256 _minAmountOut,         address[] memory _path,         bool _startWithYield     ) external nonReentrant {         require(pools[_pool], \"pool not all",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperlend-security-review_2025-01-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

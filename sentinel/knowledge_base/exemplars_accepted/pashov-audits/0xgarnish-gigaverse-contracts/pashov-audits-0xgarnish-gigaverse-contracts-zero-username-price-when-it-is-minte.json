@@ -1,0 +1,19 @@
+{
+  "title": "Zero Username price when it is minted with `mintUsername()`",
+  "platform": "pashov-audits",
+  "program": "0xgarnish-gigaverse-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `AccountSystem` contract allows users to mint new accounts by paying Ether through the `mintWithEth` function. This function correctly enforces the payment requirement by checking the mint price stored in the` ETH_MINT_PRICE_CID` column of the `AccountSystem` table. Manager can set this price using the `setMintPrice` function in the AccountSystem contract.  However, there is an alternative path to mint an account for free by calling the `mintUsername` function in the `GigaNameNFT` contract. This function also checks the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gigaverse-security-review_2025-01-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Inconsistent `pendingCounts` in `spin()` and `fulfillRandomness()` when 0",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Inside `spin`, when `totalPending` equals 0, it will set the first active rarity `pendingCounts` to 1.  ```solidity     function spin(uint256 _totalSlots, uint256 _prizeCount) external whenNotPaused returns (uint256) {         // Validate slot configuration         if (_totalSlots == 0 || _prizeCount == 0 || _prizeCount > _totalSlots) {             revert InvalidSlotConfiguration();         }          // Calculate and verify prize distribution         uint256[] memory pendingCounts = new uint256[](maxRarityId + 1);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

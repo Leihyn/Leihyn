@@ -1,0 +1,22 @@
+{
+  "title": "Delegating to `address(0)` empties contract via `alterGovernanceDelegatee()`",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-staking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  `alterGovernanceDelegatee()` is used to delegate a user\u2019s tokens to a delegatee. ```solidity function alterGovernanceDelegatee(address newDelegatee) external nonReentrant {         Staker storage staker = stakers[_stakeMsgSender()];         if (staker.governanceDelegatee == newDelegatee) revert DelegateeUnchanged();         if (staker.amountStaked == 0) revert ZeroTokenStake();          //update rewards before         _updateUnclaimedRewardsForStaker(_stakeMsgSender());          DelegationSurrogate newSurrogate",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Staking-security-review_2025-10-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

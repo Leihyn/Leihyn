@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect rounding in previewWithdraw function leads to residual wstUSR balance",
+  "platform": "pashov-audits",
+  "program": "resolv-im-resolv-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `previewWithdraw` function in the `WstUSR` contract uses incorrect rounding when calculating the amount of wstUSR required to withdraw a certain amount of USR. The function rounds down instead of rounding up, which favors the user rather than the protocol. This leads to a situation where users can withdraw their full USR balance while leaving a small residual wstUSR balance that cannot be withdrawn.  ```solidity     function previewWithdraw(uint256 _usrAmount) public view returns (uint256 wstUSRAmount) {         return ISt",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Resolv-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

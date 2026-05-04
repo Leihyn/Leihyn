@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect handling of token decimals",
+  "platform": "pashov-audits",
+  "program": "dinaricrypto-usdplus-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `previewDeposit()`, `previewMint()`, `previewWithdraw()` and `previewRedeem()` calculate returned amounts without accounting for the decimals of the `paymentToken`.  This can result in precision discrepancies during operations, leading to incorrect amounts being processed.  Assume the following scenario:  - The `paymentToken` has `18` decimals (e.g., `DAI`). - The `USD`+ token has `6` decimals.  Impact on using each functions:  - `previewDeposit()`:  The `usdPlusAmount` to mint is calculated using the `paymentToken` dec",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dinari-security-review_2024-12-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

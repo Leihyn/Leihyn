@@ -1,0 +1,19 @@
+{
+  "title": "Updating protocolFeeTo",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  SofamonWearable has the following functions to update the fee receiver.  ```solidity     function updateRoyaltyFeeTo() public {         royaltyFeeTo = ISofamonWearableFactory(machine).protocolFeeTo();          emit NewRoyaltyFeeTo(royaltyFeeTo);     } ```  So, `royaltyFeeTo` should always be updated manually.  Some bad scenarios are possible:  1. By default it is set to `address(0)` if the function was never called => royalties sent to zero address 2. `machine` can be updated => royalties sent to the deprecated address 3. `pro",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

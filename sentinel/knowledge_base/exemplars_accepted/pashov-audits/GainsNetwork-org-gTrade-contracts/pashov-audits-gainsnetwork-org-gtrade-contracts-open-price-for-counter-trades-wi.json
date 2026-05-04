@@ -1,0 +1,22 @@
+{
+  "title": "Open price for counter trades with excess collateral calculated wrongly",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `openTradeMarketCallback` function opens trades with the `openPrice` (L102) that is calculated based on the price impact that the trade would cause on the market. In case the trade is a `counter` trade some part of the collateral amount (that excess current skew on the pair) would be returned to the user (L106):  ```solidity File: TradingCallbacksUtils.sol 094:     function openTradeMarketCallback(ITradingCallbacks.AggregatorAnswer memory _a) external tradingActivated { 095:         ITradingStorage.PendingOrder memory",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "`HoneyLocker.unstake()` can possibly lead to underflow",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "arithmetic",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In the test files, HoneyLocker interacts with the `stakeLocked()` and `withdrawLockedAll()` functions in the Kodiak staking contract.  In the Kodiak staking contract, if `withdrawLockedAll()` is called but the expiration date is not up, the function will simply call `get_rewards()` and skip the `_withdrawLocked()`.  ``` function withdrawLockedAll() nonReentrant withdrawalsNotPaused public { >       _getReward(msg.sender, msg.sender);         LockedStake[] memory locks = lockedStakes[msg.sender];         for(uint256 i = 0; i <",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

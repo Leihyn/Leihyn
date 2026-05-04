@@ -1,0 +1,21 @@
+{
+  "title": "`getStakedAmount` can be manipulated",
+  "platform": "pashov-audits",
+  "program": "labs-solo-aegis-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `getStakedAmount` returns `stakedAmount` of Aegis vault within Berachain reward's vault by calling `balanceOf`.  ```solidity     function getStakedAmount(IBerachainRewardsVault rewardsVault) private view returns (uint256 stakedAmount) {         if (address(rewardsVault) != NULL_ADDRESS) {             stakedAmount = rewardsVault.balanceOf(address(this));         }         /// @dev else stakedAmount defaults to 0     } ```  This function is called by `_calculateAegisVaultAmountsInICHIVaultIncludingStaked`, which is used in",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Aegis-security-review-September.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

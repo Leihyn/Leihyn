@@ -1,0 +1,21 @@
+{
+  "title": "Normalizing token weights can result in a revert",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  Upon normalizing weights when having a swap, we have this piece of code to turn the `weights` array from an array with amounts to an array with percentages:  ```solidity self.weights[i] = FullMath.mulDivX256(                 self.weights[i],                 self.totalWeight             ); ```  The issue is that if there is a single element in the array, then that element will equal the `totalWeight` which results in a revert when calling `mulDivX256()` as we have the following check there:  ```solidity require(denominator >",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-01-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

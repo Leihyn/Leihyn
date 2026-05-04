@@ -1,0 +1,21 @@
+{
+  "title": "Malicious actors can grief the LP contribution",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Depositing ETH into the ULTI protocol is the primary mechanism for acquiring ULTI tokens and engaging with the ecosystem. The `deposit()` function includes a deadline parameter, which is passed through multiple internal calls (\\_allocateDeposit -> \\_tryIncreaseLiquidity -> increaseLiquidity):  ```solidity     function deposit(         uint256 inputTokenAmount,         address referrer,         uint256 minUltiToAllocate,         uint256 deadline,         bool autoClaim     ) external nonReentrant unstoppable { ```  However, the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November2.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Check for `Staking` liquidity in `flip()` does not account for other game contracts",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `Flip.flip()` checks that the `Staking` contract has enough funds to cover the player's reward in the case of a win. However, it is not taken into account that other game contracts might have also funds locked in the `Staking` contract.  As a result, the total liquidity locked among all game contracts might exceed the total balance of the `Staking` contract, which would cause the `Staking` contract not to be able to cover all the rewards in the case of a win.  ## Recommendations  In the `flip()` function check that the `Staki",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

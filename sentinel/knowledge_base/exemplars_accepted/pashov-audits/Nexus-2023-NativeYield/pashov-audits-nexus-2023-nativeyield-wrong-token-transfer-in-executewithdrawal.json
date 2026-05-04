@@ -1,0 +1,21 @@
+{
+  "title": "Wrong token transfer in `executeWithdrawal()`",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `executeWithdrawal` function in the `DepositUSD` contract is incorrectly implemented to send ETH instead of the USD tokens (e.g., DAI, sDAI) that users originally deposited.  The contract attempts to send ETH using `call{value: amount}` even though it's designed to handle stablecoins:  ```solidity     function executeWithdrawal(address _receiver, bytes32 _hash) external {         if(msg.sender!=strategyExecutor) revert IncorrectStrategyExecutor(msg.sender);         (bool success,bytes memory returndata) = _receiver.call{",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

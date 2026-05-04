@@ -1,0 +1,22 @@
+{
+  "title": "CurrentAccountedNativeRewards uses current balance for reward",
+  "platform": "pashov-audits",
+  "program": "reserve-protocol-reserve-governor",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Low  **Likelihood:** High   ## Description  In function `_currentAccountedNativeRewards()`, when the code wants to calculate the rewards balance for the current timestamp instead of the last calculation time:  ```solidity     function _currentAccountedNativeRewards() internal view returns (uint256) {         uint256 elapsed = block.timestamp - nativeRewardsLastPaid;         uint256 rewardsBalance = IERC20(asset()).balanceOf(address(this)) - totalDeposited;          return _calculateHandout(rewardsBalance, elapsed);     } ```  As a result of this, if some re",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Reserve-security-review_2026-02-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

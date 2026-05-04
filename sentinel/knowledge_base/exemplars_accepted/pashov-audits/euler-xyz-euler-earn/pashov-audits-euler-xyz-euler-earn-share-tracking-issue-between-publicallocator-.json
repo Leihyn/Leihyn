@@ -1,0 +1,21 @@
+{
+  "title": "Share tracking issue between `PublicAllocator` and `EulerEarn` affects reallocations",
+  "platform": "pashov-audits",
+  "program": "euler-xyz-euler-earn",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `PublicAllocator::reallocateTo()` function uses real strategy share balances via `id.maxWithdraw(vault)` to calculate available assets, while `EulerEarn::reallocate()` uses internal share tracking via `config[id].balance` for actual operations. This discrepancy creates a serious issue when real share balances differ from the internal tracking of `EulerEarn` (which can happen due to direct share transfers of strategies to the vault).  ```solidity   // PublicAllocator.sol -> uses REAL strategy shares   uint2",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/EulerEarn-security-review_2025-07-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

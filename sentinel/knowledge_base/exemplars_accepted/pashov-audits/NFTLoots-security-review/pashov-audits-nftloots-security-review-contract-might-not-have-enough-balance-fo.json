@@ -1,0 +1,22 @@
+{
+  "title": "Contract might not have enough balance for winner to claim prize",
+  "platform": "pashov-audits",
+  "program": "NFTLoots-security-review",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as user will not be able to claim prize value  **Likelihood:** Medium, as it requires the owner to not input enough balance  ## Description  The protocol doesn't enforce the actual balance in the `NFTLootbox` contract to be enough to pay out rewards. The first issue comes in the `createLootbox` method, where the code does  ```solidity loot.usdPrizes = prizes; ```  but it doesn't actually transfer `prizes` amount of stablecoin into the contract - it just expects it will have it as a balance, which is not enforcing it and is error-prone. Also, the contract is expec",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NFTLoots-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

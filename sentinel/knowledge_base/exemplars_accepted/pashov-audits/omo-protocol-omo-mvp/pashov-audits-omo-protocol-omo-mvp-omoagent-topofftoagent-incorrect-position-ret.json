@@ -1,0 +1,22 @@
+{
+  "title": "`OmoAgent.topOffToAgent` incorrect position retrieval logic",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  - The `OmoAgent.topOffToAgent()` function allows an agent to retrieve their deposited position NFT, however, there are multiple issues in the current implementation:  ```javascript function topOffToAgent(uint256 _agentId, address asset) external onlyAgent(_agentId) {         INonfungiblePositionManager nftManager = INonfungiblePositionManager(OmoAgentStorage.data().positionManager);         for (uint256 i = 0; i < OmoAgentStorage.data()._positionIds.length; i++) {             uint256 tokenId = OmoAgentStorage.data()._positi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

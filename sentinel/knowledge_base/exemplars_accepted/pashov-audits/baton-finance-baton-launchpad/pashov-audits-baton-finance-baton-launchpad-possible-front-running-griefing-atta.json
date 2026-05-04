@@ -1,0 +1,19 @@
+{
+  "title": "Possible front-running griefing attack on NFT creations",
+  "platform": "pashov-audits",
+  "program": "baton-finance-baton-launchpad",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as it results in a temporary DoS for users of the protocol  **Likelihood:** Medium, as it is easy to execute but attacker doesn't have much incentive to do it  ## Description  The `create` method in `BatonLaunchpad` calls the `cloneDeterministically` method from `LibClone` that uses the `create2` opcode. The `create` method also has a `salt` parameter that is passed to the `cloneDeterministically` call. A malicious actor can front-run every call to `create` and use the same `salt` argument. This will result in reverts of all user transactions, as there is alrea",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BatonLaunchpad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

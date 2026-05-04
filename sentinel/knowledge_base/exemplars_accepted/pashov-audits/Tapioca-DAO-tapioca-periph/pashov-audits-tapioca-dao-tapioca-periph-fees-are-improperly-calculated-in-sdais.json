@@ -1,0 +1,21 @@
+{
+  "title": "Fees are improperly calculated in sDaiStrategy.sol and thus subsequent depositors cannot withdraw their full deposits",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, some users may not get their full deposit back.  **Likelihood:** High, will happen everytime `_withdraw()` is called.  ## Description  The fees in sDaiStrategy.sol are targeted at the yield from depositing Dai to sDai.  ``` > (uint256 fees, uint256 accumulatedTokens) = _computePendingFees(_totalActiveDeposits, maxWithdraw); // Compute pending fees             if (fees > 0) {                 feesPending += fees; // Update pending fees             } ```  If the protocol deposits 1000 Dai for x sDai and gets back 1010 Dai for x sDai in one year, the yield is 10 Da",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

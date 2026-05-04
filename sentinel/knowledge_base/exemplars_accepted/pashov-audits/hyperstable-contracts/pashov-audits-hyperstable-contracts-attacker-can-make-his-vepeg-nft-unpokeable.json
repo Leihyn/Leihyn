@@ -1,0 +1,21 @@
+{
+  "title": "Attacker can make his `vePeg` NFT unpokeable",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Since `vePeg` NFT balances decay linearly over time, votes can become outdated if not updated, this is why we have the `poke` mechanism in the system. It allows admins to update the `vePeg` NFTs voting weight to reflect its current balance. This ensures fairness and accuracy in the voting system.  A user can intentionally make their `vePeg` NFT unpokeable by exploiting a \"dust vote\" strategy. Here's how:  Suppose the current `vePeg` NFT balance is `10e18`. The user votes for two pools: Allocates `10e18 - 1` weight to their",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

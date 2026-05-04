@@ -1,0 +1,19 @@
+{
+  "title": "`clearLoop()` can OOG because of the nested loop over empires and planets",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  Function `clearLoop()` loops through empires and planets and deletes their records:  ```solidity    for (uint8 i = 1; i <= empireCount; i++) {       EEmpire empire = EEmpire(i);       for (uint256 j = 0; j < planets.length; j++) {         PendingMove.deleteRecord(planets[j]);         Magnet.deleteRecord(empire, planets[j]);       } ```  There are 6 empires and 2500 planets in the system so the total iteration of the loop would be 15000. Because in each iteration function changes the contract's storage value the gas in each ite",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

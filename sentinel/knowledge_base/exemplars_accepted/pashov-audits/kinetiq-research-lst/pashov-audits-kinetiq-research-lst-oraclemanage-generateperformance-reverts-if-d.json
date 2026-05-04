@@ -1,0 +1,21 @@
+{
+  "title": "`OracleManage::generatePerformance` reverts if deactivating validator with ongoing rebalance request",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `OracleManager::generatePerformance` is intended to update the stats of every validator and the `totalBalance` in `ValidatorManager`. This function is called once an hour (or at whatever interval is set by `MIN_UPDATE_INTERVAL`). It is crucial that this call does not revert, as a revert would cause the `ValidatorManager` to remain in a stale state. Additionally, `OracleManager::generatePerformance` performs an abnormal behaviour check, and if necessary, deactivates a validator. ```solidity         // Check for anomalies",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

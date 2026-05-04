@@ -1,0 +1,22 @@
+{
+  "title": "Psm._redeem() bypasses `yzUSD` pause and redeem restrictions during execution",
+  "platform": "pashov-audits",
+  "program": "Telos-Consilium-ouroboros-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium   ## Description  The `PSM._redeem()` allows users to redeem `syzUSD` shares for underlying assets by internally burning `yzUSD` tokens. However, this implementation bypasses `yzUSD`'s pause state and redeem restriction checks.  The function is called from two entry points:  - `PSM.redeem()`, callable by users with `USER_ROLE` to instantly redeem. - `PSM.fillRedeemOrders()`, callable by `ORDER_FILLER_ROLE` to fill orders created by users using `PSM.createRedeemOrder()`  [PSM.sol#L258-L277](https://github.com/Telos-Consilium/ou",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YuzuUSD-security-review_2026-01-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

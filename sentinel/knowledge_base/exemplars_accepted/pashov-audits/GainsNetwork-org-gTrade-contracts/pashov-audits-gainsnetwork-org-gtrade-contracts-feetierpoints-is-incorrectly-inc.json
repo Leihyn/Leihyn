@@ -1,0 +1,23 @@
+{
+  "title": "`FeeTierPoints` is incorrectly increased twice",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The execution of the position size increase will call `TradingCommonUtils.updateFeeTierPoints()` to update the trader fee tier points by the position size delta.  However, the trader fee tier points have been updated in the preceding call `TradingCommonUtils.processOpeningFees()`.  That means the trader fee tier points are incorrectly updated twice, causing the trader to receive double the points. A trader can exploit this to earn more points and get fee reduction quicker, causing protocol, vault users, and stakers to incur",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

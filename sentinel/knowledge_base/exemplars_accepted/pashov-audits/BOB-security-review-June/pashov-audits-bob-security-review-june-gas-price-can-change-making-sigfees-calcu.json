@@ -1,0 +1,24 @@
+{
+  "title": "Gas Price can change, making `sigFees` calculation insufficient",
+  "platform": "pashov-audits",
+  "program": "BOB-security-review-June",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "signature",
+    "multisig",
+    "auction"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a user asks for a redemption, the validators submit signatures which eventually transfer out the bitcoin ordinal. To compensate the validator's gas fees, the user is required to pay for them.  ```solidity uint256 sigFees = BTC_SIG_GAS_USAGE * tx.gasprice * uint256(multisig.activeCommitteeSize); ```  This `sigFees` is meant to cover the gas cost of the validators, which is incurred by them when they post a multisig signature. The issue is that this function uses `tx.gasPrice`. This is a user controlled argument, and h",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Revert if re-depositing into ICHI vaults with an amount exceeding `deposit0Max`/`deposit1Max`",
+  "platform": "pashov-audits",
+  "program": "labs-solo-aegis-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `withdraw` function allows users to choose `TargetOnly` as the withdrawal type. When this option is selected, users will receive only the target token, and the withdrawn deposit tokens from the `_withdrawAssetMix` operation will be redeposited into the deposit vault.  ```solidity     function _withdraw(         uint256 aegisShares,         uint256 aegisTotalSupply,         address to,         WithdrawSlippageData memory minSlippage,         WithdrawType withdrawType     )         internal         returns (WithdrawSlip",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AegisVault-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

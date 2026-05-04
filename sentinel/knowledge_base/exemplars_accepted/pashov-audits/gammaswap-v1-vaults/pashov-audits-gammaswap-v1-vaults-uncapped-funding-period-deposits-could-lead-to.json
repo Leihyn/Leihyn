@@ -1,0 +1,23 @@
+{
+  "title": "Uncapped funding period deposits could lead to DoS",
+  "platform": "pashov-audits",
+  "program": "gammaswap-v1-vaults",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `depositVault` allows unlimited deposits per funding period without any cap, which can lead to a DoS scenario during the execution of `DepositProcess.processDeposit()`, if too much liquidity is deposited into the `depositVault` during a single period, it can result in the vault attempting to hedge a larger position than what the GammaSwap pool can support, causing the `IGammaPool(gsPool).borrowLiquidity()` call to revert.  ```solidity function _increaseHedge(         uint256 _liquidity,         bytes memory path0,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GammaSwap-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

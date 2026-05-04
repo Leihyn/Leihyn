@@ -1,0 +1,21 @@
+{
+  "title": "`SpinLottery` will break if the first `prizeId` is selected",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  Inside the `_claimPrize` logic, if the randomly selected `prizeId` is equal to `firstPrizeId`, `firstPrizeId` will be incremented. However, `nextPrizeId` is also decremented.  ```solidity     function _claimPrize(uint8 rarity, uint256 randomValue) internal returns (address nftAddress, uint88 tokenId) {         PrizePool storage pool = prizePools[rarity];         if (pool.nextPrizeId <= pool.firstPrizeId) revert NoPrizesAvailable();                  // Calculate prize count and random index         uint256 prizeC",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

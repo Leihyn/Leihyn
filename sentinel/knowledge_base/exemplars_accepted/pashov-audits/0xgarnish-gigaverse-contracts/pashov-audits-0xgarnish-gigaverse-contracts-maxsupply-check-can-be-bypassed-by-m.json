@@ -1,0 +1,19 @@
+{
+  "title": "`maxSupply` check can be bypassed by `mintBatch`",
+  "platform": "pashov-audits",
+  "program": "0xgarnish-gigaverse-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `mint` function internally calls `_safeMint`, which performs a `maxSupply` check to ensure that the total minted amount does not exceed the defined supply limit for the token type. However, the mintBatch function directly calls `_mintBatch` without performing a similar `maxSupply` check. This allows users to bypass the `maxSupply` limitation by using the `mintBatch` function to mint tokens, leading to the potential over-minting of token types.  ## Recommendations  Modify the `mintBatch` function to include a `maxSupply` ch",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gigaverse-security-review_2025-01-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

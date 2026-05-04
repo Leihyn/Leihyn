@@ -1,0 +1,22 @@
+{
+  "title": "Sentinel pipeline calibration on Base Azul multiproof",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge",
+    "proxy"
+  ],
+  "bug_class": "meta-tooling",
+  "mental_operation": "trust_mapper",
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "Manual walk + 4-step trust_mapper tuning cut FP rate 91 percent (11 hits to 1). Fixes shipped: (a) inline-guard recognition for status/sender require-revert patterns, (b) generalized only-prefixed modifier matching plus initializer family, (c) state-var declaration list filtered against function-body strip, (d) regex disambiguation between assignment = and equality ==. Bonus discovery and fix in code_reader extract_state_variables: was capturing local var declarations because pattern was applied to whole contract body without stripping function bodies. Verified against 5 in-scope Base Azul contracts.",
+  "key_lesson": "Thinker tuning pays off only if you measure FP rate against real codebases. Toy contracts don't surface the cases that matter. After every contest, walk one or two thinker outputs by hand and write down which hits were FP and why.",
+  "contest_url": "https://immunefi.com/audit-competition/audit-comp-base-azul",
+  "submission_url": null,
+  "captured_at": "2026-05-04T17:24:32"
+}

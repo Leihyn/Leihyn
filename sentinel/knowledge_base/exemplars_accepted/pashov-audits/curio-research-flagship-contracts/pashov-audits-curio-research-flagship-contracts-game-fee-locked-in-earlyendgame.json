@@ -1,0 +1,21 @@
+{
+  "title": "Game fee locked in `earlyEndGame`",
+  "platform": "pashov-audits",
+  "program": "curio-research-flagship-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the `earlyEndGame` function, there is an issue where the game fee deducted from a player's payout is not subsequently transferred to the treasury address. Instead, the fee is subtracted from the player's payout and remains in the contract. This results in the funds being locked within the contract without a dedicated method available to transfer these collected fees to the treasury.  ## Recommendations  It is crucial to implement a mechanism within the `earlyEndGame` function to ensure that the collected game fee is tran",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Curio-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

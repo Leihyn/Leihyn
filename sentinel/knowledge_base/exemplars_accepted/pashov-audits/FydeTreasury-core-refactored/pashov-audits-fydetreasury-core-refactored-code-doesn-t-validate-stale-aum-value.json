@@ -1,0 +1,21 @@
+{
+  "title": "Code doesn't validate stale AUM values",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In the new design of the system, the value of the AUM should be updated by the off-chain bot. The issue is that there is no validation time for the AUM value and the code assumes that AUM is valid, this would cause issues when the off-chain bot can't update the AUM value for any reason. There are multiple reasons for AUM to not be updated, for example when the Ethereum network is busy when there is a bug in the off-chain bot, or when it's compromised. This is the POC for this issue:  1. Suppose the AUM is $100K and the off-cha",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

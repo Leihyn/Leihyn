@@ -1,0 +1,19 @@
+{
+  "title": "`TransferFrom` is incorrectly treated as a view function",
+  "platform": "pashov-audits",
+  "program": "galacticcouncil-hydration-node",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In the `execute` function of the `MultiCurrencyPrecompile` module, the `check_function_modifier` is intended to ensure that function calls are compatible with the execution context, particularly regarding whether they are payable or non-payable functions. However, the `Function::TransferFrom` case is missing from the match statement:  ```rust handle.check_function_modifier(match selector {     Function::Transfer => FunctionModifier::NonPayable,     // Function::TransferFrom is not included here     _ => FunctionModifier::Vi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hydration-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

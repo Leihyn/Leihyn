@@ -1,0 +1,23 @@
+{
+  "title": "PLP transfer or balance updates do not update reward index",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  [Link](https://github.com/Hyperhyperfi/protocol/blob/212acfdcd4066334ff5ea06ce46b0bbca7ca212f/src/core/pool/facets/LiquidityFacet.sol#L397-L408)  The reward calculation in `_getPendingRewards` depends on two key factors: the user's PLP token balance and their reward index (`usrRwdIndexQ128`).  ```solidity     function _getPendingRewards(address token, address user) internal view returns (uint256) {         RewardInfo storage rewards = PoolStorage.layout().ledger.state.rewardsByToken[token];         ILPToken plp_ = ILPToken(Po",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

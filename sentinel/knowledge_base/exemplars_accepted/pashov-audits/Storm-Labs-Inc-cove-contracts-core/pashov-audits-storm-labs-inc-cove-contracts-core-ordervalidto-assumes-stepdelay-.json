@@ -1,0 +1,22 @@
+{
+  "title": "`orderValidTo` assumes `stepDelay` is always 15 minutes",
+  "platform": "pashov-audits",
+  "program": "Storm-Labs-Inc-cove-contracts-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When the rebalance process is performed and incorporates `externalTrades`, it will set `orderValidTo` to 15 minutes since ` executeTokenSwap` is called by the token swap executor. This will set a deadline for the swap process to not exceed a certain time window.  ```solidity     function executeTokenSwap(ExternalTrade[] calldata externalTrades, bytes calldata) external payable override { >>>     uint32 validTo = uint32(block.timestamp + 15 minutes);         _cowswapAdapterStorage().orderValidTo = validTo;         for (uint256",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cove-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

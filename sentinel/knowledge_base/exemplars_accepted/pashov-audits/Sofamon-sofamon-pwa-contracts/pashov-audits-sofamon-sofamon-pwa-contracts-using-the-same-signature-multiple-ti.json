@@ -1,0 +1,21 @@
+{
+  "title": "Using the same signature multiple times",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-pwa-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, createSigner signs for the exact amount for a given sale, but in fact, it can be any amount in the end  **Likelihood:** Medium, easily available, requires receiving a signature only once for a private sale  ## Description  Private sales require a signature from `createSigner` for a given `wearablesSubject+amount`, with different signatures for buy and sell. But once signed the signature can be used many times. As a result, in fact, `createSigner` has no power to control amount for buy and sell operations. It is even possible to arrange a secondary market, where",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

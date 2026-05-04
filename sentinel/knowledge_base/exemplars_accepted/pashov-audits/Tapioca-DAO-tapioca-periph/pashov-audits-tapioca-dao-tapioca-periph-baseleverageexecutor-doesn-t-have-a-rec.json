@@ -1,0 +1,22 @@
+{
+  "title": "`BaseLeverageExecutor` doesn\u2019t have a `receive()` method to receive ETH withdrawals from WETH",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, since it breaks the leverage executor when the output token is the tOFT for ETH  **Likelihood:** High, since it will always happen for this output token  ## Description  The `BaseLeverageExecutor.sol` contract is the base contract that is inherited by all the other leverage executor contracts. It contains the logic for handling token swapping and tOFT wrapping and unwrapping that is common to all the leverage executors.  When the final token of a leverage action is the ETH tOFT, the WETH from the swap is converted to ETH, and the ETH is wrapped in the tOFT:  ``",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

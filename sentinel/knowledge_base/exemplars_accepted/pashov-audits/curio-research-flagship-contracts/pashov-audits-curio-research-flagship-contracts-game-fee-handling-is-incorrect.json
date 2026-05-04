@@ -1,0 +1,21 @@
+{
+  "title": "Game fee handling is incorrect",
+  "platform": "pashov-audits",
+  "program": "curio-research-flagship-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `endGame` function is called by the admin to finish the game. Admin provides a list of participants and their payouts and function loops through all of them. In case if user wins, then the game takes a fee from his reward. This fee is accumulated in the `gameFee` variable. It is increased with each new user and the real user's win is an `unsignedWinLossAmount - gameFee`.  ```solidity                 uint256 gameTakeRate = takeRate[currentSession.gameType];                 gameFee += (playerPayout.unsignedWinLossAmount * gameT",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Curio-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

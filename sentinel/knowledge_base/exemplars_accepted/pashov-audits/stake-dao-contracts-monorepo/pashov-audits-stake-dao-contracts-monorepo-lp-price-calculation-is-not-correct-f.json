@@ -1,0 +1,23 @@
+{
+  "title": "Lp price calculation is not correct for oracles",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "veToken"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In both crpto and stable swap oracles, it firstly gets the estimated price of the LP price, but it's not accurate enough to calculate the price of LP token. Price of LP token is estimated with additional **ramp** logic inside of the curve pool contract, and it makes the calculation inaccurate.   In order to determine the price of an asset, we should check how many other assets we can withdraw while redeeming LP token. For instance, if redeeming 1e18 LP token returns me 1e18 wETH and 1e18 rETH, it means LP",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

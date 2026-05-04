@@ -1,0 +1,21 @@
+{
+  "title": "Token miscalculation in `withdraw_admin_fees()` inflates shares",
+  "platform": "pashov-audits",
+  "program": "yield-basis-yb-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the LT contract, the `withdraw_admin_fees` function is designed to mint Yield Basis tokens to the fee receiver. However, there's a calculation error that results in excessive token minting. The issue lies in the `to_mint` calculation:  ```python def withdraw_admin_fees():     ...     to_mint: uint256 = v.supply_tokens * new_total // v.total     ... ```  This formula mints an amount equal to the entire new supply, not just the incremental difference representing admin fees. It leads to inflation of token sup",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YieldBasis-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

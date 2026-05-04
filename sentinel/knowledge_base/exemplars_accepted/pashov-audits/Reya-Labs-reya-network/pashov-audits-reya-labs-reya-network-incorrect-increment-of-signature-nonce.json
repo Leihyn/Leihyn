@@ -1,0 +1,23 @@
+{
+  "title": "Incorrect increment of signature nonce",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  `ExecutionModule.executeBySig()` will `incrementSigNonce(accountOwner)` to increment the nonce for `accountOwner` to prevent replay attacks by ensuring each signature can only be used once.  However, it incorrectly increments the nonce for `accountOwner` even when the signer is not the `acccountOwner`.  This allows anyone to DoS the transactions of `accountOwner` or other valid signers, by incrementing the nonce by calling `executeBySig()`. When the nonce for `accountOwner` is incremented, it will reject all transactions wi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-June2.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

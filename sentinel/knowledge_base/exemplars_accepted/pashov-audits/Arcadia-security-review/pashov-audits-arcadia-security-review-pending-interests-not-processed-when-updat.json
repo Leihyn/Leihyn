@@ -1,0 +1,21 @@
+{
+  "title": "Pending interests not processed when updating treasury weight",
+  "platform": "pashov-audits",
+  "program": "Arcadia-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: Medium, Can lead to loss of yield for the treasury or pool participants  **Likelihood**: Medium, loss only happens between the weight update and next deposit/withdrawal  ## Description  The function `setTreasuryWeights` sets the interest weight of the treasury and also updates the global `totalInterestWeight`.  ```solidity function setTreasuryWeights(     uint16 interestWeightTreasury_,     uint16 liquidationWeightTreasury_ ) external onlyOwner {     totalInterestWeight =         totalInterestWeight -         interestWeightTreasury +         interestWeightTreasury_; ``",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

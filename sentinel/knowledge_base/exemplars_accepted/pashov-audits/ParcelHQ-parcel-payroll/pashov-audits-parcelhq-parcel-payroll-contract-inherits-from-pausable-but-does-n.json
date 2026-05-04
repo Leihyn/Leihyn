@@ -1,0 +1,19 @@
+{
+  "title": "Contract inherits from `Pausable` but does not expose pausing/unpausing functionality",
+  "platform": "pashov-audits",
+  "program": "ParcelHQ-parcel-payroll",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low, as methods do not have `whenNotPaused` modifier  **Likelihood:** High, as it is certain that contract can't be paused at all  ## Description  The `Organizer` smart contract inherits from OpenZeppelin's `Pausable` contract, but the `_pause` and `_unpause` methods are not exposed externally to be callable and also no method actually uses the `whenNotPaused` modifier. This shows that `Pausable` was used incorrectly and is possible to give out a false sense of security when actually contract is not pausable at all.  ## Recommendations  Either remove `Pausable` from th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/ParcelPayroll-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "The portion of the pot corresponding to locked points is not distributed to the players",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `withdrawEarnings` function in the `RewardsSystem` contract calculates the amount of pot to distribute to the player based on the number of points they have in the winning empire. These are some of the steps in the function:  1. Get the total points issued to the winning empire (line 131). 2. Get the player's points in the winning empire (line 136), excluding the locked points (line 137). 3. Calculate the player's share of the pot based on their points (line 142).  ```solidity File: RewardsSystem.sol  125:   function with",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

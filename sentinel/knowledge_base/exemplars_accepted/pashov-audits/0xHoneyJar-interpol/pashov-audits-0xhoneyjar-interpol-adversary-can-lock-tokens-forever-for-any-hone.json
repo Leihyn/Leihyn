@@ -1,0 +1,21 @@
+{
+  "title": "Adversary can lock tokens forever for any HoneyLocker",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `onlyOwnerOrMigratingVault` modifier on `HoneyLocker` has a vulnerable check `owner() != Ownable(msg.sender).owner()`.  The problem with this is that an adversary can create a malicious contract implementing an `owner()` function that returns the current owner of the HoneyLocker and bypasses this check.  ```solidity modifier onlyOwnerOrMigratingVault() {     if (msg.sender != owner() && owner() != Ownable(msg.sender).owner()) revert Unauthorized();     _; } ```  This modifier is used to protect the `depositAndLock()` func",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

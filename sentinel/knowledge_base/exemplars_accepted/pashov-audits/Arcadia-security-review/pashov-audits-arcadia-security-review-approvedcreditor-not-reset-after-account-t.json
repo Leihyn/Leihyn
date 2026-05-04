@@ -1,0 +1,24 @@
+{
+  "title": "`approvedCreditor` not reset after account transfer",
+  "platform": "pashov-audits",
+  "program": "Arcadia-security-review",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, user can steal funds from liquidated account  **Likelihood**: Medium, requires either a bad debt account, or L2 to be offline for some time  ## Description  The Arcadia accounts support a secondary backup creditor which is stored in the `approvedCreditor` storage variable, and can be set by the owner. The issue is that when an account is transferred, this variable is not reset, and the old owner essentially can have a backdoor to the system.  The `approvedCreditor` can call the function `flashActionByCreditor` and change the current creditor of the account. This",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

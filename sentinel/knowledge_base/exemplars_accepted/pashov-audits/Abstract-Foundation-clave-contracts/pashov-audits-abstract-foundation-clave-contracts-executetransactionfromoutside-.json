@@ -1,0 +1,21 @@
+{
+  "title": "`executeTransactionFromOutside` does not increment the nonce",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  `ClaveImplementation` implements `executeTransactionFromOutside`, which can be called by the wallet owner to manually execute a transaction as a fallback. However, this execution doesn't increment the nonce of the wallet.  ```solidity     function executeTransactionFromOutside(         Transaction calldata transaction     ) external payable override {         // Check if msg.sender is authorized         if (!_k1IsOwner(msg.sender)) {             revert Errors.UNAUTHORIZED_OUTSIDE_TRANSACTION();         }          // Extract",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-11-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

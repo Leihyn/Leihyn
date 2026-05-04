@@ -1,0 +1,21 @@
+{
+  "title": "Abuse of permit functionality to block legitimate transactions",
+  "platform": "pashov-audits",
+  "program": "sushi-labs-tron-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `removeLiquidityWithPermit` function in the `SushiSwapV2Router02` contract allows users to remove liquidity from a liquidity pool by leveraging the `permit` function to approve the transfer of liquidity tokens.  However, this mechanism introduces a potential front-running vulnerability. An attacker can observe the transaction containing the `permit` call in the mempool and issue their own transaction with the same `permit` parameters but a different function call before the legitimate transaction is mined. This could",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SushiSwap-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

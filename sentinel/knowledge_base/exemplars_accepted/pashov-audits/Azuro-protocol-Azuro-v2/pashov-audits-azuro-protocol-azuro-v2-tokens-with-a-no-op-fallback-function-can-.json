@@ -1,0 +1,21 @@
+{
+  "title": "Tokens with a no-op fallback function can be used to steal the ETH balance of `LP`",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-Azuro-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because it can lead to stolen funds from the protocol  **Likelihood:** Low, as it requires a token with a fallback function but without a `withdraw` function  ## Description  In `LP::withdrawPayout` we have the following code:  ```solidty if (isNative) {     IWNative(token).withdraw(amount);     TransferHelper.safeTransferETH(account, amount); } else {     TransferHelper.safeTransfer(token, account, amount); } ```  Now imagine the following scenario:  1. The `token` used in the contract is one that does not have a `withdraw` function but has a fallback function 2",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Azuro-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Improper randomness requests in `CardAllocationPool` and `SpinLottery`",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  According to [best practices](https://docs.chain.link/vrf/v2/security#dont-accept-bidsbetsinputs-after-you-have-made-a-randomness-request) outlined by Chainlink, **once a contract has submitted a randomness request, it should not accept any additional user-supplied inputs that could affect the outcome. This is to ensure fairness and prevent potential griefing attacks.**  > Generally speaking, whenever an outcome in your contract depends on some user-supplied inputs and randomness, the contract should not accep",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

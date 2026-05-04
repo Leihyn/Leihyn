@@ -1,0 +1,19 @@
+{
+  "title": "`_lzReceive` reverts when there is a fee refund",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-ZROClaim",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When sending a message to the remote `ZROToken` for transferring the balance of ZROToken to users, if the fee exceeds the required amount, the surplus is refunded to `address(this)` (the `ClaimLocal` contract). However, the `ClaimLocal` contract does not have a `fallback` or `receive` function, preventing it from receiving ETH. This causes the `_lzReceive` function to always revert, preventing users from claiming tokens on remote chains.  ```solidity     function _lzReceive(         Origin calldata _origin,         bytes32",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LayerZeroZROClaim-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

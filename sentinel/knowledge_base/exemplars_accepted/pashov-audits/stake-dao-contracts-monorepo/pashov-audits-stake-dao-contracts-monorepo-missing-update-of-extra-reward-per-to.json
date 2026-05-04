@@ -1,0 +1,22 @@
+{
+  "title": "Missing update of extra reward per token during deposit",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  `StrategyWrapper._deposit()` updates the reward per token paid for extra rewards at the time of deposit.  ```solidity \t\t// 3. Keep track of the Extra reward tokens checkpoints at deposit time \t\taddress[] memory rewardTokens = REWARD_VAULT.getRewardTokens(); \t\tfor (uint256 i; i < rewardTokens.length; i++) { \t@>\t\tcheckpoint.rewardPerTokenPaid[rewardTokens[i]] = extraRewardPerToken[rewardTokens[i]]; \t\t} ```  However, the extra reward per token is not updated during the deposit, so the value of `extraRewardPerToken` c",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

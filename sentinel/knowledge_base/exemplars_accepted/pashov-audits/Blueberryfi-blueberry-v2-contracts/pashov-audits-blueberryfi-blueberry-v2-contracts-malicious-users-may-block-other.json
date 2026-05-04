@@ -1,0 +1,21 @@
+{
+  "title": "Malicious users may block other withdrawals",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In HyperEvmVault, users need to take 2 steps to finish the redeem operation. Step1: request redeem. In this step, we will calculate the redeem amount according to current share price. Step2: redeem. We will deduct the actual redeem amount from the `$.redeemRequests[msg.sender]`.  The problem here is that when we deduct the assets, shares from `$.redeemRequests[msg.sender]`, we use one memory variable and fail to store the updated value into the storage. We fail to deduct the assets and shares from the `$.redeemRequests[msg.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

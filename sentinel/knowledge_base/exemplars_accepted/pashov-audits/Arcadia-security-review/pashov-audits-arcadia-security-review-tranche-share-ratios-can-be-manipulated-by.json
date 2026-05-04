@@ -1,0 +1,23 @@
+{
+  "title": "Tranche share ratios can be manipulated by donating via liquidations",
+  "platform": "pashov-audits",
+  "program": "Arcadia-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, share ratio manipulation of ERC4626 vaults  **Likelihood**: Low, Requires precise timing and other conditions  ## Description  The contracts use the solmate ERC4626 contracts in order to prevent the share ratio manipulation attacks on the various vaults.  Here's a brief summary of the share ratio manipulation attack, useful for understanding the attack vector in the current context:  1. Alice deposits 1 wei of tokens into a manipulatable vault, which mints her 1 wei of vault tokens 2. Alice then \"donates\" 1e18 tokens to the vault via a direct transfer. 3. Bob now",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

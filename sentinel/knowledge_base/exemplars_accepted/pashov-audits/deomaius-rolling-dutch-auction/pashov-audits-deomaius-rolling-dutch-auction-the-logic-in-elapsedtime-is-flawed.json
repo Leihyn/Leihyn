@@ -1,0 +1,21 @@
+{
+  "title": "The logic in `elapsedTime` is flawed",
+  "platform": "pashov-audits",
+  "program": "deomaius-rolling-dutch-auction",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the method is used to calculate the price of the auction but will give out wrong results  **Likelihood:** High, as the problems are present almost all of the time during an auction  ## Description  There are multiple flaws with the `elapsedTime` method:  1. If there are 0 windows, the `windowIndex` variable (which is used for the windows count) will be 1, which is wrong and will lead to a big value for `windowElapsedTime` when it should be 0 2. If `auctionElapsedTime == windowElapsedTime` we will get `auctionElapsedTime` as a result, but if there was just 1 mo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/RollingDutchAuction-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

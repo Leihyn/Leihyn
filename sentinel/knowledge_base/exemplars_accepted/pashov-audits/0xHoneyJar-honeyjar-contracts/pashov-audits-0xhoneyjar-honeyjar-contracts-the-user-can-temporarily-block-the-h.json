@@ -1,0 +1,19 @@
+{
+  "title": "The user can temporarily block the `HoneyJar` contract from receiving LZ messages",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-honeyjar-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `HoneyJar` token uses `ONFT721.sol` and `NonblockingLzApp.sol` contracts for cross-chain communication via the Layer-Zero protocol. When it receives the message from the endpoint `NonblockingLzApp` overrides the `_blockingLzReceive` function:  ```solidity // LzApp.sol     function lzReceive(         uint16 _srcChainId,         bytes calldata _srcAddress,         uint64 _nonce,         bytes calldata _payload     ) public virtual override {         // lzReceive must be called by the endpoint for security         requir",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HoneyJar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

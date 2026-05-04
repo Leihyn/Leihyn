@@ -1,0 +1,22 @@
+{
+  "title": "Observe might fail for newly created pools",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The price of the quote token is fetched from the UniswapV3SinglePriceOracle.sol as follows -->  ```solidity function _getSqrtPriceX96FromPool(IUniswapV3Pool _pool, uint32 _interval)        public        view        returns (uint160 _sqrtPriceX96)    {        if (_interval == 0) {            (_sqrtPriceX96,,,,,,) = _pool.slot0();        } else {            uint32[] memory secondsAgo = new uint32[](2);            secondsAgo[0] = _interval;            secondsAgo[1] = 0; // to (now)            (int56[] memory tickCumulatives,) = _",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Collateral not approved after updating of GToken address",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  During adding new collateral tokens to the protocol, it's approved for corresponding `_gToken` contract address and GNS `staking` addresses:  ```solidity File: TradingStorageUtils.sol 54:     function addCollateral(address _collateral, address _gToken) internal { ... 81:         // Setup Staking and GToken approvals 82:         IERC20 collateral = IERC20(_collateral); 83:         collateral.approve(_gToken, type(uint256).max); 84:         collateral.approve(staking, type(uint256).max); 85: 86:         emit ITradingStorageUt",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "`ToyBox.sol` contract lacks `discountTokens` setter",
+  "platform": "pashov-audits",
+  "program": "Merit-Circle-forgotten-playland-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "**Impact:** Low  **Likelihood:** High  ## Description  When user buys a ToyBox token from the sale, a discount is applied to the price  ```solidity     function getFullPrice(uint256 _price, address _paymentToken) internal view returns (uint256) { >>      uint256 _discount = discountTokens[_paymentToken];         if (_discount > 0) {             _price = _price - (_price * _discount / 10000);         }         return _price;     }      function getFullCustomPrice(uint256 _price, address _paymentToken) internal view returns (uint256) { >>      uint256 _discount = saleTokenDiscounts[customSaleAct",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ForgottenPlayland-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

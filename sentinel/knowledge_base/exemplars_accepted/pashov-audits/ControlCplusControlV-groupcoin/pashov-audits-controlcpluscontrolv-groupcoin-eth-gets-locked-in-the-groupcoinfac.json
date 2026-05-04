@@ -1,0 +1,24 @@
+{
+  "title": "ETH gets locked in the `GroupcoinFactory` contract",
+  "platform": "pashov-audits",
+  "program": "ControlCplusControlV-groupcoin",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When we launch a Groupcoin to Uniswap v3, we intend to provide all the ETH received from sales as liquidity in the newly created Uniswap v3 pool. However, as we will see below, some ETH may not get wrapped and added to the liquidity position, causing it to be permanently locked in the `GroupcoinFactory` contract.  In `launchGroupCoinToUniswapV3`, we wrap a fixed amount of ETH, as determined by `config.token1Amount`, which is later deposited as liquidity to the created Uniswap v3 pool:  ```solidity IWETH9(WETH).deposit{ valu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Groupcoin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Protocol owner has control over swap fees earned",
+  "platform": "pashov-audits",
+  "program": "SolidlyV3-v3-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can result in a loss of yield for LPs  **Likelihood:** Low, as it requires a compromised or malicious owner  ## Description  In the Solidly V3 AMM the swap fees can be collected by an account that is given the `feeCollector` role. The `SolidlyV3Factory` can give and revoke this role to/from accounts. It is expected that the initial role holder will be set to a `RewardsDistributor` contract (expected source code can be seen [here](https://github.com/SolidlyV3/v3-rewards/blob/dev/contracts/RewardsDistributor.sol)). In that contract, a permissioned `owner` wil",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/SolidlyV3AMM-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

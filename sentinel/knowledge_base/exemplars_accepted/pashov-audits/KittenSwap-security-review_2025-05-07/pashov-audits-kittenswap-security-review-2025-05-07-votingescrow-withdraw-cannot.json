@@ -1,0 +1,21 @@
+{
+  "title": "`VotingEscrow.withdraw` cannot be called by an approved `tokenId` spender",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Inside `VotingEscrow.withdraw`, there is `_isApprovedOrOwner` check, which allows an approved `tokenId` spender to trigger this operation.  ```solidity     function withdraw(uint _tokenId) external nonreentrant { >>>     assert(_isApprovedOrOwner(msg.sender, _tokenId));         require(attachments[_tokenId] == 0 && !voted[_tokenId], \"attached\");          LockedBalance memory _locked = locked[_tokenId];         require(block.timestamp >= _locked.end, \"The lock didn't expire\");         uint value = uint(int256(_locked.amoun",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

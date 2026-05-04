@@ -1,0 +1,21 @@
+{
+  "title": "Manual negative PnL realization can incorrectly realize losses",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `executeManualNegativePnlRealizationCallback` function calculates unrealized PnL using the current price instead of the price after impact. This calculation fails to account for situations where price impact would actually benefit the trader's position.  When skew price impact is large (making `totalPriceImpactP` < 0) and would benefit the position (e.g., making the closing price higher for a long position or lower for a short position), the position might actually be profitable after accounting for price impact. Howe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Users can manipulate the NFT chosen for the auction",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  To create an auction, a random number is generated which is used to determine the index of the NFT auctioned off from the `auctionQueue`. If the random number is equal to the length of the auction queue or if the random number is 1 less than the length of the auction queue, users can manipulate the NFT chosen in their favor.  Firstly, let's imagine the first scenario:  - An auction will be created with the random number 5 and there are 5 NFTs in the auction queue - Due to the line below, we will auction off the NFT with ind",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

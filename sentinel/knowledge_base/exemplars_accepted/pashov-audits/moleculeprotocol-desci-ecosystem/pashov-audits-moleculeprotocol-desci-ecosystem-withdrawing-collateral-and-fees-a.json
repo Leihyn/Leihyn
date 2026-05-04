@@ -1,0 +1,24 @@
+{
+  "title": "Withdrawing collateral and fees and bypassing trust safety mechanism",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-desci-ecosystem",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy",
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  From the project specification:          Each project has a dedicated beneficiary address associated with it that enjoys very special rights during the next states and hence is enforced to be a (Safe) multisignature wallet with two signatories and a 2/2 threshold:         sourcer: the user who creates the project, a medium-high trust party, as defined by on the market spawn parameters         protocolTrustee: a protocol-controlled wallet, and high trust party (molecule), set on the configured IPSeedTrust contract.  The IPSeed",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Catalyst-security-review-april.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

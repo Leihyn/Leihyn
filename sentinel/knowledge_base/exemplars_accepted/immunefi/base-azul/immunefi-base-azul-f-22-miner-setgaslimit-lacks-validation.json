@@ -1,0 +1,22 @@
+{
+  "title": "F-22 miner_setGasLimit lacks validation",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "High",
+  "severity_awarded": "Critical",
+  "status": "escalated",
+  "rejection_reason": null,
+  "surface_tags": [
+    "l2-client",
+    "proxy"
+  ],
+  "bug_class": "l2-liveness",
+  "mental_operation": "trust_mapper",
+  "language": "rust",
+  "file_paths": [],
+  "summary": "miner namespace registered as atomic unit; setGasLimit accepts any value with no floor/cap; sequencer DoS by forcing a non-viable gas limit. Triager andrew confirmed claim, reassessed Critical.",
+  "key_lesson": "namespace-registration patterns where multiple methods are bundled atomically should be audited for the LEAST-validated method",
+  "contest_url": "https://immunefi.com/audit-competition/audit-comp-base-azul",
+  "submission_url": null,
+  "captured_at": "2026-05-04T03:26:26"
+}

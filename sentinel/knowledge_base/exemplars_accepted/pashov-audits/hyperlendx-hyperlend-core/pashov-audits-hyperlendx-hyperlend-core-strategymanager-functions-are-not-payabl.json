@@ -1,0 +1,19 @@
+{
+  "title": "StrategyManager functions are not `payable`",
+  "platform": "pashov-audits",
+  "program": "hyperlendx-hyperlend-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  Users can use StrategyManager to perform their strategies in one transaction and the code allows sending ETH for the transactions: ```solidity     function executeCall(address target, uint256 value, bytes memory data, bool allowRevert) public onlyOwner() returns (bytes memory) {         (bool success, bytes memory returnData) = target.call{value: value}(data);         if (!allowRevert) require(success, 'execution reverted');         return returnData;     } ``` The issue is that none of the functions of the StrategyManager are",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperlend-security-review_2025-01-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

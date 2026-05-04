@@ -1,0 +1,21 @@
+{
+  "title": "Recoveries of type `SigMode.OnlyDKIM` can be reverted by anyone",
+  "platform": "pashov-audits",
+  "program": "AmbireTech-ambire-common",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the recovery will be reverted and the user still won't be able to gain access to his smart wallet  **Likelihood:** High, as anyone can execute this attack when `SigMode.OnlyDKIM` is used for recovery  ## Description  The way in which the recoveries in `DKIMRecoverySigValidator::validateSig` work are that when a recovery is executed, the `sigMeta.newAddressToSet` address will be granted `sigMeta.newPrivilegeValue` privileges. In `AmbireAccount` when an address has non-zero privileges he is allowed to execute anything in the smart wallet, making him an owner of",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Ambire-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

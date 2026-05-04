@@ -1,0 +1,21 @@
+{
+  "title": "Fee target mismatch in `deposit`, `mint`, `withdraw`, `redeem` and `preview***` methods",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because it can cause double spending and disturb the pool calculations  **Likelihood:** Medium, because exception recipients are set by admin for common addresses  ## Description  When users want to deposit their tokens, code calculates fee in `previewDeposit()` and `previewMint()` and add/subtract it from the amount/share. As you can see code checks entry fee based on `msg.sender`:  ```solidity     function previewDeposit(         uint256 _amount     ) public view returns (uint256 shares) {         return convertToShares(_amount).subBp(exemptionList[msg.sender]",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

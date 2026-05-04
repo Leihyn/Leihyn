@@ -1,0 +1,21 @@
+{
+  "title": "Non-compliance with EIP-721 in `tokenURI()` function",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Low  **Likelihood:** High  ## Description  Similar Finding: [Link](https://solodit.cyfrin.io/issues/dropboxtokenuri-returns-data-for-non-existent-tokenid-violating-eip721-cyfrin-none-earnm-dropbox-markdown)  The `tokenURI` function in the`RipFunPacks` contract does not strictly adhere to the EIP-721 standard.   ```solidity     function tokenURI(uint256 tokenId) public view override returns (string memory) {         return _packetUris[tokenId];     } ```  According to the [EIP-721 specification](https://eips.ethereum.org/EIPS/eip-721), the function should th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

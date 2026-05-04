@@ -1,0 +1,22 @@
+{
+  "title": "Decreasing position size via leverage update can be abused to steal from diamond",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The trader can decrease position size using leverage update, which will then realize the partial profit/loss based on position size delta.  However, in the case of a profit, `handleTradePnl()` will incorrectly send the closing fees to the trader instead of the vault. This allows the trader to receive more profit than expected by stealing from the diamond. Over time, this will slowly drain the diamond as the closing fees are still distributed despite not receiving it.  Suppose the trader has the following position,  - existing",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Multisig wallets that call `StargateLbpHelper.participate()` could cause received token to be stolen",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as received tokens on destination chain will be lost  **Likelihood:** Medium, this occurs when caller is a multisig wallet contract  ## Description  `StargateLbpHelper.participate()` is used to perform a cross chain transfer to the host chain and then a swap using the Balancer Liquidity Bootstrapping Pool.  The issue is that the receiver address of the LBP swap on the destination chain is hardcoded to `msg.sender` (passed in by `participate()`).  This will be a problem if `msg.sender` is a multisig wallet contract, as the wallet owners may not have control over t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Funds can be permanently locked due to unsafe type casting",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `StakingManager` contract manages staking operations for HYPE tokens, allowing users to stake their tokens and receive `kHYPE` tokens in return. When users stake tokens through the `stake()` function, the contract delegates these tokens to validators using the `_distributeStake()` internal function, which in turn calls `l1Write.sendTokenDelegate()`.  A critical issue exists in the type casting of the `amount` parameter in both `_distributeStake()` and `_withdrawFromValidator()` functions. The `l1Write.sendTokenDelegate(",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

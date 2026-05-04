@@ -1,0 +1,19 @@
+{
+  "title": "Lack of access control on tSQD's `registerTokenOnL2`",
+  "platform": "pashov-audits",
+  "program": "subsquid-subsquid-network-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "access-control",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, malicious attacker can set L2 custom address to different address to break the bridge token.  **Likelihood**: Medium, attacker can front-ran the `registerTokenOnL2` to break the bridge token.  ## Description  tSQD is designed so that it can be bridged from Ethereum (L1) to Arbitrum (L2) via Arbitrum\u2019s generic-custom gateway. However, the `registerTokenOnL2` function, which sets the L2 token address via `gateway.registerTokenToL2`, is not currently restricted.  ```solidity   function registerTokenOnL2(     address l2CustomTokenAddress,     uint256 maxSubmissionCos",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Subsquid-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

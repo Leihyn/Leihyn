@@ -1,0 +1,19 @@
+{
+  "title": "The limit for jars minted can be exceeded",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-honeyjar-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  All `Beekeeper` external functions that mint jars perform some checks implemented in the internal `_canMintHoneyJar` function. Among other things, this function checks that the sum of the minted jars and the new amount to be minted does not exceed the limit defined by the checkpoints.  ```solidity File: Beekeeper.sol  168        if (progress.mintedJars.length + amount_ > progress.checkpoints[progress.checkpoints.length - 1]) { 169            revert MekingTooManyHoneyJars(); 170        } ```  If all the checks pass, `_mintHone",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HoneyJar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Swap of option profit to base token is not handled correctly",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `liquidate` function in `HegicModule.sol` exercises the options received as a parameter. For each option, in case of being in the money:  1. Calculates the profit by calling `getOptionValue` function. As we can see in the code snippet below, the profit is converted from USDCe to USDC. 2. Transfers the option from the margin account to the contract and exercises it, setting the margin account as the recipient of the profit. 3. Uses the `assetExchangerUSDCetoUSDC` contract to swap the profit from USDCe to USDC, passing `p",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

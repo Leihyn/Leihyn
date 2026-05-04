@@ -1,0 +1,23 @@
+{
+  "title": "Unvalidated External Image URLs from NFT Metadata",
+  "platform": "pashov-audits",
+  "program": "initia-labs-widget",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium    **Likelihood:** Medium  ## Description  In multiple components (`CollectionDetails.tsx`, `NftDetails.tsx`, etc.), NFT image URLs sourced from on-chain metadata or third-party APIs are passed directly into rendering components like `<NftThumbnail />` without validation or sanitization.  Example vulnerable code:  ``` <NftThumbnail src={nft.image} /> ```  This creates a **trust boundary violation**, since NFT images may originate from:  - Untrusted domains or IPFS gateways. - Inline `data:` URIs (e.g. `data:image/svg+xml`). - Malformed or malicious payloads (e.g",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Initia-security-review_2025-06-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

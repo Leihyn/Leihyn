@@ -1,0 +1,19 @@
+{
+  "title": "Manual Execution will not work with the current nonce implementation",
+  "platform": "pashov-audits",
+  "program": "stake-dao-laposte",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When sending messages / tokens through CCIP, if the transaction fails on the destination chain, CCIP offers an option to manually execute (retry) the transaction again.  One case where the transaction may fail is when the receiver contract on the destination blockchain reverted due to the gas limit being insufficient to execute the triggered function (Note: The gas limit value is set in the [extraArgs](https://docs.chain.link/ccip/api-reference/client#evmextraargsv1) param of the message) (Source: [Chainlink Docs](https://docs",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LaPoste-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Community fees wasted if no voters in `claimAndDistributeAlgebraPoolFees()`",
+  "platform": "pashov-audits",
+  "program": "Kittenswap-contracts-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `Voter` contract, the `_claimAndDistributeAlgebraPoolFees()` function is called during the `_distribute()` flow for Algebra gauges, where it:  1. Collects and withdraws community fees from the Algebra pool. 2. Sends these fees to the associated `VotingReward` contract via `votingReward.notifyRewardAmount()` for distribution to the gauge\u2019s voters **in the current period**.  ```solidity  function _distribute(uint256 _period, address _gauge) internal {         //...          uint256 emissions = (ps.totalEm",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-07-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

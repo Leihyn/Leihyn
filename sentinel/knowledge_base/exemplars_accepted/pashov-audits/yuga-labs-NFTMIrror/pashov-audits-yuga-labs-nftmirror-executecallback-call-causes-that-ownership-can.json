@@ -1,0 +1,19 @@
+{
+  "title": "`executeCallback` call causes that ownership cannot be updated on the base chain",
+  "platform": "pashov-audits",
+  "program": "yuga-labs-NFTMIrror",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When `Beacon.triggerOwnershipUpdate()` is called, the new owners of the tokens are read from the target chain, and `Beacon._updateOwnership()` is executed on the source chain to update the ownership.  When this is executed on the NFT's native chain, `shadowAddress` is the address of the NFT contract, not the NFTShadow contract. As such, when `_shadow.executeCallback(guid)` is called at the end of the function, the transaction will revert, as the NFT contract does not have the `executeCallback` function.  ```solidity 564:",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/NFTMirror-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

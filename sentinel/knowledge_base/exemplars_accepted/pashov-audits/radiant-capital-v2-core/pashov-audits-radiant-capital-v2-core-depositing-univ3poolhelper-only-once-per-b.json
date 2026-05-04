@@ -1,0 +1,23 @@
+{
+  "title": "Depositing `UniV3PoolHelper` only once per block for all users",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `checkLastBlockAction` allows only one deposit for a given `msg.sender`.  ```solidity \tmodifier checkLastBlockAction() { \t\tif (_callerLastBlockAction[msg.sender] == block.number) revert UniV3TokenizedLp_NoDepositOrWithdrawLoop(); \t\t_; \t\t_callerLastBlockAction[msg.sender] = block.number; ```  In fact, it means that `UniV3PoolHelper` can only deposit once per block, for all `UniV3PoolHelper` users (and thus all LockZap users). This condition may be too strict resulting in reverts for users in the block if `UniV3PoolHelper`",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

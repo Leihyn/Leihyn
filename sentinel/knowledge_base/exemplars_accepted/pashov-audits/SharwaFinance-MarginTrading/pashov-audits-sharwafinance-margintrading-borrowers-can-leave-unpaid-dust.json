@@ -1,0 +1,22 @@
+{
+  "title": "Borrowers can leave unpaid dust",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  `withdrawERC20`, `withdrawERC721`, `borrow` and `liquidate` functions in `MarginTrading` contract calculate the portfolio ratio to check if the account is undercollateralized. This ratio is calculated by dividing the value of the assets held by the account by the value of the debt, both denominated in the base currency (USDC).  ```solidity File: MarginTrading.sol  196:     function _calculatePortfolioRatio(uint marginAccountValue, uint debtWithAccruedInterest) private pure returns (uint marginAccountRatio) { 197:         if (d",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

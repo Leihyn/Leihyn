@@ -1,0 +1,22 @@
+{
+  "title": "`getRedemptionHints` will revert if `_maxIterations` is reached",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The function `getRedemptionHints()` in `HintHelpers.sol` is used to find the right hints to pass to `redeemCollateral()`. The number of positions to consider for redemption can be capped to `_maxIterations` to avoid running out of gas. However, there is a flaw in the implementation that will cause the function to revert if `_maxIterations` is reached.  ```solidity File: HintHelpers.sol  48:      while (vars.currentPositionUser != address(0) && vars.remainingStables > 0 && _maxIterations-- > 0) { ```  The decrement of the `_max",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

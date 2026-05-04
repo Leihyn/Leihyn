@@ -1,0 +1,22 @@
+{
+  "title": "`updateTradePosition()` fails to limit TP/SL distance",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  An increase in position size will update the trade's open price due to the partial trade with a different open price. The trade new open price will be updated via `updateTradePosition()`.  However, `updateTradePosition()` fails to adjust the TP/SL using `_limitTpDistance()` and `_limitSlDistance()` despite changing the open price. It could cause the existing TP/SL that are near limits to be incorrectly exceeding the TP/SL limits based on max PnL.  Traders could abuse this to set a TP that exceeds the max profit of 900%.  ```So",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

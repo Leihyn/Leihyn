@@ -1,0 +1,22 @@
+{
+  "title": "Missing custom logic for USDC spot market",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When adding a supported asset using addAsset(), the spotMarket ID must be provided. This market ID is later used in getRate() to fetch the USD value of the deposited asset through a precompile call. However, in the case of USDC, there is no valid spot market to get its price:  ``` Universe: [   {'tokens': [1, 0], 'name': 'PURR/USDC', 'index': 0, 'isCanonical': True},   {'tokens': [2, 0], 'name': '@1', 'index': 1, 'isCanonical': False},   {'tokens': [3, 0], 'name': '@2', 'index': 2, 'isCanonical': False} ] ``` All listed tok",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

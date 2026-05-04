@@ -1,0 +1,21 @@
+{
+  "title": "Certain stablecoins cannot be added to Pool",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The protocol aims to work with standard tokens, stablecoins, and LRTs, but in the constructor and the `addToken` function, there's a check ensuring that token decimals equal 18.  From constructor:  ```solidity             if (ERC20(tokens_[t]).decimals() != 18) {                 revert Pool__InvalidDecimals();             } ```  From `addToken`:  ```         if (ERC20(token_).decimals() != 18) revert Pool__InvalidParams(); ```  Most popular stablecoins like [USDC](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

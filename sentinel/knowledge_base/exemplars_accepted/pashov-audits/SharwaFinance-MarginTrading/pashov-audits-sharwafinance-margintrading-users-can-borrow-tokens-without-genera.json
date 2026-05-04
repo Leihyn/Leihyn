@@ -1,0 +1,23 @@
+{
+  "title": "Users can borrow tokens without generating debt shares",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `borrow` function of the `LiquidityPool` contract calculates the amount of debt shares to credit to the borrower by multiplying the new amount borrowed by the total debt shares and dividing by the total amount borrowed (including interest).  ```solidity File: LiquidityPool.sol  142:         uint newDebtShare = borrows > 0 143:   @>        ? (debtSharesSum * amount) / borrows 144:             : (amount * 10 ** decimals()) / 10 ** poolToken.decimals(); ```  In case the `debtShares * amount` is lower than `borrows`, the di",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

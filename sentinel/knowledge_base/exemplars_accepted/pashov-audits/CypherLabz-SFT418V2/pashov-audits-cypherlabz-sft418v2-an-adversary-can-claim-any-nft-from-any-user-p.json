@@ -1,0 +1,21 @@
+{
+  "title": "An adversary can claim any NFT from any user (Project self-injected exploit)",
+  "platform": "pashov-audits",
+  "program": "CypherLabz-SFT418V2",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `_claim()` function in `SFT418Core` allows users to claim any NFT, despite the intention to only allow it from the token pool:  ```solidity     /** @>   * @notice claims an existing chunk in the token pool if the target has enough eligible chunks      * @param target_ - the claimer      * @param id_ - the ID to claim      */     function _claim(address target_, uint256 id_) internal virtual {         uint256 _eligibleChunks = _getEligibleChunks(target_);         require(_eligibleChunks > 0, \"NOT_ENOUGH_ELIGIBLE\");",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SFT-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Fees will always be sent to `address(0)`",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The Staking contract includes a fee mechanism implemented as follows:  ```solidity         uint256 _fee = (shares_ * depositFeeBps) / 1e4;         _mint(to_, shares_ - _fee);         _mint(protocolFeeAddress, _fee); ```  All fees are sent to protocolFeeAddress. However, the contract does not initialize this address, nor does it provide a function to update it. As a result, fees are permanently lost because the default value of `protocolFeeAddress` is address(0).  ## Recommendations  Consider adding the following function to t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

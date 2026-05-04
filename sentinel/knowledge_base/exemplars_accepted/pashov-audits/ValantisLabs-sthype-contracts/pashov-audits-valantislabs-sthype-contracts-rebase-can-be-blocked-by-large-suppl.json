@@ -1,0 +1,22 @@
+{
+  "title": "`rebase()` can be blocked by large supply increase",
+  "platform": "pashov-audits",
+  "program": "ValantisLabs-sthype-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `Overseer.rebase()` reverts when the calculated APR change since the last rebase exceeds a predefined threshold (`aprThresholdBps`).  ```solidity         int256 aprChange = _calculateApr(timeElapsed, currentSupply, newSupply);          if (aprChange > 0) {             if (aprChange + 1 >= int256(aprThresholdBps)) {                 revert AprTooHigh(aprChange + 1, aprThresholdBps); ```  As `aprThresholdBps` is limited to 10_000 basis points (100%), a large increase in the stHYPE supply might cause the `rebase()` fun",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/stHYPE-security-review_2025-10-13.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

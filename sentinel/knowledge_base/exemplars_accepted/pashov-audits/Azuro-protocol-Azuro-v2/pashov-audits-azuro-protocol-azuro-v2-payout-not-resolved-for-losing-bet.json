@@ -1,0 +1,19 @@
+{
+  "title": "Payout not resolved for losing bet",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-Azuro-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, affects core function resolvePayout, leading to delays in resolving bets, which in turn affects the efficient use of funds.  **Likelihood:** Medium, there's a common scenario where a sub-bet, not necessarily the first in the sequence, is resolved first, without it being the winning outcome.  ## Description  When an express bet has any of its sub-bets lost, the entire bet is considered lost and should be resolved accordingly. We can see that if `condition.state` = RESOVLED then the payout returns 0.          function _calcPayout(Bet storage bet) internal view re",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Azuro_security_review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

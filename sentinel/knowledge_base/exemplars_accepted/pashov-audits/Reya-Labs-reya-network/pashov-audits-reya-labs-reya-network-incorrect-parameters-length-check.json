@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect parameters length check",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  `PythOffchainLookupNode.isValid` check on the length of the parameters data is incorrect.  ```solidity     // Must have correct length of parameters data     if (nodeDefinition.parameters.length != 32 * 4) {         return false;     } ```  The parameters data for Pyth nodes is composed of the oracle adapter address and the pair id (of type bytes32) ABI encoded, which is 64 bytes long, not 128 bytes long.  As a result, registering a node with the correct parameters will fail. On the other hand, padding the parameters data with",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

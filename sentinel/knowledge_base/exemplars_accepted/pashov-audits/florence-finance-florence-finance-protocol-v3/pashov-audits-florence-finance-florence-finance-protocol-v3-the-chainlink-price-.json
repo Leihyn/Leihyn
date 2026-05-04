@@ -1,0 +1,23 @@
+{
+  "title": "The Chainlink price feed's input is not properly validated",
+  "platform": "pashov-audits",
+  "program": "florence-finance-florence-finance-protocol-v3",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "governance"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can result in the application working with an incorrect asset price  **Likelihood:** Low, as Chainlink oracles are mostly reliable, but there has been occurrences of this issue before  ## Description  The code in `LoanVault::getFundingTokenExchangeRate` uses a Chainlink price oracle in the following way:  ```solidity (, int256 exchangeRate, , , ) = fundingTokenChainLinkFeeds[fundingToken].latestRoundData();  if (exchangeRate == 0) {     revert Errors.ZeroExchangeRate(); } ```  This has some validation but it does not check if the answer (or price) received",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/FlorenceFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

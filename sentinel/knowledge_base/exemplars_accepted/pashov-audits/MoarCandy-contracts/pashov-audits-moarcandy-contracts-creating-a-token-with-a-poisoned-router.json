@@ -1,0 +1,21 @@
+{
+  "title": "Creating a token with a poisoned router",
+  "platform": "pashov-audits",
+  "program": "MoarCandy-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `BondingERC20TokenFactory.deployBondingERC20Token` function does not validate the user's input. So it is possible to create a bonding token with a fake router to steal all ETH from the token sales.  ```solidity     function deployBondingERC20Token( >>      address _router,         string memory _name,         string memory _symbol,         LP_POOL _poolType     )         public         returns (address)     {         ContinuosBondingERC20Token _bondingERC20Token = new ContinuosBondingERC20Token( >>          _router,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/MoarCandy-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "F-21 txpool accepts gas_limit > EIP-7825 cap",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "High",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "fixed-in-pr",
+  "surface_tags": [
+    "l2-client"
+  ],
+  "bug_class": "default-state",
+  "mental_operation": "boundary_prober",
+  "language": "rust",
+  "file_paths": [],
+  "summary": "Post-Azul txpool accepts gas_limit > 16,777,216 (EIP-7825 cap) for raw transactions.",
+  "key_lesson": "PR #2297 (merged 2026-04-21) backports the cap to v0.7.6/v0.8.0 \u2014 bug not present in audited rc.28 commit. Pre-flight on every cap-style finding.",
+  "contest_url": null,
+  "submission_url": null,
+  "captured_at": "2026-05-04T03:26:28"
+}

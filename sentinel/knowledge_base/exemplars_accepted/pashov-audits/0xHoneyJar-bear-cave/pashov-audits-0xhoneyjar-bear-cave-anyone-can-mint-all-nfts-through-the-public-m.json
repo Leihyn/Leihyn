@@ -1,0 +1,19 @@
+{
+  "title": "Anyone can mint all NFTs through the public mint before it has even started",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it breaks an important protocol invariant and the way the protocol should work overall  **Likelihood:** High, as it does not need any preconditions, can be executed easily at the deployment of `HoneyBox`  ## Description  Both the `mekHoneyJarWithERC20` and `mekHoneyJarWithETH` methods are ways for the players to mint `HoneyJar` NFTs, but they should work only when general mint is open, as shown in this check that is present in both methods:  ```solidity if (slumberParties[bundleId_].publicMintTime > block.timestamp) revert GeneralMintNotOpen(bundleId_); ```  T",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

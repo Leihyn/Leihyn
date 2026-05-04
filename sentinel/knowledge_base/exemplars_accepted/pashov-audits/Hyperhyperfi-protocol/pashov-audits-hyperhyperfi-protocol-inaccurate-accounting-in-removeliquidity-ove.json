@@ -1,0 +1,22 @@
+{
+  "title": "Inaccurate accounting in `removeLiquidity()` overstating liquidity",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  `LiquidityFacet.removeLiquidity()` incorrectly updates the pool's token balance by only deducting the net amount (`netOutAmount`) while separately tracking the fee amount (`pFee`).  This creates a discrepancy because the full withdrawal amount (`outAmount = netOutAmount + pFee`) is taken from the pool's token balance, but only `netOutAmount` is deducted from the accounting balance in `poolAmount`.  Consider the following example:  1. User calls `LiquidityFacet.removeLiquidity()` with `_lpAmount` LP tokens. 2. Protocol calcu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

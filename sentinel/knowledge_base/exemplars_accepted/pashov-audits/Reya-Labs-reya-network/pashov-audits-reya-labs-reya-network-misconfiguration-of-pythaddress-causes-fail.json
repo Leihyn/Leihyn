@@ -1,0 +1,21 @@
+{
+  "title": "Misconfiguration of `pythAddress` causes failure in dependent contracts",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `oracle-adapters/src/storage/Configuration.sol` library is responsible for storing and retrieving configuration data, including the address for the Pyth oracle (`pythAddress`). However, the current implementation does not set the `pythAddress`, leading to potential issues in contracts that rely on this address. Specifically, if the `pythAddress` is not set, any calls to retrieve or use this address will fail.  The relevant code section from `Configuration.sol` shows that the `pythAddress` is defined but not set:  ```solidi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

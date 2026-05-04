@@ -1,0 +1,21 @@
+{
+  "title": "Some common non-standard ERC20 tokens are incompatible with the protocol",
+  "platform": "pashov-audits",
+  "program": "NFTLoots-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, because it won't leave to a loss of funds, outside of gas for redeployment  **Likelihood:** Medium, because such token is listed in the docs  ## Description  The code in `NFTLootbox` is directly using ERC20's `transfer` and `transferFrom` methods. There are two problems with this:  1. Some tokens do not revert on failure in `transfer` or `transferFrom`, but instead return false (example is `ZRX`) 2. Some tokens do not return a bool on `transfer` or `transferFrom` call (examples are `USDT`, `BNB`, `OMG`).  The application is incompatible with either of those. Th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NFTLoots-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

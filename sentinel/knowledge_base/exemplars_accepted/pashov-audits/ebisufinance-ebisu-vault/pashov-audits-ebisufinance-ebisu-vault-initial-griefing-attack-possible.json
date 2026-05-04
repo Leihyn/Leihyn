@@ -1,0 +1,22 @@
+{
+  "title": "Initial griefing attack possible",
+  "platform": "pashov-audits",
+  "program": "ebisufinance-ebisu-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the victim loses their funds  **Likelihood:** Low, as it comes at a cost for the attacker  ## Description  The famous initial deposit attack is largely mitigated by the `+1` done in the asset/shares conversion. However, doing this attack can cause some strange behavior that could grief users (at high cost of the attacker) and leave the vault in a weird state:  Here's a PoC showing the impacts, can be added to `Deposit.t.sol`:  ```solidity     Vault vault;     MockERC20 asset;      address bob = makeAddr('bob');      function setUp() public {         asset = ne",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ebisu-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

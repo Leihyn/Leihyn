@@ -1,0 +1,22 @@
+{
+  "title": "Critical functions revert if system is undercollateralized",
+  "platform": "pashov-audits",
+  "program": "RegnumAurumAcquisitionCorp-fx-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The internal function `Treasury._loadSwapState()` calculates the `xNav` as follows:  ```solidity _state.xNav = _state.baseSupply.mul(_state.baseNav).sub(_state.fSupply.mul(_state.fNav)).div(_state.xSupply); ```  This is equivalent to:  ```js (baseSupplyNav - fSupplyNav) / xSupply ```  In the case of the system being undercollateralized (`baseSupplyNav < fSupplyNav`), the calculation of `xNav` will revert due to subtraction underflow. All transactions involving the execution of `_loadSwapState()` will fail, inclu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RWf(x)-security-review_2025-08-20.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

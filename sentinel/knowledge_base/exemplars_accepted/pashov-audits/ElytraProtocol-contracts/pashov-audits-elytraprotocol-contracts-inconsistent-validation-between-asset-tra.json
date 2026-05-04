@@ -1,0 +1,22 @@
+{
+  "title": "Inconsistent validation between asset transfer functions",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `ElytraDepositPoolV1` has inconsistent validation logic between `allocateToStrategy()` and `transferAssetToUnstakingVault()` when checking tracked deposit balances. This inconsistency allows attackers to bypass donation attack protections by using the lenient transfer path instead of the strict allocation path.  Let's check `ElytraDepositPoolV1.sol` code where **inconsistent validation logic** is present.  ```solidity // allocateToStrategy() - STRICT validation function allocateToStrategy(address asset, ui",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

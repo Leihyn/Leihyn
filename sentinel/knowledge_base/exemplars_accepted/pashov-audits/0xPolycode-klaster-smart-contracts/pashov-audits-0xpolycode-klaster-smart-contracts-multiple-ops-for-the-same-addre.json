@@ -1,0 +1,21 @@
+{
+  "title": "Multiple ops for the same address case",
+  "platform": "pashov-audits",
+  "program": "0xPolycode-klaster-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  A possible failure of transaction done in [handleOps](https://github.com/0xPolycode/klaster-smart-contracts/blob/a819679b17716bb0b01e787fbb7fc54d7c70127e/contracts/KlasterPaymaster.sol#L13) method for all UserOperation[], since there is no check for ops array if ops have multiple UserOperation for the same address:  ``` function handleOps(UserOperation[] calldata ops) public payable {         entryPoint.depositTo{value: msg.value}(address(this));         entryPoint.handleOps(ops, payable(msg.sender));         entryPoint.withdr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Klaster-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

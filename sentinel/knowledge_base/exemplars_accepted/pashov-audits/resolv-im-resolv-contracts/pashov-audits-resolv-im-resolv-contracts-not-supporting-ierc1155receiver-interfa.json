@@ -1,0 +1,21 @@
+{
+  "title": "Not supporting `IERC1155Receiver` interface ID",
+  "platform": "pashov-audits",
+  "program": "resolv-im-resolv-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `DineroTreasuryConnector` inherits from `ERC1155HolderUpgradeable`, which implements ERC-165 to support the `IERC1155Receiver` interface ID. also inherits from `AccessControlDefaultAdminRulesUpgradeable`, which implements ERC-165 to support the `IAccessControlDefaultAdminRules` interface ID.  But the current implementation of `supportsInterface` interface within `DineroTreasuryConnector` remove `IERC1155Receiver` interface ID from ERC-165 checker.  ```solidity contract DineroTreasuryConnector is IDineroTreasuryConnector,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Resolv-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

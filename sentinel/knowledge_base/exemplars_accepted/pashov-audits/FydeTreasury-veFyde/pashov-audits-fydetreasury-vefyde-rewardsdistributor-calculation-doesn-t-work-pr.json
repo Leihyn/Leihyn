@@ -1,0 +1,21 @@
+{
+  "title": "`RewardsDistributor` calculation doesn't work properly",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-veFyde",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The owner of the `RewardsDistributor` contract can set boost periods for higher reward multipliers by calling `setBoostPeriods`. These periods are used in the `rewardRate` logic when calculating the current reward rate and by association the reward per token.  As suggested in an example by the sponsor, a common configuration for such boost periods is to have the multiplier decrease over time with a series of boost periods. The idea behind this is to start with a higher boost to reward early participants, and tail off the bo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

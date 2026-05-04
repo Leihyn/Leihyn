@@ -1,0 +1,22 @@
+{
+  "title": "Disabled lender's loan configuration can be used by a borrower",
+  "platform": "pashov-audits",
+  "program": "bull-haus-lumin-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as a borrower can use a disabled loan configuration but it will still work as a normal loan, so no lender value loss  **Likelihood:** High, as the disabling functionality can never work with the current code  ## Description  In the `LoanConfig` struct we have the `enabled` field, which is set to `true` for newly created loan config and can be set to `true/false` in `LoanConfigManager::updateLoanConfigEnabledStatus`. The problem is that in `LoanManager::createLoan`, when a borrower takes in a loan from a lender, a `configId` is given as an argument and then the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Lumin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

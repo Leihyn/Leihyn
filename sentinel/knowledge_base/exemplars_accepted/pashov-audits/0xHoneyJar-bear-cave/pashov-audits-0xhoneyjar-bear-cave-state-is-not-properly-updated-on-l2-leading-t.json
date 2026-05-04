@@ -1,0 +1,19 @@
+{
+  "title": "State is not properly updated on L2, leading to stuck prize NFTs",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as winning prize NFTs won't be claimable  **Likelihood:** High, as functionality is never working correctly  ## Description  The `addToParty` method in `HibernationDen` does not send a cross-chain message, even though it pushes sleepers into the `party.sleepoors` array on L1. Since the array won't be updated on L2, now all the calculations and validations that are done based on the `party.sleepoors.length` value will be incorrect. This essentially means that the sleeper NFTs will be stuck as in `wakeSleeper` there is the following check:  ```solidity if (party.nu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

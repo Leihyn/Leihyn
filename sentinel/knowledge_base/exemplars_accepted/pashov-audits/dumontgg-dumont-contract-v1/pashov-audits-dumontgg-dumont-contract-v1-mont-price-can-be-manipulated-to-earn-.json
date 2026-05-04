@@ -1,0 +1,22 @@
+{
+  "title": "Mont price can be manipulated to earn more rewards",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `MontRewardManager` contract uses the `quoteExactInputSingle()` function from the Uniswap Quoter to get the USDT price of one unit of MONT.  The problem is that this price can be easily manipulated since it uses the current pool price for its calculations.  ```solidity     function transferPlayerRewards(...) external returns (uint256 reward) {         uint256 price = getMontPrice();         ...          reward = ((houseFeeFixedPoint * 8) / 10) / price;          balances[_player] += reward;     }      function getMontPri",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

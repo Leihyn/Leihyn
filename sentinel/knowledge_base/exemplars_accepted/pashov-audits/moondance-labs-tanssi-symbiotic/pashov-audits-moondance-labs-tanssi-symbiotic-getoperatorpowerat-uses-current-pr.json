@@ -1,0 +1,23 @@
+{
+  "title": "`getOperatorPowerAt` uses current prices for past stake calculations",
+  "platform": "pashov-audits",
+  "program": "moondance-labs-tanssi-symbiotic",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `OBaseMiddlewareReader::getOperatorPowerAt()` is trying to calculate the stake power that a specific operator had at a past timestamp based on their stake across all active vaults. This past stake power is used to sort the operator against others in `sortOperatorsByPower`, and also in `ODefaultOperatorRewards::_getRewardsAmountPerVault` to determine how the `stakerAmount` will be distributed among their active shared vaults. ```solidity     function _getRewardsAmountPerVault(         address[] memory operatorVaults,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tanssi-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

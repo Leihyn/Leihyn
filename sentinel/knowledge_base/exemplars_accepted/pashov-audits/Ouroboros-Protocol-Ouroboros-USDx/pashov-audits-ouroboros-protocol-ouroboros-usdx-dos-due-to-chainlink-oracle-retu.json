@@ -1,0 +1,22 @@
+{
+  "title": "DoS due to Chainlink oracle returning wrong data or going offline",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Chainlink oracle price feed can return wrong data or go offline in extreme cases, which will provoke the `EthPriceFeed.fetchEthPrice()` function to revert. This function is called to execute the main actions of the system, such as redeeming collateral, opening a position, adding collateral, closing a position, claiming escrow, and liquidating a position.  The impact of transaction reverting is especially severe in the case of liquidations, which might cause the system to be uncollateralized, and adding collateral, which might",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

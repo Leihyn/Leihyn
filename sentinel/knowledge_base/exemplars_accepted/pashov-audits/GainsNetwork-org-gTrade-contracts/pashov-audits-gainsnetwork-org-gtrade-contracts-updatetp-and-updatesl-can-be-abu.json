@@ -1,0 +1,22 @@
+{
+  "title": "`updateTp()` and `updateSl()` can be abused to obtain risk-free trade",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When an open order is executed within `executeTriggerOpenOrderCallback()`, validation is performed in `_openTradePrep()` to cancel any invalid order. This includes checking whether the TP or SL has been met.  However, the trader is allowed to update the TP/SL as long as there are no pending `TP_CLOSE` or `SL_CLOSE` orders.  This means that the trader can abuse `updateTp()` or `updateSl()` to block the execution of the pending order even when the open price has been hit. The trader can block it till the price is favorable, whi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

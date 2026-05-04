@@ -1,0 +1,23 @@
+{
+  "title": "Using stale price in Pyth Network",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High - Using stale prices leads to inaccurate calculations of total asset values and share prices.  **Likelihood:** Low - Price can be stale frequently if there is no update  ## Description  The `StrategyV5Pyth` uses `pyth.getPriceUnsafe` for obtaining Pyth oracle price feeds to calculate the asset/input exchange rate.          function assetExchangeRate(uint8 inputId) public view returns (uint256) {             if (inputPythIds[inputId] == assetPythId)                 return weiPerShare; // == weiPerUnit of asset == 1:1             PythStructs.Price memory inputPrice",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

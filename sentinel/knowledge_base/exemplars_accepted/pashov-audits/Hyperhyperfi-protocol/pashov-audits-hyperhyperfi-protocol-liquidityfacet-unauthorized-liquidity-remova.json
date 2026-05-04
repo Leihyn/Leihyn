@@ -1,0 +1,22 @@
+{
+  "title": "`liquidityFacet`: unauthorized liquidity removal for other users",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `removeLiquidity()` function currently allows any user to call the function and remove liquidity on behalf of another user, as it does not properly restrict access to the user performing the action. This could lead to unauthorized removal of liquidity from another user's account, potentially resulting in loss of assets, especially in scenarios where malicious actors attempt to exploit the function.  ```solidity     function removeLiquidity(address _tokenOut, uint256 _lpAmount, uint256 _minOut, address _to)         external",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

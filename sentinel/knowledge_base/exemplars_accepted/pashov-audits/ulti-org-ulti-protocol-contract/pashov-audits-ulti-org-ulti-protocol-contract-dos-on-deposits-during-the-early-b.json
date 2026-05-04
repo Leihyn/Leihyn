@@ -1,0 +1,23 @@
+{
+  "title": "DoS on deposits during the early bird period",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "amm"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  On deposits, the deposit price is calculated using the TWAP, but in the first 24 hours after the launch, a fixed price is used instead. This fixed price is the initial price in the pool.  ```solidity 981:         if (block.timestamp < launchTimestamp + EARLY_BIRD_PRICE_DURATION) { 982:             depositPrice = 1e18 / INITIAL_RATIO; 983:         } ```  A portion of the input tokens deposited by the user, together with an equivalent amount of ULTI tokens, are added to the pool as liquidity. The amount of ULTI tokens is calc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

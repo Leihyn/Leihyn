@@ -1,0 +1,21 @@
+{
+  "title": "Users can't bridge funds back from the app chain",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The protocol must pay a fee in native coin to bridge funds back from the app chain:  ```solidity         (uint256 tokenFees, uint256 nativeFees) =             getFees(withdrawToken, socketController, socketConnector, socketMsgGasLimit, socketPayloadSize);         if (tokenAmount > tokenFees) {             uint256 tokensToWithdraw = tokenAmount - tokenFees; @>          socketController.bridge{ value: nativeFees }({                 receiver_: receiver,                 amount_: tokensToWithdraw,                 msgGasLimit_: soc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

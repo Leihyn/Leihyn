@@ -1,0 +1,22 @@
+{
+  "title": "No slippage protection when interacting with AMM",
+  "platform": "pashov-audits",
+  "program": "gammaswap-v1-vaults",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  - It was noticed that the `amount0Min` & `amount1Min` are set to zero during interactions with the AMM router (Uniswap) for swaps and liquidity additions. These parameters are intended to protect against slippage; setting them to zero exposes transactions to slippage, potentially resulting in receiving or adding smaller amounts than intended.  - This issue was identified across all interactions with the AMM (Uniswap), when swapping, adding liquidity and removing liquidity, where these different interactions has different im",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GammaSwap-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "User deposits may be vulnerable to sandwich attacks",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `PositionManager` contract, the `deposit()` function allows users to deposit the underlying asset of a specified vault and lock them for collateral. However, the function does not introduce `minAmountOut` (the minimum amount of shares a user is willing to receive) .  The lack of this parameter exposes the depositors to **sandwich attacks**, where a malicious actor could front-run the deposit transaction to manipulate the share price, resulting in depositors receiving fewer shares than expected, reducing their effec",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

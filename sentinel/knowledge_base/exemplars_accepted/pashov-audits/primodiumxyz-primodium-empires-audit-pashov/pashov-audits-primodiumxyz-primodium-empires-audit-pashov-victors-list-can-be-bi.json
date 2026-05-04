@@ -1,0 +1,21 @@
+{
+  "title": "Victors list can be big and cannot be handled in one transaction",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Contract PayoutManager has been used to distribute the winner's payout. Admins call `record()` to set winners and their reward amounts and code loops through those winners and sets their rewards in the storage.  ```solidity     function record(         address[] memory _victors,         uint256[] memory _gains,         uint256 _roundNumber     ) public payable {         require(msg.sender == owner, \"[PAYMAN] Only owner can add winners\");         uint256 allocated = 0;          for (uint256 i = 0; i < _victors.length; i++)",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "User can drain escrow via approved withdrawals",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High    **Likelihood:** Medium    ## Description  Whenever a user wishes to withdraw, they must create a request via the `HyperEvmVault::requestRedeem` function:  ```solidity function requestRedeem(uint256 shares_) external nonReentrant {     V1Storage storage $ = _getV1Storage();     uint256 balance = this.balanceOf(msg.sender);     // Determine if the user withdrawal request is valid     require(shares_ <= balance, Errors.INSUFFICIENT_BALANCE());      RedeemRequest storage request = $.redeemRequests[msg.sender];          request.shares += shares_;     require(request",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Profitable trade positions risk unwarranted liquidation and loss of profit",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "staking",
+    "oracle"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When the liquidator calls `triggerOrder` to liquidate a trade, the `_fromBlock` parameter is set to `tradeInfo.createdBlock`. It is the block where the trade is executed and stored in the system.          function _getPriceTriggerOrder(             ITradingStorage.Trade memory _trade,             ITradingStorage.Id memory _orderId,             ITradingStorage.PendingOrderType _orderType,             uint256 _positionSizeCollateral // collateral precision         ) internal {             ITradingStorage.TradeInfo memory tradeIn",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

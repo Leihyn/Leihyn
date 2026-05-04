@@ -1,0 +1,23 @@
+{
+  "title": "swapTokens does not account for SwapX router fees when the out token is native",
+  "platform": "pashov-audits",
+  "program": "acc8-labs-funnel-vault",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description When the out token is native, the `SwapX` router charges fees on the out amount of the swap in both `swapV2ExactIn` and `swapV3ExactIn`, sending the remainder to the recipient but still returning the original out amount to the caller.  [SwapX@takeFee](https://github.com/acc8-labs/swapx-router-contracts/blob/main/src/SwapX.sol#L149-L165) ```solidity     function takeFee(address tokenIn, uint256 amountIn) internal returns (uint256){         if (feeExcludeList[msg.sender])             return 0;          uint256 fee",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Funnel-security-review_2025-08-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Preventing token claims until vesting period ends",
+  "platform": "pashov-audits",
+  "program": "g8keep-audit",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `g8keepVester` contract, responsible for managing token vesting schedules, contains an error in its implementation that prevents users from claiming any tokens until the entire vesting period has elapsed.  The issue stems from the `deploymentVest` function not initializing the `lastClaim` timestamp when creating a new vesting schedule:  ```solidity     function deploymentVest(address _deployer, uint256 _tokensToDeployer, uint256 _vestTime)         external         returns (uint256 vestingId)     {         ...         De",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/g8keep-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

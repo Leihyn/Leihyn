@@ -1,0 +1,19 @@
+{
+  "title": "Asset loan config can never be removed from its EnumerableSet",
+  "platform": "pashov-audits",
+  "program": "bull-haus-lumin-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as a user will be limited in his platform usage but won't lose value  **Likelihood:** Medium, as it happens when a user has created the max total loan configs for an asset  ## Description  The `LoanConfigManager` contract uses the `userConfigIds` mapping to keep track of the count of loan configurations a user created for an asset and limit them up until `maxLoanConfigsPerAsset` (which is set to 10 in the `LuminDeploy` deployment script). The problem is with the `deleteLoanConfig` method, which looks like this:  ```solidity function deleteLoanConfig(uint256 con",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Lumin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

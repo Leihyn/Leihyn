@@ -1,0 +1,22 @@
+{
+  "title": "Current redemption design causes users to be charged a penalty despite doing nothing wrong",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Upon users redeeming their escrow positions, we have the following piece of code if the cooldown and grace period have expired:  ```solidity else {     // We are about to return stables to user and charge the timeout fee on total remaining amount     timedOut = true;     effectiveAmount = redemption.stableAmount;     redemption.stableAmount = 0; } ```  In this case, the user will be charged a penalty and his escrow position will be canceled. There are 2 scenarios for this to occur:  Scenario 1:  1. User creates an escrow",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

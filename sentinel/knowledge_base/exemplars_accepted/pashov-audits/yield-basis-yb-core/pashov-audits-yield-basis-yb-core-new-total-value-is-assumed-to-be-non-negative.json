@@ -1,0 +1,21 @@
+{
+  "title": "`new_total_value` is assumed to be non-negative",
+  "platform": "pashov-audits",
+  "program": "yield-basis-yb-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When `_calculate_values` is performed, it will calculate `new_total_value` based on the `value_change`, and will return it as `total` where it is converted to `uint256`.  ```python @internal @view def _calculate_values(p_o: uint256) -> LiquidityValuesOut:     prev: LiquidityValues = self.liquidity     staker: address = self.staker     staked: int256 = 0     if staker != empty(address):         staked = convert(self.balanceOf[self.staker], int256)     supply: int256 = convert(self.totalSupply, int256)      f_a: int2",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YieldBasis-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

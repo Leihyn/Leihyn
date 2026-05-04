@@ -1,0 +1,21 @@
+{
+  "title": "BetExpress is broken when a bet has a condition with more than one outcome",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-Azuro-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, having a condition with two or more winning outcomes, the functionality of BetExpress doesn't work.  **Likelihood:** Medium, it happens when a condition has two or more winning outcomes.  ## Description  In the scenario where a deposit is made for a condition supporting two or more outcomes, BetExpress's construction logic improperly handles the `condition.payouts` array by pushing only one `subBetPayout`, despite multiple outcomes being possible.          if (outcomeOrdinal == 0) {             condition.payouts.push(subBetPayout);  The variable `winningOutcomesC",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Azuro_security_review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

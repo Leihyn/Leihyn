@@ -1,0 +1,21 @@
+{
+  "title": "Fixed participants can claim more premium than expected",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, wrong premium amount will allow some participants to withdraw more than others  **Likelihood:** High, always occur as fixed participants will claim premiums  ## Description  `claimFixedPremium()` is called to allow fixed participants to claim their fixed premium when vault is started. And `sendAmount`, the premium amount to be claimed, is determined by the participant's share of `variableSideCapacity`, using their balance of `fixedClaimTokens` over `fixedLidoSharesTotalSupply()`.  As `fixedLidoSharesTotalSupply()` is the sum of `fixedBearerToken.totalSupply()` an",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

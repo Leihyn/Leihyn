@@ -1,0 +1,21 @@
+{
+  "title": "`setAdjustor` selector not included from `SimplexFacet`",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `SimplexFacet` contract is missing the `setAdjustor` selector from the `simplexSelectors` array. This means that the `setAdjustor` function cannot be called.  ## Recommendations  ```diff -       bytes4[] memory simplexSelectors = new bytes4[](9); +       bytes4[] memory simplexSelectors = new bytes4[](10);         simplexSelectors[0] = SimplexFacet.getVertexId.selector;         simplexSelectors[1] = SimplexFacet.addVertex.selector;         simplexSelectors[2] = SimplexFacet.getTokens.selector;         simplexSelectors",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-03-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

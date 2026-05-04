@@ -1,0 +1,21 @@
+{
+  "title": "Rewards calculation error will result in 0 rewards for users",
+  "platform": "pashov-audits",
+  "program": "Topia-Game-token-lp-staking",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as users will lose on their rewards  **Likelihood:** High, as it will happen almost always  ## Description  The formula to calculate rewards in `getUserStakeReward` is the following:  ```solidity rewardsPerWeight_.accumulated = (rewardsPerWeight_.accumulated +     (unaccountedTime * rewardsPerWeight_.rate) / rewardsPerWeight_.totalWeight).toUint96(); ```  It is the same in `updateRewardsPerWeight`. The problem with this code is that `(unaccountedTime * rewardsPerWeight_.rate) / rewardsPerWeight_.totalWeight` will round down to zero almost always. Since both `tota",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/TopiaStaking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

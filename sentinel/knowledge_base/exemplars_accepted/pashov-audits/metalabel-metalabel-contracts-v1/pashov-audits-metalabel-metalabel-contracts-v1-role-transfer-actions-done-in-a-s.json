@@ -1,0 +1,19 @@
+{
+  "title": "Role transfer actions done in a single-step manner are dangerous",
+  "platform": "pashov-audits",
+  "program": "metalabel-metalabel-contracts-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as important protocol functionality would become unusable  **Likelihood:** Low, as it requires an admin/owner error  ## Description  This is a common problem where transferring a role or admin rights to a different address can go wrong if this address is wrong and not actually controlled by any user. This is taken into consideration in `NodeRegistry` where the node ownership transfer is a two-step operation. Not the same approach is used in `AccountRegistry` though, where the contract inherits from `Owned` which has a single-step ownership transfer pattern and al",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Metalabel-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

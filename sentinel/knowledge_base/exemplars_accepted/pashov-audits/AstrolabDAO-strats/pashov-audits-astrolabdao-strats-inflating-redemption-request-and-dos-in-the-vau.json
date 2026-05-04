@@ -1,0 +1,22 @@
+{
+  "title": "Inflating redemption request and DoS in the vault",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because this can disrupt all primary functionalities of the vaults, leading to a denial of service  **Likelihood:** High, because any vault share owner can exploit this easily  ## Description  In `requestRedeem`, the function ensures that the shares requested for redemption are not greater than the owner's share balance. However, the operator parameter is not validated. This allows users to inflate the `req.totalRedemption` value by repeatedly submitting redemption requests with different operator addresses. The `req.totalRedemption` can be inflated to be larger",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

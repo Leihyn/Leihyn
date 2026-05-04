@@ -1,0 +1,21 @@
+{
+  "title": "LayerZero Fee refunds cannot be processed",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `DepositUSD`, `DepositETHBera`, and `DepositUSDBera` contracts are intended to serve as the refund address for LayerZero, the messaging protocol responsible for paying fees in the native gas token. However, these contracts are unable to receive these refunds, causing a revert when excess fees are sent.  Although the `DepositUSD`, `DepositETHBera`, and `DepositUSDBera` contracts act as implementation contracts, the refunds are transferred to the Proxy contract. The standard [ERC1697Proxy](https://github.com/OpenZeppeli",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

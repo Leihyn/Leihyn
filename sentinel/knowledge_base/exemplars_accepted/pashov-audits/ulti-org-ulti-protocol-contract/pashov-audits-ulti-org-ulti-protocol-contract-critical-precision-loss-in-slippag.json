@@ -1,0 +1,22 @@
+{
+  "title": "Critical precision loss in slippage protection calculation",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The ULTI contract contains a precision error in its slippage protection mechanism during token swaps (using 18 instead of 1e18). In the `_swapInputTokenForUlti` function, the calculation of `expectedUltiAmountWithoutSlippage` uses an incorrect scaling factor that results in a significant precision loss.  ```solidity     function _swapInputTokenForUlti(uint256 inputAmountToSwap, uint256 minUltiAmount, uint256 twap, uint256 deadline)         private         returns (uint256 ultiAmount)     {         ...         // 2. Calculate",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

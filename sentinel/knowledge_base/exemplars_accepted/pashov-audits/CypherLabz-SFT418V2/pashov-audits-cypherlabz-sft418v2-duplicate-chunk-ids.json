@@ -1,0 +1,19 @@
+{
+  "title": "Duplicate Chunk IDs",
+  "platform": "pashov-audits",
+  "program": "CypherLabz-SFT418V2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In `ChunkProcessor`, the chunk manipulation functions such as `pushChunk()` will perform a downcast of Chunk ID and Indexes from `uint256` to `uint32`. This effectively reduces the maximum number of chunks to `type(uint32).max`, As chunks represent the paired/wrapped ERC721, this means that NFT supply based on SFT418 will be similarly capped as well.  The issue is that capping of the NFT supply to 32-bit is not compliant with EIP721, which allows up to `type(uint256).max` NFTs. This is evident from the use of `uint256` to repr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SFT-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

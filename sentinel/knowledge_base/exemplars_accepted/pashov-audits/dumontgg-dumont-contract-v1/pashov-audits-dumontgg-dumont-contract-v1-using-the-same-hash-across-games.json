@@ -1,0 +1,19 @@
+{
+  "title": "Using the same hash across games",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  If a hash is revealed in one game its params become public - `_number` and `_salt`. This hash must not be used in other games. Otherwise, there is a risk of exploiting a game (guaranteed wins leverage by max available amounts).  ## Recommendations  Consider additionally encoding `address(this)` in `verifySalt()` to ensure that the hash can only be used in this game.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

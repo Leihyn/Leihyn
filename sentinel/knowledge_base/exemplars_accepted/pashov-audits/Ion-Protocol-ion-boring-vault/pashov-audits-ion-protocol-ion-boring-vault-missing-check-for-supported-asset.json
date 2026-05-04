@@ -1,0 +1,22 @@
+{
+  "title": "Missing check for supported asset",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-ion-boring-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `depositAndBridge` function currently lacks the necessary validation to verify that the deposit asset is supported by the Vault. This omission could allow an attacker to use a custom token as the deposit asset, misleading the Vault into minting shares that are not backed by approved assets.  ```solidity function depositAndBridge(ERC20 depositAsset, uint256 depositAmount, uint256 minimumMint, BridgeData calldata data) external payable{     uint shareAmount = _erc20Deposit(depositAsset, depositAmount, minimumMint, msg.sender",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/IonProtocol-security-review-July.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Admin could call `adminSettleDebt` anytime without previous call `initiatingAdminSettleDebt`",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, core functionality related to timelock would be bypassed  **Likelihood:** Low, since could be done by admin only accidentally or in case of malicious action  ## Description  The `adminSettleDebt` function is designed to allow the admin to settle debt after finishing timelock. The last one should be initiated during `initiatingAdminSettleDebt`. While `adminSettleDebt` successfully checks if timelock is ended, it fails to check if timelock was ever initiated, this way check at L713 would compare the current timestamp with the default value for `uint256` type - `0`,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Missing slippage protection allows unexpected asset amounts",
+  "platform": "pashov-audits",
+  "program": "Telos-Consilium-ouroboros-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `ERC4626` interaction functions in `StakedYuzuUSD`, `YuzuUSD`, and `YuzuILP` lack slippage protection mechanisms. Users call functions like `initiateRedeem()` expecting to receive a specific amount of assets based on the current preview, but the actual amount received can differ due to state changes between transaction submission and execution.  - In `StakedYuzuUSD` and `YuzuUSD` contracts, users may suffer from changes in redemption fees.   - In `YuzuILP` contract, users may suffer from both changes in fe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YuzuUSD-security-review_2025-08-28.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Borrowers can be left with debt shares after full repayment",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  Borrowers can be left with debt shares after full repayment of their debt. This is due to the calculation of the `shareChange` value rounding down.  ```solidity File: LiquidityPool.sol  155:     function repay(uint marginAccountID, uint amount) external onlyRole(MARGIN_ACCOUNT_ROLE) { (...) 164:  @>     uint shareChange = (amount * debtSharesSum) / newTotalBorrows; // Trader's share to be given away 165:         uint profit = (accruedInterest * shareChange) / shareOfDebt[marginAccountID]; 166:         uint profitInsurancePool",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

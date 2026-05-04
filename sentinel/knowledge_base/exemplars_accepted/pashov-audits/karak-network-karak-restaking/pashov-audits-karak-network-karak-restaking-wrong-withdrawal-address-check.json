@@ -1,0 +1,22 @@
+{
+  "title": "Wrong withdrawal address check",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a new validator is added to the owner using `validateWithdrawalCredentials` function, then its withdrawal recipient address is checked to be equal to `NativaVault`.  ```solidity  if (             BeaconProofs.getWithdrawalCredentials(validatorFieldsProof.validatorFields)                 != bytes32(abi.encodePacked(bytes1(uint8(1)), bytes11(0), address(this)))         ) {             revert WithdrawalCredentialsMismatchWithNode();         } ```  This is incorrect because the protocol needs all rewards to be sent to th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

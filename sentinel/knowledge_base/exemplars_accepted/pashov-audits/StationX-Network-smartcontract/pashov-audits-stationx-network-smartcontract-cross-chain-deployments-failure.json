@@ -1,0 +1,19 @@
+{
+  "title": "Cross-chain deployments failure",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When code wants to create cross-chain DAO deployment message it divides the total ETH amount equally between cross-chain messages. The issue is that different destination chains may require different cross-chain fee. Code should allow user to specify bridge fee amount for each cross-chain message. In the current design user have to pay based on maximum bridge fee amount.  ## Recommendations  Allow user to specify cross-chain bridge fee amounts for each chain.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

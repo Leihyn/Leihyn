@@ -1,0 +1,21 @@
+{
+  "title": "Updating oracle with post-swap `lnImpliedRate` allows TWAP manipulation",
+  "platform": "pashov-audits",
+  "program": "napierfi-napier-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `TokiHookLogic.beforeSwap()` incorrectly updates the oracle observation with the new `lnImpliedRate`. As a result, the observation \u201ccloses\u201d the entire elapsed interval using the **post-swap** rate, as if it were active for the whole period since the previous observation.  ```solidity function beforeSwap(     ... ) external returns (bytes4, BeforeSwapDelta, uint24) {     PoolId id = key.toId();     ITokiHook.PoolStorage memory state = $.s_states[id];      --- SNIPPED ---     // Compute swap result and update to",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Napier-security-review_2025-09-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

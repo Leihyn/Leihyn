@@ -1,0 +1,19 @@
+{
+  "title": "Missing a function to set royalties for specific tokenId",
+  "platform": "pashov-audits",
+  "program": "avierauy-beam-nodes",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `resetDefaultRoyalty` function is used to clear the royalty information set for specific tokenId.  ```solidity     function resetDefaultRoyalty(uint256 _tokenId) external onlyRole(ADMIN_ROLE) {         _resetTokenRoyalty(_tokenId);         emit ResetDefaultRoyalty(_tokenId);     } ```  However, there is a lack of a function to set royalty information for specific tokenId.  ## Recommendations  Add a function to set royalty information for specific tokenId.  ```diff +   function setRoyaltyForId(uint256 _tokenId, address",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BeamNodes-security-review_2025-01-28.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

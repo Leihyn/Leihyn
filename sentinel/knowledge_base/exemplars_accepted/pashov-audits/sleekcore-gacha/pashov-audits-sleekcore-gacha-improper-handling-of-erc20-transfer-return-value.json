@@ -1,0 +1,21 @@
+{
+  "title": "Improper handling of ERC20 `transfer` return value",
+  "platform": "pashov-audits",
+  "program": "sleekcore-gacha",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In the `GachaTickets::entropyCallback` function, the contract transfers, winnings to the recipient as follows:  ```solidity if (token == pool.token) pool.tokenBalance -= amount; if (amount > 0) IERC20(token).transfer(receiver, amount); ```  This function call has `two major issues`:  1. Non-Compliant ERC20 tokens can revert :  The contract assumes that all ERC20 tokens implement the standard `transfer` function with the following signature:  ```solidity function transfer(address to, uint256 value) external returns (bool); ```",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gacha-security-review_2025-01-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

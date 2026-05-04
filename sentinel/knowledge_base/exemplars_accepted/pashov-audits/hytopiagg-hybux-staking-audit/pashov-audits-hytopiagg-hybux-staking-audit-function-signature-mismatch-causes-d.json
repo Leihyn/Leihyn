@@ -1,0 +1,22 @@
+{
+  "title": "Function signature mismatch causes DoS",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-hybux-staking-audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `INFTStaking` interface in `NFTStakingRouter` defines `calculateRewards()` with a single parameter, but the actual implementation in `NFTStaking` is different:  Interface: ```solidity function calculateRewards(address user) external returns (uint256) ```  Implementation: ```solidity function calculateRewards(address _user, bool _includePendingRewards) public view returns (uint256) ```  When `NFTStakingRouter.claimRewardsRouter()` calls `calculateRewards()`, the function selector doesn't match, causing the call",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYBUX-security-review_2025-11-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

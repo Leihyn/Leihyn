@@ -1,0 +1,21 @@
+{
+  "title": "Positions with very low portfolio ratio cannot be liquidated",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In `MarginTrading.sol`, the `_calculatePortfolioRatio` function calculates the ratio between the margin account value and the debt with accrued interest. In case the margin account value is 5 orders of magnitude lower than the debt accrued, this function reverts.  ```solidity File: MarginTrading.sol  196:     function _calculatePortfolioRatio(uint marginAccountValue, uint debtWithAccruedInterest) private pure returns (uint marginAccountRatio) { 197:         if (debtWithAccruedInterest == 0) { 198:             return 0; 199:",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

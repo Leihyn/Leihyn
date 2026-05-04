@@ -1,0 +1,21 @@
+{
+  "title": "Decimals are incorrectly handled in DivReducerNode",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Node DivReducer is supposed to have 2 parents which are Redstone oracles and combine 2 prices. For example, to price ETH/USDC it will fetch 2 prices and divide `(ETH/USD) / (USDC/USD)`.  The problem is that Redstone oracles have 8 decimals by default, but the code uses 1e18 arithmetic:  ```solidity     function process(NodeOutput.Data[] memory parentNodeOutputs) internal pure returns (NodeOutput.Data memory) {         if (parentNodeOutputs[1].price == 0) {             revert InvalidPrice();         }  @>      uint256 price =",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

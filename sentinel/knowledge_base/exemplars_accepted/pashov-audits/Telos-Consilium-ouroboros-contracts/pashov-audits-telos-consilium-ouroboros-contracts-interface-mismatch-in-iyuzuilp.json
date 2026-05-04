@@ -1,0 +1,19 @@
+{
+  "title": "Interface mismatch in `IYuzuILPV2` and `IPSM` can lead to call revert",
+  "platform": "pashov-audits",
+  "program": "Telos-Consilium-ouroboros-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Low  **Likelihood:** High   ## Description  In `IYuzuILPV2.sol`, it is observed that `terminateDistribution()` takes a `receiver` address parameter:  ```solidity interface IYuzuILPV2 is IYuzuILP {     function lastDistributedAmount() external view returns (uint256);     function lastDistributionPeriod() external view returns (uint256);     function lastDistributionTimestamp() external view returns (uint256);      function distribute(uint256 assets, uint256 period) external;     function terminateDistribution(address receiver) external;             <<@ } ```",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YuzuUSD-security-review_2026-01-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

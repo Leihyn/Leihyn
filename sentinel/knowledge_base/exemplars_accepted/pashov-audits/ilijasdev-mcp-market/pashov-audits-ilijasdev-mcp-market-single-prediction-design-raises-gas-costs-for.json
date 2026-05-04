@@ -1,0 +1,19 @@
+{
+  "title": "Single-prediction design raises gas costs for high-volume users",
+  "platform": "pashov-audits",
+  "program": "ilijasdev-mcp-market",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The current predict function in the MemePredictionMarket contract only supports a fixed single prediction per transaction. Each user is charged exactly 5 USDC (PREDICTION_FEE) for every prediction they make, with no way to scale the amount in a single call.  This creates a bottleneck for users who want to place large predictions (e.g., $1,000 or $10,000). These users must call the predict function multiple times, each transferring 5 USDC, resulting in repetitive token transfer operations and expensive gas fees,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/MCP-security-review_2025-08-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Balance going below BASE_WEARABLE_UNIT",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-pwa-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, some balance cannot be sold and transferred, it is small but potentially valuable enough in case of low curveAdjustmentFactor or high supply  **Likelihood:** Medium, just required sending any number not strictly devisable by 0.001 ETH  ## Description  `transferWearables()` only requires sending amount above `BASE_WEARABLE_UNIT=0.001 ether`. But allows sending e.g. 0.0015 ether when the user has 0.002 ether. 0.0005 ether will remain in this case, below `BASE_WEARABLE_UNIT`.  The same thing for selling wearables.  ```solidity     function sellPrivateWearables(byt",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

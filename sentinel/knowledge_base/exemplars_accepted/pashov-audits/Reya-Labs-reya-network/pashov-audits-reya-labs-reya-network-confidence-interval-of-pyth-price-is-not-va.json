@@ -1,0 +1,19 @@
+{
+  "title": "Confidence interval of Pyth price is not validated",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `PythOffchainLookupNode.process` does not validate the confidence interval of the Pyth price.  As stated in the [Pyth documentation](https://docs.pyth.network/price-feeds/best-practices#confidence-intervals), it is important to check this value to prevent the contract from accepting untrusted prices.  ## Recommendations  ```diff +       if (latestPrice.conf > 0 && (latestPrice.price / int64(latestPrice.conf) < minConfidenceRatio)) { +           revert LowConfidencePyth(latestPrice.price, latestPrice.conf, oracleAdaptersProxy);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

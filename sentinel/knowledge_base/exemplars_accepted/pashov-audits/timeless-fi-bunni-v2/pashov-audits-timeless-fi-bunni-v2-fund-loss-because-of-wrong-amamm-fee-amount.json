@@ -1,0 +1,21 @@
+{
+  "title": "Fund loss because of wrong amAmm Fee Amount",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When amAMM manager is enabled on the BunniHook, the code sets the wrong value for `amAmmFeeAmount` in `BunniHookLogic.beforeSwap()` function.  ```solidity            // decrease output amount             swapFeeAmount = outputAmount.mulDivUp(swapFee, SWAP_FEE_BASE);             (amAmmFeeCurrency, amAmmFeeAmount) = (outputToken, swapFeeAmount);              // take hook fees from swap fee             // @a: when there's amm whom does hook fee belongs? amFee should be only swapfee-hookfee             hookFeesAmount = swapFeeAmo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

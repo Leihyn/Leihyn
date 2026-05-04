@@ -1,0 +1,21 @@
+{
+  "title": "Deprecated `safeApprove()` usage blocks collateral approval to pool",
+  "platform": "pashov-audits",
+  "program": "hyperlendx-hyperlend-utils",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Project uses Openzeppelin@v4.9.6, which deprecates `safeApprove()`. Safe approve usage is not safe here because it blocks every approval if approval for the collateral is non-zero:  ```solidity //    function executeOperation()          for (uint256 i = 0; i < _collateralActions.length; ++i){             uint256 amount = _collateralActions[i].amount;             IERC20 token = _collateralActions[i].token;              //transfer tokens from the caller & approve pool contract to spend them             token.safeT",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperlend-security-review_2025-11-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

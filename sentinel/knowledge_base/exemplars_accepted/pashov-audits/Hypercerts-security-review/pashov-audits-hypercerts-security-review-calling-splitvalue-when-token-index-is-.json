@@ -1,0 +1,19 @@
+{
+  "title": "Calling `splitValue` when token index is not the latest will overwrite other claims' storage",
+  "platform": "pashov-audits",
+  "program": "Hypercerts-security-review",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can lead to loss of units for an account without any action on his side  **Likelihood:** Medium, because it can happen only with a token that has a non-latest index  ## Description  The logic in `_splitValue` is flawed here:  ```solidity uint256 currentID = _tokenID; ... toIDs[i] = ++currentID; ... for (uint256 i; i < len; ) {     valueLeft -= values[i];      tokenValues[toIDs[i]] = values[i];      unchecked {         ++i;     } } ... _mintBatch(_account, toIDs, amounts, \"\"); ```  Let's look at the following scenario:  1. Alice mints through allowlist, toke",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Hypercerts-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

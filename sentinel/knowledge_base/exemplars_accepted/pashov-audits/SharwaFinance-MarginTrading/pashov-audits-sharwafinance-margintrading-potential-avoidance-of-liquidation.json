@@ -1,0 +1,23 @@
+{
+  "title": "Potential avoidance of liquidation",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Users can deposit ERC721 tokens using the `MarginTrading::provideERC721` function, which can then be used as collateral for borrowing. Additionally, users can execute the `MarginTrading::exercise` function to convert their ERC721 into `baseToken` value, crediting the respective `marginAccount`.  The issue arises when a malicious user deposits ERC721 tokens that are invalid within the protocol context; i.e., they are inactive, expired, or worthless:  ```solidity File: HegicModule.sol 68:     function checkValidityERC721(uint id",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

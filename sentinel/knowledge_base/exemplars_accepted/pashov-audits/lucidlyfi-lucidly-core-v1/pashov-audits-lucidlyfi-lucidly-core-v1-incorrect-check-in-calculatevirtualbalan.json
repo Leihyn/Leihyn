@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect check in `_calculateVirtualBalanceProd`",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `_calculateVirtualBalanceProd` function should revert if the `weight` is 0 or if the `virtualBalance` of the token is 0.  However, in the implementation, it only breaks if both are 0.  ```solidity if (_weight <= 0 && _virtualBalance <= 0) {                 break;             } ```  This has two problems:  1. If either 1 of the values is zero, the function doesn't revert and the calculation gets processed like a normal transaction 2. The transaction isn't reverted. Instead, due to the break statement, the returned valu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

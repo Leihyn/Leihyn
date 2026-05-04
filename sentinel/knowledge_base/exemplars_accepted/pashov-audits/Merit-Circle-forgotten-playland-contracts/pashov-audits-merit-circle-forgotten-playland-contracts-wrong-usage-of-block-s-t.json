@@ -1,0 +1,19 @@
+{
+  "title": "Wrong usage of block's timestamp instead of block's number",
+  "platform": "pashov-audits",
+  "program": "Merit-Circle-forgotten-playland-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When code wants to get last block hash it uses `blockhash(block.timestamp - 1)`.  ```solidity         bytes32 pseudoRandomness =             keccak256(abi.encode(blockhash(block.timestamp - 1), msg.sender, nonces[msg.sender])) >> 3; ```  But according to Solidity docs:  ``` blockhash(uint blockNumber) returns (bytes32): hash of the given block - only works for 256 most recent blocks ```  As a result `blockhash(block.timestamp - 1)` would be calculated for a nonexisting block and would always result in 0 so the `pesudoRandomnes",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ForgottenPlayland-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

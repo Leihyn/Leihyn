@@ -1,0 +1,23 @@
+{
+  "title": "Donations to `LiquidityPool` contract can manipulate share calculation",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `provide` function in the `LiquidityPool` contract mints new shares for the caller based on the amount of liquidity provided. The amount of shares minted is calculated as follows:  - If the total liquidity (contract's balance + amount borrowed) is greater than 0, the share change is calculated as `(depositShare * amount) / totalLiquidity`. - If the total liquidity is 0, the share change is calculated as `(amount * 10 ** decimals()) / 10 ** poolToken.decimals()`.  ```solidity File: LiquidityPool.sol  097:     function provi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

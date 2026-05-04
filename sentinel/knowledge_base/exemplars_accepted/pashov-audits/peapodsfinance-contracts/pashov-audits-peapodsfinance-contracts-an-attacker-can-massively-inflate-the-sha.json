@@ -1,0 +1,23 @@
+{
+  "title": "An attacker can massively inflate the share value",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  Since the total assets/shares are tracked via an internal storage variable, a traditional vault inflation attack cannot occur in the Fraxlend pairs. However, by exploiting the rounding directions when minting/burning shares, an attacker can exponentially inflate the value of a single share, allowing them to steal 100% of the first deposit from the first depositor, and DoS that lending pair from proper usage in the future.  Note that while this exists in Fraxlend, it can't be exploited since all the lending pairs have alread",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Using the `transfer` function of `address payable` is discouraged",
+  "platform": "pashov-audits",
+  "program": "metalabel-metalabel-contracts-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as sequence won't be usable as mints will revert  **Likelihood:** Medium, as it happens any time the recipient is a smart contract or a multisig wallet that has a receive function taking up more than 2300 gas  ## Description  The `mint` function in `DropEngine` uses the `transfer` method of `address payable` to transfer native asset funds to an address. This address is set by a node owner and is possible to be a smart contract that has a `receive` or `fallback` function that takes up more than the 2300 gas which is the limit of `transfer`. Examples are some sma",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Metalabel-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

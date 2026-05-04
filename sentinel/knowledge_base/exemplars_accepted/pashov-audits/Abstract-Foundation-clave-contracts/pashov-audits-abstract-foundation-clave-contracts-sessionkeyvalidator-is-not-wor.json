@@ -1,0 +1,19 @@
+{
+  "title": "`SessionKeyValidator` is not working on ZkSync mainnet",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The SessionKeyValidator contract fails to function on ZkSync mainnet due to the `TimestampAsserterLocator.locate` function explicitly reverting on chainId `324` (ZkSync mainnet). This breaks all session key functionality for mainnet deployments.  ```solidity   function locate() internal view returns (ITimestampAsserter) {     ...     if (block.chainid == 324) { // @audit revert if the chain is ZkSync mainnet       revert(\"Timestamp asserter is not deployed on ZKsync mainnet yet\");     }     ...   } ```  ## Recommendations  Upd",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-12-23.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

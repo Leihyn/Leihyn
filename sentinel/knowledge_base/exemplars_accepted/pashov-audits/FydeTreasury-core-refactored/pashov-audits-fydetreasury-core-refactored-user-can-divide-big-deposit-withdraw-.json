@@ -1,0 +1,21 @@
+{
+  "title": "User can divide big deposit/withdraw into small parts to reduce tax",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Tax to pay depends on how much deposit/withdraw makes current asset concentration deviate from the target value, therefore big amounts will pay bigger tax. However, users can supply a request array with the same assets, which can significantly reduce the tax to pay. For example, when asset concentration is too low, the tax to pay on deposit for this asset can equal to 0 to incentivize deposits. Part of fee calculation that uses delta concentration of deposit works incorrectly when an array with the same assets is supplied.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

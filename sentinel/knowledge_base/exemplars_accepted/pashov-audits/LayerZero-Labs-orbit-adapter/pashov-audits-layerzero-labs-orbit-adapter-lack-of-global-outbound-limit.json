@@ -1,0 +1,22 @@
+{
+  "title": "Lack of global outbound limit",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-orbit-adapter",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The current implementation checks that individual transactions do not exceed the uint64 max value in shared decimals:  ```solidity     function _debitFrom(         address _from,         uint16,         bytes32,         uint256 _amount     ) internal virtual override returns (uint) {         ...          uint256 cap = _sd2ld(type(uint64).max);         if (amount > cap) {             revert AmountOverflow();         }          return amount;     } ```  From the architecture, the gas token is bridge not only between L2 and L3 bu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LZOrbit-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

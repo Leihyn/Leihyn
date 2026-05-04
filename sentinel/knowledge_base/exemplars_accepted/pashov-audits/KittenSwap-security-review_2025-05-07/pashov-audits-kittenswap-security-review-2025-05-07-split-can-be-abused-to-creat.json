@@ -1,0 +1,23 @@
+{
+  "title": "`split` can be abused to create `locked` data with an arbitrary `amount`",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Due to the lack of a check on the split amount inside `split`, a user can provide an arbitrary `_amount` to the function. Since `locked.amount` is stored as an `int128`, this can result in one of the split tokens having a negative value, while the other is set to the full `_amount` provided.  ```solidity     function split(         uint _from,         uint _amount     ) external returns (uint _tokenId1, uint _tokenId2) {         address msgSender = msg.sender;          require(_isApprovedOrOwner(msgSender, _from));         re",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

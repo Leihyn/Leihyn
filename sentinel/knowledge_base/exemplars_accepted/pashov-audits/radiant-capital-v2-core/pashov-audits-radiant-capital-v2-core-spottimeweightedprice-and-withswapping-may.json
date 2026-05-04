@@ -1,0 +1,21 @@
+{
+  "title": "`spotTimeWeightedPrice` and `withSwapping` may conflict",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `autoRebalance` function has two input parameters.  - `useOracleForNewBounds`: If `false`, use `spotTimeWeightedPrice` to determine the new `baseLower` and `baseUpper` - `withSwapping`: If `true`, when the difference between spot and oracle prices is too large, some tokens will be swapped to make the spot price closer to the oracle price.  The following scenario occurs when `useOracleForNewBounds` is `false` and `withSwapping` is `true` and the price difference between spot and oracle is too large. There is a discrepanc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-July.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

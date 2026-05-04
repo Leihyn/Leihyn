@@ -1,0 +1,22 @@
+{
+  "title": "Collateral double-spend post liquidation is possible",
+  "platform": "pashov-audits",
+  "program": "bull-haus-lumin-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as a borrower can double-spend his collateral  **Likelihood:** High, as liquidations never subtract the collateral amount  ## Description  In `AssetManager::assetTransferOnLoanAction` in the `if (action == AssetActionType.Seize)` statement, the transferred amount is only subtracted from `userDepositFrom.lockedAmount`, but it should have also been subtracted from `userDepositFrom.depositAmount` as well. This means that a borrower's collateral balance won't be decreased on liquidation, even though the loan shareholders will receive most of the collateral.  Here is",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Lumin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

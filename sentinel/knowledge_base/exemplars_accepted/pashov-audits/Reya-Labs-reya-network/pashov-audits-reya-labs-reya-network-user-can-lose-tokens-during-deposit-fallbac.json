@@ -1,0 +1,24 @@
+{
+  "title": "User can lose tokens during deposit fallback bridging",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  DepositsFallbackModule handles situations where a deposit reverts and initiates bridging back of users' funds. Note that it uses the address `receiver` of the deposit on the Reya chain to bridge back funds on the source chain:  ```solidity         try DepositsModule(address(this)).depositPassivePool(inputs) { }         catch {             BridgingUtils.executeBridging({                 withdrawToken: usdc,                 socketConnector: fallbackData.socketConnector,                 socketMsgGasLimit: fallbackData.socketMs",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

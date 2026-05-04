@@ -1,0 +1,23 @@
+{
+  "title": "Staking rewards should be claimed before each `balanceOfNote` changing",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Since staking rewards depend on `balanceOfNote` the `claimRewards` function should be invoked on each `balanceOfNote` changing. But this functionality is not implemented. This way reward can be calculated incorrectly which can cause sufficient asset losses.  ```solidity     function _calculateRewards(uint256 noteId, StakeInfo storage stakeInfo) internal view returns (uint256) {         uint256 timeDiff = block.timestamp - stakeInfo.lastRewardTime;  >>      uint256 xp = dyadXP.balanceOfNote(noteId);  >>      return timeDiff",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

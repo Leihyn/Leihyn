@@ -1,0 +1,21 @@
+{
+  "title": "Free card reveals by choosing all of remaining cards",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `getGuessRate()` function lets players choose all the remaining cards as `_guessedNumbers`, meaning that they will always win:  ```solidity function getGuessRate(uint256 _numbers) public view returns (UD60x18 rate) {     uint256 remainingCards = 52 - cardsRevealed;     uint256 remainingSelectedCard = 0;      for (uint256 i = 0; i < 13; ++i) {         if ((_numbers & (1 << i)) > 0) {             remainingSelectedCard += 4 - revealedCardNumbersCount[i];         }     }      rate = ud(remainingCards).div(ud(remainingSelectedC",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

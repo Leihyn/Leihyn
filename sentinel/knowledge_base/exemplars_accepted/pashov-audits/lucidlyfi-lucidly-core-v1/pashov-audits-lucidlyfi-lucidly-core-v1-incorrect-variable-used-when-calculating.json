@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect variable used when calculating supply",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When calculating the intermediate `_r` in the `_calculateSupply` function in the pool contract, the function uses the following logic.  ```solidity _r = FixedPointMathLib.rawDiv(     FixedPointMathLib.rawMul(_s, _sp), _s);     // _r*_sp/_s ```  The comment is correct, but the implementation is incorrect. It should use `_r` instead of `s`.  This can also be seen in the yearn contract here: [link](https://github.com/yearn/yETH/blob/8d831fd6b4de9f004d419f035cd2806dc8d5cf7e/contracts/Pool.vy#L1366)  ## Recommendations  Fix the li",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

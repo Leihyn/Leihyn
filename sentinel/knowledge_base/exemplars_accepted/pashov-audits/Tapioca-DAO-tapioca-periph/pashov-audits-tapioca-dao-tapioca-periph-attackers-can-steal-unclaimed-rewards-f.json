@@ -1,0 +1,23 @@
+{
+  "title": "Attackers can steal unclaimed rewards from `GlpStrategy` because the accounted balance does not include unclaimed reward",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, since users can steal unclaimed rewards  **Likelihood:** High, since this can be performed by any user and the only requirement is that there are some unclaimed rewards. The higher the number of unclaimed rewards and the larger the deposit of the user, the higher the impact. A strategy with less frequent deposits is more likely to suffer from this attack.  ## Description  When a user wants to withdraw assets they have deposited into a YieldBox, the following logic is used in the YieldBox contract:  ```solidity         uint256 totalAmount = _tokenBalanceOf(asset);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

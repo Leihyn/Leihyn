@@ -1,0 +1,21 @@
+{
+  "title": "Referral bonus cap will be lower than what was intended",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  According to the documentation and the comments inside the code, the maximum bonus a referrer can accumulate is 10 times the total amount of ULTI they have accumulated from direct deposits since the start. Code ensures this max cap by keeping track of unclaimed bonuses in `claimableBonuses[]` and by checks that `claimableBonuses[]` doesn't go higher than the max cap:  ```solidity            // 3a. Cap referral bonus based on skin-in-game limit             // Note: if the cap is reached, no referrer and referred bonuses will be",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

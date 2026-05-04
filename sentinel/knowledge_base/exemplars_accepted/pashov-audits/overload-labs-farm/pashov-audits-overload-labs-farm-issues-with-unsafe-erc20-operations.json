@@ -1,0 +1,22 @@
+{
+  "title": "Issues with unsafe ERC20 operations",
+  "platform": "pashov-audits",
+  "program": "overload-labs-farm",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The farm contract currently utilizes non-safe versions of ERC20 interactions, which could pose a significant risk when interacting with tokens that do not strictly adhere to the ERC20 standard. Specifically, some tokens may return false instead of reverting the transaction when a transfer fails, as observed with tokens like [EURS](https://etherscan.io/address/0x25d772b21b0e5197f2dc8169e3aa976b16be04ac#code).  This issue could be exploited by malicious users who, despite not having sufficient funds, could initiate a deposit tha",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Overload-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

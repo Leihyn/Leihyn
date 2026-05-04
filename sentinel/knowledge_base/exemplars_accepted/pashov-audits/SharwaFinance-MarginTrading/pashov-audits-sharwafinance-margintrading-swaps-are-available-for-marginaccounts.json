@@ -1,0 +1,24 @@
+{
+  "title": "Swaps are available for `MarginAccounts` undergoing liquidation",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  `MarginTrading.redCoeff` and `MarginTrading.yellowCoeff` are used to determine whether a `MarginAccount` is in a state of liquidation. If an account is under liquidation, operations such as `borrow` and `withdraw` are restricted to preserve the account's integrity for liquidation purposes. However, the current implementation allows for `swaps` to continue without checks for the account's liquidation status.  ```solidity File: MarginTrading.sol 165:     function swap(uint marginAccountID, address tokenIn, address tokenOut, u",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Checkpoints are almost always outdated due to missing `_update` override",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  Strategy tokens are used as collateral token in Morpho Blue markets. It's crucial to update checkpoints in case of transfers because checkpoints are always handled with `msg.sender`. Currently, `_update` function is not overridden in strategy wrapper, which means checkpoints will be outdated almost always.   There are many impacts of this situation:  1. Liquidator can't redeem LP tokens because he doesn't have any checkpoints for those tokens. It means it has no value for liquidators.  ```solidity         User",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

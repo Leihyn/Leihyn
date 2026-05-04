@@ -1,0 +1,19 @@
+{
+  "title": "`DonateRemote` will fail to deploy when any of the stargate tokens is not set",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-ZROClaim",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium **Likelihood:** Medium  ## Description  Both `DonateCore` and `DonateLocal` are implemented to allow the donation contracts to work even when any of the `stargateUsdc`, `stargateUsdt`, and `stargateNative` addresses are not set. That means these contracts have the flexibility to support any combination of the Stargate tokens and do not require all to be enabled.  However, `DonateRemote` constructor is implemented to require all the Stargate tokens to be enabled. Without any of them, the constructor will revert and fail to initialize. This is incorrect if the int",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LayerZeroZROClaim-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

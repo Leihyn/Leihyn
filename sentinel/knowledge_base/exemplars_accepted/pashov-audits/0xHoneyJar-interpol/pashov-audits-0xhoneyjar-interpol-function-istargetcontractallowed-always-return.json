@@ -1,0 +1,21 @@
+{
+  "title": "Function `isTargetContractAllowed` always returns true",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The function `isTargetContractAllowed` is flawed and will always return true due to how memory strings are stored in the EVM.  ```solidity     function isTargetContractAllowed(address _target) public view returns (bool allowed) {         string memory protocol = protocolOfTarget[_target];         assembly {             allowed := not(iszero(protocol))         }     } ```  Here is a code snippet that can be pasted in Chisel as a PoC:  ```solidity \u279c string memory protocol; \u279c bool allowed; \u279c assembly { allowed := not(iszero(proto",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

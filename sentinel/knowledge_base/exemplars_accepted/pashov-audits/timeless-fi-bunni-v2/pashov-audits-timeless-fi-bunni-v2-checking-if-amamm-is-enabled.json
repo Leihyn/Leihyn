@@ -1,0 +1,23 @@
+{
+  "title": "Checking if amAMM is enabled",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `BunniHook` contract `amAmmEnabledOverride` and `globalAmAmmEnabledOverride` are used to check if amAMM is enabled, taking precedence over the `hookParams.amAmmEnabled` value. As so, they can be used to disable amAMMs even when their `hookParams.amAmmEnabled` is set to `true`.  ```solidity /// @notice Enables/disables am-AMM globally. Takes precedence over amAmmEnabled in hookParams, overridden by amAmmEnabledOverride. BoolOverride internal globalAmAmmEnabledOverride; ```  However, in `BunniHookLogic.beforeSwap` th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

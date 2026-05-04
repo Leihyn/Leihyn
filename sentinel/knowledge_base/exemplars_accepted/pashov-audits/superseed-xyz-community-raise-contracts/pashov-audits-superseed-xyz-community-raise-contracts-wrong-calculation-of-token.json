@@ -1,0 +1,21 @@
+{
+  "title": "Wrong calculation of tokens to transfer will break deposit flow",
+  "platform": "pashov-audits",
+  "program": "superseed-xyz-community-raise-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The private function `_calculateTokensToTransfer` is used to calculate the amount of tokens to transfer to the user based on the amount of funds deposited. When the cap of the current tier is reached, the function iterates over the remaining tiers until the amount in is reached.  In order to know if it is required to move to the following tier, it is checked if `_remainingAmount` is less or equal to the cap of the current tier. This is incorrect, as tier caps are cumulative, and `_remainingAmount` should be compared to the mar",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SuperSale-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

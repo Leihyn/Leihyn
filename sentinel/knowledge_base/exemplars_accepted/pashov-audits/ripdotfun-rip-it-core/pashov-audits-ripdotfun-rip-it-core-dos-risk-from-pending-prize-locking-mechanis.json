@@ -1,0 +1,21 @@
+{
+  "title": "DoS risk from pending prize locking mechanism",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `calculatePendingPrizesForRarity` function in the `SpinLottery` contract implements a minimum guarantee mechanism where, if `_prizeCount` is greater than `1` and the `weight` is greater than `0`, the `pendingCount` is conservatively set to 1.  ```solidity         // Ensure at least some prizes are allocated if weights allow it         if (_prizeCount > 1 && pendingCount == 0 && weight > 0) {             pendingCount = 1;         } ``` In the `spin` function, the `pendingCounts` are locked, and if the total a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

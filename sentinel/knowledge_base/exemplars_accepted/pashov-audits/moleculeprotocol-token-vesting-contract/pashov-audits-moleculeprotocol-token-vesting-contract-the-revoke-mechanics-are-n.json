@@ -1,0 +1,19 @@
+{
+  "title": "The `revoke` mechanics are not compatible with tokens that implement a block list feature",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-token-vesting-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as important functionality in the protocol won't work  **Likelihood:** Low, as a special type of ERC20 token has to be used as well as the attacker's address has to be in a block list  ## Description  Some tokens, for example `USDC` and `USDT` implement an admin controlled address block list. All transfers to a blocked address will revert. Since the `revoke` functionality forcefully transfers the claimable vested tokens to an address with a `vestingSchedule`, all calls to `revoke` will revert if such an address has claimable balance and is in the token's block li",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/MoleculeVesting-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

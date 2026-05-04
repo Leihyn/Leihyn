@@ -1,0 +1,22 @@
+{
+  "title": "Malicious user can easily make the protocol revert on every `USDT` swap on Uniswap",
+  "platform": "pashov-audits",
+  "program": "Mugen-Finance-Products",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** High, attack can easily be done and it exploits a well-known attack vector of `USDT`  **Impact:** Medium, because the protocol will not work with only one ERC20 token, but it is a widely used one  ## Description  A malicious user can get the `ArbitrumSwaps` contract to revert on each `USDT` swap on Uniswap, because of a well-known attack vector of the token implementation. The problem is in the following code from `UniswapAdapter.sol` and is present in both `swapExactInputSingle` and `swapExactInputMultihop`  ```solidity         TransferHelper.safeApprove(",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Mugen-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "`vaultUtilization` is updated incorrectly",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description:  Inside the LendingAssetVault.sol a vault's utilization is updated inside the `_updateAssetMetadataFromVault` based on how much the CBR changed from the last update. In short, if the cbr decreased then the vault utilization would decrease and increase otherwise. The logic that handles this is (a snippet from the `_updateAssetMetadataFromVault`) -->  ```solidity         uint256 _vaultAssetRatioChange = _prevVaultCbr > _vaultWhitelistCbr[_vault]             ? ((PRECISION * _prevVaultCbr) / _vaultWhitelistCbr[_vault]) - PREC",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

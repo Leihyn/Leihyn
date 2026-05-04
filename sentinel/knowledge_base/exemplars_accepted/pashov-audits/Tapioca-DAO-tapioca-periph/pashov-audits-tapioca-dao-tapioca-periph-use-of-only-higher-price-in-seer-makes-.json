@@ -1,0 +1,22 @@
+{
+  "title": "Use of only higher price in `Seer` makes it vulnerable to price manipulation",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, price manipulation will cause loss of funds  **Likelihood:** Medium, Uniswap pool can be price-manipulated when TWAP duration is too low or liquidity is not spread over a wide range  ## Description  `Seer.sol` uses the Angle Protocol's `OracleMulti.sol`, which is a combination of Chainlink and Uniswap V3 TWAP oracles. The design of `OracleMulti.sol` is to return both Chainlink and Uniswap prices, and let the protocol choose the price that is most advantageous. For example, Angle uses the lower price between Chainlink and Uniswap, for a mint transaction using coll",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

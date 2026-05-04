@@ -1,0 +1,21 @@
+{
+  "title": "Packet burn state not reset in `finalizeOpen()` causes failure",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the `Packet.sol` contract, when a user initiates a burn with **INSTANT_OPEN_PACKET** type, an issue occurs in the execution flow that leads to transaction failures. The sequence occurs as follows: - User calls `initiateBurn()` with **INSTANT_OPEN_PACKET** burn type in `Packet.sol`. - This sets the packet's burn state to **INSTANT_OPEN_PACKET** and calls `instantOpenPacket()` in `CardAllocationPool.sol`. - When only one card bundle is available, `CardAllocationPool` directly transfers NFTs and calls `finalizeO",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-05-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

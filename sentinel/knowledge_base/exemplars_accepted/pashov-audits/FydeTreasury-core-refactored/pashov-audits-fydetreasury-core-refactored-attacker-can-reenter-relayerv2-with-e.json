@@ -1,0 +1,22 @@
+{
+  "title": "Attacker can reenter RelayerV2 with ERC777 tokens and steal funds",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "oracle"
+  ],
+  "bug_class": "reentrancy",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  There's no reentrancy guard in the RelayerV2 contract and if one of the deposit or withdraw tokens had a hook (ERC777 or ...) then it would be possible to reenter the RelayerV2 contract again and steal the funds while the state is wrong. There are multiple ways that attackers can exploit this, one way is to set previous caching prices for tokens for the current operation. This is the POC:  1. Suppose token T1 is ERC777 and has a hook in transfers and it's used in the Fyde contract. 2. First Attacker would deposit T1 token by c",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

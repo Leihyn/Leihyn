@@ -1,0 +1,23 @@
+{
+  "title": "`block.timestamp` use in dex swap deadlines may cause poor trading",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the PositionInteractionFacet.sol contract, when executing DEX swaps, the `deadline` parameter is set to `block.timestamp + 30 minutes`:  ```solidity IV3SwapRouter.ExactOutputSingleParams memory params = IV3SwapRouter.ExactOutputSingleParams({     tokenIn: assetIn,     tokenOut: assetOut,     fee: dex.dexFee,     recipient: address(this),     deadline: block.timestamp + 30 minutes,  // Unnecessary buffer     amountOut: amountOut,     amountInMaximum: amountInMaximum,     sqrtPriceLimitX96: sqrtPriceLimitX96 }); ```  Thi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

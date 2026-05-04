@@ -1,0 +1,22 @@
+{
+  "title": "Extra rewards due to a malfunction with the `_cumulativeRewardPerLpToken`",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because users may receive more rewards than allocated.  **Likelihood:** Low, because it requires the removal and re-addition of a `rewardToken`.  ## Description  When the rewards for a market are updated using the function `RewardDistributor::_updateMarketRewards`, the `_cumulativeRewardPerLpToken` variable is increased to later be used in the `_accrueRewards` function for each user.  ```solidity File: RewardDistributor.sol 281:     function _updateMarketRewards(address market) internal override { ... 315:             uint256 newRewards = getInflationRate(token).",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

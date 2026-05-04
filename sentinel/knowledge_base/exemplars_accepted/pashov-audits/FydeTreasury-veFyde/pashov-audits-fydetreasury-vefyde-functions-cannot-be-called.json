@@ -1,0 +1,22 @@
+{
+  "title": "Functions cannot be called",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-veFyde",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `YieldToken` implementation is created within the `YieldTokenFactory` constructor:  ```solidity   constructor(address _fyde, address _relayer) {     TOKEN_IMPLEMENTATION = address(new YieldToken(address(this), _fyde, _relayer));   } ```  The `YieldManager` contract inherits from the `YieldTokenFactory` contract:  ```solidity   constructor() YieldTokenFactory(_fyde, _relayer) Ownable(msg.sender) ERC1967Proxy(_stratgies, \"\") {} ```  Therefore, the `YieldManager` will be the owner of the `YieldToken` implementation since i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

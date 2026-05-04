@@ -1,0 +1,22 @@
+{
+  "title": "`joinRecurPool` can incorrectly increment `userPoolCounts`",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  Users can call `joinRecurPool` to update their staked balance when their current `stakeToken` balance increases.  ```solidity     function joinRecurPool(RecurPoolKey[] calldata keys) external nonReentrant {         address msgSender = LibMulticaller.senderOrSigner();         for (uint256 i; i < keys.length; i++) {             RecurPoolKey calldata key = keys[i];              /// -----------------------------------------------------------------------             /// Validation             /// --------------------------------",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

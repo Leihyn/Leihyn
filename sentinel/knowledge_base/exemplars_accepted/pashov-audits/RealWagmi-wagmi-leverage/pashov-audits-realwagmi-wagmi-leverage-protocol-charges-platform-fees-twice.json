@@ -1,0 +1,23 @@
+{
+  "title": "Protocol charges platform fees twice",
+  "platform": "pashov-audits",
+  "program": "RealWagmi-wagmi-leverage",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  LP can call the repay on an underwater loan to retrieve their tokens back without their position being restored. If there are no other positions associated with this loan, the caller will receive the collateral minus platform fees and a liquidation bonus. However, there is an issue where platform fees are being charged twice.  ```solidity         if (params.isEmergency) {             (!underLiquidation).revertError(ErrLib.ErrorCode.FORBIDDEN);             (                 uint256 removedAmt,                 uint256 feesAmt,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Wagmi-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

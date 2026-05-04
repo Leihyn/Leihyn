@@ -1,0 +1,23 @@
+{
+  "title": "`RebaseReward` fails because of incorrect token handling",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-06-12",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `RebaseReward` deposits rewards earned by a token ID into the `VotingEscrow` contract.  ```solidity \tif (reward > 0) { \t\tveKitten.deposit_for(_tokenId, reward); \t\temit ClaimReward(_period, _tokenId, _token, _owner); \t} ```  While the `notifyRewardAmount()` function is overridden to only allow rewards for the Kitten token, `incentivize()` still allows anyone to send rewards of any whitelisted token.  As a result, rewards of tokens other than Kitten will incorrectly deposit Kitten in the `VotingEscrow` contract.  This will caus",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-06-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "DoS in `initializePool`by creating a uniswap pool and initializing the price",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy",
+    "amm"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `initializePool` uses the balance in the contract to calculate `sqrtPriceX96` instead of getting `sqrtPriceX96` from the uniswap pool.  ```solidity \t\tuint256 initRdntBal = IERC20(rdntAddr).balanceOf(address(this)); \t\tuint256 initWeth9Bal = IERC20(weth9Addr).balanceOf(address(this)); \t\tuint160 sqrtPriceX96 = UniV3PoolMath.encodePriceSqrtX96( \t\t\trdntAddr == token0 ? initRdntBal : initWeth9Bal, \t\t\trdntAddr == token1 ? initRdntBal : initWeth9Bal \t\t); ```  Before minting LP tokens, `initializePool` calculates the expected numb",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

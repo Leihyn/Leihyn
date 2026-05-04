@@ -1,0 +1,22 @@
+{
+  "title": "`disburseClaims()` allows theft of unclaimed funds",
+  "platform": "pashov-audits",
+  "program": "gammaswap-v1-vaults",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The FundingVault's `disburseClaims` function incorrectly assigns all current contract token balances to the current period, without accounting for unclaimed rewards from previous periods. This allows funds allocated to previous periods to be claimed by users in the current period.  We can see that the FundingVault enables users to make claims for the previous period. The claimable amount is determined by the lesser value between `_claimable` and the current balance of the claimToken.  ```solidity     function claim(uint256 _p",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GammaSwap-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

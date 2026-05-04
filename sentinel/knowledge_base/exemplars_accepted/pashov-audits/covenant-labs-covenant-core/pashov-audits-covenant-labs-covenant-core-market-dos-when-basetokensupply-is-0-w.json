@@ -1,0 +1,22 @@
+{
+  "title": "Market DoS when `baseTokenSupply` is 0 while Synth token supply is non-zero",
+  "platform": "pashov-audits",
+  "program": "covenant-labs-covenant-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Inside the `_calculateMarketState` function, which is called on every operation to ensure the market state is updated, there is a `baseTokenSupply == 0` check to ensure the market never enters a bad state:  ```solidity     function _calculateMarketState(         MarketId marketId,         MarketParams calldata marketParams,         uint256 baseTokenSupply     ) internal view returns (LexFullState memory marketState) {         // ...          // calculate values if market has liquidity         if (marketState.supply",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Covenant-security-review_2025-08-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Price impact cannot properly be removed",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When user's increase position size or update leverage request is successfully executed, it will update user's trade position by calling `updateTradePosition` and providing the new `newCollateralAmount` and `newLeverage`.  ```solidity     function updateTradeSuccess(         ITradingStorage.Trade memory _existingTrade,         IUpdatePositionSizeUtils.IncreasePositionSizeValues memory _values     ) internal {         // 1. Charge borrowing fees and opening fees from trade collateral         _values.newCollateralAmount -= _va",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

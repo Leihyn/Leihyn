@@ -1,0 +1,21 @@
+{
+  "title": "Misleading Validity Checks in `read` Function of `ChainlinkRelayer`",
+  "platform": "pashov-audits",
+  "program": "open-dollar-od-relayer",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `read` function of the `ChainlinkRelayer` contract is intended to fetch and return the latest price from a Chainlink feed, reverting if the price is considered invalid. However, the current implementation allows for potentially incorrect behavior due to the misuse of logical operators in the validity check. The function checks that the price `_aggregatorResult` is either non-zero or the data is fresh, using an OR (`||`) condition. This allows the function to return a zero price if the data is not stale, and conversely",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/OpenDollar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

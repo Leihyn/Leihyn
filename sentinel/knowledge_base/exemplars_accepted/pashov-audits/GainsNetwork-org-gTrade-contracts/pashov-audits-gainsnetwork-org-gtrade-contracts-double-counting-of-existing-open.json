@@ -1,0 +1,22 @@
+{
+  "title": "Double counting of existing open interest",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When validating a request to increase position size, the function `validateRequest` checks if the trade stays within exposure limits. However, the amounts and leverage used are `newCollateralAmount` and `newLeverage` instead of `collateralDelta` and `leverageDelta`.  We have `newPositionSizeCollateral = existingPositionSizeCollateral + positionSizeCollateralDelta`. The current open interest level already accounts for the `existingPositionSizeCollateral`. Therefore, to check if the trade after increasing position size stay",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

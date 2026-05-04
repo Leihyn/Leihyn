@@ -1,0 +1,23 @@
+{
+  "title": "Exchange rate calculation is incorrect",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The protocol implements a staking system where multiple `StakingManager` contracts can coexist, sharing profits and losses through a common `ValidatorManager`. Each `StakingManager` maintains its own accounting of staked and claimed amounts via `totalStaked` and `totalClaimed` state variables, while sharing rewards and slashing through the `ValidatorManager`.  The critical issue lies in the `getExchangeRatio()` function, which calculates the exchange rate between HYPE and kHYPE tokens. The current implementation uses local",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

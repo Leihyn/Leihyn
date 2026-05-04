@@ -1,0 +1,22 @@
+{
+  "title": "`Withdrawal_Stake` and pending deposits are returned to wrong address",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low. Withdrawal initiator loses 0.01 ETH per withdrawal  **Likelihood:** High. The only prerequisite is to perform withdrawal on behalf of another user, which is expected behavior  ## Description  Currently `Withdrawal_Stake` is returned to user whose withdrawal is processed, instead of actual sender who submitted withdrawal request and staked it.  Here you can see that `Withdrawal_Stake` is returned to withdrawal receiver, instead of withdrawal initiator:  ```solidity     function notarizeSettlement(         NotarizeSettlementArgs calldata _args     ) external nonReen",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

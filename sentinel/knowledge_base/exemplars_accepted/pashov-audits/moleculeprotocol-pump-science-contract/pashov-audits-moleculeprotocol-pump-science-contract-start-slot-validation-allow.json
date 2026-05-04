@@ -1,0 +1,22 @@
+{
+  "title": "Start slot validation allows past slots",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-pump-science-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "storage-collision",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The protocol implements a fee schedule that should progress from high fees (99%) to low fees (1%) over time based on slots passed since launch. However, the current implementation validates the `start_slot` parameter incorrectly:  ```rust pub fn validate(&self, params: &CreateBondingCurveParams) -> Result<()> {     let clock = Clock::get()?;     // validate start time     if let Some(start_slot) = params.start_slot {         require!(start_slot <= clock.slot, ContractError::InvalidStartTime)     }     // ... } ```  This v",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/PumpScience-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

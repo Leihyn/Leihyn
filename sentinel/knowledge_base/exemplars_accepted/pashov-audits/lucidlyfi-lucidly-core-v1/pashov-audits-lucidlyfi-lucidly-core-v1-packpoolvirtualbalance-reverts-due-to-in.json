@@ -1,0 +1,21 @@
+{
+  "title": "`_packPoolVirtualBalance()` reverts due to incorrect `POOL_VB_MASK`",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  All calculations with POOL_VB_MASK always revert due to a wrong value stored. E.g. reverts in `_packPoolVirtualBalance()` during the liquidity provision.  ## Recommendations  `POOL_VB_MASK` value should be fixed:  ```diff - uint256 public constant POOL_VB_MASK = 2 * 128 - 1; + uint256 public constant POOL_VB_MASK = 2 ** 128 - 1; ```",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Price impact miscalculation on partial closures",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "auction"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When closing a trade via closeTradeMarketCallback, the contract allows a user to specify a percentage of the position to close. The callback correctly applies this percentage when calculating collateral to close, profit/loss, and trade value.  However, when calculating price impact through getDynamicTradePriceImpact, the function always uses the entire trade collateral, instead of the reduced collateralToClose. This inconsistency causes price impact to be exaggerated, potentially leading to user losses, incorr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-08-22.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

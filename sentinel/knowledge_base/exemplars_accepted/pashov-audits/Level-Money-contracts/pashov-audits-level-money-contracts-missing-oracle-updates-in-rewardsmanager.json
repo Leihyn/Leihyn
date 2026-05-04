@@ -1,0 +1,23 @@
+{
+  "title": "Missing oracle updates in `RewardsManager`",
+  "platform": "pashov-audits",
+  "program": "Level-Money-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `RewardsManager.getAccruedYield()` function calculates rewards based on oracle prices but fails to call `_tryUpdateOracle()` before fetching prices. This behavior is different from `LevelMintingV2`, which explicitly updates oracles before using their prices. ```solidity     function getAccruedYield(address[] calldata assets) public view returns (uint256 accrued) {         uint256 total;          for (uint256 i = 0; i < assets.length; i++) {             address asset = assets[i];             StrategyConfig[] memory str",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Level-security-review_2025-04-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

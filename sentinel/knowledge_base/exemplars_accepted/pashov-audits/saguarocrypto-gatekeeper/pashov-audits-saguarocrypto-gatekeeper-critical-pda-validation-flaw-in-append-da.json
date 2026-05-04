@@ -1,0 +1,21 @@
+{
+  "title": "Critical PDA validation flaw in `append_data_sandwich_validators_bitmap`",
+  "platform": "pashov-audits",
+  "program": "saguarocrypto-gatekeeper",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `append_data_sandwich_validators_bitmap` instruction does **not correctly validate** the `sandwich_validators` PDA account. Specifically, the `AppendDataSandwichValidatorsBitmap` context used in this instruction is not Deriving the PDA account from the seeds.   This flaw allows one authority to **append data to the validator bitmap of a different authority\u2019s PDA**, leading to **unauthorized state modifications**.  Unlike a benign validation oversight, this issue poses a **critical security risk**, as it breaks isolation b",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gatekeeper-security-review_2025-06-28.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

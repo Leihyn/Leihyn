@@ -1,0 +1,21 @@
+{
+  "title": "Adversary blocks volume decay when `dt` nears `max_dt`",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `maxDecayInterval` controls the duration after which the volume will be decayed to zero. However, depending on the decayRate and `maxDecayInterval`, there may be a steep drop in decayed volume between `dt = maxDecayInterval - 1` and `dt = maxDecayInterval`.  Once aware of this, an adversary may intentionally create dummy trades in such situations to trigger an update and prevent the volume from decaying to zero, forcing some of the others' future trades into slightly less favorable prices.  ## Recommendations",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-08-22.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "ETH withdrawn is sent to `msg.sender` instead of the `to` address",
+  "platform": "pashov-audits",
+  "program": "arcadia-finance-accounts-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `AccountSpot` contract, the `_withdraw` function does not use the `to` address as the recipient of the withdrawn funds in the case of an ETH withdrawal but instead uses `msg.sender` as the recipient. This removes the ability of the withdrawer to specify a different address to receive the funds and, what is more, can lead to the loss of funds if the caller is expecting the funds to be sent to the `to` address, as the NatSpec comment explicitly states that the `to` address is the recipient of the withdrawn funds.  ``",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

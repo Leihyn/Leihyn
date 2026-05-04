@@ -1,0 +1,22 @@
+{
+  "title": "Bridge messages can be permanently lost",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-nucleus-boring-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `MultiChainHyperlaneTellerWithMultiAssetSupport` contract includes a pause mechanism that blocks all message handling through the `_beforeReceive` check in the `handle` function:  ```solidity     function handle(uint32 origin, bytes32 sender, bytes calldata payload) external payable {         _beforeReceive();         ...     }      function _beforeReceive() internal virtual {         if (isPaused) revert TellerWithMultiAssetSupport__Paused();     } ```  This creates a vulnerability in the cross-chain bridge flow:  - User",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nucleus-security-review_2024-12-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

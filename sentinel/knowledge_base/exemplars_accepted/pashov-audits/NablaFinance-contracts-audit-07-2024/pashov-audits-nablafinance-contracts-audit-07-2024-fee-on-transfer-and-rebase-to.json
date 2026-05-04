@@ -1,0 +1,22 @@
+{
+  "title": "Fee-on-transfer and rebase tokens.",
+  "platform": "pashov-audits",
+  "program": "NablaFinance-contracts-audit-07-2024",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In various parts of the codebase, assets are transferred using with the assumption that the amount transferred, is the amount received. This however isn't the case when dealing with certain tokens. i. Some charge a fee during transfers, e.g PAXG. Also important to note is that tokens like USDT also have the option to charge fees, but currently do not. ii. Some tokens, notably stETH have a [1 to 2 wei corner case](https://docs.lido.fi/guides/lido-tokens-integration-guide/#1-2-wei-corner-case), in which the amount received durin",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nabla-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

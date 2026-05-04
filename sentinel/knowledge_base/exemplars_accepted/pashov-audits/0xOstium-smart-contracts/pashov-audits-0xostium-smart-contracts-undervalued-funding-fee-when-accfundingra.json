@@ -1,0 +1,19 @@
+{
+  "title": "Undervalued funding fee when accFundingRate is negative",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The funding fee accounting differs between when Longs pay to Shorts and when Shorts pay to Longs, and Shorts always pay less funding fee than they should when oiDelta is negative.  This issue arises from the fact that, regardless of which side pays, the scaling is always applied to the `valueShort` accounting. As such, Shorts always receive the full funding fee from Longs but only pay a partial funding fee to Longs.  Consider this:  * oiDelta is positive:  Longs pay Shorts the full `accFundingRate`. The full `accFundingRate",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-01-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

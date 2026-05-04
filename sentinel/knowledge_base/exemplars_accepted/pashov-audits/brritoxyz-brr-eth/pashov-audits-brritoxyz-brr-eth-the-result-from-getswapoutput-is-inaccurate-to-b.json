@@ -1,0 +1,23 @@
+{
+  "title": "The result from `getSwapOutput` is inaccurate to be used as the `minOutput` in the swap operation",
+  "platform": "pashov-audits",
+  "program": "brritoxyz-brr-eth",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low, because it decrease the `minOutput` by 0.02%  **Likelihood:** High, because it always happened when `harvest` is called.  ## Description  When `harvest` called, it will calculate `quote` amount that will be used for `minOutput` in the swap operation by calling `router.getSwapOutput`  ```solidity function harvest() external {     // ...     // Fetching the quote onchain means that we're subject to front/back-running but the     // assumption is that we will harvest so frequently that the rewards won't justify the effort. >>  (uint256 index, uint256 quote) = router.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Brrito-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

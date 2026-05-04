@@ -1,0 +1,22 @@
+{
+  "title": "Bypassing collateral cap check",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `CollateralPool.merge` merges collateral pool `child` into collateral pool `parent` bypassing cap check in `updateCollateralShares` function since it directly invokes `_updateCollateralShares` function.  ```solidity     function merge(Data storage parent, Data storage child) internal { <...>             // transfer funds from the child collateral pool to the parent             {                 address[] storage collaterals = GlobalCollateralConfiguration.load().collaterals;                  for (uint256 i = 0; i < collate",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-April.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

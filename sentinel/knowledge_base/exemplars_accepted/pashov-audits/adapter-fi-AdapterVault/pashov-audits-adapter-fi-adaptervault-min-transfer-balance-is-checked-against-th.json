@@ -1,0 +1,21 @@
+{
+  "title": "`min_transfer_balance` is checked against the wrong value",
+  "platform": "pashov-audits",
+  "program": "adapter-fi-AdapterVault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When `_withdraw` is called a `transfer_balance` is greater than `current_balance` inside the vault, it should check if `current_balance` is enough to cover the `min_transfer_balance`. However, currently, it will check it against `transfer_balance` instead.  ```python @internal def _withdraw(_asset_amount: uint256, _receiver: address, _owner: address, pregen_info: DynArray[Bytes[4096], MAX_ADAPTERS], _min_assets: uint256 = 0) -> uint256:     # _withdraw(assetqty, _receiver, _owner, pregen_info, 0)     min_transfer_balance",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AdapterFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

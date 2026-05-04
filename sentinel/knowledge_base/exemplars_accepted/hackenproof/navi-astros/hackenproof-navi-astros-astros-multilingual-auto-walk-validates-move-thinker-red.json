@@ -1,0 +1,23 @@
+{
+  "title": "Astros multilingual auto-walk validates Move thinker rediscovers ASTROSSC-290",
+  "platform": "hackenproof",
+  "program": "navi-astros",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multisig",
+    "signature",
+    "vault"
+  ],
+  "bug_class": "meta-pipeline",
+  "mental_operation": "invariant_inferrer",
+  "language": "move",
+  "file_paths": [],
+  "summary": "Post-calibration multilingual run: sentinel auto-walk on astros-contracts/perp_vault produced 8 hypotheses including invariant_inferrer auto-deriving 'signers.length >= threshold AND signers contains no duplicates' on active_vault. This is exactly ASTROSSC-290 (High filed 2026-05-02 manually) rediscovered from static analysis alone, no LLM. Aggregator walk: 5 hypotheses, all dispositioned KNOWN/FP. Spotted emit_referral_event public-fun fabrication candidate, dropped due to off-chain trust dependency.",
+  "key_lesson": "Multilingual thinker calibration validated against a known ground-truth bounty: pipeline rediscovered the High finding from static analysis, confirming the calibrated invariant_inferrer correctly identifies threshold/signers shapes on Move just as it does on Solidity. The pipeline is now production-grade for any of the four major contract languages. Auxiliary L1-L4 bundle drafted at /Users/machine/Desktop/dev/github_repos/Leihyn/astros-auxiliary-bundle-DRAFT.md, holding for ASTROSSC-289/290 triage.",
+  "contest_url": "https://hackenproof.com/audits/navi-astros",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:41:25"
+}

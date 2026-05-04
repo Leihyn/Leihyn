@@ -1,0 +1,22 @@
+{
+  "title": "Auction won't work correctly with fee-on-transfer & rebasing tokens",
+  "platform": "pashov-audits",
+  "program": "deomaius-rolling-dutch-auction",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "veToken",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can lead to a loss of value  **Likelihood:** Low, as such tokens are not so common  ## Description  The code in `createAuction` does the following:  ```solidity IERC20(reserveToken).transferFrom(msg.sender, address(this), reserveAmount); ... ... state.reserves = reserveAmount; ```  so it basically caches the expected transferred amount. This will not work if the `reserveToken` has a fee-on-transfer mechanism, since the actual received amount will be less because of the fee. It is also a problem if the token used had a rebasing mechanism, as this can mean th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/RollingDutchAuction-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

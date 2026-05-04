@@ -1,0 +1,21 @@
+{
+  "title": "BunniZone does not verify amAMM manager properly",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  BunniZone is responsible for verifying the order fulfillers. It allows the am-AMM manager of the pool to fulfill orders. The issue is that the code doesn't check that currently the am-AMM isn't disabled through pool override or global override. So even if the am-AMM is disabled for the pool the `validate()` would allow the pending manager to fulfill the orders because the code uses `amAmm.getTopBid(id)` without first checking the `getAmAmmEnabled(id)`.  ```solidity        // query the hook for the am-AMM manager         I",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

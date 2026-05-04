@@ -1,0 +1,21 @@
+{
+  "title": "Pending withdrawal tokens in `redeem()` affect share price",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  Pending withdrawal tokens in the `redeem()` function are still considered in the share price calculations. Since `totalSupply` and `_totalAssets` are not updated to reflect the pending withdrawals:  ```solidity         // Transfer shares from owner to vault         balanceOf[owner] -= shares;         balanceOf[address(this)] += shares; ```  The share price would be incorrect for profit/loss that happens later. When the pending withdrawals are finalized (by calling `topOff`), the share price will adjust to account for the wi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

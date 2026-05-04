@@ -1,0 +1,21 @@
+{
+  "title": "Add a form of access control to `takeFee`",
+  "platform": "pashov-audits",
+  "program": "cryptexfinance-tcapv2.0",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "access-control",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `takeFee()` function is available for everyone. Imagine depositors A, B, C, each deposited 10 ETH, and holding 10 shares each, and they have the same debt. Anyone can call `takeFee()` for A and B, decreasing their shares gradually to 9.99. As a result, depositor \u0421 has more shares.  ```solidity     function takeFee(address user, uint96 pocketId) external {         IPocket pocket = _getVaultStorage().pockets[pocketId].pocket;         if (address(pocket) == address(0)) revert InvalidValue(IVault.ErrorCode.INVALID_POCKET);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cryptex-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

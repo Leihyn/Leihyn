@@ -1,0 +1,21 @@
+{
+  "title": "Force buy ToyBox for anyone who sets approval for contract",
+  "platform": "pashov-audits",
+  "program": "Merit-Circle-forgotten-playland-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In ToyBox contract and `primarySaleWithPermit()` and `customSaleWithPermit()` code doesn't check that `msg.sender` is equal to the `permitSignature.owner`. Also valid permission signature is not enforced in `trustlessPermit()` so If someone has set approval for the ToyBox contract, it would be possible to call those functions with spoofed permission signature and buy ToyBox token for them without their permission. Attacker can spend all the users' tokens that gave spending allowance and also buy ToyBox when price is not fai",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ForgottenPlayland-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Difference between charged and paid fees",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The protocol charges government fees to cover paid oracle fees:  ```solidity     function openTradeMarketCallback(ITradingCallbacks.AggregatorAnswer memory _a) external tradingActivated { <...>             // Gov fee to pay for oracle cost             TradingCommonUtils.updateFeeTierPoints(t.collateralIndex, t.user, t.pairIndex, 0);              uint256 govFeeCollateral = TradingCommonUtils.getMinGovFeeCollateral(                 t.collateralIndex,                 t.user,                 t.pairIndex             ); ```  Th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

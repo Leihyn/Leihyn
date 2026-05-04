@@ -1,0 +1,19 @@
+{
+  "title": "`SessionKeyValidator` module cannot be removed properly",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When the module is removed, `disable` will be called after the module has been removed from the registered list.  ```solidity     function _removeModule(address module) internal {         _modulesLinkedList().remove(module);  >>>     (bool success, ) = module.excessivelySafeCall(             gasleft(),             0,             0,             abi.encodeWithSelector(IInitable.disable.selector)         );         (success); // silence unused local variable warning          emit RemoveModule(module);     } ```  Inside `Sess",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-12-23.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

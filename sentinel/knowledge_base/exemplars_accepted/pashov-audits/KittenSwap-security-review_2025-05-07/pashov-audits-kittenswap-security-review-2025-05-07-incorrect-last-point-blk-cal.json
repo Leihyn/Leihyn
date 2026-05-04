@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect `last_point.blk` calculation due to shared memory in `_checkpoint()`",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the `_checkpoint` function of the VotingEscrow contract, there's an issue with how `initial_last_point` is assigned as a reference to `last_point` instead of creating an independent copy. This causes incorrect block number extrapolation calculations which affect voting power calculations throughout the system.  ```solidity     function _checkpoint(         uint _tokenId,         LockedBalance memory old_locked,         LockedBalance memory new_locked     ) internal {         ...         Point memory initial_last_point =",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

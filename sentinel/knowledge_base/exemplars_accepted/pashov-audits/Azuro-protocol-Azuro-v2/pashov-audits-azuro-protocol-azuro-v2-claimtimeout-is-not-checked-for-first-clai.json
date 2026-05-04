@@ -1,0 +1,21 @@
+{
+  "title": "`claimTimeout` is not checked for first claim by an account",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-Azuro-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** High, because it will happen for each account's first claim  **Impact:** Low, because there is no loss of funds, but code is not working as intended  ## Description  In `claimRewards` in `LP.sol` there is the following check  ```solidity if ((block.timestamp - reward.claimedAt) < claimTimeout)     revert ClaimTimeout(reward.claimedAt + claimTimeout); ```  which basically forces an account that claims his rewards to wait for at least `claimTimeout` amount of time. The problem is, in `addReserve` the reward amount is set, but `reward.claimedAt` is not set to `block.t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Azuro-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

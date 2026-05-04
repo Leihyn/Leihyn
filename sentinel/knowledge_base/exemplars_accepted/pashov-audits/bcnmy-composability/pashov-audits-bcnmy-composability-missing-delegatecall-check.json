@@ -1,0 +1,19 @@
+{
+  "title": "Missing DelegateCall Check",
+  "platform": "pashov-audits",
+  "program": "bcnmy-composability",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `executeComposableDelegateCall` is a function that allows accounts with the `ComposableExecutionModule` installed to use this functionality via `execute` with `CALLTYPE_DELEGATECALL`.  ```solidity     /// @notice It doesn't require access control as it is expected to be called by the account itself via .execute(mode = delegatecall)     function executeComposableDelegateCall(ComposableExecution[] calldata executions) external {         _executeComposable(executions, address(this), _executeExecutionDelegatecall);     } ```  ```",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BiconomyComposability-security-review_2025-03-22.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

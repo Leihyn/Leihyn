@@ -1,0 +1,23 @@
+{
+  "title": "Incorrect `excessFeeRefundAddress` and `callValueRefundAddress` are provided when bridging tokens to the L2",
+  "platform": "pashov-audits",
+  "program": "HYCHAIN-system-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge",
+    "amm",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, `address(this)` is provided for the `excessFeeRefundAddress` and `callValueRefundAddress` parameters when calling `createRetryableTicket`, which could lead to a loss of excess fee and the ability to cancel the L1 -> L2 ticket.  **Likelihood:** Medium, The ability to cancel a ticket might needed when there is potentially malicious behavior that needs to be prevented when `_mintAndBridge` is triggered.  ## Description  HYCHAIN's blockchain uses the same technology that powers Arbitrum Nova (L2). One of the capabilities that is available and used is L1 -> L2 bridg",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hytopia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

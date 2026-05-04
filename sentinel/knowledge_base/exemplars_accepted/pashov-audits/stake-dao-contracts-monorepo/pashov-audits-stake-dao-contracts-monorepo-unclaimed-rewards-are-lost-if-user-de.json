@@ -1,0 +1,22 @@
+{
+  "title": "Unclaimed rewards are lost if user deposits before claiming rewards",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `StrategyWrapper` contract, when a user deposits, the rewardVault shares are transferred to the wrapper, and the `_deposit()` function is invoked to checkpoint the user\u2019s balance and `rewardPerTokenPaid`:  ```solidity  function _deposit(uint256 amount) internal {         // 1. Update the internal user checkpoint         UserCheckpoint storage checkpoint = userCheckpoints[msg.sender];         checkpoint.balance += amount;          // 2. Keep track of the Main reward token checkpoint         checkpoint.re",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

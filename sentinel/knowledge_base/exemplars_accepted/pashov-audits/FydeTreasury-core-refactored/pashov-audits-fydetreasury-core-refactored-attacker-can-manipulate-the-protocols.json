@@ -1,0 +1,21 @@
+{
+  "title": "Attacker can manipulate the protocols AUM",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  In the new design, the AUM value will be set and updated by off-chain bot. The issue is that the bot defines the absolute value of the AUM and the Fyde contract changes the current AUM based on the bot-provided value so the attacker can change the current AUM by front-running and causing the wrong AUM value when the bot's transaction executes. This is POC:  1. Suppose the current AUM is $100K and the attacker deposited $20K into the protocol. 2. The AUM decreases to $98K and the off-chain bot sends a transaction to update the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

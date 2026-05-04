@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect boost management leads to staking reward loss",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `rewardCache::dropBoost` function (BGT 0x656b95E550C07a9ffe548bd4085c72418Ceb1dba) is designed to drop boosted rewards for a given validator. However, it checks the `dropBoostQueue` storage to confirm whether sufficient time has passed since the last boost. The problem arises because `rewardCache::queueDropBoost` is never called prior to `dropBoost` in functions like `Staker::_redeemRewards` and `Staker::setValidator`. Consequently, the `dropBoostQueue` remains empty, and `dropBoost` always returns `false`, preventing r",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

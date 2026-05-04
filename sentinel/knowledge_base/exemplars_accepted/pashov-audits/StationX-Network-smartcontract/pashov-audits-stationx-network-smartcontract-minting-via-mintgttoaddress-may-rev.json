@@ -1,0 +1,19 @@
+{
+  "title": "Minting via mintGTToAddress may revert",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When minting ERC721 DAO tokens via `mintGTToAddress()` a check is performed to validate that the user won't end up with more than the max limit:  ```solidity     uint256 length = _userAddress.length;     for (uint256 i; i < length;) {         for (uint256 j; j < _amountArray[i];) { @>          if (balanceOf(_userAddress[i]) + _amountArray[i] > erc721DaoDetails.maxTokensPerUser) { @>              revert MaxTokensMintedForUser(_userAddress[i]); @>          }              _tokenIdTracker += 1;             _safeMint(_userAddr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

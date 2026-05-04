@@ -1,0 +1,22 @@
+{
+  "title": "Users can't withdraw from `sDaiStrategy` when it is paused",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, reverts when integrating with strategy shares  **Likelihood:** Medium, since this only applies when the `sDaiStrategy` is paused, which shouldn't happen too frequently and should be transient  ## Description  At any point in time the owner of the `sDaiStrategy` can either pause the strategy or emergency withdraw (which enables a pause). When the strategy is marked as paused, both deposits and withdrawals cannot be executed.  However, the problem with this logic is that blocking withdrawals from a YieldBox strategy at any time is a big no-no. Even in the event o",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

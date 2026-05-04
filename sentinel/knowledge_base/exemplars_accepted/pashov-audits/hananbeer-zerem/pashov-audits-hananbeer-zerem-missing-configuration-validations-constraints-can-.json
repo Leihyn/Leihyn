@@ -1,0 +1,23 @@
+{
+  "title": "Missing configuration validations & constraints can lead to stuck funds",
+  "platform": "pashov-audits",
+  "program": "hananbeer-zerem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  If a protocol integrates with Zerem it needs to deploy different instances of `Zerem.sol` for each `underlyingToken`. In the constructor there are some configurations being set but the inputs are not validated at all. Now if the deployer did not configure them correctly, or fat-fingered the deployment or if the deployment scripts were incorrect, it is possible to misconfigure the protocol in such a way that it is not obvious but leads to all locked funds getting stuck forever.  Let\u2019s look at the following scenario:  1. Mistake in the deployment script sets the `unlockDelay",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Zerem-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

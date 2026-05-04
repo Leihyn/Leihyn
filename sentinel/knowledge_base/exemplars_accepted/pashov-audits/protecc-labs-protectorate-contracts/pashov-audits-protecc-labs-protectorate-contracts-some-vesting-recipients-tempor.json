@@ -1,0 +1,19 @@
+{
+  "title": "Some vesting recipients temporarily won't be able to claim",
+  "platform": "pashov-audits",
+  "program": "protecc-labs-protectorate-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as funds will be locked for 30 days  **Likelihood:** Medium, because it will only happen when the cliff is < 30 day  ## Description  The `SLICE_PERIOD` constant in `Vesting` is set to 30 days. Due to the following math in `_computeReleasableAmount`  ```solidity uint256 vestedSeconds = (timeFromStart / SLICE_PERIOD) * SLICE_PERIOD; ```  If `timeFromStart` is less than 30 days this will round down to zero, which means the amount to claim until 30 days have passed will always be zero. This applies especially for vesting schedules that have no `cliff` (it is 0), wh",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Protectorate-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

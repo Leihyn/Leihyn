@@ -1,0 +1,22 @@
+{
+  "title": "Decrease position's `updateTradeSuccess` will use wrong `availableCollateralInDiamond`",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Inside the Decrease Position's `updateTradeSuccess`, the closing fee is deducted from the user. However, it is not considered when providing `_values.availableCollateralInDiamond` to the `handleTradeValueTransfer` operation.  ```solidity     function updateTradeSuccess(         ITradingStorage.Trade memory _existingTrade,         IUpdatePositionSizeUtils.DecreasePositionSizeValues memory _values,         ITradingCallbacks.AggregatorAnswer memory _answer     ) internal {         // 1. Update trade in storage         _getMult",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

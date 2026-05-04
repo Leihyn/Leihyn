@@ -1,0 +1,21 @@
+{
+  "title": "Missing slippage protection in deposit/redeem functions",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `HyperVaultRouter` contract implements a vault system where users can deposit various assets and receive share tokens in return. The share calculation in the `deposit()` function relies on the USD value of deposited assets, which is determined by querying rates from the escrow contract. However, the function lacks slippage protection, making users vulnerable to sandwich attacks and unfavorable rate manipulation.  ```solidity     function deposit(address asset, uint256 amount) external override nonReentrant returns (uint256",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

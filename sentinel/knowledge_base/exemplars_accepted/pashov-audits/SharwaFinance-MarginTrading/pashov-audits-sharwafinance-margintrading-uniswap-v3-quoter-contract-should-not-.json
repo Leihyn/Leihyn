@@ -1,0 +1,21 @@
+{
+  "title": "Uniswap V3 quoter contract should not be called on-chain",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `UniswapModule` contains calls to the Uniswap V3 quoter contract.  ```solidity File: UniswapModule.sol  61:     function getInputPositionValue(uint256 amountIn) external returns (uint amountOut) { 62:         ISwapRouter.ExactInputParams memory params = _preparationInputParams(amountIn); 63: 64:         amountOut = quoter.quoteExactInput(params.path, amountIn); 65:     } 66: 67:     function getOutputPositionValue(uint256 amountOut) public returns (uint amountIn) { 68:         ISwapRouter.ExactOutputParams memory params = _pre",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

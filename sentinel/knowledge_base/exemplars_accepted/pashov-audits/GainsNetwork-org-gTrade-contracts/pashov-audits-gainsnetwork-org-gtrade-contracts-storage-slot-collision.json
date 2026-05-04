@@ -1,0 +1,21 @@
+{
+  "title": "Storage slot collision",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "oracle"
+  ],
+  "bug_class": "storage-collision",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  There is a miscalculation in the storage layout allocation for the `PriceAggregatorStorage` struct, which leads to a potential storage slot collision with `OtcStorage`.  The key issue is with the bytes32[2] jobIds field. It's incorrectly calculated as taking up 64 bits, but in reality, it occupies 64 bytes (512 bits), spanning 2 full storage slots.  ```solidity     struct PriceAggregatorStorage {         IChainlinkFeed linkUsdPriceFeed; // 160 bits         uint24 twapInterval; // 24 bits         uint8 minAnswers; // 8 bits",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-July.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

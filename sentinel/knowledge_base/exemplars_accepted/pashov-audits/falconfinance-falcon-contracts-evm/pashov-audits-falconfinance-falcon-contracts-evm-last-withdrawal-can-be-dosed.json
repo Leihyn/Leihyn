@@ -1,0 +1,23 @@
+{
+  "title": "Last withdrawal can be DoSed",
+  "platform": "pashov-audits",
+  "program": "falconfinance-falcon-contracts-evm",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In `StakedUSDf.sol`, every withdrawal is performs a check (`_checkMinShares`) that enforces that if `totalSupply()` is non-zero, it must be greater than `MIN_SHARES == 1e18`. This restriction creates a DoS vulnerability for the last user attempting to withdraw their tokens.  An attacker can frontrun the last withdrawal transaction by depositing a small amount, causing `_checkMinShares` to revert the legitimate withdrawal. After successfully executing the DoS, the attacker can then backrun their own withdrawal, ensuring that th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Falcon-security-review_2025-02-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

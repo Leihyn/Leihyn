@@ -1,0 +1,22 @@
+{
+  "title": "Unexpected token divisibility issues on non-evm chains",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-orbit-adapter",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The OrbitProxyOFT1_2 contract, which inherits from BaseOFTV2, uses a `_sharedDecimals` parameter in its constructor. However, this value is not explicitly set to accommodate potential differences in decimal places across various blockchain networks, especially non-EVM chains.  ```solidity constructor(     address _token,     uint8 _sharedDecimals,     address _lzEndpoint,     IERC20Bridge _bridge ) BaseOFTV2(_sharedDecimals, _lzEndpoint) {     // ... other initialization logic ...     if (_sharedDecimals > decimals) {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LZOrbit-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

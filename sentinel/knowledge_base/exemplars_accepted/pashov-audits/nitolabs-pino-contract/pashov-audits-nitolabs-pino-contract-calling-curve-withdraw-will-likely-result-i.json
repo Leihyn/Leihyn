@@ -1,0 +1,24 @@
+{
+  "title": "Calling `Curve::withdraw` will likely result in users losing ETH",
+  "platform": "pashov-audits",
+  "program": "nitolabs-pino-contract",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy",
+    "signature",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as users can lose ETH value  **Likelihood:** High, as all >75 Curve pools that have ETH are problematic  ## Description  The `Curve::withdraw` method removes liquidity from a pool to burn LP tokens and receive the underlying assets, after which a user can sweep them to his wallet. The problem with this is that some pools use ETH as an underlying asset and the `remove_liquidity` method will send back ETH to the caller. When this is the case the ETH will be stuck in the contract (the `owner` can withdraw it for himself) since the user has no way to sweep the ETH ba",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Pino-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

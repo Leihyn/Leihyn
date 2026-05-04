@@ -1,0 +1,22 @@
+{
+  "title": "Reward time is updated even when no rewards are sent",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In `UniswapV3Staking` users can claim rewards by calling the `claimRewards` function. However, the `lastRewardTime` is always updated even when they get zero rewards:  ```solidity     function _claimRewards(uint256 noteId, StakeInfo storage stakeInfo, address recipient) internal {         require(dnft.ownerOf(noteId) == msg.sender, \"You are not the Note owner\");         require(stakeInfo.isStaked, \"Note not staked\");         uint256 rewards = _calculateRewards(noteId, stakeInfo); ->      stakeInfo.lastRewardTime = block.t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

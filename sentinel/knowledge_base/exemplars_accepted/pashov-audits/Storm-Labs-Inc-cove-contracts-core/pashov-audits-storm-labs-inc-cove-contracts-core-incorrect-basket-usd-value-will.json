@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect basket USD value will cause incorrect results",
+  "platform": "pashov-audits",
+  "program": "Storm-Labs-Inc-cove-contracts-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Upon proposing a token swap, we have the following sequence of function calls:  ```solidity uint256[] memory totalValues = new uint256[](numBaskets); // 2d array of asset balances for each basket uint256[][] memory basketBalances = new uint256[][](numBaskets); _initializeBasketData(self, baskets, basketAssets, basketBalances, totalValues); // NOTE: for rebalance retries the internal trades must be updated as well _processInternalTrades(self, internalTrades, baskets, basketBalances); _validateExternalTrades(self, externalTra",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cove-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Insufficient input data validation for `configureSequence`",
+  "platform": "pashov-audits",
+  "program": "metalabel-metalabel-contracts-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as some of those can result in a DoS or too big of a royalty payment  **Likelihood:** Low, as it requires a configuration error or a malicious actor  ## Description  An authorized address for a node can call `Collection::configureSequence` where most of the input is not validated properly. The `_sequence` parameter of the method is of type `SequenceData` which fields are not validated. Missing checks are the following:  1.  `sealedBeforeTimestamp` is bigger than `block.timestamp` 2.  `sealedAfterTimestamp` is always bigger than `sealedBeforeTimestamp` 3.  The dif",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Metalabel-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

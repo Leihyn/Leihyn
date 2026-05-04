@@ -1,0 +1,22 @@
+{
+  "title": "Initial griefing attack possible",
+  "platform": "pashov-audits",
+  "program": "brritoxyz-brr-eth",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the victim loses their funds  **Likelihood:** Low, as it comes at a cost for the attacker  ## Description  The famous initial deposit attack is largely mitigated by the solady library. However, doing this attack can cause some weird behavior that could grief users (at high cost of the attacker) and leave the vault in a weird state:  Here's a PoC showing the impacts  ```solidity     address bob = makeAddr(\"bob\");      function testInitialSupplyAttack() public {     \t// attacker starts with 13 ether         _getCWETH(13e18 + 6);          // initial small deposit",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Brrito-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

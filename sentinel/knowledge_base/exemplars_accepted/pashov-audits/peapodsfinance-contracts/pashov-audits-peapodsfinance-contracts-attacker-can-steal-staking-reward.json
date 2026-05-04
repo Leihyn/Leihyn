@@ -1,0 +1,23 @@
+{
+  "title": "Attacker can steal Staking reward",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When `flashMint` is called, it sets `_shortCircuitRewards` to 1, preventing `_processPreSwapFeesAndSwap` from being executed. As a result, the collected fees will neither be swapped nor deposited into the staking pool's `POOL_REWARDS`.  ```solidity     function flashMint(address _recipient, uint256 _amount, bytes calldata _data) external override lock { >>>     _shortCircuitRewards = 1;         uint256 _fee = _amount / 1000;         _mint(_recipient, _amount);         IFlashLoanRecipient(_recipient).callback(_data);         /",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

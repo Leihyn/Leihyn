@@ -1,0 +1,23 @@
+{
+  "title": "`reward` does not account for an under-peg scenario",
+  "platform": "pashov-audits",
+  "program": "Level-Money-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When `reward` is called, it calculates the accrued yield as the total asset balances in the vault and across strategies, minus the minted shares in the vault.  ```solidity     function getAccruedYield(address[] calldata assets) public view returns (uint256 accrued) {         uint256 total;          for (uint256 i = 0; i < assets.length; i++) {             address asset = assets[i];              StrategyConfig[] memory strategies = allStrategies[asset];              uint256 totalForAsset = vault._getTotalAssets(strategies, asse",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Level-security-review_2025-04-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

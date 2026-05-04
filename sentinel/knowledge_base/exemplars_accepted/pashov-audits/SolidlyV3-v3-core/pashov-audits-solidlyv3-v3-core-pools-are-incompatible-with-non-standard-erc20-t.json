@@ -1,0 +1,21 @@
+{
+  "title": "Pools are incompatible with non-standard ERC20 tokens",
+  "platform": "pashov-audits",
+  "program": "SolidlyV3-v3-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as it limits the possible pools in the app and with some special ones can result in loss of funds  **Likelihood:** Medium, as some of the tokens are not uncommon, like `USDT`  ## Description  The Solidly V3 AMM code removes the balance checks before and after transfers and also the `TransferHelper` library, calling the `transfer` and `transferFrom` methods of ERC20 directly. This will be problematic with three different types of tokens:  1. The `USDT` and `BNB` tokens do not return a `bool` on `transfer`, meaning transactions that add liquidity for a pool of th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/SolidlyV3AMM-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Loss of rewards due to the boostPeriods design",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-veFyde",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `rewardRate()` calculated based on boostPeriods as follows:  ```solidity     for (uint256 i; i < boostPeriods.length; ++i) {       currTime = currTime - timeInPeriod;       uint256 nextTimeStamp = // if boostPeriods[i].timeStamp in the past, take the current time         currTime > boostPeriods[i].timeStamp ? currTime : boostPeriods[i].timeStamp;       uint256 lastUpdate =         boostPeriods[i].timeStamp > lastUpdateTime ? boostPeriods[i].timeStamp : lastUpdateTime;       timeInPeriod = nextTimeStamp - lastUpdate;       tota",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

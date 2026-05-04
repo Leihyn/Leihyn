@@ -1,0 +1,19 @@
+{
+  "title": "Admin account has a lot of power in the protocol and multiple ways to deny/steal users' rewards",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the admin can steal funds from users(players)  **Likelihood:** Medium, as it requires a malicious or a compromised admin, but the incentives are high  ## Description  There are multiple centralization flaws and attack vectors in the protocol:  - Game admin can make `openHotBox` revert by front-running it with a `forceHoneyJarSearch` call, essentially rugging game winner - Game admin can call `setVRFConfig` and use his personally controlled VRF interface compliant contract and use a non-random number, essentially deciding the outcome of the game - The `setMaxho",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

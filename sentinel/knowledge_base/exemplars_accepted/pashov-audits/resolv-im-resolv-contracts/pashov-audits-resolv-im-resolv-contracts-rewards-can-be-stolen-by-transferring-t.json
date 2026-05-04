@@ -1,0 +1,22 @@
+{
+  "title": "Rewards can be stolen by transferring tokens to oneself",
+  "platform": "pashov-audits",
+  "program": "resolv-im-resolv-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  When `ResolvStakingV2` tokens are transferred, the checkpoints for the sender and the receiver are updated accordingly.  When a user transfers tokens to themselves, the first checkpoint is updated with a negative delta for the user, and the second checkpoint is updated with a positive delta for the same user.  However, after the first checkpoint is updated, the user's balance has not been updated, so when `ResolvStakingCheckpoints.updateEffectiveBalance()` is called for the second checkpoint, the `userStakedBalanc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Resolv-security-review_2025-07-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

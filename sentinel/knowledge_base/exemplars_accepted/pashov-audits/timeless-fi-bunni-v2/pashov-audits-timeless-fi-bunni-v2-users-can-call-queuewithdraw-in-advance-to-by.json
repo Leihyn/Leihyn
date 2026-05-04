@@ -1,0 +1,23 @@
+{
+  "title": "Users can call `queueWithdraw` in advance to bypass the withdraw delay",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `BunniHub` contract has a certain delay when withdrawing tokens. The specific withdrawal process is as follows.  1. The user calls `BunniHub.queueWithdraw` to initiate withdraw 2. The withdrawal delay time has passed 3. The user calls `BunniHub.withdraw` to finish withdraw  However, the `queueWithdraw` function does not lock the tokens to be withdrawn. An attacker can call the `queueWithdraw` function in advance to bypass the withdrawal delay. And the attacker can use multiple sub-accounts to call `queueWithdraw` in advanc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

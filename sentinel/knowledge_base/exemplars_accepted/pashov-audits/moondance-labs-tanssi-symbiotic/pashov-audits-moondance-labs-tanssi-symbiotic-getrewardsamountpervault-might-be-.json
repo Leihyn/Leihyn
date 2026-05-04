@@ -1,0 +1,23 @@
+{
+  "title": "`_getRewardsAmountPerVault` might be using an outdated vault power",
+  "platform": "pashov-audits",
+  "program": "moondance-labs-tanssi-symbiotic",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In Symbiotic, if a vault is slashed in the current epoch, its `activeStake` will be immediately reduced: ```solidity // https://github.com/symbioticfi/core/blob/main/src/contracts/vault/Vault.sol#L237             if (slashedAmount > 0) {                 uint256 activeSlashed = slashedAmount.mulDiv(activeStake_, slashableStake);                 uint256 nextWithdrawalsSlashed = slashedAmount - activeSlashed;                  _activeStake.push(Time.timestamp(), activeStake_ - activeSlashed);                 withdrawals[captureEpo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tanssi-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

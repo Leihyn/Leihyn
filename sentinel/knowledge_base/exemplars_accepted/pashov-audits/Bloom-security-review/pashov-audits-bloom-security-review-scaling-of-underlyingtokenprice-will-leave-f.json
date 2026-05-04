@@ -1,0 +1,23 @@
+{
+  "title": "Scaling of `underlyingTokenPrice` will leave funds stuck in protocol",
+  "platform": "pashov-audits",
+  "program": "Bloom-security-review",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as all deposited funds will be stuck in the protocol  **Likelihood:** High, as it will always happen  ## Description  The `_getTokenPrices` method in `SwapFacility` has the following code:  ```solidity underlyingTokenPrice =     uint256(IOracle(underlyingTokenOracle).latestAnswer()) *     1e12; ```  This scaling by `1e12` is an error, because most oracle price feeds in Chainlink (and more specifically, the one that is expected to be used, `USDC/USD`) return an 8 decimals number. Since this `underlyingTokenPrice` value will be divided by the `billyTokenPrice` valu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Bloom-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

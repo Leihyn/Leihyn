@@ -1,0 +1,21 @@
+{
+  "title": "Funds distribution can fail due to the rounding up",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-honeyjar-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When a NFT is sold, `Beekeeper` calls `BearPouch.distribute` to distribute the received funds to the configured recipients according to their share value. The calculation of the amount to be transferred to each recipient uses `FixedPointMathLib.mulWadUp` which rounds up the result to the nearest whole number.  ```solidity File: BearPouch.sol  61            if (xferERC20) { 62                paymentToken.safeTransferFrom( 63  @>                 msg.sender, distributions[i].recipient, amountERC20.mulWadUp(distributions[i].sha",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HoneyJar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

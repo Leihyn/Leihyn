@@ -1,0 +1,21 @@
+{
+  "title": "User can lock tokens from the TemporaryHolding for an \"infinite\" amount of time",
+  "platform": "pashov-audits",
+  "program": "subsquid-subsquid-network-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, admin won't be able to retrieve tokens after lock time has passed  **Likelihood:** Medium, attacker needs to be a temporary holding beneficiary  ## Description  `TemporaryHoldings.sol` allows the `beneficiary` address to use tSQD in the whitelisted protocol contracts for a limited amount of time  ```solidity   function execute(address to, bytes calldata data, uint256 requiredApprove) public returns (bytes memory) {     require(_canExecute(msg.sender), \"Not allowed to execute\");     require(router.networkController().isAllowedVestedTarget(to), \"Target is not all",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Subsquid-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

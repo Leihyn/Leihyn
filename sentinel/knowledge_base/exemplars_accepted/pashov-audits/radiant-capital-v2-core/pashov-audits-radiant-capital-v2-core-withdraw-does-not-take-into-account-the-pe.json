@@ -1,0 +1,23 @@
+{
+  "title": "`withdraw()` does not take into account the pending fee",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The assets corresponding to the user's shares are:  1. liquidity 2. pending fee 3. the remaining balance in UniV3TokenizedLp.  The `withdraw` function will call `_burnLiquidity` to extract the user's liquidity. `_burnLiquidity` calls `IUniswapV3Pool.burn`. The return values of `burn`, `owed0` and `owed1`, do not include the pending fee (the pending fee is directly included in the position).  ```bash \t\t\t(uint256 owed0, uint256 owed1) = IUniswapV3Pool(pool).burn(tickLower, tickUpper, liquidity); ```  Since the pending fee is",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

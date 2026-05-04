@@ -1,0 +1,22 @@
+{
+  "title": "Uniswap's pool can be initialized with a different price",
+  "platform": "pashov-audits",
+  "program": "serious-market-serious-core",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "amm"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `SeriousMarket.createPoolAndAddLiquidity` creates and initializes a Uniswap pool for the token-WETH pair only if the pool does not exist. Then liquidity is added to the pool at the current price.  In case the pool exists and the current price is different from the target initial price, not all the liquidity is added to the pool.  In case the price for the token is higher than the target price, fewer tokens will be added to the pool and the remaining tokens will be burned. In case the price is lower, fewer WETH will be added t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Serious-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

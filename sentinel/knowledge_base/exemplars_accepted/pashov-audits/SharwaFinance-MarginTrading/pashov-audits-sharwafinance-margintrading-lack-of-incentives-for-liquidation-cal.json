@@ -1,0 +1,23 @@
+{
+  "title": "Lack of incentives for Liquidation calls",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `liquidation` operates as follows:  1. All collateral balances owned by the `marginAccount` are retrieved in the code line `MarginAccount#L221-L231`. 2. Assets are liquidated for USDC through the `ModularSwapRouter::liquidate` function, converting the account's holdings into a more liquid form. Code line `MarginAccount#L233`. 3. Debts in corresponding `LiquidityPools` are cleared in the code line `MarginAccount#L237`, using the USDC acquired from liquidation (step 2). If debts exceed the liquidation proceeds, additional fu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

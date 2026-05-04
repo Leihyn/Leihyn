@@ -1,0 +1,21 @@
+{
+  "title": "Discrepancy in fee retrieval",
+  "platform": "pashov-audits",
+  "program": "Sageterminal-Sage-Contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When creating an `ERC314 token` using the `EVToken` contract, the fee amount to be charged in the `buy()/sell()` functions can be specified. Later, this fee will be directly stored in memory when initializing the contract in the `constructor`:  ```solidity File: EvFactoryProxyOptFee.sol 555: 556: contract EVToken is ERC314Implementation { 557:     constructor( 558:         address implementation, 559:         address factory, 560:         address owner, 561:         uint totalSupply, 562:         uint fee, 563:         st",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/EVTerminal-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect math operation leads to underprediction of stored product",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The function `swap` is used to exchange tokens. The contract keeps track of two values: a product and a sum of the virtual balances to calculate the exchange rate. In the `swap` function, the product is updated.  ```solidity _virtualBalanceProd = _virtualBalanceProd             + _powUp(_prevVirtualBalanceY, _wnY) / _powDown((_virtualBalanceX * PRECISION) / _prevVirtualBalanceX, _wnX); ```  The issue is that instead of updating the product with multiplication and division, it is actually updating with an addition. This comple",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Missing Accounts in `lz_receive_types` Return",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `lz_receive_types` function is missing the `account 8 - associated token program` and `account 9 - system program` in its return value.  The `lz_receive_types` function is used to extract the accounts needed for calling `lz_receive` starting from `LzReceiveParams` as input.  The absence of these accounts will cause the `lz_receive` function to fail when it relies on the accounts returned by `lz_receive_types`.  ```rust File: programs/oft/src/instructions/lz_receive_types.rs#L70-L75  accounts.extend_from_slice(&[     LzAcco",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LayerZero-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

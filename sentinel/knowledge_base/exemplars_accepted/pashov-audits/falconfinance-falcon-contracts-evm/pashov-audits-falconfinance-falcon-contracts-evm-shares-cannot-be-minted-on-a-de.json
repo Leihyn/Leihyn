@@ -1,0 +1,23 @@
+{
+  "title": "Shares cannot be minted on a deposit attack",
+  "platform": "pashov-audits",
+  "program": "falconfinance-falcon-contracts-evm",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When users deposit USDf into the stakedUSDf contract, they get back sUSDf. The calculation follows [ERC4626](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/8ab1f5acf958b937531cee87f99ae4c0242f0dee/contracts/token/ERC20/extensions/ERC4626Upgradeable.sol#L247), as so:  ```   function _convertToShares(uint256 assets, Math.Rounding rounding) internal view virtual returns (uint256) {         return assets.mulDiv(totalSupply() + 10 ** _decimalsOffset(), totalAssets() + 1, rounding);     } ```  If the user de",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Falcon-security-review_2025-02-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

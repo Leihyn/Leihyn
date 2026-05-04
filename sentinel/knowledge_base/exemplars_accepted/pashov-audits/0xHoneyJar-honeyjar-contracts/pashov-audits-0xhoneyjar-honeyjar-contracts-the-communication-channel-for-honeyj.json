@@ -1,0 +1,21 @@
+{
+  "title": "The communication channel for `HoneyJarONFT` can be blocked",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-honeyjar-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `HoneyJarONFT` inherits from LayerZero's `NonblockingLzApp` to manage the cross-chain NFT transfers.  Let's break down how the flow of receiving a cross-chain message works:  1. The entry point is the `lzReceive` function of the `LzApp` contract, inherited by `NonblockingLzApp`, that executes the internal function `_blockingLzReceive`.  2. `_blockingLzReceive` (overridden by `NonblockingLzApp`) executes `nonblockingLzReceive` through a low-level call. If the call fails, the message is stored to be processed later.  ```solidit",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HoneyJar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

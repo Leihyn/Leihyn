@@ -1,0 +1,19 @@
+{
+  "title": "Preventing balance updates by adding a new validator in the current block",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The balance of the user's validators can be updated by creating a new snapshot and proving the balance of the validators. If a user doesn't start a new snapshot in time then anyone can start a snapshot for that user and update the user's balance. Users have an incentive to not update their balances if they get slashed in the beacon chain. A user can block the snapshot finalization and snapshot creation process and stop balance updates by performing this attack. The issue is that the `validateSnapshotProofs()` code doesn't",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

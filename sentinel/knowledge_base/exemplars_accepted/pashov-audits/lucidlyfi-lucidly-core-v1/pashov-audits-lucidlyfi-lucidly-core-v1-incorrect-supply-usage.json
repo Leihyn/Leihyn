@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect supply usage",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The contract uses the global variable `supply` in some places, and the function value `totalSupply` in other places. The issue is that these two values are not the same.  `totalSupply` is the total minted out LP tokens in circulation.  `supply` is a value calculated using Newton-Raphson iterations based on the weights, sums and products of the tokens composing the pool.  These two values are only in sync after calling the `_calculateSupply` followed by `_updateSupply`, since the latter function burns or mints the LP token s",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

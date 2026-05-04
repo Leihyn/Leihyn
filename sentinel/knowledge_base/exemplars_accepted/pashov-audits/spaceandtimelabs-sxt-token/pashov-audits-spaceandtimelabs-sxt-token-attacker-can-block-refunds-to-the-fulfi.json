@@ -1,0 +1,19 @@
+{
+  "title": "Attacker can block refunds to the fulfiller's account",
+  "platform": "pashov-audits",
+  "program": "spaceandtimelabs-sxt-token",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description   The current `fulfillQuery` pays refund gas to the query source. If the refund fails, the entire flow will revert. This means malicious users can always reject the completion of queries:  ```solidity QueryLogic.sol::L243             if (refundAmount > 0) {                 // slither-disable-next-line low-level-calls                 (bool refundSuccess,) = payment.source.call{value: refundAmount}(\"\");                 if (!refundSuccess) revert NativeRefundFailed();             } ```  Attacker can:  0. Attacker pre-deploy a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SXT-security-review_2025-03-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

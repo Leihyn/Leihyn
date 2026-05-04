@@ -1,0 +1,22 @@
+{
+  "title": "Griefing attack on claimable rewards",
+  "platform": "pashov-audits",
+  "program": "resolv-im-resolv-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In the calculation of the rewards, done in the `ResolvStakingCheckpoints.checkpoint()` function, the value of the new claimable amount is truncated. This makes it possible that the accumulated rewards per token are updated for the user, while the claimable amount is not because it rounds down to zero.  ```solidity File: ResolvStakingCheckpoints.sol \t\tuint256 userAccReward = userData.accumulatedRewardsPerToken[token]; \t\tuint256 newClaimable = 0; \t\tif (userAccReward < reward.accumulatedRewardPerToken) { \t\t\tuserData.accumulatedRe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Resolv-security-review_2025-04-15.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

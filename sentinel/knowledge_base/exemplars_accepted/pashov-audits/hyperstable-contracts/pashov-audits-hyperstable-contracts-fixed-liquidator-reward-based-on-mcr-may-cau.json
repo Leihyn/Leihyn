@@ -1,0 +1,24 @@
+{
+  "title": "Fixed liquidator reward based on MCR may cause protocol losses",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking",
+    "multisig"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The liquidation mechanism calculates liquidator rewards based on the vault's MCR value (`@1>`), which can lead to unnecessary protocol losses even if the position is still solvent (collateral can cover debt).  The issue arises because the reward calculation assumes the position should maintain MCR-level collateralization even during liquidation, creating excessive rewards that may deplete the protocol buffer or distribute losses among debtors.  ```solidity function _getLiquidationValues(     ... ) internal view returns (Liquid",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

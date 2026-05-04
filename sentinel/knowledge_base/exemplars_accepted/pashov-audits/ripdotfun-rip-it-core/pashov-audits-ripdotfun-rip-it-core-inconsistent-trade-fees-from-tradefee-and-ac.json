@@ -1,0 +1,21 @@
+{
+  "title": "Inconsistent trade fees from `tradeFee` and `acceptedCurrency` mods",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description In the Marketplace contract, the `tradeFee` is charged in the `acceptedCurrency`, which can be modified independently of the fee itself.   ```solidity             // Update state before external calls             totalPendingFees += tradeFee;              // External calls after state changes             // take fee from requester             IERC20(acceptedCurrency).transferFrom(trades[i].request.requester, address(this), tradeFee); ```  ```solidity     /**      * @notice Updates the trade fee (called by Marke",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

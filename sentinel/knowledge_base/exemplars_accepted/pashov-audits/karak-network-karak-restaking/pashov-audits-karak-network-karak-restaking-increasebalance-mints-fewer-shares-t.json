@@ -1,0 +1,23 @@
+{
+  "title": "`_increaseBalance()` mints fewer shares than expected",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  To increase the balance of a node owner, the `NativeVault._increaseBalance` function is called. This function increases the total assets, calculates the shares to be minted, mints the shares for the node owner, and updates the `totalRestakedETH` of the node owner.  However, the order of the operations is not correct, as updating the `totalAssets` before the calculation of the shares to be minted causes the number of shares received to be lower than it should be.  ```solidity File: NativeVault.sol      function _increaseBala",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

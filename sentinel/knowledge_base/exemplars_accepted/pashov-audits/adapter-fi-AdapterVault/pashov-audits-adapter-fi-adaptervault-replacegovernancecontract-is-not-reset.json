@@ -1,0 +1,19 @@
+{
+  "title": "replaceGovernanceContract is not reset",
+  "platform": "pashov-audits",
+  "program": "adapter-fi-AdapterVault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  After the governance is replaced, the VotesGCByVault is not reset to 0. This can lead to a situation where if the governance for the vault is reverted back to a previous contract, the vote count is still recorded, allowing a guard to change it back without proper voting. For example, consider governance contracts A and B: A is voted to be replaced by B. If B has a problem or bug and is replaced back by A, the vote count for B is still recorded. A guard can then vote to change it back to B immediately without proper voting",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AdapterFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

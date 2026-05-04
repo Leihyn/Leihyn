@@ -1,0 +1,22 @@
+{
+  "title": "Liquidations prevented for non-18 decimal collaterals",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `getTradeLiquidationPrice` is called when `triggerOrder` processes a liquidation order or a pending order. It calculates the `liqPrice` and checks if the order needs to be updated to `SL_CLOSE` once the stop-loss price is reached. The `getTradeLiquidationPrice` requires the collateral amount provided to be in collateral precision, for calculating the borrowing fee and the liquidation price.  ```solidity   /**    * @dev Pure function that returns the liquidation price for a trade (1e10 precision)    * @param _openPrice trade o",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

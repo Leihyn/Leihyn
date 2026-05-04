@@ -1,0 +1,21 @@
+{
+  "title": "Burning could be DOSed in case a large number of burn requests are processed",
+  "platform": "pashov-audits",
+  "program": "resolv-im-resolv-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  For the successful execution of the burning flow, burn requests should first be processed using the `LPExternalRequestsManager#processBurns()` function and after that completed through `LPExternalRequestsManager#completeBurns()` function which includes a few `for` loops. The iteration count of the \"heaviest\" one loop (on line 290) strictly depends on the number of burn requests that were previously processed (L283):  ```solidity File: LPExternalRequestsManager.sol 275:     function completeBurns( 276:         bytes32 _idempote",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Resolv-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

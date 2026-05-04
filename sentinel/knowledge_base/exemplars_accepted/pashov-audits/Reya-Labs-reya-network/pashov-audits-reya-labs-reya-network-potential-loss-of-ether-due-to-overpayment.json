@@ -1,0 +1,21 @@
+{
+  "title": "Potential loss of Ether due to overpayment",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `fullfillOracleQueryPyth` function within `Pyth.sol`, there is a potential issue where users can inadvertently send more Ether (`msg.value`) than required to the `pyth.updatePriceFeeds` function. This overpayment has not been refunded, resulting in a loss of Ether.  The function implementation is as follows:  ```solidity function fullfillOracleQueryPyth(address pythAddress, bytes calldata signedOffchainData) {     IPyth pyth = IPyth(pythAddress);      (bytes[] memory updateData) = abi.decode(signedOffchainData, (by",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

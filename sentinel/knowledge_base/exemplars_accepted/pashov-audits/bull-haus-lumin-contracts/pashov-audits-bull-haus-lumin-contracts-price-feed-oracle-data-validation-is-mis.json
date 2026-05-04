@@ -1,0 +1,19 @@
+{
+  "title": "Price feed oracle data validation is missing",
+  "platform": "pashov-audits",
+  "program": "bull-haus-lumin-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can possibly result in unfair liquidations  **Likelihood:** Low, as it only happens in specific rare conditions  ## Description  There are multiple problems when validating the price feed data in `PriceFeedProxyChainlink`:  - the code doesn't revert when `intPrice == 0` - price staleness is not checked - the `GRACE_PERIOD` after a sequencer was down is not waited  Using an incorrect price can be detrimental for the protocol as it can lead to unfair loans/liquidations.  ## Recommendations  For the sequencer `GRACE_PERIOD` make sure to follow the [Chainlink d",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Lumin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

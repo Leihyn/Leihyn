@@ -1,0 +1,23 @@
+{
+  "title": "`rebalancePosition()` transaction is susceptible to frontrunning",
+  "platform": "pashov-audits",
+  "program": "gammaswap-v1-vaults",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Position collaterals are rebalanced to align with a desired ratio specified by the `GammaVault` manager when the manager calls `rebalancePosition`. The steps performed during the rebalancing process include:  1. Collecting fees from the Uniswap V3 position. 2. Decreasing liquidity to zero. 3. Closing the position. 4. Opening a new position with a revised hedge.  ```javascript  function rebalancePosition(         IGammaVault.RebalancePositionData memory params     ) external virtual override {         _validatePaths(params",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GammaSwap-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

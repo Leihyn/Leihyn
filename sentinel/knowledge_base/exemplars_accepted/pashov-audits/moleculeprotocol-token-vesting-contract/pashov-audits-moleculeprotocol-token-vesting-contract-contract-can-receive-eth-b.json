@@ -1,0 +1,21 @@
+{
+  "title": "Contract can receive ETH but has no withdraw function for it",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-token-vesting-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as value can be stuck forever  **Likelihood:** Low, as it should be an error that someone sends ETH to the contract  ## Description  The `TokenVesting` contract has `receive` and `fallback` functions that are `payable`. If someone sends a transaction with `msg.value != 0` then the ETH will be stuck in the contract forever without a way for anyone to withdraw it.  ## Recommendations  Remove the `receive` and `fallback` functions since the ETH balance is not used in the contract anyway.  ## Discussion  **pashov:** Fixed in [8f8f786d95ee8db1e3d3ae96e26a86b7e250de0f]",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/MoleculeVesting-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Excess ETH is not refunded",
+  "platform": "pashov-audits",
+  "program": "NablaFinance-contracts-audit-07-2024",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In multiple instances, pricefeeds are updated without the excess eth sent being refunded. This will result in the funds being stuck in the contracts forever.  1. NablaRouter.sol - `swapExactTokensForTokens`  2. NablaBackstopPool.sol - `deposit`, `finalizeWithdrawBackstopLiquidity`, `redeemSwapPoolShares`, `finalizeWithdrawExcessSwapLiquidity`, `redeemCrossSwapPoolShares`  3. NablaPortal.sol - `swapExactTokensForEth`, `_updatePriceFeeds`  ## Recommendations  Two potential fixes:  1. Implement a check for update fees in these fu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nabla-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

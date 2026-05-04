@@ -1,0 +1,24 @@
+{
+  "title": "The target weight check does not account for redeem request assets",
+  "platform": "pashov-audits",
+  "program": "Storm-Labs-Inc-cove-contracts-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "governance",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In the rebalance process, target balances depend not only on the configured target weights but also on the withdraw requests processed within the rebalance epoch. However, when the `_isTargetWeightMet` check is performed within `proposeTokenSwap` and `completeRebalance`, it only considers the configured target weights and does not account for the processed withdraw requests.  ```solidity     function _isTargetWeightMet(         BasketManagerStorage storage self,         address[] calldata baskets,         uint64[][] calldat",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cove-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

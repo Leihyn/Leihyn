@@ -1,0 +1,22 @@
+{
+  "title": "Front-running risk in key admin actions",
+  "platform": "pashov-audits",
+  "program": "Cadmos-finance-InvestmentPool",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Medium, because it requires the malicious user to have a script that monitors the public mempool  **Impact:** Medium, because key admin functionality will revert  ## Description  The methods `forceTransfer`, `whitelistAccount` and `freezeAccount` from `InvestmentPoolCore` and `Whitelist` can be monitored for transactions and front-ran. Imagine the following scenario:  1. Bob holds some `InvestmentPool` ERC20 tokens 2. For some reason, a holder of the `TOKEN_FREEZE_ROLE` decides Bob is malicious and his balance should be frozen, so he calls `Whitelist::freezeAccount",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/CadmosFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

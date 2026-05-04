@@ -1,0 +1,21 @@
+{
+  "title": "Attacker can inflate share price and cause loss for users",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When the share amount is calculated and `totalSupply` is zero, the code uses the deposit amount and doesn't add extra precision, this will give the attacker the ability to inflate the share price up to `1000 * 1e18` and cause a loss for depositors because of rounding error.  ```solidity   function _convertToShares(uint256 _usdValue, uint256 _usdAUM, uint256 totalTrsySupply)  {     return totalTrsySupply == 0 ? _usdValue : (_usdValue * totalTrsySupply) / _usdAUM;   } ```  This is one example that this could happen:  1. Suppose",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

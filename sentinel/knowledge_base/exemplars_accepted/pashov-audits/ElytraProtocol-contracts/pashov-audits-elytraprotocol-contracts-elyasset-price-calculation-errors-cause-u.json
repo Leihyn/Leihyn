@@ -1,0 +1,21 @@
+{
+  "title": "`elyAsset` price calculation errors cause underflow reverts",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `updateElyAssetPrice()` function contains a mathematical error where `protocolFeeInHYPE` is incorrectly multiplied by 1e18 before being subtracted from `totalValueInProtocol`. Since both values are already in 18-decimal precision, this unnecessary multiplication creates a massive scaling mismatch that causes the subtraction to underflow.  ```solidity uint256 newElyAssetPrice = (totalValueInProtocol - (protocolFeeInHYPE * 1e18)) * 1e18 / elyAssetSupply; ```  The issue occurs because:  2. `protocolFeeInHYPE` i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Calls to methods with `nonETHReuse` modifier can be force reverted",
+  "platform": "pashov-audits",
+  "program": "nitolabs-pino-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as the user will get its transaction reverted, but it can be replayed through a `Multicall` call  **Likelihood:** Medium, as it can only happen when there is a direct call to such methods, which isn't the usual way to use the app  ## Description  In the contracts under `protocols/` we see a good amount of their methods having the `nonETHReuse` modifier. The modifier code calls the following method:  ```solidity     function _nonReuseBefore() private {         // On the first call to nonETHReuse, _status will be NOT_ENTERED         if (_status == ENTERED) {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Pino-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

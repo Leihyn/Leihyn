@@ -1,0 +1,23 @@
+{
+  "title": "`withdraw` operation is prone to sandwich attacks",
+  "platform": "pashov-audits",
+  "program": "de-swarm-contracts.hyperbloom.xyz",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Inside `withdraw` operation of `StrategyPassiveManagerHyperswap` and `StrategyPassiveManagerKittenswap`, `_onlyCalmPeriods` will be checked only when `calmAction` is false and `lastDeposit` is equal to `block.timestamp`.  ```solidity     function withdraw(uint256 _amount0, uint256 _amount1) external {         _onlyVault();  >>>     if (block.timestamp == lastDeposit && !calmAction) _onlyCalmPeriods();          if (_amount0 > 0) IERC20Metadata(lpToken0).safeTransfer(vault, _amount0);         if (_amount1 > 0) IERC20Metadat",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperbloom-security-review_2025-06-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

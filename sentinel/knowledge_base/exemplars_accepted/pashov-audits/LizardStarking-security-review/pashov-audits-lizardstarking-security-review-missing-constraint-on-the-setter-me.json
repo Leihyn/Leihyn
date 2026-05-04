@@ -1,0 +1,21 @@
+{
+  "title": "Missing constraint on the setter method of a percentage value",
+  "platform": "pashov-audits",
+  "program": "LizardStarking-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it will result in wrong reward calculations  **Likelihood:** Low, as it requires a malicious/compromised owner or a big error on his side  ## Description  The `setResetShareValue` lacks a check that the `_newShareResetValue` argument is not more than 100%. Since it is expected that the value will be in percentages, setting a value that is bigger than 100 will mess with the important calculations in the contract, one of which is the rewards to claim calculation. This can make users receive a smaller reward than what they have earned since a bigger `resetShareVa",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/LizardStarking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Sale token amount is not adjusted per its decimals",
+  "platform": "pashov-audits",
+  "program": "defi-app-defi-app-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  During depositing USDC, the `_computeTokens` function is called (`depositUSDC -> _purchase -> _calculateTokensToTransfer -> _computeTokens`) to calculate the number of tokens that the user would receive for the deposited amount:  ```solidity File: PublicSale.sol 519:     function _computeTokens(uint256 _amountUSDC, uint256 _price) private pure returns (uint256) { 520:         // _price = price * 10^18 --> precision scaling 521:         // _amount = (input_amount * 10^6 (USDC/T)) * 10^18 (_price) 522:         // (_amount * 1",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/DefiApp-security-review_2025-01-08.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "`DeployUsdxlUtils`: Wrong setting for mint limits",
+  "platform": "pashov-audits",
+  "program": "HypurrFi-security-review_2025-02-12",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Functions `_addUsdxlATokenAsEntity()` and `_addUsdxlFlashMinterAsEntity()` set mint limit as 1B instead of 100mil:  ```solidity    function _addUsdxlATokenAsEntity(IDeployConfigTypes.HypurrDeployRegistry memory deployRegistry)         internal     {         // pull aToken proxy from reserves config         _getUsdxlToken().addFacilitator(           address(_getUsdxlATokenProxy()),           'HypurrFi Market Loans', // entity label           1e27 // entity mint limit (100mil)         );     }      function _addUsdxlFlashMi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HypurrFi-security-review_2025-02-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

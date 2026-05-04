@@ -1,0 +1,19 @@
+{
+  "title": "No Slippage Protection in buyWithReferral",
+  "platform": "pashov-audits",
+  "program": "Project-Aegis-xyz-tokenFactory",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When users buy tokens using the `buyWithReferral` function, they specify the token amount to buy and send the corresponding amount of ETH. There isn\u2019t slippage protection due to the assumption that the maximum price users will pay is `tokenAmountToBuy/msg.value`, allowing users to control the price they pay.  However, users can still end up paying a higher price than expected (slippage) because:  - The number of tokens available for purchase might be less than the `tokenAmountToBuy` if the remaining token supply is less than t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Aburra-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

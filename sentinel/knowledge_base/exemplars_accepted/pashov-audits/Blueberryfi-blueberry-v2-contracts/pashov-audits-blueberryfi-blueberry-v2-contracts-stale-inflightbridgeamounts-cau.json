@@ -1,0 +1,22 @@
+{
+  "title": "Stale `inFlightBridgeAmounts` cause incorrect `tvl` calculations",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `inFlightBridgeAmounts[assetIndex]` mapping in the `L1EscrowActions` contract is not cleared after assets are settled on L1. This leads to outdated and unrelated in-flight amounts lingering in the mapping, which are then incorrectly included in `tvl` calculations.  **Steps to reproduce**   1. **Block 1**: Execute `bridgeToL1` for `assetA`. The `inFlightBridgeAmounts[assetA]` mapping is updated with the corresponding bridged amount.   2. **Block 2**: Asset A settles on L1. However, the `inFlightBridgeAmounts[assetA]` map",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Rounding issue in price formula",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-pwa-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Here is current formula:  ```solidity         return (             (totalSupply * curveFactor) / (totalSupply - x) - (totalSupply * curveFactor) / totalSupply                 - initialPriceFactor / 1000 * x         ) * 1 ether; ```  There are several issues:  1. First parameter `(totalSupply * curveFactor) / (totalSupply - x)` is rounded down, because both numerator and denominator are 1e18 numbers. 2. Second parameter `(totalSupply * curveFactor) / totalSupply` can be simply reduced to `curveFactor`. 3. Third parameter `in",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

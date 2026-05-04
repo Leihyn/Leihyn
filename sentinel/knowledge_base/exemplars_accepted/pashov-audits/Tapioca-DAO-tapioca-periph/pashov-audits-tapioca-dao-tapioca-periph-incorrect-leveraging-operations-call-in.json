@@ -1,0 +1,23 @@
+{
+  "title": "Incorrect leveraging operations call in Magnetar",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: Medium, broken functionality  **Likelihood**: High, broken functionality never works  ## Description  The Magnetar contract has helper functions to interact with the Singularity and BigBang markets which also does multiple compounded operations at the same time for added functionality. One such operation which is supported by the BigBang and Singularity markets is the ability to buy and sell the collateral tokens. This is supported in the BigBang and Singularity markets as shown by the function prototypes below.  ```solidity function buyCollateral(         address from",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

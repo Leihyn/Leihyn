@@ -1,0 +1,21 @@
+{
+  "title": "Missing selectors from `SimplexFacet` for diamond cuts",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Several functions from `SimplexFacet` are missing from the diamond cuts:  - `withdrawFees` - `setName` - `getName`  Since these functions are not included in the selector list, they cannot be called through the diamond contract, **effectively making them inaccessible**.  ## Recommendations  Ensure these functions are added as selectors in the diamond cut process.  ```diff         { -            bytes4[] memory simplexSelectors = new bytes4[](2); +            bytes4[] memory simplexSelectors = new bytes4[](5);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-01-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

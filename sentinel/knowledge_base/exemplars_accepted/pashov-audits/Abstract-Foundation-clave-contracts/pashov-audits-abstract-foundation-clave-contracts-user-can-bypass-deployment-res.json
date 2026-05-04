@@ -1,0 +1,21 @@
+{
+  "title": "User can bypass deployment restrictions",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `deployAccount` function is intended to allow users to deploy their own smart accounts with controlled initialization parameters. It accepts user-provided `initializer` data, which is expected to call the `initialize` function of the deployed `claveProxy` contract to set up the account correctly.  ```solidity function deployAccount(     bytes32 salt,     bytes memory initializer ) external returns (address accountAddress) {     // Deployment logic } ```  During deployment, a `claveProxy` contract is created:  ```solid",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-11-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

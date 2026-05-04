@@ -1,0 +1,21 @@
+{
+  "title": "Wrong active pumper bonus calculation",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  According to the whitepaper, Active Pumpers receive a +3% of their Guardian bonus.  However, the current implementation results in a significantly lower bonus of 0.03% due to incorrect scaling in the calculation:  - ACTIVE_PUMPERS_BONUS_PERCENTAGE = ULTI_NUMBER / 10 = 3. - So the bonus is 3 / 10000 = 0.03%.  Active Pumpers receive only a 0.03% additional bonus instead of the intended 3%, this represents a 99% reduction in the promised bonus. It's a significant loss of value for active pumpers.  ```solidity     function _all",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

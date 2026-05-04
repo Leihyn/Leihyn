@@ -1,0 +1,23 @@
+{
+  "title": "`GlpStrategy` withdrawals can fail if `shouldBuyGLP` is false",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, since withdrawals can fail until `shouldBuyGLP` is set to true  **Likelihood:** Medium, since `shouldBuyGLP` has to be set to false by the owner  ## Description  When a user wants to withdraw assets they have deposited into a YieldBox, the following logic is used in the YieldBox contract:  ```solidity         uint256 totalAmount = _tokenBalanceOf(asset);         if (share == 0) {             // value of the share paid could be lower than the amount paid due to rounding, in that case, add a share (Always round up)             share = amount._toShares(totalSupply",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

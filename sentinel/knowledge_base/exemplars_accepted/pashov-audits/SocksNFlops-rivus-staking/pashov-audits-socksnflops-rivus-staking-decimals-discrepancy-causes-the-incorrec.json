@@ -1,0 +1,21 @@
+{
+  "title": "Decimals discrepancy causes the incorrect pegging",
+  "platform": "pashov-audits",
+  "program": "SocksNFlops-rivus-staking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `StakingToken` contract is intended to create a staking token pegged to the underlying token `wTAO`. According to the NatSpec comments in the `IStakingToken` interface:  ```solidity /**  * @notice The address of the underlying token that this staking token is pegged to  */ function underlyingToken() external view returns (address); ```  However, there's a significant discrepancy due to differing decimal places between the two tokens. The underlying token `wTAO` has **9 decimals**, whereas the staking token has **18 de",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Rivus-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

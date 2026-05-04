@@ -1,0 +1,23 @@
+{
+  "title": "`transferERC20ToTreasury` won't work as intended if `assetToken` is a multiple-address token",
+  "platform": "pashov-audits",
+  "program": "Cadmos-finance-InvestmentPool",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Low, because it requires using a multiple-address token and a malicious/compromised admin  **Impact:** High, because users can use 100% of their deposits  ## Description  Some ERC20 tokens on the blockchain are deployed behind a proxy, so they have at least 2 entry points (the proxy and the implementation) for their functionality. Example is Synthetix\u2019s `ProxyERC20` contract from where you can interact with `sUSD, sBTC etc). If such a token was used as the `assetToken`token in an InvestmentPool, then the admin will be able to rug all depositors with the`transferERC",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/CadmosFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

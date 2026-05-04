@@ -1,0 +1,19 @@
+{
+  "title": "Cloning a `subGauge` can result in an uninitialized proxy",
+  "platform": "pashov-audits",
+  "program": "tenet-org-veTenet-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as `subGauge` initialization can be front-ran  **Likelihood:** High, as every new `subGauge` will be vulnerable  ## Description  In `GaugeFactory::createSubGauge`, the `Clones::cloneDeterministic` method is used to deploy a new `subGauge`. The problem is, in contrast to `GaugeFactory::createGaugeProxyAndSubGauges`, in `createSubGauge` the `subGauge` is not initialized after cloning, which leaves it vulnerable to a front-running attack. Example scenario:  1. Alice calls `GaugeFactory::createSubGauge` to deploy a new `subGauge` 2. The `subGauge` is added to a `Gaug",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/veTenet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

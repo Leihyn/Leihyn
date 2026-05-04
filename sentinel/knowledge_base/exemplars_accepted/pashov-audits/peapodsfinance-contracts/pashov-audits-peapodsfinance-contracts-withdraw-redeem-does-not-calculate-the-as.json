@@ -1,0 +1,22 @@
+{
+  "title": "`withdraw/redeem` does not calculate the assets received",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `AutoCompoundingPodLp.withdraw/redeem` first calculates the `assets/shares` to be received or burned, then triggers `_withdraw` to burn the shares and transfer the calculated assets to the users. However, the calculated assets or burned shares for the users do not account for processed rewards, as these are triggered later within the `_withdraw` operation.  ```solidity     function withdraw(uint256 _assets, address _receiver, address _owner) external override returns (uint256 _shares) { >>>     _shares = convertToShares(_",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

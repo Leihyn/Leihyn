@@ -1,0 +1,23 @@
+{
+  "title": "Inverted slippage protection approach can lead to problems",
+  "platform": "pashov-audits",
+  "program": "saulgoodmandev-gmd",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Low, because it needs more than one special condition simultaneously  **Impact:** Medium, because it can lead to limited amount of funds lost from the protocol  ## Description  Both the `leaveETH` and `leave` methods use the `slippage` storage variable to implement slippage protection for the users leaving the vault. The problem is that the slippage protection is done in an unusual approach which can result in problems. Both methods call the `swapGLPto` method which has the `min_receive` parameter that is passed to the `unstakeAndRedeemGlp` method in `GLPRouter`. T",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/GMD-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Exchange rate implementation not used in token operations",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `StakingManager` contract implements an exchange rate mechanism between HYPE and kHYPE tokens, but fails to utilize it in critical token operations. This discrepancy between the implemented exchange rate logic and its actual usage in token minting and burning operations will lead to incorrect token accounting and value loss for users.  The contract maintains an exchange rate calculation through `getExchangeRatio()` which considers: - Total staked HYPE - Total rewards - Total claimed HYPE - Total slashing - Current kHYPE",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "OOG error in `clearLoop()`",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Function `ResetClearLoopSubsystem.clearLoop()` calls `PointsMap.clear(empire)` to clear all utilities associated with an empire. The issue is that this function loops through all players of the empire and clears their data and if the player's count is very big then the execution can encounter OOG.  ```solidity   function clear(EEmpire empire) internal {     bytes32[] memory players = keys(empire);     for (uint256 i = 0; i < players.length; i++) {       Value_PointsMap.deleteRecord(empire, players[i]);       Meta_PointsMap.del",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

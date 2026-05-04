@@ -1,0 +1,22 @@
+{
+  "title": "Underlying tokens of UniV3 Liquidity Position are unchecked",
+  "platform": "pashov-audits",
+  "program": "DyadStablecoin-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Within `UniswapV3Staking.stake()`, the underlying tokens of the staked UniV3 Liquidity Position are unchecked. This lets a malicious actor create a new UniV3 pool with their own arbitrary ERC20 tokens, where they mint themselves a large number of tokens. This causes the `liquidity` of their position in this pool to be extremely high, allowing them to earn an extremely large amount of rewards from staking this position.  ## Recommendations  Within `stake()`, ensure that the underlying tokens of the position are USDC and DYAD",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dyad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

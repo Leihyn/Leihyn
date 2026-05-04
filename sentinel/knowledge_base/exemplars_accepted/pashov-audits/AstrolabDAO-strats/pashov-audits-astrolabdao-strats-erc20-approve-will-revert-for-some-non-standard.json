@@ -1,0 +1,23 @@
+{
+  "title": "`ERC20::approve` will revert for some non-standard tokens like USDT",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: Medium, because functionality won't work  **Likelihood**: Medium, because USDT is a common token  ## Description  Code uses the `approve` method to set allowance for ERC20 tokens in `setSwapperAllowance`. This will cause revert if the target ERC20 was a non-standard token that has different function signature for `approve()` function. Tokens like USDT will cause revert for this function, so they can't be used as reward token, input token and underlying asset.  ```solidity     function setSwapperAllowance(uint256 _amount) public onlyAdmin {         address swapperAddres",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

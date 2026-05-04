@@ -1,0 +1,22 @@
+{
+  "title": "Reward Index Inflation Due to Rounding Up Can Trap Rewards",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `_depositPremium` function within `PositionInteractionFacet.sol`, when option premiums are added as rewards for liquidity providers, the `rewards.rewardsPerLPQ128` index is updated using `mulDivRoundingUp`:  ```solidity if (lpSupply > 0) rewards.rewardsPerLPQ128 += upscaledPremium.mulDivRoundingUp(Q128, lpSupply); ```  Using `mulDivRoundingUp` causes the calculated reward added per LP token unit (scaled by `Q128`) to be rounded **up** to the nearest integer in the fixed-point representation. While seemingly small f",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

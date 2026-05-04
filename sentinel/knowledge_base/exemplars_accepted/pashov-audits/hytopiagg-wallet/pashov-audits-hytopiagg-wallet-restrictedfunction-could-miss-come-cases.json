@@ -1,0 +1,19 @@
+{
+  "title": "`RestrictedFunction` could miss come cases",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-wallet",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because the fund in the contract could all be stolen, much beyond allowed amount.  **Likelihood:** Low, because it only applies to cases when MAGIC_CONTRACT_ALL_FUNCTION_SELECTORS being used, and not all tokens have this problem.  ## Description  Only `approve` and `setApprovalForAll` are considered restricted function, however it is possible that the token allowance could be chaged by other functions: Such as [RNDR](https://etherscan.io/address/0x1a1fdf27c5e6784d1cebf256a8a5cc0877e73af0#code), has `increaseApproval()/decreaseApproval()` function, which is not st",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYTOPIAWallet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

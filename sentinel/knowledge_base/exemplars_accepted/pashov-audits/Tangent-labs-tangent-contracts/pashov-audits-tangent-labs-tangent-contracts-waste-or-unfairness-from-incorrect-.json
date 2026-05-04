@@ -1,0 +1,21 @@
+{
+  "title": "Waste or unfairness from incorrect reward distribution",
+  "platform": "pashov-audits",
+  "program": "Tangent-labs-tangent-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Both `VsTAN.sol` and `RewardAccumulator.sol` implement Synthetix-style staking reward systems but have flaws when `totalSupply (or totalCollateral) is zero`.   - When rewards are added during a zero-supply period, when leftover rewards from the previous period are included in the new `rewardRate`, wasting rewards that were never distributed.   ```solidity if (timestamp >= rData.periodFinish) {     rewardData[rewardToken].rewardRate = amount / ONE_WEEK; } else {     uint256 leftover = (rData.periodFinish - time",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tangent-security-review_2025-10-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

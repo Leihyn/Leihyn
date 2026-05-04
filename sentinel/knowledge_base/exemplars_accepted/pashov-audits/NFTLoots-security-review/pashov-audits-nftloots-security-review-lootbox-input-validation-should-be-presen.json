@@ -1,0 +1,19 @@
+{
+  "title": "Lootbox input validation should be present",
+  "platform": "pashov-audits",
+  "program": "NFTLoots-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can leave NFTs stuck in the contract forever  **Likelihood:** Low, as it requires a fat-finger or misconfiguration by the `NFTLootbox` owner  ## Description  Both the `_priceForPlay` and `_duration` values should be properly validated in `NFTLootbox::createLootbox`. The `_priceToPlay` has to have an upper bound, because if it's too big then no one will want to participate and until the duration passes the NFTs will be stuck in the contract. For the `_duration` value there should be a lower and an upper bound, as too low of a duration doesn't make sense but",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NFTLoots-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

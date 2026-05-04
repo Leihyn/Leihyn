@@ -1,0 +1,23 @@
+{
+  "title": "`removeLiquidityBySigV2` does not correctly hash its contents to comply with EIP-712",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `removeLiquidityBySigV2` hashes the signature as shown below but doesn't fully hash it to comply with EIP-712.  ```solidity         Signature.validateRecoveredAddress(             Signature.calculateDigest(                 keccak256(                     abi.encode(                         REMOVE_LIQUIDITY_V2_TYPEHASH,                         block.chainid,                         msg.sender,                         owner,                         poolId, >>>                     abi.encode(                             REMOV",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Reya-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

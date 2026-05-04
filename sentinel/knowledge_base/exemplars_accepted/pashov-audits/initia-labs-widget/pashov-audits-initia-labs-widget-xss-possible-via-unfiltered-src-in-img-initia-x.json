@@ -1,0 +1,21 @@
+{
+  "title": "XSS possible via unfiltered `src` in `img.initia.xyz` proxy endpoint",
+  "platform": "pashov-audits",
+  "program": "initia-labs-widget",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  An XSS vulnerability exists due to the use of unvalidated and unfiltered URLs passed into an image proxy service (`img.initia.xyz`). This affects the image rendering logic within the `Image.tsx` component, which directly binds the `src` attribute from potentially untrusted input.  The function `getProxyImage` prepends `https://img.initia.xyz/?url=` to the provided URL unless it starts with a `data:image/` prefix. However, this allows attackers to inject malicious payloads via base64-encoded HTML/JavaScript content through a `d",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Initia-security-review_2025-06-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

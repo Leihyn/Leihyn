@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect logical check in `endGame` function",
+  "platform": "pashov-audits",
+  "program": "curio-research-flagship-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `endGame` function in the `Game` contract fails to function correctly due to an erroneous logical check. This function, intended to handle the payouts at the end of a game, incorrectly uses `==` instead of `!=` when comparing the hash of the `gameId` provided with the `gameId` of each player. This results in the function skipping all players who are actually in the game it intends to end. Consequently, no player payouts or updates to game status are processed, and the transaction completes without performing any meaningfu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Curio-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

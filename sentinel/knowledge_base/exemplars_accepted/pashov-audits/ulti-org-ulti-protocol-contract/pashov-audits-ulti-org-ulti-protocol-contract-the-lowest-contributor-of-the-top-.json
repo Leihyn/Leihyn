@@ -1,0 +1,22 @@
+{
+  "title": "The Lowest contributor of the top contributor's list can be removed unfairly",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When a new deposit is made the list of top contributors is updated in the `_updateTopContributors` function. If the list is full (33 contributors), the lowest contributor is searched. If the contribution of the current contributor is greater than the one of the lowest contributor, the lowest contributor is removed and the current contributor is added to the list.  ```solidity 1394:             // Replace lowest contributor if new contribution is higher 1395:             if (updatedContribution > minContribution) { 1396:",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

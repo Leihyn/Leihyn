@@ -1,0 +1,22 @@
+{
+  "title": "Faulty `deposit_for()` check",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `claim()` function in the `RewardsDistributor` contract is designed to claim rewards for `vePeg` locks. It transfers rewards directly if the lock is expired or calls the `vePeg.deposit_for()` function if the lock is not expired or is perpetually locked:  ```solidity  function claim(uint256 _tokenId) external returns (uint256) {         //...         if (amount != 0) {             //...             if (locked.end > block.timestamp || locked.perpetuallyLocked) {                 // lock has not expired                 ve.d",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-03-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

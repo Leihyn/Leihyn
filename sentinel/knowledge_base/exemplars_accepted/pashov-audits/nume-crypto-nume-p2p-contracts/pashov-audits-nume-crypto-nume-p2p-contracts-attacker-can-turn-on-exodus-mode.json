@@ -1,0 +1,22 @@
+{
+  "title": "Attacker can turn on Exodus Mode",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High. Protocol stops operating.  **Likelihood:** High. Nothing stops from performing this attack.  ## Description  Attacker can reenter Nume when `Witdrawal_Stake` is returned on settlement notarization, and in `fallback()` call `challengeUserWithdrawal()` to activate Exodus Mode.  `notarizeSettlement()` processes withdrawals submitted on-chain, such on-chain submissions require `Withdrawal_stake` which is returned on successful withdrawal. Note that it firstly deletes timestamp of that `withdrawalRequest`, but updates `ns.lastFinalizedWithdrawalsQueueIndex` in the ver",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Insufficient restrictions in `instantOpenPacket()` risk DOS",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In `Packet.sol` a user can call `initiateBurn` with `params.BurnType` set to `BurnType.INSTANT_OPEN_PACKET`. ```solidity         if (params.burnType == BurnType.INSTANT_OPEN_PACKET) {             randomAllocationPool.instantOpenPacket(params.packetId, _packetTypeIds[params.packetId], msg.sender);         } ``` This will result in the function calling `instantOpenPacket` on the `CardAllocationPool` contract.   ```solidity     function instantOpenPacket(uint256 packetId, uint256 packetType, address owner) external",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

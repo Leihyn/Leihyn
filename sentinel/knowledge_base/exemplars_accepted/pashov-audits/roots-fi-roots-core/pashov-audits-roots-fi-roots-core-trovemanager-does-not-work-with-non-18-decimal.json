@@ -1,0 +1,22 @@
+{
+  "title": "TroveManager does not work with non-18 decimal tokens",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `_redeemCollateralFromTrove()` function, used internally by `redeemCollateral()`, assumes all collateral tokens have 18 decimals, matching the debt token. However, when handling tokens with different precisions, incorrect calculations occur due to this formula:  ```solidity         singleRedemption.collateralLot = (singleRedemption.debtLot * DECIMAL_PRECISION) / _price; ```  Since `singleRedemption.debtLot`, `_price`, and `DECIMAL_PRECISION` are all 18-decimal values, this results in an invalid collateralLot for tokens wit",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

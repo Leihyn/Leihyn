@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect condition handling in `BunniSwapMath::_computeSwap()`",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `BunniSwapMath::_computeSwap` function, there is an issue with the condition handling at line `BunniSwapMath#L134`. Specifically, the `if` statement does not validate whether `naiveSwapResultSqrtPriceX96` is equal to `sqrtPriceNextX96`.  ```solidity File: BunniSwapMath.sol 080:     function _computeSwap(BunniComputeSwapInput calldata input, int256 amountSpecified) 081:         private 082:         view 083:         returns (uint160 updatedSqrtPriceX96, int24 updatedTick, uint256 inputAmount, uint256 outputAmount) 0",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

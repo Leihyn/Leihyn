@@ -1,0 +1,19 @@
+{
+  "title": "An error in the `minOrderSize` check",
+  "platform": "pashov-audits",
+  "program": "Daydream-Labs-stardusts-v1-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  ```javascript function _validateBondingCurveBuy(uint256 minOrderSize)         internal         returns (uint256 totalCost, uint256 trueOrderSize, uint256 fee, uint256 refund, bool shouldGraduate)     {         // Set the total cost to the amount of ETH sent         totalCost = msg.value;          // Calculate the fee         fee = (totalCost * feeBps) / 10000;          // Calculate the amount of ETH remaining for the order         uint256 remainingEth = totalCost - fee;          // Get quote for the number of tokens that",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Stardusts-security-review_2024-12-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

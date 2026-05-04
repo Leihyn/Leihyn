@@ -1,0 +1,23 @@
+{
+  "title": "LPs can withdraw immediately even with withdrawal cooldown",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The withdrawal cooldown period for Backstop LPs is now configured using `backstopLPConfig.withdrawCooldownDurationInSeconds`, such that the withdrawal cooldown period is turned on when it is greater than 0 and turned off when it is equal 0.  However, the issue is that Backstop LPs can start the withdrawal timer before the withdrawal cooldown is turned on, allowing them to withdraw immediately even after the withdrawal cooldown is enabled.  1. Suppose the cooldown period for withdrawal has been disabled for a while, so `wi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-April.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

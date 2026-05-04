@@ -1,0 +1,22 @@
+{
+  "title": "`_AddRebalanceRequest` may use outdated balance for delegate withdrawal request",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  `ValidatorManager._addRebalanceRequest()` checks validator's balance and records a withdrawal request:  ```solidity     function _addRebalanceRequest(address validator, uint256 withdrawalAmount) internal {         require(!_validatorsWithPendingRebalance.contains(validator), \"Validator has pending rebalance\");         require(withdrawalAmount > 0, \"Invalid withdrawal amount\");          (bool exists, uint256 index) = _validatorIndexes.tryGet(validator);         require(exists, \"Validator does not exist\");         require(_va",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

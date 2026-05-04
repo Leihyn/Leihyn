@@ -1,0 +1,23 @@
+{
+  "title": "Using deprecated function in Chainlink",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "oracle",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High - Using stale prices leads to inaccurate calculations of total asset values and share prices.  **Likelihood:** Low - The return price can be wrong or stale without validating  ## Description  To convert from USD to input token amount, `StrategyV5Chainlink` uses `IChainlinkAggregatorV3.latestAnswer`. However the function `latestAnswer` is deprecated by Chainlink. This deprecated function usage is also observed in other libraries, such as `ChainlinkUtils`.      function _usdToInput(uint256 _amount, uint8 _index) internal view returns (uint256) {         return _amou",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

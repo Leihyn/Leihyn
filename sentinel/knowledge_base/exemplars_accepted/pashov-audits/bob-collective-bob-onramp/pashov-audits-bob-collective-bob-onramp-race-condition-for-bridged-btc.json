@@ -1,0 +1,21 @@
+{
+  "title": "Race condition for bridged BTC",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-onramp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, users would lose bridged BTC.  **Likelihood:** Low, requires special conditions.  ## Description  To bridge BTC users need to transfer their funds to the onramp address (`scriptPubKeyHash`) and then the relayer would call `proveBtcTransfer()` and the target onramp would transfer the bridged token to the user. The issue is that multiple users may have transferred their BTC to that address at the same time and the onramp may not have enough tokens to handle all those orders so some of the users would lose their funds.  ## Recommendations  Add queue mechanism for of",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Onramp-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

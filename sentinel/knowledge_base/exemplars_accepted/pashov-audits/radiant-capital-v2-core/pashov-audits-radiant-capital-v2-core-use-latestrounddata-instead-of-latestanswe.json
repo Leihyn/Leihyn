@@ -1,0 +1,21 @@
+{
+  "title": "Use `latestRoundData` instead of `latestAnswer`",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "oracle"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `UniV3TokenizedLp` is calling `latestAnswer()` to get the last oracle price. This method will return the last value, but you will not be able to check if the data is fresh. On the other hand, calling the method `latestRoundData()` allows you to run some extra validations.  ## Recommendations  Consider using latestRoundData() with the following additional checks:  ```solidity  (           roundId,           rawPrice,           ,           updateTime,           answeredInRound         ) = IChainlinkAdapter(_oracle).latestRo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

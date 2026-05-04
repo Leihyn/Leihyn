@@ -1,0 +1,22 @@
+{
+  "title": "`increase_amount()` lacks support for perpetual lock amounts",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `increase_amount()` function in the `vePeg` contract is designed to enable anyone to deposit additional tokens for any lock (`tokenId`) without modifying the unlock time. However, while this function is supposed to be compatible with both permanent and perpetual locks, **the current implementation only allows increasing the amount for non-perpetual locks**. This is due to a check that ensures `_locked.end > block.timestamp`, which is not applicable to perpetual locks as the `lock.end` is set to zero:  ```solidity func",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-03-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

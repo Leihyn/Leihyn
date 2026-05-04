@@ -1,0 +1,22 @@
+{
+  "title": "Wrong rounding direction in previewWithdraw()",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low, because revert in mint() and violates EIP4626  **Likelihood:** High, because division happens in each tx  ## Description  According to the [EIP4626 ](https://eips.ethereum.org/EIPS/eip-4626) `previewWithdraw` should round up when performing division:  > Finally, EIP-4626 Vault implementers should be aware of the need for specific, opposing rounding directions across the different mutable and view methods, as it is considered most secure to favor the Vault itself during calculations over its users: > > If (1) it\u2019s calculating how many shares to issue to a user for",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

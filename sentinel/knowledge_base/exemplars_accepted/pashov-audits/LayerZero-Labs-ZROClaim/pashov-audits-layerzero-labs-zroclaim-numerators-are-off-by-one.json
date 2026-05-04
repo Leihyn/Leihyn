@@ -1,0 +1,19 @@
+{
+  "title": "Numerators are off by one",
+  "platform": "pashov-audits",
+  "program": "LayerZero-Labs-ZROClaim",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `ClaimCore` constructor will set the numerators (`numeratorUsdc`, `numeratorUsdt`, `numeratorNative`) for computing the required donation amount to claim the ZRO token.  However, the numerators are off by a factor of 10 as the base10 exponent is incorrectly subtracted by 1 during initialization. This will reduce the donations required by a factor of 10, allowing anyone to claim 10x more ZRO than expected.  ```Solidity     constructor(         bytes32 _merkleRoot,         address _donateContract,         address _stargateUsdc,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LayerZeroZROClaim-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

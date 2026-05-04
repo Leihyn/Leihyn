@@ -1,0 +1,19 @@
+{
+  "title": "`setManagementFeeBps()` fails to update fee state",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium    **Likelihood:** Medium    ## Description  The `setManagementFeeBps()` function in the `HyperEvmVault` contract allows the owner to update the management fee rate. However, it does not update the fee state (e.g., `lastFeeCollectionTimestamp`) when the fee rate is changed. This can lead to incorrect fee calculations, especially in less active vaults. ```solidity     function setManagementFeeBps(uint64 newManagementFeeBps_) external onlyOwner {         require(newManagementFeeBps_ <= BPS_DENOMINATOR, Errors.FEE_TOO_HIGH());         _getV1Storage().managementFeeB",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "`swapOn1INCH()` slippage may be ineffective",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-veFyde",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `swapOn1INCH()` function attempts to check for slippage as follows:  ```solidity   function swapOn1INCH(     address _assetIn,     uint256 _amountIn,     address _assetOut,     uint256 _minAmountOut,     bytes calldata _swapData   ) external {     IERC20(_assetIn).approve(ONEINCH_AGGREGATION_ROUTER, _amountIn);     (bool success, bytes memory data) = ONEINCH_AGGREGATION_ROUTER.call(_swapData);     require(IERC20(_assetOut).balanceOf(address(this)) >= _minAmountOut, \"Slippage Exceeded\");   } ```  This slippage check may be",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

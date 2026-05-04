@@ -1,0 +1,23 @@
+{
+  "title": "Incorrect usage of `msg.value` in iterative native token distribution",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "governance",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the `factory::createERC20DAO` function, when the `_depositChainIds` array has more than one element, the function iterates over the chain IDs to send messages using the `commLayer::sendMsg` function. A portion of the native token value (`msg.value`) is calculated and sent in each iteration using the formula `(msg.value - fees) / (_depositChainIds.length - (i + 1))`. However, the calculation does not account for the diminishing `msg.value` as fees are deducted in each iteration. This might lead to incorrect fee distributi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

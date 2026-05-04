@@ -1,0 +1,23 @@
+{
+  "title": "`returnFunds()` can be frontrun to profit from an increase in share price",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "auction"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, an attacker can profit from the share price increase  **Likelihood:** Low, only profitable if a large amount of funds are returned  ## Description  `SafetyModule.returnFunds()` is used by governance to inject funds back into `StakedToken`, in the form of underlying tokens. For example, when there are excess funds raised from the auction, they can be returned back to compensate the stakers.  The issue is that anyone can frontrun `returnFunds()` with a `stake()` to profit from the share price increase and then redeem shortly once it has reached the unstake window.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

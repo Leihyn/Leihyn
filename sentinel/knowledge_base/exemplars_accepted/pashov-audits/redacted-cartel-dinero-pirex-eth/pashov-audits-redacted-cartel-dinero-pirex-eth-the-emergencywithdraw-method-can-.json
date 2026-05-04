@@ -1,0 +1,21 @@
+{
+  "title": "The `emergencyWithdraw` method can leave `PirexEth` in a broken state",
+  "platform": "pashov-audits",
+  "program": "redacted-cartel-dinero-pirex-eth",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the logic in `PirexEth` will be broken  **Likelihood:** Low, as it requires an emergency and using the contract after it  ## Description  The `emergencyWithdraw` method in `PirexEth` allows for withdrawal of ETH. This ETH could have been the `pendingDeposit` balance, which is not yet deposited to the ETH 2.0 deposit contract, and if it is withdrawn from the `emergencyWithdraw` method then the contract will be in a broken state. The `pendingDeposit` variable will have a value that is more than the ETH balance in the contract which will make deposit transactions",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Pirex-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Last user can't sell all his wearables",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-pwa-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, user can be unable to sell if has only 1 share of Wearable  **Likelihood:** Medium, the last user to sell will get the error.  ## Description  Price calculation rounds down in both situations: buy and sell. Therefore buy price can be lower than the sell price if dividing one purchase into several batches, that's because of rounding down.  There is a possible situation when a lower price is paid on `buy` compared to the `sell`. As a result, the contract can calculate the sell price to be greater than the buy price, as shown in this test:  ```solidity     functio",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

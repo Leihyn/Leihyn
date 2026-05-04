@@ -1,0 +1,23 @@
+{
+  "title": "Liquidators can earn extra yield by flash depositing into tranches",
+  "platform": "pashov-audits",
+  "program": "Arcadia-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "auction"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: Medium, Liquidation yields can be denied to liquidity providers  **Likelihood**: Medium, Not applicable in current deployment configuration, but valid in general  ## Description  The `liquidationPenalty` part of the liquidation incentives is dealt out to the tranches as extra yield according to their weights via the `_syncLiquidationFeeToLiquidityProviders` function. This increases the amount corresponding to each tranch share. The issue is that liquidators can snipe this extra yield at no extra cost via flash deposits.  During liquidations, only the juinor-most tranch",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

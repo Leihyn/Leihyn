@@ -1,0 +1,22 @@
+{
+  "title": "Users with escrowed stables are charged a penalty if TCR < MCR during the grace period",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When the redemption cooldown requirement is set, users need to escrow their stables for a certain period before being able to redeem collateral. After the cooldown period, the grace period starts, and users can redeem their collateral. However, if the redemption does not take place before the grace period ends, the user will be charged a penalty fee.  Given that the `redeemCollateral` function reverts if the TCR is below the MCR, if the TCR falls below the MCR during the cooldown period and does not recover before the gra",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

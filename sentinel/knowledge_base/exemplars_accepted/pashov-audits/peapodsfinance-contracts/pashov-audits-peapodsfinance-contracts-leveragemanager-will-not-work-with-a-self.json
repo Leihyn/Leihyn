@@ -1,0 +1,23 @@
+{
+  "title": "`LeverageManager` will not work with a `selfLendingPod` that consists of multiple tokens",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When leverage positions use a `selfLendingPod`, it will `bond` and `debond` to convert between the borrowed token and the final paired token.  ```solidity     function _processAndGetPairedTknAndAmt(         uint256 _positionId,         address _borrowedTkn,         uint256 _borrowedAmt,         address _selfLendingPairPod     ) internal returns (address _finalPairedTkn, uint256 _finalPairedAmt) {         _finalPairedTkn = _borrowedTkn;         _finalPairedAmt = _borrowedAmt;         address _lendingPair = positionProps[_positi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

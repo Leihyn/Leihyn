@@ -1,0 +1,22 @@
+{
+  "title": "Users are likely to lose their bid if `purchaseToken` is a low-decimals token",
+  "platform": "pashov-audits",
+  "program": "deomaius-rolling-dutch-auction",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "veToken",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because users will lose their entire bid amount  **Likelihood:** Medium, because it happens when `purchaseToken` is a low-decimals token, but those are commonly used  ## Description  When a user calls `commitBid` he provides a `volume` parameter, which is the amount of `purchaseToken` he will bid, and a `price` parameter, which is the price in `reserveToken`. His bid is then cached and when window expires the `fulfillWindow` method is called, where we have this logic:  ```solidity _auctions[auctionId].reserves -= volume / price; _auctions[auctionId].proceeds += v",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/RollingDutchAuction-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Attack to force the project into the exodusMode",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, disabled core project functions forever  **Likelihood:** High, easy to execute by anyone  ## Description  The attack flow:  1. Deposit ETH from a malicious smart contract A, which reverts when receiving ETH 2. Await for the deposit settlement to Nume network 3. call `submitWithdrawalRequest()` 4. the owner has 14 days to withdraw via `notarizeSettlement()` 5. the owner tries to settle the withdrawal but it fails - a malicious smart contract A intentionally reverts not receiving ETH 6. The attacker waits 14 days 7. The attacker calls `challengeUserWithdrawal()` =>",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

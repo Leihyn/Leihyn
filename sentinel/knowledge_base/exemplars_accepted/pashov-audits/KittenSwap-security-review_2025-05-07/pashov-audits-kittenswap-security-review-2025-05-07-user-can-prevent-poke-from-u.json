@@ -1,0 +1,23 @@
+{
+  "title": "User can prevent poke() from updating voting power",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The poke() function is designed to allow anyone to update a user\u2019s voting allocation based on their current voting power. This is important because users who do not re-cast their votes (via vote()) can otherwise continue to receive rewards as if their balance never decreased. However, the system can be abused to prevent successful pokes by introducing dust-level weights in the original vote.  ```solidity     function _vote(         uint _tokenId,         address[] memory _poolVote,         uint256[] memory _weights     )",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

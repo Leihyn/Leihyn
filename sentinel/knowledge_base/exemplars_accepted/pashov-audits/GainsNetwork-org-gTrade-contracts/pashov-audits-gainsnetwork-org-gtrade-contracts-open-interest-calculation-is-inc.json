@@ -1,0 +1,22 @@
+{
+  "title": "Open interest calculation is incorrect",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The open interest (OI) delta is calculated using the `current collateral/USD` price when `adding OI`. Conversely, when `removing OI`, the delta is calculated using the `collateral/USD price at the time the OI was added`. This method works correctly if an order is only opened and closed once. However, if the order position is increased or decreased multiple times, the OI calculation becomes incorrect.  For example, if a position is opened when the collateral price is $100 and then increased when the price is $110, the OI t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

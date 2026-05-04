@@ -1,0 +1,22 @@
+{
+  "title": "Hardcoded swap path might not be the most optimal/liquid one",
+  "platform": "pashov-audits",
+  "program": "0xTK421-ninja-core-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  Currently in `NyPtvFantomWftmBooSpookyV2StrategyToUsdc` the value of the `booToUsdcPath` trade path is not configurable and is basically hardcoded to be `[BOO, USDC]`. It is the same for the swap router, as it is currently hardcoded to point to the SpookySwap router. The problem is that the `BOO/USDC` pool on SpookySwap might not be the most optimal and liquid one, and maybe instead it would be better to go `BOO/USDT` and then `USDT/USDC`. If the `BOO/USDC` pair for example loses most of its liquidity (maybe LPs are not incentivised as much or they decided to move elsewher",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NinjaYielder-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

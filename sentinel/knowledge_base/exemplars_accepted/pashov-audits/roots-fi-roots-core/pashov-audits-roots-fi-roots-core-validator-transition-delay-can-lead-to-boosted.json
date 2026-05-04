@@ -1,0 +1,21 @@
+{
+  "title": "Validator transition delay can lead to boosted token mismanagement",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `setValidator` function in `Staker.sol` contains a vulnerability related to the management of boosted tokens through the `rewardCache.dropBoost` function call. The issue arises from the potential failure of `dropBoost` to drop boosts associated with the `oldValidator` due to inadequate time passing since the last boost action.  ```solidity File: Staker.sol 68:     function setValidator(address _newValidator) external onlyOwner { ... 80:         uint256 boosted = rewardCache.boosts(address(this)); 81:         if (boost",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Race condition with `initiatingAdminSettleDebt()` could under-compensate participants",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, participants will incur loss on withdrawal as admin underpaid for debt settlement. But admin (trusted) can make up the loss by refunding them the difference separately.  **Likelihood:** Medium, occurs when admin settles debt  ## Description  Within `LidoVault.deposit()`, there is a check `require(!isAdminSettleDebtInitialized(), \"AAI\")` that prevents fixed/variable participants from starting the vault with the last deposit when the admin settle debt process has been initialized.  ```Solidity   function deposit(uint256 side) external payable isInitialized nonRee",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

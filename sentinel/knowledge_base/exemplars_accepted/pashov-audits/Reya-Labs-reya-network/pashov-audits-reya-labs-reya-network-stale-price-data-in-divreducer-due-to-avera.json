@@ -1,0 +1,19 @@
+{
+  "title": "Stale Price Data in `DivReducer` Due to Average Timestamp Calculation",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `DivReducer` function within the system is designed to calculate the quotient of the prices from two input nodes, typically used for deriving asset prices in alternative currency terms when direct feeds are not available. A critical part of this functionality is the calculation of the `updated_at` timestamp for the output, which currently averages the timestamps of the two input nodes. This approach introduces a significant risk; if one input node provides a very recent timestamp and the other is significantly stale, the a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

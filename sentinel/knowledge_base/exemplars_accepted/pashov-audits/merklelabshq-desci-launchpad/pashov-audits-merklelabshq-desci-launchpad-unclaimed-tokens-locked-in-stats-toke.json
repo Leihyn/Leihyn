@@ -1,0 +1,21 @@
+{
+  "title": "Unclaimed tokens locked in `stats_token` causing permanent fund loss",
+  "platform": "pashov-audits",
+  "program": "merklelabshq-desci-launchpad",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  In the `claim_token` function, tokens are distributed to users based on the proportion of tokens they purchased relative to the total `claimed_supply`. If the `claimed_supply` is less than the `sale_supply`, users receive a proportional amount of `claimed_supply` rather than the full `sale_supply`.  This is reflected in the following code snippet:  ```rust let adjusted_tokens = ((user_stats.tokens_purchased as f64 / token_stats.claimed_supply as f64)     * (token_stats.sale_supply.min(token_stats.claimed_supply) as f64))",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/DesciLaunchpad-security-review_2025-02-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

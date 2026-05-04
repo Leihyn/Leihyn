@@ -1,0 +1,22 @@
+{
+  "title": "Non-atomic updatePool() enables sandwich attacks and extraction",
+  "platform": "pashov-audits",
+  "program": "Telos-Consilium-ouroboros-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `YuzuILP.updatePool()` lacks atomicity when updating the pool state, allowing manipulation of `poolSize` in a way that can be exploited through sandwich attacks.  The function directly sets `poolSize` from the externally provided input without validating against the current state or considering ongoing user operations.  ```solidity function updatePool(uint256 newPoolSize, uint256 newDailyLinearYieldRatePpm) external onlyRole(POOL_MANAGER_ROLE) {     if (newDailyLinearYieldRatePpm > 1e6) {         revert Inva",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YuzuUSD-security-review_2025-08-28.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

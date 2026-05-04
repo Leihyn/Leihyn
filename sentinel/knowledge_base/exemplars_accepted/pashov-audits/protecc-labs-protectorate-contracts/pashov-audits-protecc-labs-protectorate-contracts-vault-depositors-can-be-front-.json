@@ -1,0 +1,22 @@
+{
+  "title": "Vault depositors can be front-ran and lose their funds",
+  "platform": "pashov-audits",
+  "program": "protecc-labs-protectorate-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as a theft of user assets is possible  **Likelihood:** Medium, as it works only if the attacker is the first vault depositor  ## Description  The following attack is possible:  1. The `LendingVault` contract has just been deployed and has 0 `assets` and `shares` deposited/minted 2. Alice sends a transaction to deposit `10e18` worth of `_assets` 3. Bob is a malicious user/bot and sees the transaction in the mempool and front-runs it by depositing 1 wei worth of the asset, receiving 1 wei of shares 4. Bob also front-runs Alice's transaction with a direct ERC20::tra",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Protectorate-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

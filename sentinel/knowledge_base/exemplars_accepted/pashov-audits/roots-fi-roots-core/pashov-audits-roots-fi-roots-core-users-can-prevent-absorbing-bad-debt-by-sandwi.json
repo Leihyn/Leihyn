@@ -1,0 +1,22 @@
+{
+  "title": "Users can prevent absorbing bad debt by sandwiching liquidations",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When a liquidation occurs and the stability pool does not have enough funds to absorb the bad debt, this debt is distributed among all active troves.  Before a big liquidation that will cause a redistribution of bad debt, trove owners can withdraw their collateral just before the liquidation happens and open the trove again just after the liquidation, thus avoiding the redistribution of bad debt and increasing the bad debt of other troves.  ## Recommendations  Implement a two-step mechanism for closing troves such that the req",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

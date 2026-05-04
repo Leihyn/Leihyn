@@ -1,0 +1,22 @@
+{
+  "title": "Unvalidated token mints in `create_vault` lead to withdrawal failure",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-orca-saffron",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "amm"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium   ## Description  `create_vault` stores caller-supplied `token_mint_a` / `token_mint_b` without verifying they are the actual mints of the provided Whirlpool. Later instructions trust those stored mints and pass them into Orca CPI calls that do enforce Whirlpool\u2194mint consistency, causing hard reverts at withdrawal time.  **Code References**  - `create_vault` accepts arbitrary mint accounts and only validates Whirlpool owner + tick spacing, not Whirlpool token mints:     [create.rs#L120](https://github.com/saffron-finance/orca-",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review_2026-03-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

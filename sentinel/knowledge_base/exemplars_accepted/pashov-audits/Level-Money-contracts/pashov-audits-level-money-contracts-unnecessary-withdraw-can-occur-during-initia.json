@@ -1,0 +1,23 @@
+{
+  "title": "Unnecessary withdraw can occur during `initiateRedeem` and `reward`",
+  "platform": "pashov-audits",
+  "program": "Level-Money-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When users trigger `initiateRedeem`, the operation always attempts to withdraw collateral from the default strategies without first checking whether the current collateral balance in the boring vault is sufficient to cover the redemption request.  ```solidity     function initiateRedeem(address asset, uint256 lvlUsdAmount, uint256 expectedAmount)         external         requiresAuth         notPaused         returns (uint256, uint256)     {         if (!redeemableAssets[asset]) revert UnsupportedAsset();         if (!isB",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Level-security-review_2025-04-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

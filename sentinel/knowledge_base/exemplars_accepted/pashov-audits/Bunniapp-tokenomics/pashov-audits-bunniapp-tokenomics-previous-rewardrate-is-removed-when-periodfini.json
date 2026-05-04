@@ -1,0 +1,23 @@
+{
+  "title": "Previous `rewardRate` is removed when `periodFinish` has not yet been reached",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When `incentivizeRecurPool` is called and the `periodFinish` has not yet been reached, it incorrectly sets `newRewardRate`, which consists of only the new `incentiveAmount`, to `state.rewardRate` instead of adding it to `state.rewardRate`.  ```solidity     function incentivizeRecurPool(RecurIncentiveParams[] calldata params, address incentiveToken)         external         returns (uint256 totalIncentiveAmount)     {         // ...              // record new reward >>>         uint256 newRewardRate;             if (block.time",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Unrestricted LP burn enables price inflation to exploit deposits",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `LPToken` contract allows unrestricted burning of LP tokens via `burn()` and `burnFrom()`. This enables an attack where the first depositor manipulates the LP price by burning nearly all of their LP tokens. This skews the pool state such that any subsequent deposit may mint **less or 0 LP tokens**, either causing a denial of service (if slippage checks are used) or silent fund loss (if not).  ```solidity function _calcAddLiquidity() internal view returns (uint256 netAmount, uint256 pFee, uint256 lpAmount) {     --- SNIPPED",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

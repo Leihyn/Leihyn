@@ -1,0 +1,21 @@
+{
+  "title": "DOS attack by delegating tokens at MAX_DELEGATES = 1024",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The delegate function in the VotingEscrow contract allows any user to delegate voting power to any other address. However, delegated token information is stored in arrays whose size is capped by MAX_DELEGATES = 1024. This limit is designed to prevent excessive gas usage during operations like transfer, withdraw, or burn.  In HyperEVM\u2019s dual-block architecture, this constraint has more severe implications:  Fast blocks: 2-second block time, 2M gas limit.  Slow blocks: 1-minute block time, 30M gas limit. A user whose NFT has rec",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

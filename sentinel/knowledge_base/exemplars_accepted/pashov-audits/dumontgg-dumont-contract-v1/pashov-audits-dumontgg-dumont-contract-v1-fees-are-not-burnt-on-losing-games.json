@@ -1,0 +1,22 @@
+{
+  "title": "Fees are not burnt on losing games",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  According to the burning mechanism, a 10% fee should applied on the winning or **losing** amount of every bet. 80% of those USDT fees will be swapped at the end of each month to buy and burn MONT tokens.  The problem is that the Vault is only sending assets to the burner when the player is a winner:  ```solidity     function transferPlayerRewards(...) external {         IGameFactory.GameDetails memory game = gameFactory.games(_gameId);          ...          uint256 burnAmount = (houseEdge * 8) / 10;          if (_isPlayerWi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

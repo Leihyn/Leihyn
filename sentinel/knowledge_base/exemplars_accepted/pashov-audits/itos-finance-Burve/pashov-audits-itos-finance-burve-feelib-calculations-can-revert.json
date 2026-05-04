@@ -1,0 +1,22 @@
+{
+  "title": "`FeeLib` calculations can revert",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `FeeLib` library is based on the [Uniswap's V3 `PositionValue` library](https://github.com/Uniswap/v3-periphery/blob/main/contracts/libraries/PositionValue.sol). However, it is not taken into account that the fee calculations [expect overflows and underflows](https://github.com/Uniswap/v3-periphery/issues/198). This is not an issue in the original library, as it uses a solc version lower than 0.8.0, which does not revert to overflow/underflow. But in the Burve implementation, this will cause the transaction to revert.  The",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-03-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

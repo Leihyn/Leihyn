@@ -1,0 +1,22 @@
+{
+  "title": "Not checked ETH provided == amountIn swapped",
+  "platform": "pashov-audits",
+  "program": "astralparrot-KekotronRouter",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, loss of funds  **Likelihood:** Low, required mistake in inputted data and choosing native token as tokenIn  ## Description  RouterV2 does not check that `msg.value` is equal to `amountIn` in case of `tokenIn == address(0)`. If a user sends in fact less - the transaction will revert. If a user sends in fact more - some native token will stuck on Router after the swap (the delta will not be swapped)  ## Recommendations  Consider checking that `msg.value == amountIn` if the native token is `tokenIn`.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kekotron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Lack of withdrawal limits check",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The provided update fully excludes withdrawal limits checks from the `CollateralConfiguration.checkWithdrawLimits` function and puts them into the `AccountCollateral.updateBalance` function. So `AccountCollateral.transferFunds` and `ExposedModule.updateCollateralShares` functions have neither `GlobalCollateralConfiguration.checkWithdrawLimits` nor `CollateralConfiguration.checkWithdrawLimits` check since they bypass the `updateBalance` function.  ```solidity     function transferFunds(uint128 fromAccountId, uint128 toAccoun",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-April.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

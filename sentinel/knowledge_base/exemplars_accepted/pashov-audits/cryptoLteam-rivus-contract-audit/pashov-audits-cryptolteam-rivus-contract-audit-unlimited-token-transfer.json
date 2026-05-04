@@ -1,0 +1,22 @@
+{
+  "title": "Unlimited token transfer",
+  "platform": "pashov-audits",
+  "program": "cryptoLteam-rivus-contract-audit",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Function `getSharesByMintedRsTAO()` has been used to calculate amount of shares that corresponds to the RsTAO amount and it's been used in multiple functions like `_transfer()` and `_mintRsTAO()`. The issue is that the function `getSharesByMintedRsTAO()` returns 0 when the total minted amount is 0 while it should have returned the amount itself. This has multiple impacts like transferring unlimited tokens while the total mint is 0, this is the POC:  1. Suppose RivusTAO is recently deployed or for other reasons (upgrade or ...",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Rivus-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

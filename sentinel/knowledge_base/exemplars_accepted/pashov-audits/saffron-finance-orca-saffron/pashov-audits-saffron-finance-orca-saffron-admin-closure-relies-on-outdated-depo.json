@@ -1,0 +1,21 @@
+{
+  "title": "Admin closure relies on outdated depositor address in vault",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-orca-saffron",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium   ## Description  1. Deposits snapshot the depositor address into vault state:    [deposit_fixed.rs:275](https://github.com/saffron-finance/orca-saffron/blob/56b254ac8c19a640318e40b8b40e0240b36e5c9f/programs/saffron-vault/src/instructions/vault/deposit_fixed.rs#L275), [deposit_variable.rs:172](https://github.com/saffron-finance/orca-saffron/blob/56b254ac8c19a640318e40b8b40e0240b36e5c9f/programs/saffron-vault/src/instructions/vault/deposit_variable.rs#L172).  2. Admin close enforces those snapshot addresses, not the current bea",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review_2026-03-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "`createERC20DAO()` will always revert when `_depositChainIds` has a length bigger than 1",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Whenever we call `createERC20DAO()`, we have the following **if** check:  ```solidity if (_depositChainIds.length > 1) ```  If we end up in there, we will always revert. This is due to this line:  ```solidity IEmitter(emitterAddress).createCCDao(_daoAddress, _depositChainIds); ```  It calls `createCCDao()` on the `Emitter` contract however that function is not implemented there. This can easily be confirmed by searching for that function name by using `CTRL + Shift + F` and we will see that the only function with that nam",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

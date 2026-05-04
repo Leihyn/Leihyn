@@ -1,0 +1,22 @@
+{
+  "title": "Redeem period is less than intended down to 0",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, StakedTokens are not redeemable in case the cooldown period is 2 times greater than unstake window, therefore underlying tokens are stuck forever  **Likelihood:** High, calculation mistake on redeem  ## Description  To redeem StakedToken, the user needs to submit a request to `cooldown()` and wait time of `COOLDOWN_SECONDS`. Then he should be able to redeem for a period of `UNSTAKE_WINDOW` after cooldown.  However, this check underestimates the open window by `2 * COOLDOWN_SECONDS`:  ```solidity     function _redeem(address from, address to, uint256 amount) inter",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

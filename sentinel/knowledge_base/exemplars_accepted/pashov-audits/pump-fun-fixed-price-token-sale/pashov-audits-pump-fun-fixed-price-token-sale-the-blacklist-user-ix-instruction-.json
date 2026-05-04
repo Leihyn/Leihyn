@@ -1,0 +1,19 @@
+{
+  "title": "The `blacklist_user_ix` instruction skips `is_blacklisted` update",
+  "platform": "pashov-audits",
+  "program": "pump-fun-fixed-price-token-sale",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `super_admin` can call the `blacklist_user_ix` instruction to refund the tokens purchased by `user_state`, but the contract does not update the `is_blacklisted` flag in `user_state` to `true`, which fails to prevent this user from continuing to purchase tokens.  ## Recommendations  Set the `is_blacklisted` flag of `user_state` to `true` in the `blacklist_user_ix` instruction. ```diff pub fn blacklist_user_ix<'a, 'b, 'c, 'info>(     ctx: Context<'a, 'b, 'c, 'info, BlacklistUser<'info>>, ) -> Result<()> {     //... +",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Pump-security-review_2025-03-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

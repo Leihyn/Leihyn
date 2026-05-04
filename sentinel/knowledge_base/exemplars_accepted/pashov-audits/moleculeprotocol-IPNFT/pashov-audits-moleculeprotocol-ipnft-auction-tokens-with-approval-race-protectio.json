@@ -1,0 +1,21 @@
+{
+  "title": "Auction tokens with approval race protection or not returning a `bool` on `approve` are incompatible with `VestedCrowdSa",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-IPNFT",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as sale won't be possible to be settled  **Likelihood:** Low, as such tokens are rare, but they do exist  ## Description  Some tokens, for example [USDT](https://etherscan.io/token/0xdac17f958d2ee523a2206206994597c13d831ec7) (not a good example because auction tokens have to have 18 decimals) and [KNC](https://etherscan.io/token/0xdd974d5c2e2928dea5f71b9825b8b646686bd200#code) (18 decimals) have approval race protection mechanism and require the allowance to be either 0 or `uint256.max` when it is updated. The problem is that in `VestedCrowdSale` the following co",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/IPNFT-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

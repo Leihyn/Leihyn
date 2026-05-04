@@ -1,0 +1,22 @@
+{
+  "title": "Protocol misses fees from borrowing positions",
+  "platform": "pashov-audits",
+  "program": "RegnumAurumAcquisitionCorp-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Protocol always subtracts protocol fee rate while calculation of interest rate for liquidity providers, but it never mints or allocate these funds. It means borrowers pay for these fees too, but nobody receives these funds, including lenders.  It means even if all the borrowers pay for their positions and then lenders withdraw 100% of the funds, there will be funds in the system.  ```solidity     function calculateLiquidityRate(uint256 utilizationRate, uint256 usageRate, uint256 protocolFeeRate, uint256 totalD",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RegnumAurum-security-review_2025-08-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

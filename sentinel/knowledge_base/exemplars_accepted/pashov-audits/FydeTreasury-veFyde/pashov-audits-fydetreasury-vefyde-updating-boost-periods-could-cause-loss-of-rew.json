@@ -1,0 +1,21 @@
+{
+  "title": "Updating boost periods could cause loss of rewards",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-veFyde",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `claimFydeEmissions` is used to claim users' rewards. To calculate the user rewards, `earned` view function is utilized.  ```solidity   /// @notice Withdraws all earned rewards   function claimFydeEmissions() external { \t\t. \t\t. \t\t.     uint256 reward = earned(msg.sender, accountBalance, rewardPerToken_, rewards[msg.sender]); ```  [RewardsDistributor.sol:L133](https://github.com/FydeTreasury/liquid-vault/blob/6bf1be3dec4b6c9e33929a51bf07539a4ced74f2/src/yield/RewardsDistributor.sol#L133)  `earned` function calculate the due rew",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

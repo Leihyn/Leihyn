@@ -1,0 +1,22 @@
+{
+  "title": "User can repeat calling `withdrawExodus()` to steal all tokens",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High. Any user can steal all funds.  **Likelihood:** Medium. Exodus Mode must be enabled.  ## Description  Function `withdrawExodus()` is used to withdraw funds deposited to Nume when protocol enters Exodus Mode, i.e. when operator doesn't perform bridging from Nume to Polygon.  This function only verifies that user had token balance prior to the last settlement. If yes - transfers requested tokens to user. However nothing stops user from replaying call to `withdrawExodus()`.  ```solidity     function withdrawExodus(         WithdrawalRequestArgs calldata _args     ) e",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

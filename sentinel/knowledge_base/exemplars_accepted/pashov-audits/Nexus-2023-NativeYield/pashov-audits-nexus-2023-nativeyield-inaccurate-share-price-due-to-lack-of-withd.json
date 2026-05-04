@@ -1,0 +1,22 @@
+{
+  "title": "Inaccurate share price due to lack of withdrawal tracking",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `DepositETH` and `DepositUSD` contracts fail to update the withdrawal counters (`ethWithdrawn`/`stableWithdrawn`) and shares (`nETHMinted`, `nUSDMinted`) when processing withdrawals.  This leads to incorrect accounting because the share price will be calculated by including the portion of withdrawn funds in the total balance.  The share price is calculated based on the total balance: ```solidity function _updateSharePrice(uint256 _rewardsEarned) internal {     rewardsClaimed+=_rewardsEarned;     uint256 totalEthBalance =",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

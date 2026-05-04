@@ -1,0 +1,19 @@
+{
+  "title": "Mistake using primary price for `customSaleWithPermit()`",
+  "platform": "pashov-audits",
+  "program": "Merit-Circle-forgotten-playland-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  ToyBox uses `customSale()` and `customSaleWithPermit()` for non-primary sales, and these functions should not use data from the primary sales. But customSaleWithPermit() uses the price for the primary sale, which likely is not the intended behavior.  ```     function customSaleWithPermit(uint256 _amount, PermitSignature calldata _permitSignature, bytes32[] calldata _proof)         external         nonReentrant         customSaleChecks(_permitSignature.owner, _permitSignature.token, _amount, _proof)     {         ...         _",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ForgottenPlayland-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Current pow math allows only integers",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Pow math uses `FixedPointMathLib.rpow` which is not enough because it accepts only integers as a second param. [link](https://github.com/lucidlyfi/lucidly-core-v1/blob/f00c45bbadc836b9eaa94717a0b3aa017e792588/src/Pool.sol#L1475)  But the expected pow calculations should allow calculations like 0.5 ^0.5 for instance (as it works with weights).  As a result, all current calculations using `FixedPointMathLib.rpow` will revert due to overflow.  ## Recommendations  Consider using alternative math libraries.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

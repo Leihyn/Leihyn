@@ -1,0 +1,19 @@
+{
+  "title": "Deploy functions is vulnerable to DoS attack vectors",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  While creating the morpho market, there are several checks for market parameters in morpho blue. If the market is already created with the same parameters, it will fail in the required line.  ```solidity         require(isIrmEnabled[marketParams.irm], ErrorsLib.IRM_NOT_ENABLED);         require(isLltvEnabled[marketParams.lltv], ErrorsLib.LLTV_NOT_ENABLED); @>      require(market[id].lastUpdate == 0, ErrorsLib.MARKET_ALREADY_CREATED);          // Safe \"unchecked\" cast.         market[id].lastUpdate = uint128(bl",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

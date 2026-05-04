@@ -1,0 +1,21 @@
+{
+  "title": "Hardcoded address restricts multi-chain deployments",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-fixed-income",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `UniV3LimitedRangeAdapter` contract, the address of the **Uniswap V3 NonfungiblePositionManager** is hardcoded as:  ```solidity INonfungiblePositionManager public constant positionManager =  INonfungiblePositionManager(0xC36442b4a4522E871399CD717aBDD847Ab11FE88); ```  While this address is correct for **Ethereum mainnet**, **Arbitrum**, and **Optimism**, it does **not match the deployed address on Base** and may differ on other Layer 2s (e.g., Base, Unichain, zkSync, Scroll).  If the contract is deploye",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review_2025-07-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Sandwiching yield distributions allows users to profit from redemption",
+  "platform": "pashov-audits",
+  "program": "Telos-Consilium-ouroboros-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `StakedYuzuUSD` allows users to deposit and initiate redeem requests immediately after the reward distribution. When rewards are distributed to the `StakedYuzuUSD` contract, the `totalAssets()` increases while `totalSupply()` remains constant, which improve the exchange rate for all shareholders.   However, users can sandwich the reward distribution with the deposit and redeem requests to initiate redemption requests. They can then benefit from the yields that larger than the fee they pay, potentially resu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YuzuUSD-security-review_2025-08-28.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

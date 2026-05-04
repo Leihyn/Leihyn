@@ -1,0 +1,19 @@
+{
+  "title": "The `fulfillRandomWords` method might revert with out of gas error",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as randomness won't be fulfilled  **Likelihood:** Low, as it requires misconfiguration of gas  ## Description  The `fulfillRandomWords` method in `HibernationDen` calls the internal `_setFermentedJars` method which loops over the `fermentedJars` array and also has an external call. This is a potential problem as this code might require a lot of gas and make the `fulfillRandomWords` method revert which is problematic for a VRF integration (it is listed in the [VRF Security Considerations docs](https://docs.chain.link/vrf/v2/security#fulfillrandomwords-must-not-rev",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

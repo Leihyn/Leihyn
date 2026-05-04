@@ -1,0 +1,22 @@
+{
+  "title": "Missing price feed validation and usage of a deprecated method can lead to 0 price",
+  "platform": "pashov-audits",
+  "program": "Bloom-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as using a 0 price would mess the swap calculations  **Likelihood:** Low, as it requires a malfunctioning price feed  ## Description  The `_getTokenPrices` method in `SwapFacility` makes use of the `latestAnswer` method from Chainlink price feeds. The problem is that the NatSpec of `latestAnswer` says this:  > @dev #[deprecated] Use latestRoundData instead. This does not error if no > answer has been reached, it will simply return 0. Either wait to point to > an already answered Aggregator or use the recommended latestRoundData > instead which includes better ver",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Bloom-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

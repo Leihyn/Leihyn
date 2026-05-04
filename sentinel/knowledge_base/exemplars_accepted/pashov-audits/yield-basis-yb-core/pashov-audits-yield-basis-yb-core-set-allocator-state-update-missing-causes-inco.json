@@ -1,0 +1,21 @@
+{
+  "title": "`set_allocator()` state update missing causes incorrect balances",
+  "platform": "pashov-audits",
+  "program": "yield-basis-yb-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `set_allocator` function, the contract intends to adjust the allocation for a given allocator by comparing the new `amount` with the `old_allocation` stored in `self.allocators[allocator]`. However, the function does not update the `self.allocators` mapping with the new `amount`. As a consequence, every call to `set_allocator` will always see the previous allocation (old_allocation) as zero, and any subsequent logic that relies on `self.allocators` (for example, when an allocator attempts to withdraw th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YieldBasis-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

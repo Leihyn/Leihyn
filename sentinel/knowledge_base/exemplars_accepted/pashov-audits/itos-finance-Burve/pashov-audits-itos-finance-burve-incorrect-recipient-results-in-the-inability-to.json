@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect recipient results in the inability to properly redeem a position",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Upon minting, we have the following code:  ```solidity if (range.lower == 0 && range.upper == 0) {             uint256 mintShares = islandLiqToShares(liq);             island.mint(mintShares, recipient);         } else {             // mint the V3 ranges             pool.mint(address(this), range.lower, range.upper, liq, abi.encode(msg.sender));         } ```  When minting for the island, we set the recipient as the `recipient` input and when minting Uniswap V3 liquidity, we set the recipient as `address(this)`. The latter",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-01-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

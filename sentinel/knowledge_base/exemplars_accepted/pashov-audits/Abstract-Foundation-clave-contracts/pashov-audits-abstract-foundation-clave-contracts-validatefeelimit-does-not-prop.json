@@ -1,0 +1,21 @@
+{
+  "title": "`validateFeeLimit` does not properly limit the transaction fee",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `validateFeeLimit` will be called within `SessionKeyValidator`'s `validationHook` to ensure that the caller's provided `maxFeePerGas` and `gasLimit` is within the usage limit.  ```solidity   function validationHook(bytes32 signedHash, Transaction calldata transaction, bytes calldata hookData) external {     if (hookData.length == 0) {       // There's no session data so we aren't validating anything       return;     }     (bytes memory signature, address validator, ) = abi.decode(transaction.signature, (bytes, address, b",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-12-23.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

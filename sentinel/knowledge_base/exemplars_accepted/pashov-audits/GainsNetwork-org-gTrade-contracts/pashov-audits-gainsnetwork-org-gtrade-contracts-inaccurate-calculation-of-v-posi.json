@@ -1,0 +1,23 @@
+{
+  "title": "Inaccurate calculation of `v.positionSizeCollateralAfterReferralFees`",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When calculating v.positionSizeCollateralAfterReferralFees and reward1 (the actual referral reward), the following calculation will be used:  ```solidity     // ...     if (_getMultiCollatDiamond().getTraderActiveReferrer(_trade.user) != address(0)) {         // Use this variable to store position size for dev/gov fees after referral fees         // and before volumeReferredUsd increases >>>     v.positionSizeCollateralAfterReferralFees =             (v.positionSizeCollateral *                 (100 *                     P",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

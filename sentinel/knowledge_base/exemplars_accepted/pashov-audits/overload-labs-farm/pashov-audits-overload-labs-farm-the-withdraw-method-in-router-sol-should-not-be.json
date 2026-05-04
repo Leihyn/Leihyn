@@ -1,0 +1,21 @@
+{
+  "title": "The `withdraw` method in `Router.sol` should not be payable",
+  "platform": "pashov-audits",
+  "program": "overload-labs-farm",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `withdraw` method in `Router.sol` is payable which means callers can provide ETH with their function call. However, there is no reason for this method to be payable, since any ETH provided will simply be gladly accepted by the contract and not returned to the user.  Other users can steal any accidentally provided ETH by calling `deposit` with `amount == [excess ETH] && token == WETH`.  ## Recommendations  Remove the `payable` modifier from `withdraw`.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Overload-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

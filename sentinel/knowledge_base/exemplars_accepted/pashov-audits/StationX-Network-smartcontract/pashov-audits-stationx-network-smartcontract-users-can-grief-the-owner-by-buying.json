@@ -1,0 +1,21 @@
+{
+  "title": "Users can grief the owner by buying in chunks",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The factory contract supports all ERC20 tokens, allowing DAO creators to add any token as a payment method for their DAO. When users buy tokens using the `buyGovernanceTokenERC20DAO()` function, the owner takes a portion of the payment as a fee:  ```solidity         uint256 _totalAmount = (_numOfTokensToBuy * _daoDetails.pricePerToken) / 1e18;          if (_totalAmount == 0) {             revert AmountInvalid(\"_numOfTokensToBuy\", _totalAmount);         }          uint256 ownerShare = (_totalAmount * _daoDetails.ownerFeePerDepo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

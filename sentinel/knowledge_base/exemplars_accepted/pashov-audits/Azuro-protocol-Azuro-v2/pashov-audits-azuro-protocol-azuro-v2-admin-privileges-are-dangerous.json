@@ -1,0 +1,21 @@
+{
+  "title": "Admin privileges are dangerous",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-Azuro-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Low, because it requires a malicious/compromised admin  **Impact:** High, because a rug pull can be executed  ## Description  A malicious or a compromised admin can execute a 100% rug pull in the following way:  1. The `LP` admin calls the `Factory` contract to add a malicious `core` to the `LP` 2. The malicious `core` returns the `LP` contract balance when its `resolveAffiliateReward` method is called 3. Now calling `claimAffiliateReward` with the fake `core` as an argument will result in a 100% of the `LP` balance stolen  Same thing applies to `withdrawPayout`.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Azuro-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

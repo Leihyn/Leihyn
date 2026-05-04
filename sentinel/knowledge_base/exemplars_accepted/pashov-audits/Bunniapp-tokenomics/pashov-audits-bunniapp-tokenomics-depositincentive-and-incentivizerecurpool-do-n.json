@@ -1,0 +1,25 @@
+{
+  "title": "`depositIncentive` and `incentivizeRecurPool` do not verify if the `incentiveToken` exists",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking",
+    "proxy",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Both `depositIncentive` and `incentivizeRecurPool` use solady's `SafeTransferLib` to transfer the `incentiveToken` to the `MasterBunni`.  ```solidity     function depositIncentive(RushIncentiveParams[] calldata params, address incentiveToken, address recipient)         external         nonReentrant         returns (uint256 totalIncentiveAmount)     {         // ...          // transfer incentive tokens to this contract         if (totalIncentiveAmount != 0) {             // @audit - doesn't use the latest version of solady",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

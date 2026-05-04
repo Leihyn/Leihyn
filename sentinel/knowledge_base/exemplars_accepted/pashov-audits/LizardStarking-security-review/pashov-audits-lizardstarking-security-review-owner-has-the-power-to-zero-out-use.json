@@ -1,0 +1,21 @@
+{
+  "title": "Owner has the power to zero-out user's daily interest on rewards",
+  "platform": "pashov-audits",
+  "program": "LizardStarking-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as users can lose their right to claim accrued rewards  **Likelihood:** Low, as it requires a malicious/compromised owner  ## Description  The `setDepositsActive` method resets `startTimestamp` and `lastGlobalUpdate`. The owner can front-run each `claimReward` transaction and by resetting the `startTimestamp` this will result in 0 `requiredRebases` in `calculateShareFromTime`, so the user will lose on his daily interest. On the other side, by resetting `lastGlobalUpdate` this will make `updateGlobalShares` never do a rebase, which will never inflate the `overallS",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/LizardStarking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

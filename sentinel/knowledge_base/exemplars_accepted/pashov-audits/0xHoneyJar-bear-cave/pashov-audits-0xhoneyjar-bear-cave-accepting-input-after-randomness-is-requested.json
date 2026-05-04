@@ -1,0 +1,21 @@
+{
+  "title": "Accepting input after randomness is requested can be exploited",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can result in a griefing attack on an expected game winner  **Likelihood:** Medium, as it requires minting a new HoneyJar NFT  ## Description  The [VRF security considerations docs](https://docs.chain.link/vrf/v2/security#dont-accept-bidsbetsinputs-after-you-have-made-a-randomness-request) explicitly mention that if an outcome in the contract depends on user-supplied inputs (in this case minting HoneyJar NFTs) and randomness, then the contract should stop accepting any additional user-supplied inputs after it submits the randomness request. The problem here",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

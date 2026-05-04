@@ -1,0 +1,21 @@
+{
+  "title": "Wrong price calculation with inverse base and negative interest rates",
+  "platform": "pashov-audits",
+  "program": "amphora-atlas-stable-swap-dev",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  To calculate `token0OverToken1` for tokens that accrue value, `swapStorage.perSecondInterestRate` is used to adjust the base price of the asset. Depending on the order of the tokens, this value can be positive or negative.  However, this approach is flawed, as applying a negative interest rate over the inverse price does not yield the correct result.  Consider the following example: - XYZ is token0 (6 decimals). - AUSD is token1 (6 decimals). - XYZ price is $2 and its annual interest rate is 50%. - token0OverToken1 is set to 0",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AgoraStableSwap-security-review_2025-06-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

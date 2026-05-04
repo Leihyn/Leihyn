@@ -1,0 +1,21 @@
+{
+  "title": "Missing admin input sanitization",
+  "platform": "pashov-audits",
+  "program": "Azuro-protocol-Azuro-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Low, because it requires a malicious/compromised admin or an error on admin side  **Impact:** High, because important protocol functionality can be bricked  ## Description  It is not checked that the `claimTimeout` property in `LP.sol` both in its setter function and in `initialize` does not have a very big value. Same thing for the setter function of `withdrawTimeout`. Also, the `checkFee` method in `LP.sol` has a loose validation - the max sum of all fees should be much lower than 100%. Finally the `startsAt` argument of `shiftGame` in `LP.sol` is not validated t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Azuro-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

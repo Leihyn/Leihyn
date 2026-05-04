@@ -1,0 +1,22 @@
+{
+  "title": "Cannot recover unclaimed airdrop tokens",
+  "platform": "pashov-audits",
+  "program": "bio-xyz-launchpad-agent-evm",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The Airdrop contract includes a recoverWrongToken function that allows the owner to withdraw tokens mistakenly sent to the contract, except for the main airdrop token. However, there is no mechanism for the owner to recover unclaimed airdrop tokens. Any airdrop tokens not claimed by users will remain locked in the contract indefinitely. This is likely, as some users may never claim their allocation.  ## Recommendations  Add a function that allows the owner to withdraw unclaimed airdrop tokens after a certain period",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bio-security-review_2025-12-15.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

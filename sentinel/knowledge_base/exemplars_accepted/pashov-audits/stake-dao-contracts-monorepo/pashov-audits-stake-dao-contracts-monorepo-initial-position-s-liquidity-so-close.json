@@ -1,0 +1,21 @@
+{
+  "title": "Initial position's liquidity so close to liquidation",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Currently, after deployment and creation Morpho Blue market system directly opens a position. But this position is so close to liquidation, and it can be liquidated immediately.   ```solidity         uint256 collateralToSupply = Math.mulDiv(             Math.mulDiv(borrowAmount, 10 ** oracle.ORACLE_BASE_EXPONENT(), oracle.price(), Math.Rounding.Ceil),             1e18,             lltv,             Math.Rounding.Ceil         );         uint256 buffer = 2 * (10 ** (collateral.decimals() - loan.decimals()));",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

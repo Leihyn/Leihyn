@@ -1,0 +1,21 @@
+{
+  "title": "No way to call `triggerMetadataRead()` from `NFTShadow.sol`",
+  "platform": "pashov-audits",
+  "program": "yuga-labs-NFTMIrror",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `NFTShadow.sol#tokenURI()` function returns the token URI for token IDs by invoking `tokenURI()` from `MetadataReadRenderer.sol`. However, the `MetadataReadRenderer.sol` contract has a function `triggerMetadataRead()` to read token URIs from the base collection (from the original chain ) and render them on the shadow collection. using the **lzRead** from LayerZero protocol.  But, because it takes `msg.sender` to determine the `baseCollectionAddress` value.  ```solidity         address baseCollectionAddress = IBeacon(beacon",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/NFTMirror-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

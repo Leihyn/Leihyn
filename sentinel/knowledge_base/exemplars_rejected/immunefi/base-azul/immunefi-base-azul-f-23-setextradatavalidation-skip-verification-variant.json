@@ -1,0 +1,21 @@
+{
+  "title": "F-23 setExtraDataValidation skip-verification variant",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "High",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "documented-design",
+  "surface_tags": [
+    "l2-client"
+  ],
+  "bug_class": "trust-boundary",
+  "mental_operation": "trust_mapper",
+  "language": "rust",
+  "file_paths": [],
+  "summary": "A function variant exists allowing the builder to skip signature verification.",
+  "key_lesson": "Trait doc-comment explicitly states 'allowing the builder to skip signature verification' \u2014 documented intent, not bug.",
+  "contest_url": null,
+  "submission_url": null,
+  "captured_at": "2026-05-04T03:26:29"
+}

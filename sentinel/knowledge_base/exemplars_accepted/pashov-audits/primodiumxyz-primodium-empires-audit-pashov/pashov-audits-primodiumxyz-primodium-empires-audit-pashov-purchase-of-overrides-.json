@@ -1,0 +1,19 @@
+{
+  "title": "Purchase of overrides can increase a player's loss more than the actual amount spent",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The override systems call the `LibOverride._purchaseOverride` function, which handles the purchase of the respective override. The function receives the `_spend` parameter, which is the amount spent on the override, and this value is used to increase the `loss` of the player.  ```solidity File: LibOverride.sol  36    PlayersMap.setLoss(playerId, PlayersMap.get(playerId).loss + _spend); ```  However, the value passed to the `_spend` parameter is `_msgValue()`, which can be higher than the actual amount spent by the player, as t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

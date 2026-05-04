@@ -1,0 +1,21 @@
+{
+  "title": "Hook bypass via enable mode in module installation",
+  "platform": "pashov-audits",
+  "program": "bcnmy-nexus",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The Nexus smart account uses a hook mechanism to implement pre-checks and post-checks for operations like module installation. However, there's a vulnerability where these hooks can be bypassed when modules are installed via the Module Enable Mode in `validateUserOp`.  When a module is installed through the normal flow using `installModule`, the `withHook` modifier is applied, which properly calls the hook's `preCheck` and `postCheck` functions:  ```solidity function installModule(uint256 moduleTypeId, address module, bytes ca",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BiconomyNexus-security-review_2025-03-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

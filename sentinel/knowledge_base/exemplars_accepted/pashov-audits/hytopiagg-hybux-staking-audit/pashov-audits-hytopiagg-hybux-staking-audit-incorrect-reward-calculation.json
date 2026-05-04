@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect reward calculation",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-hybux-staking-audit",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `_unstakeNFTs` internal function calls `claimRewards()` instead of `_claimRewards(_sender)` when processing unstaking operations. While this works correctly for direct unstaking (where `msg.sender` is the user), it fails when unstaking through the router because `msg.sender` becomes the router contract address.  ```solidity File: NFTStaking.sol 82:     function unstakeNFTsRouter(address _sender, uint256[] calldata _tokenIds) external { 83:         require(msg.sender == stakingRouterAddress, \"Only router\"); 84:",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYBUX-security-review_2025-11-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

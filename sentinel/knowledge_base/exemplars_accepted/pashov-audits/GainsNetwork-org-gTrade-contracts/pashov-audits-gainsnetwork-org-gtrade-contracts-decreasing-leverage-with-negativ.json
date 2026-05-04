@@ -1,0 +1,22 @@
+{
+  "title": "Decreasing leverage with negative PnL may misdirect assets to the vault",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When a leverage decrease is executed for a trade with negative PnL that causes negative `collateralSentToTrader`, collateral is sent to the vault (because `_collateralSentToTrader < _availableCollateralInDiamond`). This can occur if `partialNetPnlCollateral` is negative.  ```solidity     function updateTradeSuccess(         ITradingStorage.Trade memory _existingTrade,         ITradingStorage.Trade memory _partialTrade,         IUpdatePositionSizeUtils.DecreasePositionSizeValues memory _values,         ITradingCallbacks.Aggrega",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

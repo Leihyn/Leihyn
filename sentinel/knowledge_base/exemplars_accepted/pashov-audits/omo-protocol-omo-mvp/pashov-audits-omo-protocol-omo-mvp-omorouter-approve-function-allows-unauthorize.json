@@ -1,0 +1,21 @@
+{
+  "title": "`OmoRouter.approve()` function allows unauthorized token approvals",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  - The `OmoRouter.approve()` function allows any user to approve themselves on the vault share tokens of the router contract, so users can grant themselves approvals, potentially leading to unauthorized token transfers or misuse (if the router has any shares balance):  ```javascript     function approve(         uint256 vaultId,         address spender,         uint256 amount     ) external returns (bool) {         address vault = vaultFactory.getVault(vaultId);         return IOmoVault(vault).approve(spender, amount);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

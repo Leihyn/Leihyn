@@ -1,0 +1,21 @@
+{
+  "title": "`InitiateOrUpdateSession` typehash is encoded incorrectly",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  According to the [ERC-712 standard](https://eips.ethereum.org/EIPS/eip-712#definition-of-hashstruct):  > The type of a struct is encoded as `name \u2016 \"(\" \u2016 member\u2081 \u2016 \",\" \u2016 member\u2082 \u2016 \",\" \u2016 \u2026 \u2016 member\u2099 \")\"` where each member is written as `type \u2016 \" \" \u2016 name`.  In `SessionUpdateHashing.sol`, the `_INITIATE_OR_UPDATE_SESSION_TYPEHASH` constant does not follow the standard, as it includes an extra space between the `deadline` and `session` members.  As a result, `SessionPermissionModule.verifySignature` will fail to verify a correct",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

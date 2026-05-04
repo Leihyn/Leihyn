@@ -1,0 +1,22 @@
+{
+  "title": "No price limit in `zapWETH`",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `zapWETH` function deposits some WETH to `UniV3TokenizedLp`. If there is too much WETH in `UniV3TokenizedLp`, some WETH will be swapped without a price limit. Furthermore, its caller, `LockZap` contract, does not check slippage. `LockZap` only checks the number of LPs received from the deposit. However, this problem results in a smaller value for LPs rather than a smaller number.  ## Recommendations  Add slippage check.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-July.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

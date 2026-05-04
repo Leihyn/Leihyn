@@ -1,0 +1,23 @@
+{
+  "title": "Send 0 fees to the previous proposer when the proposer is changed",
+  "platform": "pashov-audits",
+  "program": "adapter-fi-AdapterVault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When `set_strategy` is called and `current_proposer` is not the same as the provided `_proposer`, it will try to send fees to the previous proposer by calling \\_claim_fees.  ```python @internal def _set_strategy(_proposer: address, _strategies : AdapterStrategy[MAX_ADAPTERS], _min_proposer_payout : uint256, pregen_info: DynArray[Bytes[4096], MAX_ADAPTERS]) -> bool:     assert msg.sender == self.governance, \"Only Governance DAO may set a new strategy.\"     assert _proposer != empty(address), \"Proposer can't be null address",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AdapterFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

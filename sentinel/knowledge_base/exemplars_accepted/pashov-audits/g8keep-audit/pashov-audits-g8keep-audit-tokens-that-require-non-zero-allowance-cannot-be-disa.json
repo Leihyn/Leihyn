@@ -1,0 +1,21 @@
+{
+  "title": "Tokens that require non-zero allowance cannot be disabled",
+  "platform": "pashov-audits",
+  "program": "g8keep-audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `g8keepFactory` contract, the `setPairedTokenSettings` function allows the owner to enable or disable a token as a valid paired token. At the end of the function, the Uniswap router is approved to spend an unlimited amount of the token.  ```solidity     function setPairedTokenSettings(address pairedToken, bool allowed, uint256 minimumLiquidity) external onlyOwner {         if (lockedTokens[pairedToken]) revert TokenLocked();          allowedPairs[pairedToken] = allowed;         pairedTokenMinimumLiquidity[pairedTok",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/g8keep-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

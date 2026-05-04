@@ -1,0 +1,23 @@
+{
+  "title": "Locking collected ETH by triggering `createPoolAndAddLiquidity` twice",
+  "platform": "pashov-audits",
+  "program": "serious-market-serious-core",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "amm"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When users create a token in the Serious market, it can be funded by calling `buyToken` and providing the required amount of ETH and users will receive the requested amount of the token. Until the token is fully funded (`tokensSold >= tradeableSupply`), the collected ETH will be stored inside the `SeriousMarketProtocol` contract.  Once the token is fully funded, anyone can call `createPoolAndAddLiquidity` to create UniV3 Pool of a token and weth pair and add liquidity in the pool based on the configured `ethAmount` and `token",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Serious-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

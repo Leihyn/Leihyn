@@ -1,0 +1,23 @@
+{
+  "title": "`_validateSignature()` does not properly handle `address(0)`",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "proxy",
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The current implementation of `_validateSignature()` uses `ECDSA.recover()` to extract the signer address, which can return `address(0)` for invalid signatures:  ```solidity     function _validateSignature(         UserOperation calldata userOp,         bytes32 userOpHash     ) internal virtual override returns (uint256 validationData) {         bytes32 hash = ECDSA.toEthSignedMessageHash(userOpHash);         address signer = ECDSA.recover(hash, userOp.signature);          // Check if signer is admin (user wallet)         i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

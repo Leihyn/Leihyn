@@ -1,0 +1,22 @@
+{
+  "title": "Referrer rewards can be arbitraged by sandwich attacks",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `BunniToken` contract has a referrer mechanism, and referrer rewards are based on their scores. When BunniToken is transferred, the scores of the `from`'s referrer will be transferred to the `to`'s referrer.  ```solidity     function transfer(address to, uint256 amount) public virtual override returns (bool) { --snip--             // Update referrer scores if referrers are different.             if iszero(eq(fromReferrer, toReferrer)) {                 // Compute the score slot of `fromReferrer`.                 mstor",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Unauthorized `rewardTokens` in `_marketWeightsByToken`",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because a `market` can receive unauthorized `rewardTokens`.  **Likelihood:** Low, as it requires a `rewardToken` to be re-added after governance removes it.  ## Description  The `_marketWeightsByToken` variable is used in the `RewardDistributor::_updateMarketRewards` function to assign rewards to a `market` based on the weight assigned to that market:  ```solidity File: RewardDistributor.sol 281:     function _updateMarketRewards(address market) internal override { ... 315:             uint256 newRewards = getInflationRate(token).mulDiv(_marketWeightsByToken[toke",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

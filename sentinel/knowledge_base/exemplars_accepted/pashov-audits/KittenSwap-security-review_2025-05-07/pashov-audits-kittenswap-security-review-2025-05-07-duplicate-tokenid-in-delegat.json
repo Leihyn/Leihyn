@@ -1,0 +1,21 @@
+{
+  "title": "Duplicate `tokenId` in delegate list may inflate votes",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The following issue occurs when moving delegates and was already identified in the Spearbit audit of [Velodrome](https://github.com/spearbit/portfolio/raw/master/pdfs/Velodrome-Spearbit-Security-Review.pdf).  Inside `_moveAllDelegates` and `_moveTokenDelegates`, the delegated `tokenIds` will be removed from `srcRep` (previous delegatee) and will be added to the `dstRep` (new delegatee).  ```solidity     function _moveAllDelegates(         address owner,         address srcRep,         address dstRep     ) internal {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

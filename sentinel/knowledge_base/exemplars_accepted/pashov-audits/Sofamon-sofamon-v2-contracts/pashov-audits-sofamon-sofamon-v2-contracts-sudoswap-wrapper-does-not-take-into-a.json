@@ -1,0 +1,22 @@
+{
+  "title": "Sudoswap wrapper does not take into account refunds",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  Impact: Medium  Likelihood: Medium  ## Description  The SofamonExchange contract includes wrapper functions like `fillAskOrder` and `fulfillMultipleOrders` to interact with Sudoswap. These functions facilitate purchasing NFTs by calling the `swapTokenForSpecificNFTs` function in the Sudoswap pool contract. However, the current implementation does not account for the possibility that `swapTokenForSpecificNFTs` might return a refund if more funds than necessary were sent. This omission will lead to loss of funds for the caller.  Reference: [link](https://github.com/sudoswap/lssvm2/b",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

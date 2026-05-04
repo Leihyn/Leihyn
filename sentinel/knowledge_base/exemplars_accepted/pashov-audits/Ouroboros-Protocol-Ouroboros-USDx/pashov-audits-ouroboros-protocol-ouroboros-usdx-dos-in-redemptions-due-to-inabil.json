@@ -1,0 +1,22 @@
+{
+  "title": "DoS in redemptions due to inability to consume reescrowed stables",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  On collateral redemptions, it is possible that not all the `_stableAmount` is consumed if the remaining debt of the position used for redemption is lower than the minimum net debt and, when the cooldown redemption requirement is in place, the remaining stables are re-escrowed.  ```solidity File: PositionManager.sol  288:        if ( 289:            ((newDebt - GAS_COMPENSATION) < MIN_NET_DEBT) || 290:            ((newNICR != _partialRedemptionHintNICR) && !firstInLine) 291:        ) { 292:            singleRedemption.canc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

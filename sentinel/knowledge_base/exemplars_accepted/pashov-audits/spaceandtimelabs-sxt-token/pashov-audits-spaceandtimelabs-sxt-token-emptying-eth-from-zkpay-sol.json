@@ -1,0 +1,21 @@
+{
+  "title": "Emptying ETH from `ZKPay.sol`",
+  "platform": "pashov-audits",
+  "program": "spaceandtimelabs-sxt-token",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  An attacker can call `ZKPay::query()`, which is supposed to be used with ERC20 tokens, but pass `NATIVE_ADDRESS` and specify a large amount of ETH. Then, `handleQueryPayment` will assume that this amount came from `msg.value`, so it will think the sender actually sent that ETH to the contract. ```solidity     function query(address asset, uint248 amount, QueryLogic.QueryRequest calldata queryRequest)         external         returns (bytes32 queryHash)     {         return _query(asset, amount, queryRequest);     }      funct",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SXT-security-review_2025-03-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

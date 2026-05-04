@@ -1,0 +1,22 @@
+{
+  "title": "Early market can be DoSed by over-minting debt",
+  "platform": "pashov-audits",
+  "program": "covenant-labs-covenant-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When the market is still in its early stages with a low `baseTokenSupply`, an attacker can mint a large proportion of zTokens close to the max debt limit. This makes the market highly sensitive to price changes, once the price drops, the market becomes undercollateralized, subsequent mint operations revert, and honest users are effectively DoS\u2019ed from adding base liquidity and bootstrapping the market.  ```solidity     function mint(         MintParams calldata mintParams,         address,         uint256 base",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Covenant-security-review_2025-08-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

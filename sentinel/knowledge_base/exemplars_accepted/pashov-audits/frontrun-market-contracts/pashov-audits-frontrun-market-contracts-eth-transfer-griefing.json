@@ -1,0 +1,21 @@
+{
+  "title": "ETH transfer griefing",
+  "platform": "pashov-audits",
+  "program": "frontrun-market-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `forceCancelOrder()` uses a direct address call to send ETH to buyer and seller on refund in ETH.  ```     if (offer.exToken == address(0)) {       // refund ETH       if (buyerRefundValue > 0 && buyer != address(0)) {         (bool success,) = buyer.call{value: buyerRefundValue}('');         require(success, 'Transfer Funds to Seller Fail');       }       if (sellerRefundValue > 0 && seller != address(0)) {         (bool success,) = seller.call{value: sellerRefundValue}('');         require(success, 'Transfer Funds to Seller",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/FrontrunMarket-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

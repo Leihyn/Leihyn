@@ -1,0 +1,22 @@
+{
+  "title": "Oracles are vulnerable to flash loan attack vectors",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** High  **Likelihood:** Law  ## Description  Both of the oracles directly fetch the current price of LP tokens in the pool. However, this is not safe because price can be manipulated for a very short time-range by multiple attack vectors. One of the biggest threats is flashloan attack vectors. When the pool is imbalanced in terms of liquidity, oracles will return an incorrect value for LP price.  The root cause of this situation is the direct usage of Pool state in oracle price calculation. Implementation like TWAP is crucial in this kind of scenarios. Mo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Fixed participants will be incorrectly penalized during adminSettleDebt timelock period",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, fixed participants will incur losses  **Likelihood:** Medium, occurs when admin settles debt  ## Description  When `initiatingAdminSettleDebt()` is called, the settle debt process is initialized. That will start the timelock of 3 days (based on `adminSettleDebtLockPeriod`), before the admin can call `adminSettleDebt()` and transfer the stETH balance to `AdminLidoAdapter`. I believe the timelock is designed to allow fixed/variable participants to withdraw before `adminSettleDebt()`, when the `settleDebtAmount` set during initialization does not properly compensate",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

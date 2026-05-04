@@ -1,0 +1,21 @@
+{
+  "title": "Permanent lock due to missing unlock mechanism for options",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The protocol has a critical issue where liquidity can be permanently locked in the pool when options are not exercised within the specified window(`exerciseWindowDuration`) or have 0 `PNL`(at a loss). Here's the problematic flow:  ```solidity // In PositionInteractionFacet.sol function _lockLiquidity(Position memory pos) internal {     PoolStorage.Layout storage strg = PoolStorage.layout();     if (pos.opType == OptionType.CALL)         strg.ledger.state.lockedToken[pos.uAsset] += pos.sizeUa;     else if (pos.opType == Option",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

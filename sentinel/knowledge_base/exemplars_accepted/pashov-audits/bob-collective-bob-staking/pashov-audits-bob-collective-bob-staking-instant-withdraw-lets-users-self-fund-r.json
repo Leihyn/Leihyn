@@ -1,0 +1,23 @@
+{
+  "title": "Instant withdraw lets users self-fund residuals with their own penalty",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-staking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a user calls `BobStaking::instantWithdraw`, the function first calls `_claimRewards(msg.sender, false)`. If `rewardTokenBalance` is insufficient, `_claimRewards` credits the shortfall to `residualRewardBalance[msg.sender]` (and may pay `rewardsToPay == 0`). Immediately after, `instantWithdraw` computes the penalty and adds it to `rewardTokenBalance`:  ```solidity     function instantWithdraw(address _receiver) external nonReentrant {         // ...          _claimRewards(_stakeMsgSender(), false); #AU",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Staking-security-review_2025-10-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "DoS on `mint()` and `burn()` due to overestimation of available liquidity",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "amm"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the Burve contract, `compoundV3Ranges()` is executed when `mint()` or `burn()` are called. This function performs the following actions:  1. Collects fees from the UniswapV3 pool for all ranges. 2. Calculates the total liquidity that can be minted with the available balance of token0 and token1. 3. Calculates the liquidity that can be minted for each range, according to their weight distribution. 4. Mints the respective liquidity for each range.  Step 2) is performed by the `collectAndCalcCompound()` function and these a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-03-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

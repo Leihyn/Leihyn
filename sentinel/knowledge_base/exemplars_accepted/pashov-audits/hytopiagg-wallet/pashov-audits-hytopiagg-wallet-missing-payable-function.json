@@ -1,0 +1,19 @@
+{
+  "title": "Missing `payable` function",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-wallet",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, wallet will not receive native tokens but expected  **Likelihood:** High, because the use of msg.value and sending native token is a frequent operation  ## Description  `_call()` could send native token via `.call{ value: _callRequest.value }`, however, none of the contracts can receive native token, including Main.sol, PreauthorizedCalls.sol, SessionCalls.sol, Calls.sol, Controllers.sol.  ```solidity File: contracts\\modules\\Calls\\Calls.sol 80:     function _call(CallsStructs.CallRequest calldata _callRequest) internal returns (bytes memory) { 81:         (bool",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYTOPIAWallet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

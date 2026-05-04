@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect conversion from USD to asset during redemption",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  In the deposit() function, the conversion from asset amount to USD value is performed by multiplying the spot rate: `        uint256 usdValue = escrow.getRate(details.spotMarket).mulWadDown(amount * scaler); ` in the redeem() function, the conversion from USD back to asset is incorrectly also performed via multiplication: `amount = escrow.getRate(details.spotMarket).mulWadDown(usdAmount); `  This causes the user to receive more tokens than they originally deposited, leading to value inflation. For example, if the rate is 2 *",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

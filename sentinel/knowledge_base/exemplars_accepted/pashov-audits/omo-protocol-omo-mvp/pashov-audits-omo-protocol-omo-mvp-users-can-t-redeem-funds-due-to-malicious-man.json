@@ -1,0 +1,21 @@
+{
+  "title": "Users can't redeem funds due to malicious manipulation of `_totalAssets`",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The function `OmoVault.sol#topOff()` is only used by agents. It transfers the entire asset balance from the agent to the `record.receiver` address  ```solidity File: OmoVault.sol  449:         asset.safeTransferFrom(msg.sender, address(this), agentBalance); 450:         asset.safeTransfer(record.receiver, agentBalance);  ```  Regardless of the fact that we need to trust the agent will set his balance to the exact value. Malicious users can manipulate the value of `agentBalance` by transferring assets directly to the agent add",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

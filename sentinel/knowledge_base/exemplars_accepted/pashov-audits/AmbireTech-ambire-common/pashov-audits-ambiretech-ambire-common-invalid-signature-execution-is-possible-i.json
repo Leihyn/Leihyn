@@ -1,0 +1,21 @@
+{
+  "title": "Invalid signature execution is possible if `address(0)` has non-zero privileges",
+  "platform": "pashov-audits",
+  "program": "AmbireTech-ambire-common",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as anyone will be able to steal all funds from a given wallet  **Likelihood:** Low, as it requires `address(0)` to have non-zero privileges  ## Description  The problem is similar to [this](https://github.com/code-423n4/2021-10-ambire-findings/issues/13) issue from a previous audit. The code in `SignatureValidator::recoverAddrImpl` will return `address(0)` if it receives a valid `Schnorr` signature but not one that is for the given `hash` (transactions hash). Now the result will be checked like this:  ```solidity signerKey = SignatureValidator.recoverAddrImpl(has",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Ambire-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

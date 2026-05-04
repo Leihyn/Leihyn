@@ -1,0 +1,21 @@
+{
+  "title": "Fee avoidance possible by uncollected fees in pool accounting",
+  "platform": "pashov-audits",
+  "program": "Telos-Consilium-ouroboros-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "invariant-violation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Both `YuzuILP` and `StakedYuzuUSD` contracts have an accounting issue where fees collected during withdrawals and redemptions are not properly separated from the pool's available assets. This creates an opportunity to minimize fees as the remaining shares benefit from the fees collected by previous redemptions.  - In `YuzuILP._withdraw()`, when a user redeems shares, the fee is deducted from the assets they receive, but the fee amount remains in the `poolSize`.  - Similarly, in `StakedYuzuUSD._initiateRedeem()`,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YuzuUSD-security-review_2025-08-28.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

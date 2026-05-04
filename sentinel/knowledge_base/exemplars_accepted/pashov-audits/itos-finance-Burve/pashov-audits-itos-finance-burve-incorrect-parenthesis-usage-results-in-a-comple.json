@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect parenthesis usage results in a completely wrong calculation",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Upon calling `Edge.calcLowerImplied()` when the price is below the narrow range low tick, we have the following piece of code:  ```solidity uint256 xyX192 = (x << (128 / y)) << 64; ```  It aims to compute the `x/y` ratio in 192-bit precision by first moving `x` to 128-bit precision, dividing by `y` and then going to 192-bit precision when shifting left by 64 bits. However, the formula has a critical issue as `x` is shifted left by `128 / y` bits due to the parenthesis usage, this will round down to 0 in pretty much every case",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-01-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

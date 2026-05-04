@@ -1,0 +1,19 @@
+{
+  "title": "Broken initial call functionality",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Though the `ClaveImplementation.initialize` function can proceed an initial call with arbitrary `value`, the `payable` modifier is missed both in the `initialize` and in the `AccountFactory.deployAccount` functions. The `deployAccount` function also initializes an account with hardcoded `0` value. This way the initial call functionality is implemented only partially.  ```solidity     function deployAccount(         bytes32 salt,         bytes memory initializer >>  ) external returns (address accountAddress) { <...>",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-11-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

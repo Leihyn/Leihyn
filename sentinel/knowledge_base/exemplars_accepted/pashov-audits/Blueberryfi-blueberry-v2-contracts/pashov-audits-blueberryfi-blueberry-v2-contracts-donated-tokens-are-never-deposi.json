@@ -1,0 +1,21 @@
+{
+  "title": "Donated tokens are never deposited into vaults",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `HyperEvmVault` contract has to use the asset balances of the `VaultEscrow`s in the share's price calculation to handle tokens being received from the system contract. In normal the balances should not exceed the `$.requestSum.assets` value. The problem is that in case of donation to the vaults, the excess balance increases the shares price but can not be distributed, i.e. it is locked on the vaults. This way, users can not redeem all shares. Also, the excess amount increases the management fee. Assume an attacker depos",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "`setTVLLimits` incorrectly assigns `_newMaxTotalDeposits` to `maxPerDeposit` instead of `maxTotalDeposits`.",
+  "platform": "pashov-audits",
+  "program": "ebisufinance-ebisu-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, Because the cap raiser cannot update `maxTotalDeposits` and will wrongly update `maxPerDeposit` with `_newMaxTotalDeposits`.  **Likelihood:** Medium, Because it will happened every time cap raiser want to update TVL limits.  ## Description  Current implementation of `setTVLLimits` is incorrectly assigns `_newMaxTotalDeposits` to `maxPerDeposit` instead of `maxTotalDeposits`.  ```solidity     function setTVLLimits(uint256 _newMaxPerDeposit, uint256 _newMaxTotalDeposits) external onlyCapRaiser() {         require(_newMaxPerDeposit<=_newMaxTotalDeposits, \"newMaxPe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ebisu-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "`TRANSFER_FROM_WITH_PERMIT` command is vulnerable to DOS via frontrunning",
+  "platform": "pashov-audits",
+  "program": "Spectra-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, because it allows for denial of service (DOS) attacks which can prevent the execution of legitimate transactions.  **Likelihood:** Medium, given that the exploit requires specific conditions to be met, such as observing and front-running transactions in the mempool.  ## Description  The `TRANSFER_FROM_WITH_PERMIT` command is intended to allow off-chain signed approvals to be used on-chain, saving gas and improving user experience.  However, including this command in a call to `execute()` will make the transaction susceptible to DOS via frontrunning. An attacker",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Spectra-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

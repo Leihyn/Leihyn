@@ -1,0 +1,19 @@
+{
+  "title": "Malicious users can mint the double Guaranteed Mints per RING",
+  "platform": "pashov-audits",
+  "program": "onchain-heroes-och-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  `HeroERC721A.sol` is an NFT contract, It guarantees the first phase **OG Phase** the whitelisted addresses will get:  - 1 Free Mint - 2 Guaranteed Mints per **RING** (RING is NFT, so they take a Snapshot for holders)  `HeroERC721A.sol#ogMint()` function is how users mint tokens for OG whitelisted addresses. Users who are eligible for the two types of OG mint have the flexibility to call `ogMint()` multiple times, So they can take the free mint and the guaranteed mint in two different transactions.  Malicious users can take th",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/OnchainHeroes-security-review_2025-01-13.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

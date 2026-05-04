@@ -1,0 +1,19 @@
+{
+  "title": "Missing user input validation can lead to stuck funds",
+  "platform": "pashov-audits",
+  "program": "baton-finance-baton-launchpad",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as all mint fees can be stuck forever  **Likelihood:** Medium, as users can easily misconfigure inputs  ## Description  There are multiple insufficiencies in the input validation of the arguments of the `initialize` method in `Nft`:  1. The sum of the `supply` of all `categories_` can be less than the `maxMintSupply_` - this would lead to the mint never completing, which results in all of the ETH in the `Nft` contract coming from mints so far being stuck in it forever 2. The `duration` of the `vestingParams_` should have a lower and upper bound as for example a t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BatonLaunchpad-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

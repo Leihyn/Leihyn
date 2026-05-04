@@ -1,0 +1,21 @@
+{
+  "title": "Users can't claim all rewards after reward token removal",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, there are always users who can't claim reward  **Likelihood:** Medium, token removal is not a usual operation but is possible  ## Description  There is a method `removeRewardToken()` which leaves only accrued but not yet claimed rewards in reserve, transferring the other part to governance. The issue is that the method doesn't take into consideration pending but not yet accrued rewards.  Relevant code block:  ```solidity     function removeRewardToken(address _rewardToken) external onlyRole(GOVERNANCE) {         ...         // Determine how much of the removed to",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect `IPETHNFTVault::borrow` assumption breaks the protocol",
+  "platform": "pashov-audits",
+  "program": "0xMedici-protecvault",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as the protocol will have to be redeployed  **Likelihood:** High, as it it certain to happen  ## Description  The `depositNft` method in `Capsule` calls `IPETHNFTVault::borrow` with a `_borrowAmount` argument. Later, the code actually tries using the `_borrowAmount` value as the amount of `PETH` to provide as liquidity to a Curve pool. The problem is that the `borrow` method of those vaults always takes a fee, so `Capsule` will have received less than `_borrowAmount` of `PETH`. Quoted from `IPETHNFTVault::borrow`'s NatSpec:  > /// @param \\_amount The amount of",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NFTCapsule-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

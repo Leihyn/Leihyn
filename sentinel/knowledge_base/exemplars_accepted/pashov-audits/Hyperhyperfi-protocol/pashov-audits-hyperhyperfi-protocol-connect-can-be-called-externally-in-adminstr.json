@@ -1,0 +1,19 @@
+{
+  "title": "`connect()` can be called externally in `AdminStrategy` causing DoS",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `connect()` function in the `AdminStrategy` contract is externally callable and lacks access control, which allows any address to call it before the official initialization via `AdminOperationalTreasury`. Once called, it sets the `setUp.treasury` field, and any subsequent legitimate call (including the one from `init()`) will revert due to the `TreasuryAlreadySet()` check.  ```solidity     function connect() external override {         StrategyStorage.SetUp storage setUp = StrategyStorage.layout().setUp;         IOper",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

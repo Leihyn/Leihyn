@@ -1,0 +1,19 @@
+{
+  "title": "Broken balance update if a slash event happens",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When `_transferToSlashStore()` is called the slash ETH amount is transferred from the native node contract's balance but the code doesn't decrease the value of the `creditedNodeETH` so its value would be higher than it should be and `_startSnapshot()` would revert because of underflow:  ```solidity         // Calculate unattributed node balance         uint256 nodeBalanceWei = node.nodeAddress.balance - node.creditedNodeETH; ```  ## Recommendations  Update the value of the `creditedNodeETH` in `_transferToSlashStore()`.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

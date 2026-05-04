@@ -1,0 +1,22 @@
+{
+  "title": "Liquidity pool interest accrual can be manipulated",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  On each call to the `borrow` method of the `LiquidityPool` contract, the subsequent `_fixAccruedInterest` method is invoked which updates the `totalBorrowsSnapshotTimestamp` to the current `block.timestamp`. In case of frequent calls, this causes the `ownershipTime` in the `totalBorrows` method to have a low value (worst case: 1) which in turn leads to a precision loss in the final `totalBorrows` / interest snapshot computation. Therefore, the resulting pool interest is understated.  An adversary could abuse the above beh",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "StakingManager `getExchangeRatio` does not handle first mint",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description `getExchangeRatio()` is supposed to be used for calculating exchange rate between HYPE and kHYPE. It checks kHYPESupply to be bigger than zero: ```solidity     function getExchangeRatio() public view returns (uint256) {         uint256 totalSlashing = validatorManager.totalSlashing();         uint256 totalRewards = validatorManager.totalRewards();         uint256 kHYPESupply = kHYPE.totalSupply();  @>      require(kHYPESupply > 0, \"No kHYPE supply\");          // Calculate total HYPE: totalStaked + totalRewards - totalClaim",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Inconsistent price impact calculations",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "auction"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `TradingCallbacksLib::getDynamicTradePriceImpact` helps in calculating the final price impact before registering the trade. It is calculated before the `OstiumTradingCallbacks::registerTrade()` call in `OstiumTradingCallbacks::openTradeMarketCallback()` and`OstiumTradingCallbacks::executeAutomationOpenOrderCallback()`.  However, the collateral value used to calculate the `priceAfterImpact` and `priceImpactP` is before fee deductions, but the dynamic spread is updated using the post-fee collateral:  ```solid",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Ignoring withdrawal limits during accounts merging",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `CollateralPool.merge` merges collateral pool `child` into the collateral pool `parent` ignoring withdrawal limits of the `child` pool.  ```solidity     function merge(Data storage parent, Data storage child) internal { <...>             // transfer funds from the child collateral pool to the parent             {                 address[] storage collaterals = GlobalCollateralConfiguration.load().collaterals;                  for (uint256 i = 0; i < collaterals.length; i++) {                     address collateral = col",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-April.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Stakers may fail to claim all incentives",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros_Staking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking",
+    "amm"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In UniswapV3Staker, the owner can create one incentive. There is one kind of incentive that we have a fixed tick range position. LP holders can earn some incentives on condition that their position's range should match this fixed range. According to the readme, the common use is `full-range positions(-887220 - 887220)`.  In Uniswap v3, most traders will not choose the full range liquidity. Because full range liquidity will have very low liquidity efficiency.  As one LP holder, the possible profit with this v3 st",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2025-06-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "`GetTradeSkewPriceImpactP` function ignores trade contract version",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `PriceImpactUtils.getTradeSkewPriceImpactP` does not take into account a trade contract version. This causes applying the same skew price impact to all contract versions. So independent from whether the skew price impact was applied or not when the trade was opened, a half of the price impact will be applied during closing.  ```solidity     function getTradeSkewPriceImpactP(         uint8 _collateralIndex,         uint16 _pairIndex,         bool _long,         uint256 _tradeOpenInterestUsd, // 1e18 USD         bool _ope",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

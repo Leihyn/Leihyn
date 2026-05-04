@@ -1,0 +1,21 @@
+{
+  "title": "Missing negation in if clause",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When setting weights via the `setWeightBands` function, certain restrictions need to be followed. The weight has to be lower than the PRECISION value, which is 1e18.  This is because the sum of weights must add up to 1e18.  This check is incorrectly applied in the `setWeightBands` function.  ```solidity if ((lower_[t] <= PRECISION && upper_[t] <= PRECISION)) {                 revert Pool__BandsOutOfBounds();             } ```  As seen above, the contract will revert if both the weights are below PRECISION. Thus the function",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

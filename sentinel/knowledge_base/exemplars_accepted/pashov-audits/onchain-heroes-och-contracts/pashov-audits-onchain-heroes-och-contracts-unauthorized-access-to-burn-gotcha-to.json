@@ -1,0 +1,19 @@
+{
+  "title": "Unauthorized access to burn Gotcha token",
+  "platform": "pashov-audits",
+  "program": "onchain-heroes-och-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Two functions are affected here: `burnFrom` and `brun`  - `burnFrom`: `GachaToken::burnFrom` has four inputs, `address by, address from, uint256 id, uint256 amount`, here is a description for `address by`:  ```         // - If `by` is not the zero address, it must be either `from`,         //   or approved to manage the tokens of `from`. ```  An attacker could set `by` as zero or any approved address and burn tokens.  - `burn`: this function calls `_burn` function, in `_burn`:  ```solidity     function _burn(address from, uin",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/OnchainHeroes-security-review_2025-01-13.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

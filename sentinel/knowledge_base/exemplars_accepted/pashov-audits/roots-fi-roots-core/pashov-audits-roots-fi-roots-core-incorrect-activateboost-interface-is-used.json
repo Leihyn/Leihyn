@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect `activateBoost` interface is used",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In Staker contract, we will activate our queued boost BGT. The interface we use is as below:  ```solidity     function activateBoost(address validator) external; ```  ```solidity     function _tryToBoost() internal {         if (queued > 0 && blockDelta > 8191) {             rewardCache.activateBoost(validator);         }     } ```  When we check the BGT's implementation, we will find out that the correct interface should be like as below:  ```solidity     function activateBoost(address user, bytes calldata pubkey) external",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

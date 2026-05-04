@@ -1,0 +1,22 @@
+{
+  "title": "`_swap()` is vulnerable to sandwich attacks",
+  "platform": "pashov-audits",
+  "program": "sleekcore-gacha",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Anyone can buy a ticket from a specified pool, a certain payment token will be used to swap for meme tokens. The swapping process is implemented as below:  ```solidity     function _swap(         address token,         uint256 cost     ) private returns (uint256 actualTokens) {         Storage storage $ = _getOwnStorage();         IUniswapV2Router01 uni = IUniswapV2Router01($.uniswapRouter);         IUniswapV2Factory factory = IUniswapV2Factory($.uniswapFactory);          address pair = factory.getPair($.paymentToken, token);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gacha-security-review_2025-01-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

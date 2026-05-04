@@ -1,0 +1,22 @@
+{
+  "title": "Unhandled exceptions in a function",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `ApiologyAuctionHouse::_createAuctionWithRandomNumber` function, there is a try/catch block that only catches `Error(string memory)`.  ```solidity File: ApiologyDAOAuctionHouse.sol 402:         } else { 403:             try apiologyToken.mint() returns (uint256 mintedapDAOId) { 404:                 apdaoId = mintedapDAOId; 405:                 nftOwners[apdaoId] = address(0); 406:             } catch Error(string memory) { 407:                 _pause(); 408:                 return; 409:             } 410:         }",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

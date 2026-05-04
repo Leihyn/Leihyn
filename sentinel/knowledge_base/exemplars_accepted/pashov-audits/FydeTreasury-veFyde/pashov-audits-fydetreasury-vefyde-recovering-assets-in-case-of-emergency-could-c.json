@@ -1,0 +1,22 @@
+{
+  "title": "Recovering assets in case of emergency could cause an error in accounting",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-veFyde",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "invariant-violation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `recoverAsset` function is used to withdraw any ERC20 sent to the contract mistakenly. However, this function accepts any address. if the admin passes **TRSY** address, they can extract **TRSY** from the contract which is not supposed to happen.  Furthermore, let's say there is an emergency and the admin wants **TRSY**, `cumulativeFees` will hold the wrong value as the amount withdrawn is not deducted from it. Thus, causing an accounting error in the overall protocol.  ## Recommendations  Update `cumulativeFees` on `recoverAss",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

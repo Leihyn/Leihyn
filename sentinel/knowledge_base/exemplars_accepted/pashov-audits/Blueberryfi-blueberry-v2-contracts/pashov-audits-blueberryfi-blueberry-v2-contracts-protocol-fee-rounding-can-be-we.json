@@ -1,0 +1,21 @@
+{
+  "title": "Protocol fee rounding can be weaponized for minimal earnings",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In `_previewFeeShares` and `_takeFee`, we can see that after calculating the fee assets that the protocol is entitled to, a conversion of the assets is made to fees, via the `_convertToShares` functions. Observe the specified, albeit unused rounding direction.  ```solidity     function _previewFeeShares(V1Storage storage $, uint256 tvl_) internal view returns (uint256) {         uint256 expectedFee = _calculateFee($, tvl_); @>1     return _convertToShares(expectedFee, Math.Rounding.Floor);     }      /**      * @notice Takes t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

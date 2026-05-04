@@ -1,0 +1,19 @@
+{
+  "title": "Token-gated airdrops don't work with ERC20 DAOs",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The function to `claim()` tokens in the `Claim` contract first checks that the `daoToken` supports an interface via `supportsInterface()`:  ```solidity     if (claimSettingsMemory.permission == CLAIM_PERMISSION.TokenGated) { @>      if (IERC20Extended(claimSettingsMemory.daoToken).supportsInterface(0xd9b67a26)) {             if (                 IERC20Extended(claimSettingsMemory.daoToken).balanceOf(msg.sender, _tokenId)                     < claimSettingsMemory.tokenGatingValue             ) revert InsufficientBalance();",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

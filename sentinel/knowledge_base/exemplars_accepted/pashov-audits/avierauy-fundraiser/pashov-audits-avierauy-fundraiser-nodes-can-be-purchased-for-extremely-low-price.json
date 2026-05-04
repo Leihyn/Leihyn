@@ -1,0 +1,19 @@
+{
+  "title": "Nodes can be purchased for extremely low price",
+  "platform": "pashov-audits",
+  "program": "avierauy-fundraiser",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The code snippet below is from the `deploy-multichain.js` file. As we can see, we use `usdcBasePrice` (parsed mwei value) during deployment instead of the `finalUSDCBasePrice` (parsed ether value) variable. USDC has 18 decimals on BSC mainnet while on other chains it is 6. Since the price is deployed with 6 decimals instead of 18, buying nodes would be extremely cheap (close to zero) on BSC mainnet, causing a loss to the protocol during the launch.  ```solidity     if (networkName === \"bscMainnet\") {       finalUSDCBasePrice =",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fundraiser-security-review_2024-11-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Raw request chain to external service",
+  "platform": "pashov-audits",
+  "program": "initia-labs-widget",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Vulnerable code:  - router-api/src/app/transfer/transfer.controller.ts. - router-api/src/app/transfer/transfer.service.ts. - router-api/src/app/transfer/external/skip.service.ts.  The code defines two open proxy-style endpoints (/api/rest/* and /api/rpc/*) that forward the entire raw HTTP Request object, unfiltered, through the application layers and finally into an outbound axios.request(...) call targeting the Skip API (SKIP_GO_API_URL).  There is no:  - Input validation. - Allowed path filtering. - Header or method res",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Initia-security-review_2025-06-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

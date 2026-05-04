@@ -1,0 +1,21 @@
+{
+  "title": "A \"team\" can block another \"team\" from receiving funds",
+  "platform": "pashov-audits",
+  "program": "Sageterminal-Sage-Contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Token deployments using the `ERC314Factory` accrue a fee for two teams:  1. `evFeeCollector` 2. `dzhvFeeCollector`  ```solidity     function claimFees() external {         uint256 totalAccruedAmount = accruedFeeAmount;         if (totalAccruedAmount > address(this).balance) {             totalAccruedAmount = address(this).balance;         }          uint256 evTeamShare = (totalAccruedAmount * split) / 10000;         uint256 dzhvTeamShare = totalAccruedAmount - evTeamShare;          accruedFeeAmount = 0;          (bool successE",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/EVTerminal-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

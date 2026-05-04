@@ -1,0 +1,22 @@
+{
+  "title": "`SetRewardsFeeBps` fails to update reward calculations",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `Staker::setRewardsFeeBps` function updates the fee percentage applied to rewards earned by the `Staker` contract. However, it does not call `_updateRewardIntegral` before modifying the fee. `_updateRewardIntegral` is responsible for calculating and integrating the rewards and fees into the system. Without invoking `_updateRewardIntegral`, all pending rewards are calculated using the new fee rate, potentially leading to inaccurate rewards distribution.  Code analysis:  1. The `setRewardsFeeBps` function is defined as",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

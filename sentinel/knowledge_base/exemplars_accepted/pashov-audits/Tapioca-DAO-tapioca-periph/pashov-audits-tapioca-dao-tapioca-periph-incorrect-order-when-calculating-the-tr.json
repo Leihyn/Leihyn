@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect order when calculating the transferred amount to Stargate makes the `participate()` function unusable",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  Impact: Medium, as the functionality will always revert  Likelihood: Medium, as it only occurs when calling `participate`  ## Description  The participate() function in Stargate helper contract will not work.  The cause of this, is the way on how you Tapioca is calculating the amount transferred to Stargate to refund the dust amounts that Stargate returns:  ``` uint256 transferred = balanceAfter - balanceBefore; ```  Let's put an example without decimals for simplicity.  - I, as the msg.sender, transfer 50 tokens: `balanceBefore = 50`  - Those 50 tokens are then sent to the pool.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

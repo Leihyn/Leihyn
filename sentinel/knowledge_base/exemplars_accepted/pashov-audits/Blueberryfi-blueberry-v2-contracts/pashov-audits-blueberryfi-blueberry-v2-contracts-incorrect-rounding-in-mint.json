@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect rounding in `mint()`",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description In the `HyperEvmVault` contract, the `mint()` function calculates the number of assets by rounding down:  ```solidity     function mint(uint256 shares, address receiver) public override(ERC4626Upgradeable, IERC4626) nonReentrant returns (uint256 assets) {         V1Storage storage $ = _getV1Storage();          if (totalSupply() == 0) {             // If the vault is empty then we need to initialize last fee collection timestamp             assets = shares;             $.lastFeeCollectionTimestamp = uint64(block.timestamp);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "F-12 WebSocket Topics walks Azul-removed receipts",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Medium",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "fixed-in-pr",
+  "surface_tags": [
+    "l2-client"
+  ],
+  "bug_class": "spec-divergence",
+  "mental_operation": "spec_skeptic",
+  "language": "rust",
+  "file_paths": [],
+  "summary": "Topics filter walks metadata.receipts which was removed in Azul. Mechanically valid silent-failure.",
+  "key_lesson": "Issue #2265 documented removal as intentional + experimental + with public migration path. Mechanical airtightness != fileability when removal is documented with replacement.",
+  "contest_url": null,
+  "submission_url": null,
+  "captured_at": "2026-05-04T03:26:27"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "`MAX_DELEGATES` limit can be bypassed",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `delegate()` allows votes to be delegated from one ID to another. Each owner of an ID has a maximum limit of 128 delegates (`MAX_DELEGATES = 128`). However, this limit can be bypassed because the `require` statement does not validate the newly acquired delegates. This issue can be observed in `_moveAllDelegates()`.  Moreover, if the number of delegates increases significantly, it could trigger DOS. This happens because iterating through the loop may reach the block's gas limit, making it impossible to transfer the NFT or",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-03-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

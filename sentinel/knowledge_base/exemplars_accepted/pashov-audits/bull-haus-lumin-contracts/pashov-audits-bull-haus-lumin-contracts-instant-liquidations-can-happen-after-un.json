@@ -1,0 +1,21 @@
+{
+  "title": "Instant liquidations can happen after unpausing the protocol",
+  "platform": "pashov-audits",
+  "program": "bull-haus-lumin-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as users can be instantly liquidated and lose value  **Likelihood:** Low, as it requires a long pause from the protocol admin  ## Description  The `LoanManagerDelegator` contract through which all protocol interactions happen is pausable by the Lumin admin. In the case that the protocol is paused for a long time, borrowers' collateral assets can fall in price and their loans might become liquidateable without a way for them to repay them or to add collateral, or even their loan term can pass. This means when the protocol is unpaused the loan can get instantly liq",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Lumin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

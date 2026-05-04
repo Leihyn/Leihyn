@@ -1,0 +1,22 @@
+{
+  "title": "Accrued fees from the `buy()` or `sell()` functions could be lost",
+  "platform": "pashov-audits",
+  "program": "Sageterminal-Sage-Contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `feeCollector` can renounce fees using the `ERC314Implementation::setFeeCollector` function, setting the variable `_feeCollector==address(0)`:  ```solidity File: EvFactoryProxyOptFee.sol 328:     function setFeeCollector(address _newFeeCollector) external onlyOwner { 329:         _feeCollector = _newFeeCollector; 330:         if (_newFeeCollector == address(0)) _opt.feeCollectorRenounced = true; 331:         if (_newFeeCollector != address(0)) _opt.feeCollectorRenounced = false; 332:     } ```  The issue arises because fee",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/EVTerminal-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

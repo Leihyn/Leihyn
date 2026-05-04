@@ -1,0 +1,21 @@
+{
+  "title": "Deposits might fail if staking module account is not activated",
+  "platform": "pashov-audits",
+  "program": "ValantisLabs-sthype-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  On `deposit()`, the staking module sends HYPE to HyperCore's spot balance and then moves it to the staking balance. However, if the staking module account has not been activated in HyperCore (i.e., it has never received funds in the L1), then the deposit will fail silently.  As a result:  - The deposited HYPE will disappear from the total balance, as it is not credited to the spot balance until the account is activated. This will cause the total supply to be lower than expected, similar to the occurrence of a slash",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/stHYPE-security-review_2025-10-13.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

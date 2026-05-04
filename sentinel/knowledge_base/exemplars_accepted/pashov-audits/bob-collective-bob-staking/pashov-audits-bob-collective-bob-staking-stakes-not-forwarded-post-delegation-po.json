@@ -1,0 +1,22 @@
+{
+  "title": "Stakes not forwarded post-delegation, positions unwithdrawable",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-staking",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  In `BobStaking`, once a user delegates governance via `alterGovernanceDelegatee`, their existing stake is moved to a `DelegationSurrogate`. However, later calls to `stake(_amount, receiver, lockPeriod)` **keep new tokens in the staking contract**:  ```solidity IERC20(_stakingToken).safeTransferFrom(_stakeMsgSender(), address(this), _amount); stakers[receiver].amountStaked += _amount; ```  No forwarding occurs when `stakers[receiver].governanceDelegatee != address(0)`. Exit paths then **assume all** `amountStaked`",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Staking-security-review_2025-10-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

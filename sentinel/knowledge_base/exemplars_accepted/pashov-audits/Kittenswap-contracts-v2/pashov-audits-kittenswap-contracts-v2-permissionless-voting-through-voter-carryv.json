@@ -1,0 +1,19 @@
+{
+  "title": "Permissionless voting through `Voter::carryVoteForward()`",
+  "platform": "pashov-audits",
+  "program": "Kittenswap-contracts-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "access-control",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `carryVoteForward` function in `Voter.sol` lacks essential access controls, allowing any user to manipulate votes for any NFT without authorization from the owner of it.  ```solidity     /// @notice Carry forward votes from past period     function carryVoteForward(uint256 _tokenId, uint256 _fromPeriod) public {         IVoter.Period storage ps = period[_fromPeriod];         uint256 nextPeriod = getCurrentPeriod() + 1; ```  The result of this vulnerability is that anyone can call `carryVoteForward()` for any",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-07-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

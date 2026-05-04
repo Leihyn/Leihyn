@@ -1,0 +1,21 @@
+{
+  "title": "Unintended transfer of creator fees to zero address",
+  "platform": "pashov-audits",
+  "program": "Project-Aegis-xyz-tokenFactory",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  During the creation of a `tokenPool` a user can specify the `creatorFeeRecipient` (TokenFactory#L266):  ```solidity File: TokenFactory.sol 262:      */ 263:     function initializeTokenAndBuy( 264:         string calldata name, 265:         string calldata symbol, 266:         address creatorFeeRecipient, 267:         uint256 initialBuyAmount 268:     ) external payable returns (address newTokenAddress) { 269:         newTokenAddress = initializeToken(name, symbol, creatorFeeRecipient); ... ... ```  The issue arises when",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Aburra-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

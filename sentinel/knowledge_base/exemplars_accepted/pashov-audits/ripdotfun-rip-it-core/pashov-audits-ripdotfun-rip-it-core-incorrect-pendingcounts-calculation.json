@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect `pendingCounts` calculation",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In SpinLottery contract, users can spin to win one prize NFT. The spin result is based on the randomness from Chainlink VRF. The spin result is asynchronous. When users trigger `spin` function, we will calculate the `pendingCounts`. Because there are some previous `spin` transactions, these transactions' results are unknown, and these `spin` transactions may win and claim some prize NFTs from the contract. So when we trigger `spin`, we need to check current prize in the pool and also the potential claimed prize.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

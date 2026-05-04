@@ -1,0 +1,21 @@
+{
+  "title": "Input is insufficiently validated in multiple methods",
+  "platform": "pashov-audits",
+  "program": "tenet-org-veTenet-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can result of loss of accrued yield for validators or DoS of the protocol  **Likelihood:** Low, as it requires configuration error by `Governance` or `TLSDFactory` or them being malicious or compromised  ## Description  The input validation of multiple methods throughout the codebase is insufficient:  - In `RewardDistributor::setScanPeriod` if the `_newScanPeriod` argument is too big of a number it can result in a DoS in the `_distribute` method, and if it is too small it can result in lost unclaimed yield for validators - In `GaugeProxy::setValidatorFee` i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/veTenet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

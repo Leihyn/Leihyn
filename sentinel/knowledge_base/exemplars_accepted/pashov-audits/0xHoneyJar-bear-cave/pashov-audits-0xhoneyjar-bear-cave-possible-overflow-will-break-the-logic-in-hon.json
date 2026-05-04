@@ -1,0 +1,19 @@
+{
+  "title": "Possible overflow will break the logic in `HoneyBox`",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "arithmetic",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as bundles storage variables will be overwritten  **Likelihood:** Low, as it is not expected to add more than 255 bundles  ## Description  In `HoneyBox::addBundle` we have the following code:  ```solidity         uint8 bundleId = uint8(slumberPartyList.length); // Will fail if we have >255 bundles ```  The comment is wrong, as it assumes that the cast is safe and will revert if `slumberPartyList.length > 255` but this is not the case as it will just overflow. This will be a big problem as then already existing `bundleId` values will be overwritten in the `slumber",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

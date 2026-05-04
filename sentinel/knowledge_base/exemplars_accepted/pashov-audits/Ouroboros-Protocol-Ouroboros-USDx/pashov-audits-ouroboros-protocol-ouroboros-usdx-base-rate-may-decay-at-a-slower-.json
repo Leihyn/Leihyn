@@ -1,0 +1,19 @@
+{
+  "title": "Base rate may decay at a slower rate than expected",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The base rate is used to calculate fees for redemptions and new issuances of debt, and its value decays over time and increases based on redemption volume.  On redemption, the decay on the base rate is calculated based on the number of minutes passed since the last fee operation. What is important to note is that the number of minutes passed is rounded down to the nearest minute.  ```solidity File: BaseRateAbstract.sol 68:    function _minutesPassedSinceLastFeeOp() internal view returns (uint) { 69:        return (block.t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

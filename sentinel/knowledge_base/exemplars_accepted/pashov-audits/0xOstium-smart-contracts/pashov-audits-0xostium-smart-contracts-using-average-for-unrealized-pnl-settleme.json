@@ -1,0 +1,21 @@
+{
+  "title": "Using average for unrealized PnL settlement gives opportunity to extract value",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When an epoch ends, code settles the unrealized profit and loss in the vault. It uses the average of the snapshot of the unrealized PnL during the epoch: ```solidity         int256 newEpochOpenPnl =             nextEpochValues.length >= requestsCount ? average(nextEpochValues) : currentEpochPositiveOpenPnl.toInt256();          uint256 finalNewEpochPositiveOpenPnl = vault.updateAccPnlPerTokenUsed(             currentEpochPositiveOpenPnl, newEpochOpenPnl > 0 ? uint256(newEpochOpenPnl) : 0         ); ``` The issue",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

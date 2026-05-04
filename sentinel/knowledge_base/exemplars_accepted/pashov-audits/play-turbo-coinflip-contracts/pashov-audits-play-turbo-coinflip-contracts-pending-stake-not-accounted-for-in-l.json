@@ -1,0 +1,22 @@
+{
+  "title": "Pending stake not accounted for in liquidity calculations",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `Staking` contract uses `IERC20(token).balanceOf(address(this))` to determine total balance for share calculations and liquidity validation. However, in `Staking.requestStake()`, tokens are transferred to the contract immediately when requesting a stake without tracking the pending stake. This is included in the liquidity in many crucial processes, such as share calculation, liquidity locked validation, and amount owed calculation.  ```solidity function requestStake(address token, uint256 amount) external nonReentrant {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Anyone can burn any NFT in the `HoneyJarPortal`",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, because the NFTs won't be retrievable from the portal anymore  **Likelihood:** High, because it does not require any preconditions to be exploited  ## Description  The `_debitFrom` method in `HoneyJarPortal` allows burning of any `HoneyJar` NFT, given its ID. This method is freely callable through `ONFT721Core`'s `sendFrom` method, which calls `_send` which calls the `_debitFrom` method without an access control check. This results in the ability for anyone to burn any HoneyJar NFT, no matter who holds it. There is the following check in the method:  ```solidity",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

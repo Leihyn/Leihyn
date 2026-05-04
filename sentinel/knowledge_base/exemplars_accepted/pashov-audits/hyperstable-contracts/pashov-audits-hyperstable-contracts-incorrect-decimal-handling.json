@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect decimal handling",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `PositionManager` and `LiquidationManager` contracts incorrectly handles decimals when calculating across various processes. The issue stems from assuming all values are 18 decimals when performing calculations, while vault shares inherit decimals from their underlying token through `Vault.decimals()`.  Therefore, for the vault supported assets with decimals != 18, ot the decimal offset > 0, the current process will treat the share amount as 18 decimals despite the fact that the `colalteralSnapshots` are stored with vault",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

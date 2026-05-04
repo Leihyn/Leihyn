@@ -1,0 +1,23 @@
+{
+  "title": "Overwriting collateral breaks collateral gains logic",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In the `StabilityPool` contract, when 180 days have passed since the sunset of a collateral, enabling a new collateral overwrites the previous one.  In this process, the `epochToScaleToSums` mapping is cleared, but not the `collateralGainsByDepositor` and `depositSums` mappings. This means that the pending gains for the old collateral will be counted as gains for the new collateral.  As a result, the collateral gains logic is broken, leading to different situations, such as:  - DoS on functions that execute `_accrueDeposito",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

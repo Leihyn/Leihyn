@@ -1,0 +1,23 @@
+{
+  "title": "`deposit` may not mint liquidity",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "amm"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `deposit` function will mint liquidity only if bounds are defined. However, the method to determine whether bounds are defined is wrong.  When `baseLower` and `baseUpper` are both `0`, the bounds are undefined. However, the `deposit` function does not mint liquidity as long as one of `baseLower` and `baseUpper` is `0`. For uniswap pool v3, if the price is `1`, its tick is `0`. Therefore, this results in the `deposit` function not minting liquidity when bounds are already defined.  ## Recommendations  If one of `baseLo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-July.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

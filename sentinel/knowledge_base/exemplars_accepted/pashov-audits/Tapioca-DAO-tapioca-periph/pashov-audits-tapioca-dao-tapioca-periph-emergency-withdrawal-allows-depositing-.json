@@ -1,0 +1,21 @@
+{
+  "title": "Emergency withdrawal allows depositing again",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, tokens can be deposited again after emergency withdrawal, mass withdrawal will not be finalized  **Likelihood:** Medium, emergency withdrawal is an important admin function, but still not a usual operation  ## Description  The last step of `sDaiStrategy.emergencyWithdraw()` is the conversion to tDai and setting a pause.  ```     function emergencyWithdraw() external onlyOwner {         paused = true; // Pause the strategy          // Withdraw from the pool, convert to Dai and wrap it into tDai         uint256 maxWithdraw = sDai.maxWithdraw(address(this));",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

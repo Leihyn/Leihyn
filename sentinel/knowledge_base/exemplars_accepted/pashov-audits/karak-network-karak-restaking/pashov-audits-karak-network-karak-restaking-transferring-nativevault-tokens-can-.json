@@ -1,0 +1,22 @@
+{
+  "title": "Transferring `NativeVault` tokens can break some functionalities",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  `NativeVault` tokens (shares) can be transferred from the node owner to another address. This can cause different issues in the behavior of the protocol. Here there are some examples:  1. The sender of the tokens might be slashed with more assets than he should be, as his balance would have decreased, but not the `node.totalRestakedETH` value.  ``` File: NativeVault.sol      function _transferToSlashStore(address nodeOwner) internal {         NativeVaultLib.Storage storage self = _state();         NativeVaultLib.NativeNode",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect principle tracking due to fee inclusion",
+  "platform": "pashov-audits",
+  "program": "SocksNFlops-rivus-staking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the deposit function, the `principle` state variable is incorrectly updated by adding the full deposit amount, including fees that are not actually staked:  ```solidity function deposit(uint256 amount) external whenNotPaused returns (uint256 mintedAmount) {     // Calculate fees     (mintedAmount, stakingFee) = _calculateMintAmountAndFees(amount);      // Incorrect: Updates principle with full amount including fees     principle += amount;  // @audit - includes stakingFee and bridgingFee      // Transfer and mint logic",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Rivus-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

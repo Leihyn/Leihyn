@@ -1,0 +1,23 @@
+{
+  "title": "`claimReward()` can DOS by iterating predictions blocking funds",
+  "platform": "pashov-audits",
+  "program": "ilijasdev-mcp-market",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description Users can create an unlimited number of predictions for a specific market and round using `predict()`. ```solidity function predict(uint256 marketId, bool isBullish) external roundActive(marketId) {         uint256 roundId = currentRoundId[marketId];         Round memory round = marketRounds[marketId][roundId];          // Predictions close 1 hour before round ends to prevent last-minute manipulation         require(block.timestamp < round.startTime + 23 hours, \"Prediction closed (last hour)\");          // Transf",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/MCP-security-review_2025-08-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

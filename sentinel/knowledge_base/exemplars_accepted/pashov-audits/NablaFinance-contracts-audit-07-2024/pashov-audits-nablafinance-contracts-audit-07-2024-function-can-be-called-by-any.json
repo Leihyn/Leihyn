@@ -1,0 +1,21 @@
+{
+  "title": "Function can be called by anyone",
+  "platform": "pashov-audits",
+  "program": "NablaFinance-contracts-audit-07-2024",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  In the `NablaRouter` contract, the `swapExactTokensForTokens` function uses the `allowed` modifier to check if the caller is allowed to access the function. However, the `swapExactTokensForTokensWithoutPriceFeedUpdate` function does not have this modifier.  As so, any address can bypass the access check in `swapExactTokensForTokens` by calling `PriceOracleAdapter.updatePriceFeeds` and `swapExactTokensForTokensWithoutPriceFeedUpdate`.  ## Recommendations  Add the `allowed` modifier to `swapExactTokensForTokensWithoutPriceFeedUp",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nabla-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

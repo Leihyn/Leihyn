@@ -1,0 +1,21 @@
+{
+  "title": "Potential out-of-bounds in `removeCardBundlesFromPacketPool`",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `removeCardBundlesFromPacketPool` function in the `CardAllocationPool` contract has a critical flaw that could lead to `out-of-bounds` access errors.  When removing card bundles, the function **swaps the selected bundle with the last unselected bundle and then pops the last element from the array.**  ```solidity             // Swap selected card bundle with last unselected card bundle and pop             cardBundles[index] = cardBundles[cardBundles.length - 1];             cardBundles.pop(); ```  However,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

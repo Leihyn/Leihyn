@@ -1,0 +1,21 @@
+{
+  "title": "`setPrices()` accesses the settlement history by a wrong value",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Let's take a look at the `setPrices()` function:  ```solidity function setPrices(SettlementNoClientId[] memory settlements) external onlyOwner {         for (uint256 i = 0; i < settlements.length; ++i) {             SettlementState storage settlementState = settlementHistory[settlements[i].apdaoId];             settlementState.blockTimestamp = settlements[i].blockTimestamp;             settlementState.amount = ethPriceToUint64(settlements[i].amount);             settlementState.winner = settlements[i].winner;",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

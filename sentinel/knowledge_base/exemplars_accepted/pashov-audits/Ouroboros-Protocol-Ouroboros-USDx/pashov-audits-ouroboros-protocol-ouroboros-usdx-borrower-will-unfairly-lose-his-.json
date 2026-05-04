@@ -1,0 +1,22 @@
+{
+  "title": "Borrower will unfairly lose his stables if the collateral goes into recovery mode during sunset period",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The PositionController contract utilizes an escrow mechanism to temporarily hold a borrower's stablecoins before they can be claimed. However, an edge case exists where the borrower may lose both their collateral and stablecoins. For instance, consider the following scenario:  - A borrower opens a position, and their stablecoins are placed in escrow. - Shortly thereafter, the collateral is sunset (e.g., due to being highly volatile). - The price of the collateral drops, pushing the system into recovery mode.  After the es",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

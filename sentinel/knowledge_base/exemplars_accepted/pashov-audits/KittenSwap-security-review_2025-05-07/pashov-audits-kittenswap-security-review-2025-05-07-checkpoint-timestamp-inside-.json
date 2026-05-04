@@ -1,0 +1,19 @@
+{
+  "title": "`checkpoint.timestamp` inside `VotingEscrow` never used",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The design of `checkpoint` in `VotingEscrow` is to record the delegatee's information at the time of execution. This is necessary for optimization and for querying how much a `tokenId` was delegated to a specific address at a given time.  ```solidity     function getPastVotesIndex(         address account,         uint timestamp     ) public view returns (uint32) {         uint32 nCheckpoints = numCheckpoints[account];         if (nCheckpoints == 0) {             return 0;         }         // First check most recent bala",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Missing sanity check in `addCardBundlesToPacketPool`",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In CardAllocationPool contract, we will generate one randomness via Chainlink VRF for the instant redeem. In initialize() function, we will initialize `callbackGasLimit` to 100_000. This gas limit is used for the Chainlink VRF callback gas limit.  In the callback function, there is one loop for transferring the selected cards. After the foundry's test, if we have 10 cards in this bundle, the gas limit will be insufficient. This will cause the callback function will fail, and users cannot get the card NFT.  Fun",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

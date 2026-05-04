@@ -1,0 +1,21 @@
+{
+  "title": "Wrong out-of-bounds check in `swap` function",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `swap` function makes sure the passed-in indices are not out of bounds.  ```solidity if (tokenIn_ > _numTokens - 1 && tokenOut_ > _numTokens - 1) {             revert Pool__IndexOutOfBounds();         } ```  The issue is that in the above snippet, the contract reverts if BOTH the checks pass, so if BOTH the indices are out of bounds. If only a single one is out of bounds, the revert does not happen. It will instead use 0 values and lead to unpredictable behavior since the arrays have a size larger than the max number of",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

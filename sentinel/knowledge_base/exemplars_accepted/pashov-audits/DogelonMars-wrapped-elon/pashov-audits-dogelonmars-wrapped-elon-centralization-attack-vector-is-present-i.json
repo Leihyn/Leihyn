@@ -1,0 +1,19 @@
+{
+  "title": "Centralization attack vector is present in `setEnabledState`",
+  "platform": "pashov-audits",
+  "program": "DogelonMars-wrapped-elon",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as an owner can block unwrapping of wrapped assets  **Likelihood:** Low, as it requires a malicious or a compromised owner  ## Description  The `setEnabledState` method of `WrappedElon` allows the owner of the contract to disable (or enable) wrapping and unwrapping of tokens. The issue is that a malicious or a compromised owner can decide to act in a bad way towards users and block unwrapping of the tokens, essentially locking them out of their funds. If the ownership is burned then (or private keys are lost) it will be irreversible.  ## Recommendations  Potentia",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/WrappedElon-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

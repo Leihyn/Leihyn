@@ -1,0 +1,21 @@
+{
+  "title": "Unauthorized Global and Oracle State Initialization",
+  "platform": "pashov-audits",
+  "program": "pump-fun-fixed-price-token-sale",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium    **Likelihood:** Medium  ## Description  The `InitializeGlobalState` instruction allows any user to initialize both a `global_state` and `oracle` account using arbitrary values for `super_admin` and `admin`. The instruction lacks necessary access controls:  ```rust #[derive(Accounts)] pub struct InitializeGlobalState<'info> {     #[account(mut)]     pub super_admin: Signer<'info>,      /// CHECK: no need to check     #[account(mut)]     pub admin: AccountInfo<'info>,      #[account(         init,         seeds = [             GLOBAL_STATE_SEED.as_bytes(), supe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Pump-security-review_2025-03-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

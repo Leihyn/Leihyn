@@ -1,0 +1,26 @@
+{
+  "title": "Uniswap oracle prices can be manipulated",
+  "platform": "pashov-audits",
+  "program": "Ouroboros-Protocol-Ouroboros-USDx",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "governance",
+    "oracle",
+    "multisig"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The protocol uses Uniswap V3 oracles to calculate the prices of the collateral tokens TitanX and DragonX. For the price of TitanX, the ETH/TITANX pool is used, while for the price of DragonX, both the ETH/TITANX and the TITANX/DRAGONX pools are used.  There are different factors that make the manipulation of these prices feasible:  - The current liquidity in the pools is relatively low: $4.7M in the ETH/TITANX pool and $1.9M in the TITANX/DRAGONX pool. - The TWAP windows are too short: 36 seconds for the short TWAP and 5 minut",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ouroboros-security-review_2024-12-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

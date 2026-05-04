@@ -1,0 +1,22 @@
+{
+  "title": "Code does not reset `orderTriggerBlock` when updating trades",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Code use the variable `orderTriggerBlock` to track the events triggered for an order or trade. To perform an operation on an order or trade, code checks that there's no current ongoing trigger by calling `checkNoPendingTrigger()` function: ```solidity     function checkNoPendingTrigger(         IOstiumTradingStorage storageT,         address trader,         uint16 pairIndex,         uint8 index,         IOstiumTradingStorage.LimitOrder orderType,         uint256 triggerTimeout     ) public view returns (bo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

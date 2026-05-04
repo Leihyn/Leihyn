@@ -1,0 +1,22 @@
+{
+  "title": "Incentive rewards may be stolen",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-06-12",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  In VotingReward, voters can gain some rewards because of their vote. There are two kind of possible rewards in VotingReward.  1. Kitten token from voter. 2. Users can add some incentive tokens via function `incentivize`.  If users incentive some rewards via function `incentivize`, we will record these rewards in the next period. Users can vote for the related pool to get some rewards.  The problem here is that we miss one `_period` validation in function `getRewardForPeriod`. Users can get the future period's rewards.  Let's",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-06-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

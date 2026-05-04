@@ -1,0 +1,23 @@
+{
+  "title": "Wrong\u2011Offset Ed25519 instruction introspection enables forged approvals",
+  "platform": "pashov-audits",
+  "program": "Enclave-Money-solver-fund-pool-anchor",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  The program accepts off\u2011chain approvals by \u201cverifying\u201d an Ed25519 signature via the instruction sysvar: `borrow` expects the previous instruction in the same transaction to be a native Ed25519 verification and then inspects that instruction\u2019s raw data to decide whether the signature is valid.  However, the current verifier does not perform the essential validations that make this pattern sound:  * It does not assert that the previous instruction\u2019s `program_id` is the native Ed25519 program. * It does not enforce \u201c",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Enclave-security-review_2025-10-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

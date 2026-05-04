@@ -1,0 +1,22 @@
+{
+  "title": "Anyone can move `EURS` tokens that the user allowed `FlorinTreasury` to spend",
+  "platform": "pashov-audits",
+  "program": "florence-finance-florence-finance-protocol-v3",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as funds will be moved from a user's wallet unwillingly  **Likelihood:** High, as it requires no preconditions and is a common attack vector  ## Description  The `depositEUR` method in `FlorinTreasury` looks like this:  ```solidity function depositEUR(address from, uint256 eurTokens) external whenNotPaused {     eurTokens = Util.convertDecimals(eurTokens, 18, Util.getERC20Decimals(eurToken));     SafeERC20Upgradeable.safeTransferFrom(florinToken, from, address(this), eurTokens);     emit DepositEUR(_msgSender(), from, eurTokens); } ```  The problem is that the `f",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/FlorenceFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

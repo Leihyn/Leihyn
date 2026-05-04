@@ -1,0 +1,19 @@
+{
+  "title": "FeeTaker is not accounting for `unwrapWeth` Feature",
+  "platform": "pashov-audits",
+  "program": "1inch-limit-order-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "invariant-violation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `FeeTaker` currently does not account for scenarios where the `unwrapWeth` feature is enabled. This oversight becomes apparent when `takerAsset` is `WETH`, and `unwrapWeth` is activated, causing the limit order protocol to unwrap the `WETH` and send the taking amount as `ETH` directly to the maker listener (`FeeTaker`). The `postInteraction` function, however, is designed to only handle ERC20 tokens and not ETH. Consequently, this discrepancy leads to transaction failures as the contract attempts to transfer `WETH` to",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/1inch-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

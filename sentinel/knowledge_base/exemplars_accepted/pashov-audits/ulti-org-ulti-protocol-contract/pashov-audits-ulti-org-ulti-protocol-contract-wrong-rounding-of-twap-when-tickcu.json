@@ -1,0 +1,24 @@
+{
+  "title": "Wrong rounding of TWAP when `tickCumulativeDelta` is negative",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle",
+    "proxy",
+    "amm"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  For the TWAP calculation, `tickCumulativeDelta` is calculated as the difference between the two tickCumulatives. This value is divided by the first tick cumulative to obtain the time-weighted average tick.  Given that Solidity division truncates the result, the effect of this truncation is different depending on the sign of `tickCumulativeDelta`. If `tickCumulativeDelta` is positive, a truncation will decrease the value of the tick. However, if `tickCumulativeDelta` is negative, truncating its value increases the value of the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

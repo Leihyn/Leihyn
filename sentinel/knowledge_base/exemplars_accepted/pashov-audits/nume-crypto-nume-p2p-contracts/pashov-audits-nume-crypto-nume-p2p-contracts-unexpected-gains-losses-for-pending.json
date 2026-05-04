@@ -1,0 +1,22 @@
+{
+  "title": "Unexpected gains&losses for pending withdrawals if WITHDRAWAL_STAKE is changed",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, potential funds stolen from other users and DoS  **Likelihood:** Low, as `Withdrawal_Stake` is not so likely to be changed, must be increased, and must have pending withdrawals  ## Description  `submitWithdrawalRequest()` receives `msg.value` as `WITHDRAWAL_STAKE`. However, it does not store the exact value received per request. When withdrawal requests are proceeded in `notarizeSettlement()`, the current `WITHDRAWAL_STAKE` is returned. Thus if `WITHDRAWAL_STAKE` was updated between \"submit\" and \"notarize\" (via `setWithdrawStake()`), the new updated value will be",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

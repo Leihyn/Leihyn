@@ -1,0 +1,23 @@
+{
+  "title": "Improper execution order in `generatePerformance`",
+  "platform": "pashov-audits",
+  "program": "kinetiq-research-lst",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In OracleManager, the operator role will generate validators' performance result periodically. When we get the performance result, we will check the validator's behavior. If this validator's behavior is below expectation, we will deactivate this validator.  The problem is that we will trigger to deactivate the validator directly, missing updating the latest slash/reward/balance amount.  There are some possible impacts: 1. If there are more rewards than slash in the latest period, we will withdraw less HYPE than we expect.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Kinetiq-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

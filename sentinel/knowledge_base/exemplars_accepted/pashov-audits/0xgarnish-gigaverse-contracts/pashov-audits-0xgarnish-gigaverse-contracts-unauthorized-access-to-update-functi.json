@@ -1,0 +1,19 @@
+{
+  "title": "Unauthorized access to `update()` function",
+  "platform": "pashov-audits",
+  "program": "0xgarnish-gigaverse-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `GigaNameNFTBeforeUpdateHandler` and `GigaNoobNFTBeforeUpdateHandler` handler contracts are called by the `GameNFT._update()` function when **GigaNameNFT** or **GigaNoobNFT** tokens are minted, transferred, or burnt, where these handler contracts rely on the `GAME_LOGIC_CONTRACT_ROLE` granted in the `AccountSystem` contract to store the new owner data and remove the old owner data from the datastore. However, the `update()` function in these handler contracts isn't protected and can be accessed by anyone, which allows a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gigaverse-security-review_2025-01-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

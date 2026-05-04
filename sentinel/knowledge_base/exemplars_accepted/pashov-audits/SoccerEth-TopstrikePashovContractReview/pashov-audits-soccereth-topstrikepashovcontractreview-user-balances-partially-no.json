@@ -1,0 +1,21 @@
+{
+  "title": "User balances partially non-withdrawable after `LOT_SIZE_UNITS` changes",
+  "platform": "pashov-audits",
+  "program": "SoccerEth-TopstrikePashovContractReview",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The protocol allows the contract owner to dynamically update `LOT_SIZE_UNITS` using `setTradingParameters`, with the stated goal of keeping trading accessible as prices increase.  However, **all share-changing operations** (buy, sell, transfer, prize distribution) enforce that `amountUnits` must be a multiple of the *current* `LOT_SIZE_UNITS`.  ```solidity require(amountUnits >= LOT_SIZE_UNITS, \"below min size\"); require(amountUnits % LOT_SIZE_UNITS == 0, \"bad step\");  function setTradingParameters(     uint25",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TopStrike-security-review_2025-12-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "DoS for actions performing volatility check",
+  "platform": "pashov-audits",
+  "program": "labs-solo-aegis-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "multisig",
+    "amm"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `_checkVolatility` function in `AegisVaultCore.sol` requires that the pending holdings ratio of deposit and target vaults are not above a certain threshold (set initially to 1%).  ```solidity     require(         _pendingHoldingsRatio(depositVault, depositSpotPrice) <= pendingThreshold             && _pendingHoldingsRatio(targetVault, targetSpotPrice) <= pendingThreshold,         \"PDT\"     ); ```  This internal function is executed on deposit, rebalance, and withdrawal of type `TargetOnly`.  A malicious actor could pe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AegisVault-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Operator might be unable to withdraw rewards due to gas limit",
+  "platform": "pashov-audits",
+  "program": "Smoothly-Protocol-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as operator's yield will be frozen  **Likelihood:** Low, as it requires operator to be a special multi-sig wallet or contract  ## Description  The `PoolGovernance:withdrawRewards` method allows operators to withdraw their yield, which happens with this external call:  ```solidity (bool sent, ) = msg.sender.call{value: rewards, gas: 2300}(\"\"); ```  The 2300 gas limit might not be enough for smart contract wallets that have a `receive` or `fallback` function that takes more than 2300 gas units, which is too low (you can't do much more than emit an event). If that i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Smoothly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

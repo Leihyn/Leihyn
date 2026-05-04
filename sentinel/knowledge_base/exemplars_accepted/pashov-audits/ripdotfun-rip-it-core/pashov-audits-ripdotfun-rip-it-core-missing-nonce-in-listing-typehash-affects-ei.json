@@ -1,0 +1,21 @@
+{
+  "title": "Missing nonce in `LISTING_TYPEHASH` affects EIP-712 and signatures",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `Marketplace.generateListingSignatureHash()` function, when the hash is generated for a listing request, it includes the `nonce` parameter, however, this nonce is not introduced in the `LISTING_TYPEHASH`, which breaks the `EIP-712` compliance, leading to the failure of the signature validation and causing the listing process to be non-compliant, thus; blocking listings from being correctly verified and processed:  ```solidity     /**      * @notice The EIP-712 type hash for listing requests.      */",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-05-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

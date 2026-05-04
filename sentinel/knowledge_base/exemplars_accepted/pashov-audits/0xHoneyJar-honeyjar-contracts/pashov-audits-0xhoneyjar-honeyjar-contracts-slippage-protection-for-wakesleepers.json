@@ -1,0 +1,19 @@
+{
+  "title": "Slippage protection for `wakeSleepers()`",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-honeyjar-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  All Jars are equal in terms of value and can be used to receive tokens locked in Sleepers. Users cannot choose exact Sleepers, the next available Sleeper is always used. It is considered a game mechanic. The problem is that User Alice can sign a transaction expecting to receive a Sleeper 2, but during the transaction execution, someone frontrun the user and now Alice spends a Jar to receive Sleeper 3.  ## Recommendations  Allows users to indicate the Sleeper index they wanted when signing the transaction.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HoneyJar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

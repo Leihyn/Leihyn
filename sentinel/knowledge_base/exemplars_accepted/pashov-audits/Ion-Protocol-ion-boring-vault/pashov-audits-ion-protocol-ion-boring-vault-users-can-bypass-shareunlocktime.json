@@ -1,0 +1,22 @@
+{
+  "title": "Users can bypass `shareUnlockTime`",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-ion-boring-vault",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When users call `depositAndBridge`, it will immediately transfer the token to the vault, then users will receive the minted shares and bridge it to the destination chain.  ```solidity     function depositAndBridge(ERC20 depositAsset, uint256 depositAmount, uint256 minimumMint, BridgeData calldata data) external payable{         uint shareAmount = _erc20Deposit(depositAsset, depositAmount, minimumMint, msg.sender);         bridge(shareAmount, data);     } ```  On the destination chain, it will then mint the shares to the des",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/IonProtocol-security-review-July.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

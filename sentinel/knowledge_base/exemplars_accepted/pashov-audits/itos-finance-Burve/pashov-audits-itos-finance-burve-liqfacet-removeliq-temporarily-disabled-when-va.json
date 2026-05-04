@@ -1,0 +1,21 @@
+{
+  "title": "`LiqFacet::removeLiq` temporarily disabled when vault is paused",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Burve",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In `LiqFacet`, when users add liquidity, they deposit a single token into a specific vault:  ```solidity     function addLiq(         address recipient,         uint16 _closureId,         address token,         uint128 amount     ) external nonReentrant returns (uint256 shares) { ```  However, when removing liquidity, the function attempts to withdraw from all vaults where the token is in the closure:  ```solidity         for (uint8 i = 0; i < n; ++i) {             VertexId v = newVertexId(i);             VaultPointer mem",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Burve-security-review_2025-01-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

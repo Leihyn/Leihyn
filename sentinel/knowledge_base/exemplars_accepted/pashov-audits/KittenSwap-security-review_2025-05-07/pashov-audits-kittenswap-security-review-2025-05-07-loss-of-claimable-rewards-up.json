@@ -1,0 +1,23 @@
+{
+  "title": "Loss of claimable rewards upon gauge deactivation",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `killGauge` and `reviveGauge` functions in the `Voter` contract allow the `emergencyCouncil` to deactivate and reactivate gauges. However, once a gauge is killed, its associated claimable rewards are set to zero, resulting in the permanent loss of any accumulated rewards, even if the gauge is later revived.  In the contract, the following code snippets illustrate the issue:  ```solidity    function killGauge(address _gauge) external {        require(msg.sender == emergencyCouncil, \"not emergency council\");        requir",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "The deprecated `privateMint()` prone to many issues",
+  "platform": "pashov-audits",
+  "program": "dinaricrypto-usdplus-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `privateMint()` is marked as a deprecated function. However, this function is prone to several issues:  1. The `splitSignature()`, which is only used for `privateMint()`, does not work with short signatures (64-length signature):    [link](https://eips.ethereum.org/EIPS/eip-2098)  2. The direct value for USD+ minting (`usdPlusAmount`) is used without performing oracle conversion to reflect the real amount especially when the paymentToken is not USD+ (e.g., USDC, which also has permit functionalities). This can lead to over",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dinari-security-review_2024-12-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

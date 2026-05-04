@@ -1,0 +1,19 @@
+{
+  "title": "Flash loan wrong balance check",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "flashloan",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, because the flash loan functionality is affected  **Likelihood:** High, because it will revert every time \u0430 flash loan is used  ## Description  `balanceBefore` is recorded before the flash loan amount being transferred. As a result, in line 714, `balanceAfter` need to be more than needed. Users have to pay extra with the same amount to use a flash loan.  ```solidity File: src\\abstract\\As4626.sol 696:     function flashLoanSimple() external nonReentrant {  705:         uint256 fee = exemptionList[msg.sender] ? 0 : amount.bp(fees.flash); 706:         uint256 toRe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

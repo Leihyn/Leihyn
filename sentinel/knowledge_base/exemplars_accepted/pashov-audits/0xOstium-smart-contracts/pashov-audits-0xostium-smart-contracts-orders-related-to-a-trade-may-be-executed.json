@@ -1,0 +1,22 @@
+{
+  "title": "Orders related to a trade may be executed to replaced trade",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a trade is executed, code finds an empty index in the `openTrades[][][]` variable and stores the new trade. There could be a pending order for an open trade. Those orders contain the trades position index, and when those orders executed, they will be are executed for that index.  ```solidity         IOstiumTradingStorage.Trade memory t = storageT.getOpenTrade(sender, pairIndex, index); ...         storageT.storePendingRemoveCollateral(             IOstiumTradingStorage.PendingRemoveCollateral(removeAm",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

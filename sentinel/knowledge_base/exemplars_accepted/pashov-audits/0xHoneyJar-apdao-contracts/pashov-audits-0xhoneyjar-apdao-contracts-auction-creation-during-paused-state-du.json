@@ -1,0 +1,21 @@
+{
+  "title": "Auction creation during paused state due to entropy callback",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `ApiologyAuctionHouse` contract has a mechanism to pause its operations preventing new auctions from being created. The creation of an auction can only occur through the `ApiologyAuctionHouse::unpause` and `ApiologyAuctionHouse::settleCurrentAndCreateNewAuction` functions, and these two functions can only be executed if the contract is not paused. However, the `entropyCallback` function can create a new auction without checking if the contract is paused. This occurs because the entropy callback can be triggered asynch",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

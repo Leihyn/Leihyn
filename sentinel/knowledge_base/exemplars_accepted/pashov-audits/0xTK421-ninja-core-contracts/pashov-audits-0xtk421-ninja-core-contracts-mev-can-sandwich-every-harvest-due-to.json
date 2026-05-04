@@ -1,0 +1,21 @@
+{
+  "title": "MEV can sandwich every harvest due to missing slippage tolerance value",
+  "platform": "pashov-audits",
+  "program": "0xTK421-ninja-core-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  In `NyPtvFantomWftmBooSpookyV2StrategyToUsdc` each time the `_harvestCore` method is called (on each harvest) it will call the `_swapFarmEmissionTokens` method which itself has the following code:  ```solidity IUniswapV2Router02(SPOOKY_ROUTER).swapExactTokensForTokensSupportingFeeOnTransferTokens(       booBalance,       0,       booToUsdcPath,       address(this),       block.timestamp     ); ```  The \u201c0\u201d here is the value of the `amountOutMin` argument which is used for slippage tolerance. 0 value here essentially means 100% slippage tolerance. This is a very easy target",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NinjaYielder-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

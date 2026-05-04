@@ -1,0 +1,21 @@
+{
+  "title": "Failure of entropy source callback",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `ApiologyAuctionHouse` contract relies on an external entropy source, implemented through the `Pyth Entropy` contract, to provide random numbers necessary for creating auctions. The main function responsible for handling the random number response is `ApiologyAuctionHouse::entropyCallback`, which is supposed to be invoked by the entropy source. If this callback function is not called, the contract cannot proceed with creating new auctions that require randomness.  ```solidity File: ApiologyDAOAuctionHouse.sol 358:     func",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

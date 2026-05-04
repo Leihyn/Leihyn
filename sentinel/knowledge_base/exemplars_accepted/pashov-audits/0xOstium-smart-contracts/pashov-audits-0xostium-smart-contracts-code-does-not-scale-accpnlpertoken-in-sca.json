@@ -1,0 +1,22 @@
+{
+  "title": "Code does not scale `accPnlPerToken` in `scaleVariables()` always",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In function `scaleVariables()` code scales the value of `accPnlPerToken` to reflect the changed balance: ```solidity         uint256 supply = totalSupply();          if (accPnlPerToken < 0) {             accPnlPerToken = accPnlPerToken * supply.toInt256()                 / (isDeposit ? (supply + shares).toInt256() : (supply - shares).toInt256());         }     } ``` The issue is that when `accPnlPerToken > 0`, code doesn't update the value, and as a result the implied accumulated PnL would be wrong. For exam",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

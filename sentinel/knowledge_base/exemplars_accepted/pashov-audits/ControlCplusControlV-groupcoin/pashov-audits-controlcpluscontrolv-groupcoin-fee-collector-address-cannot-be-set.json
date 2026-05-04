@@ -1,0 +1,19 @@
+{
+  "title": "Fee collector address cannot be set",
+  "platform": "pashov-audits",
+  "program": "ControlCplusControlV-groupcoin",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  To claim fees, the creator or the collector can call the `claimFees` function.  ```solidity     function claimFees(uint256 id) external {         address creator = creatorOf[id];         if (!canCollectFees[msg.sender] && msg.sender != creator) {             revert NoAuthorization();         } ```  To set the fee collector, a call has to be made from the GroupcoinFactory, as can be seen from the check. The function is however missing in the GroupcoinFactory contract. As a result, fee collectors cannot be set, hence, they canno",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Groupcoin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

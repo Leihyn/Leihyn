@@ -1,0 +1,22 @@
+{
+  "title": "Wrong validation in `toggleCollateralActiveState()`",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The active state of the collateral can be toggled using `toggleCollateralActiveState()`, which will set `isActive` for the specified collateral index. This allows the governance to disable specified collateral when required and prevent opening of new trades using that collateral.  However, `toggleCollateralActiveState()` has an error in the validation check. It reverts when `collateral.precision > 0`, which would occur for all existing collateral as precision is set upon added.  This will prevent governance from disabling t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

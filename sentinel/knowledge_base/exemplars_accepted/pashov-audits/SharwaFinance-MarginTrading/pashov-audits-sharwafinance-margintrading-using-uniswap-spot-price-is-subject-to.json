@@ -1,0 +1,23 @@
+{
+  "title": "Using Uniswap spot price is subject to manipulation",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The protocol uses the Uniswap V3 quoter contract to get the current value of the supported tokens in terms of the base token (USDC). The values returned by the quoter are the result of a simulated swap, given the current state of the pools. This means that these values can be easily manipulated, for example, by using a flash loan to add liquidity and remove it after interacting with the protocol.  The quote of tokens is used in the most critical parts of the protocol, such as withdrawal, borrowing, repayment, and liquidation.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

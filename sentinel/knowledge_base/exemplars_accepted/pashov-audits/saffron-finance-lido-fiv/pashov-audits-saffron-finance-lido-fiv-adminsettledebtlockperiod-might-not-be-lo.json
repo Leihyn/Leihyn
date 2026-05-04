@@ -1,0 +1,23 @@
+{
+  "title": "`adminSettleDebtLockPeriod` might not be long enough",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High as users might not be able to withdraw in time before their `stETH` is transferred to `AdminLidoAdapter`  **Likelihood:** Low, as it needs to be a delay in the queue for lido withdrawals and an event that causes admin to trigger settle debt  ## Description  `admin` has the ability to end the vault early in case of unforeseen circumstances. This is done by first calling `initiatingAdminSettleDebt` which triggers a timelock before `adminSettleDebt` can be called. This so that users can chose to withdraw before all `stETH` and pending withdraw requests are transferre",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

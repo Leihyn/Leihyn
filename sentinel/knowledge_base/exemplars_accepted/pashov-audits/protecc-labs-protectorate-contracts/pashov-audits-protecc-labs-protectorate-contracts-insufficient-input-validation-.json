@@ -1,0 +1,19 @@
+{
+  "title": "Insufficient input validation can lead to loss of funds",
+  "platform": "pashov-audits",
+  "program": "protecc-labs-protectorate-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as funds might be stuck forever in contracts  **Likelihood:** Low, as it requires a configuration error from the admin  ## Description  Multiple places in the codebase have insufficient input validation that can lead to stuck funds.  1. The `performanceFee` in `LendingVault` constructor is not validated as it is in the `adjustPerformanceFee` setter 2. The `_duration` parameter in `Vesting::createSchedule` is not validated, it can be too large or too small 3. The `AuctionDetails` set in the constructor of `DutchAuction` has timestamps and prices that can be too la",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Protectorate-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

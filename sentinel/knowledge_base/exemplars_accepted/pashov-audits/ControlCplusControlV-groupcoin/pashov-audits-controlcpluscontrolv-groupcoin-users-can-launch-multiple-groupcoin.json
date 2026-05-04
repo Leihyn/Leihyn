@@ -1,0 +1,22 @@
+{
+  "title": "Users can launch multiple Groupcoins under the same name and ticker",
+  "platform": "pashov-audits",
+  "program": "ControlCplusControlV-groupcoin",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In `launchGroupCoin`, a hash of the `msg.sender`, `name`, and `ticker` is taken and converted to a signed message hash where it's compared to the provided `signature` where we revert if the recovered address doesn't match the `signer`. This is done so that users can only launch Groupcoins if the `signer` has allowed for them to launch one with the given `name` and `ticker`. However, the signature logic doesn't contain a nonce, which allows the user to launch as many Groupcoins as they want under the allowed `name` and `ti",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Groupcoin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

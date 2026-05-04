@@ -1,0 +1,22 @@
+{
+  "title": "Users could avoid liquidation by providing a large number of position NFTs",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Users could provide an arbitrary number of position NFTs to their margin account using the `provideERC721` function, each new token would be pushed to an array associated with their margin account ID (line 178):  ```solidity File: MarginAccount.sol 176:     function provideERC721(uint marginAccountID, address txSender, address token, uint collateralTokenID, address baseToken) external onlyRole(MARGIN_TRADING_ROLE) { 177:         require(isAvailableErc721[token], \"Token you are attempting to deposit is not available for deposi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

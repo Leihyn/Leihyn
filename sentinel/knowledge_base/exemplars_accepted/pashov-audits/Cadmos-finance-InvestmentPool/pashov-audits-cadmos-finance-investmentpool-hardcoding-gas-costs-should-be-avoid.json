@@ -1,0 +1,19 @@
+{
+  "title": "Hardcoding gas costs should be avoided",
+  "platform": "pashov-audits",
+  "program": "Cadmos-finance-InvestmentPool",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** Medium, because changes to gas costs have happened before, but it is not certain that there will be changes that affect the protocol.  **Impact:** Low, because even though calculations will be wrong they can still be done off-chain  ## Description  The modifier `markCost` in `SimpleAdministrator` has some hard coded gas cost values like for example 21000 (the base cost of an EVM transaction). We have seen previous EVM forks changing the gas cost of some key things, for example the SSTORE opcode. This can happen again and in this case the hardcoded values in `markCo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/CadmosFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

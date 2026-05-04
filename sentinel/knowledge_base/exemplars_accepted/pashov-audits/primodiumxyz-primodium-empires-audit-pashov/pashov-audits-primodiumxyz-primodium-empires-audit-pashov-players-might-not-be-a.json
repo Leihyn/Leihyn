@@ -1,0 +1,22 @@
+{
+  "title": "Players might not be able to withdraw earnings if the game is reset",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The funds of the pot are meant to be sent to the `PayoutManager` contract so that players can withdraw their earnings at their leisure. However, in the current implementation, the funds are not sent to the `PayoutManager` contract, so the withdrawal of earnings is dealt with by the `RewardsSystem.withdrawEarnings` function.  The issue is that the `RewardsSystem.withdrawEarnings` function can only be called if the game is over, meaning that players can only withdraw their earnings for the time between the end of the game and t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

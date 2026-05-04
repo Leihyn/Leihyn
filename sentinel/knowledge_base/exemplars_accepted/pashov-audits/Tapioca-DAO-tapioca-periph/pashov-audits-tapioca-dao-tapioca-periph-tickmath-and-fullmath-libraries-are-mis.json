@@ -1,0 +1,21 @@
+{
+  "title": "`TickMath` and `FullMath` libraries are missing `unchecked`",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as it will cause the swap to revert.  **Likelihood:** Medium, as it will occur when there is phantom overflow.  ## Description  Both `FullMath` and `TickMath` are missing `unchecked`, which causes it to incorrectly revert on phantom overflow. These libraries are supposed to handle \"phantom overflow\" by allowing multiplication and division even when the intermediate value overflows 256 bits as documented by UniswapV3. In the original UniswapV3 code, unchecked is not used as solidity version is < 0.8.0, which does not revert on overflow.  `TickMath` will affect `",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Bypass blacklist using `safeBatchTransferFrom` and approval redirection",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The contract includes a blacklist feature intended to prevent certain addresses from transferring tokens. While the `safeTransferFrom` function checks both the sender and the recipient against the blacklist, the `safeBatchTransferFrom` function only checks the recipient. This allows blacklisted users to bypass the restriction and transfer their funds using `safeBatchTransferFrom`. Additionally, blacklisted users can redirect their approvals to another address since there is no blacklist check on the `msg.sender` in the ap",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

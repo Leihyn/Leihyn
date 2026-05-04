@@ -1,0 +1,21 @@
+{
+  "title": "The house fee cap mechanism is flawed",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `transferPlayerRewards()` function attempts to implement a protection mechanism to prevent abuses from an operator that can access game outcomes and liquidity, participate as a player, place bets without risk, and deplete the reward pool.  The problem is that the mechanism is flawed, and not only it doesn't protect the protocol from such an attack, but it caps user rewards substantially.  Note how `reward` is set to `_totalAmount` when it is bigger. The error is that `reward` is measured in MONT tokens, and `_totalAmount`",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

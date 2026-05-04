@@ -1,0 +1,21 @@
+{
+  "title": "Variable participants could lose their fee earnings",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, affected variable participants will lose their fee earnings  **Likelihood:** Medium, occurs when final total staking earnings is lower than on-going period  ## Description  `calculateVariableWithdrawState()` is used to calculate the `ethAmountOwed`, which is the balance of unwithdrawn earnings. This is computed using the variable particpant share of the `totalEarnings`, subtracted by `previousWithdrawnAmount` (see code below).  ```Solidity   function calculateVariableWithdrawState(     uint256 totalEarnings,     uint256 previousWithdrawnAmount   ) internal view r",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

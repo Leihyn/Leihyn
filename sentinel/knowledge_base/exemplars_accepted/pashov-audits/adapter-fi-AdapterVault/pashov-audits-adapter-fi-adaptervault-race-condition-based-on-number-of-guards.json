@@ -1,0 +1,22 @@
+{
+  "title": "Race condition based on number of guards",
+  "platform": "pashov-audits",
+  "program": "adapter-fi-AdapterVault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  A submitted strategy can be replaced by a new one if it has been short-circuited by downvotes. However, because the number of downvotes required to short-circuit is `no_guards / 2` and rounding down, the number of downvotes required can be less than half of `no_guards`. This can lead to a situation where a strategy is replaced even though it has not been properly short-circuited by downvotes.  Consider the scenario when `no_guards` equals 3:  - 2 guards `endorseStrategy` the strategy. This should be sufficient to activate the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AdapterFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

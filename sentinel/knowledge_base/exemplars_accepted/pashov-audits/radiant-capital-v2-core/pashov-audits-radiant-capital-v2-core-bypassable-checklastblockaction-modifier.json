@@ -1,0 +1,22 @@
+{
+  "title": "Bypassable `checkLastBlockAction` Modifier",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `checkLastBlockAction` modifier is intended to prevent users from depositing and withdrawing in the same block, likely as a measure against flash loan attacks. However, this check can be easily bypassed. A user can deposit and receive share tokens, then transfer these shares to another address they control and proceed to withdraw in the same block from that address.  ```solidity \tmodifier checkLastBlockAction() { \t\tif (_callerLastBlockAction[msg.sender] == block.number) revert UniV3TokenizedLp_NoDepositOrWithdrawLoop();",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

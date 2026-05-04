@@ -1,0 +1,23 @@
+{
+  "title": "Decrease position can be abused to withdraw PnL twice",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When users decrease their position, it will eventually trigger `executeDecreasePositionSizeMarket`.  ```solidity     function executeDecreasePositionSizeMarket(         ITradingStorage.PendingOrder memory _order,         ITradingCallbacks.AggregatorAnswer memory _answer     ) external {         // 1. Prepare vars         ITradingStorage.Trade memory partialTrade = _order.trade;         ITradingStorage.Trade memory existingTrade = _getMultiCollatDiamond().getTrade(             partialTrade.user,             partialTrade.index",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

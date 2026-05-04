@@ -1,0 +1,22 @@
+{
+  "title": "Transaction fees can be underestimated due to early return",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `IAccount.validateTransaction` method besides validation `is also used during the gas fee estimation`. This way the protocol should `preserve as many steps as possible both for valid and invalid transactions`. In turn, the `ClaveImplementation.validateTransaction` function has an early return for the gas fee estimation calls. So many gas-consumed checks stay not estimated.  ```solidity     function _validateTransaction(         bytes32 signedHash,         Transaction calldata transaction     ) internal returns (bytes4",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-11-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

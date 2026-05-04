@@ -1,0 +1,23 @@
+{
+  "title": "Zero `heartBeat` can cause reward claim failures",
+  "platform": "pashov-audits",
+  "program": "Level-Money-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "oracle",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `OracleLib` and `RewardsManager` contracts work together to enable reward claiming based on asset prices. A key part of this process involves the `getAssets()` function in `StrategyLib`, which calculates the total assets held by a vault. This function depends on price data fetched via `OracleLib.getPriceAndDecimals()`.  However, the current implementation passes a `heartBeat` value of 0 when calling `getPriceAndDecimals()`:  ```solidity         (int256 assetsForOneShare, uint256 decimals) = OracleLib.getPriceAndDecimals",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Level-security-review_2025-04-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

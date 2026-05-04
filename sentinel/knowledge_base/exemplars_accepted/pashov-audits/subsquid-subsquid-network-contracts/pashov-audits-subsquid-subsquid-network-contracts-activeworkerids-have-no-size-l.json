@@ -1,0 +1,21 @@
+{
+  "title": "`activeWorkerIds` have no size limit, can grow unbounded and gas-grief / cause OOG errors",
+  "platform": "pashov-audits",
+  "program": "subsquid-subsquid-network-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, Denial of service and high gas costs to users  **Likelihood**: Low, unprofitable due to bond submitted  ## Description  The function `register` in `WorkerRegistration.sol` contract adds a new element to the `activeWorkerIds` array whenever a new worker is registered. There are no checks for registered `peerId`s, so anyone can register any peerId as a worker. The only restriction is that the user has to submit a bond amount of tokens in order to do so, which will get unlocked later.  The issue is that if this array grows too large, it will cause excessive gas cost",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Subsquid-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "`finishWithdrawal()` doesn't remove withdrawal info",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In order to withdraw funds, the user needs to make a withdrawal request. This will store information about the amount that the user wants to withdraw and the request will be queued for execution.  After `MIN_WITHDRAWAL_DELAY` passes user has the ability to call `finishWithdrawal` to get funds. The reason why the user needs to wait `MIN_WITHDRAWAL_DELAY` is to make sure the user can't avoid slashing by frontrunning the slash action.  The problem is that `finishWithdrawal` function doesn't delete information about withdrawal",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

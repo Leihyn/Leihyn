@@ -1,0 +1,21 @@
+{
+  "title": "Fee can be set to 100% before order fulfillment",
+  "platform": "pashov-audits",
+  "program": "pump-fun-pump-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can mean the order recipient will receive nothing in exchange for his tokens  **Likelihood:** Low, as it requires a malicious or compromised admin  ## Description  The `setFeeRate` method in `PumpV1` currently has no input validation on the `_feeRate` parameter. If the value given is `1e18` this would set the fee to 100%. An admin can see a call to `fulfill` by monitoring the blockchain's pending transaction pool and front-run it by setting the fee to 100%, essentially stealing all of the tokens that the order recipient should have gotten.  ## Recommendatio",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Pump-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

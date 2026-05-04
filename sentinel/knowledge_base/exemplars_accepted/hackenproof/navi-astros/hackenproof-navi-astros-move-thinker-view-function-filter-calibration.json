@@ -1,0 +1,22 @@
+{
+  "title": "Move thinker view-function filter calibration",
+  "platform": "hackenproof",
+  "program": "navi-astros",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multi-language",
+    "vault"
+  ],
+  "bug_class": "meta-tooling",
+  "mental_operation": "value_flow",
+  "language": "move",
+  "file_paths": [],
+  "summary": "value_flow on Move was firing on balance_value() read-only functions. Added _is_move_view_function() heuristic: detect read-only via no &mut params + no entry modifier + no mutation operations in body (transfer::, ::join, ::split, push_back, remove, borrow_mut, .add). Result on Astros perp_vault: 8 to 6 hypotheses (25 percent FP cut), 100 percent signal rate (1 REAL ASTROSSC-290 + 5 KNOWN catalogued, zero FPs).",
+  "key_lesson": "Move view-function detection requires body inspection because Move has no view/pure keyword. Heuristic: NO &mut param, NO entry modifier, NO mutation primitives in body. Same calibration pattern as Solidity boundary_prober view filter that cut Dexalot 81 percent. Calibration depth on Move: ~70 percent of Solidity, sufficient for production use on bounty/contest workflow.",
+  "contest_url": "https://hackenproof.com/audits/navi-astros",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:54:41"
+}

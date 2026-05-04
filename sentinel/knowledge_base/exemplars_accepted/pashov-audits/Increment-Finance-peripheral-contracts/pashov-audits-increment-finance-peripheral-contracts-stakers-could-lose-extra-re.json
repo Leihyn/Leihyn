@@ -1,0 +1,21 @@
+{
+  "title": "Stakers could lose extra rewards due to accrual on behalf",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, loss of extra rewards for users who want to accumulate unaccrued rewards and claim at max rewards multiplier  **Likelihood:** High, always occurs as anyone can claim rewards on behalf  ## Description  Stakers are allocated a rewards multiplier that incentivizes them to keep/increase their stakes for a long period of time. The reward multiplier increases over time, and is applied to the unaccrued rewards when the staker claims the reward or changes their stake position.  The design is such that a staker can maximize their rewards by staking once and only claimin",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

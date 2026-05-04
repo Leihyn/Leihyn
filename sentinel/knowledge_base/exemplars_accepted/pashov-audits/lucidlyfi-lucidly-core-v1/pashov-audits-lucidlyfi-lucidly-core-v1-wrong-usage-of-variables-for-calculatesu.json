@@ -1,0 +1,22 @@
+{
+  "title": "Wrong usage of variables for \\_calculateSupply()",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  `addLiquidity()` uses `_calculateSupply()` twice  ```         (_supply, _virtualBalanceProd) = _calculateSupply(             _numTokens,             _prevSupply,             amplification,             _virtualBalanceProdFinal,             _virtualBalanceSumFinal,             true         ); ```  [link](https://github.com/lucidlyfi/lucidly-core-v1/blob/f00c45bbadc836b9eaa94717a0b3aa017e792588/src/Pool.sol#L520)  There are a few mistakes:  1. `_prevSupply` is used, while `_supply` is correct    Otherwise, it reverts on the fi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

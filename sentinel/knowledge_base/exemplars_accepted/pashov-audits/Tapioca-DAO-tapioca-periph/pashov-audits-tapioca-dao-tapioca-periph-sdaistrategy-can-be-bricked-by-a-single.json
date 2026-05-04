@@ -1,0 +1,23 @@
+{
+  "title": "`sDaiStrategy` can be bricked by a single attacker, requiring manual intervention to resolve",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, since the contract can be bricked, and this is most easily achieved when minimal funds are at risk  **Likelihood:** Medium, since this can be easily achieved with minimal stake by a single attacker or inadvertently during normal operation  ## Description  For both deposit and withdrawal interactions, the `_currentBalance` method is called from the YieldBox to exchange assets for shares and vice versa. If this method were to revert, then all deposits and withdrawals would fail. One potential scenario that would cause a revert is in the following line if `feesPen",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

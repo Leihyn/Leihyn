@@ -1,0 +1,21 @@
+{
+  "title": "An auction created when there is no treasury backing",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Whenever an auction is created, we set the reserve price like this:  ```solidity uint256 reservePriceWithBuffer = currentRFV + (currentRFV * reservePriceBuffer) / 100;  _setReservePrice(uint192(reservePriceWithBuffer)); ```  `currentRFV` is the result of `Treasury::realFloorValue()` where if we have no backing (and no loaned out backing), we will get a value of 0 (or if the float value is higher than the backing). The chance of that happening is slim but the impact is very serious as it can lead to a permanently stuck NFT.  If",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

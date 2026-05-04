@@ -1,0 +1,22 @@
+{
+  "title": "Protocol does not work with ERC20 tokens that have a mechanism for balance modifications outside of transfers",
+  "platform": "pashov-audits",
+  "program": "hananbeer-zerem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  Some tokens may make arbitrary balance modifications outside of transfers. One example are Ampleforth-style rebasing tokens and there are other tokens with airdrop or mint/burn mechanisms. The Zerem system caches the locked balances for users and if such an arbitrary modification has happened this can mean that the protocol is operating with outdated information. Let\u2019s look at the following scenario:  1. Alice claims some tokens with such a mechanism from a protocol that is integrated with Zerem 2. The protocol calls `Zerem::transferTo` method, but the amount sent is \u2265 `lo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Zerem-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

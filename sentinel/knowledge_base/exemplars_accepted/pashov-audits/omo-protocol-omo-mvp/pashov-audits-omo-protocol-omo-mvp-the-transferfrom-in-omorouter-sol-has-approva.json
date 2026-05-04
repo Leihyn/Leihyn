@@ -1,0 +1,21 @@
+{
+  "title": "The `transferFrom()` in `OmoRouter.sol` has approval vulnerabilities",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `transferFrom()` function in `OmoRouter.sol` contract transfers a certain amount of shares from a sender `from` to a recipient address `to`.  ```solidity File: OmoRouter.sol  File: OmoRouter.sol      function transferFrom(uint256 vaultId,address from,address to,uint256 amount) external returns (bool) {          address vault = vaultFactory.getVault(vaultId);          return IOmoVault(vault).transferFrom(from, to, amount);      } ```  It directly sub-calls to `OmoVault.sol#transferFrom()`. The user needs to call `Approve",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

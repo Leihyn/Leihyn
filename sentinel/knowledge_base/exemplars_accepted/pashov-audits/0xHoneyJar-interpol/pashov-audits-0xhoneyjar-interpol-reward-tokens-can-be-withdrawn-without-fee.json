@@ -1,0 +1,22 @@
+{
+  "title": "Reward tokens can be withdrawn without fee",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  InterPol takes a cut of the rewards accrued from staking of the tokens locked in the protocol when withdrawing the reward tokens. The rewards can be withdrawn with the `withdrawERC20` function, which also sends the fee to the protocol. However, users can use the `withdrawLPToken` function to bypass the fee. This happens due to the lines checking if the withdrawn token is a reward token being commented out, as seen in the snippet:  ```Solidity     function withdrawLPToken(address _LPToken, uint256 _amountOrId) external onlyU",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Fulfiller can arbitrate the rebalancing process interacting with `BunniHub`",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "signature",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The rebalance process starts when a new order is submitted to the Flood protocol, which happens during a swap operation when certain conditions are met.  With the order submitted, off-chain actors can initiate the execution of the rebalance process. This is done by calling the `FloodPlain.fulfillOrder` function, and passing the order as a parameter. For this call to succeed, the fulfiller is required to be approved in `BunniZone`, specifically the fulfiller is required to be either a whitelisted address or the current manager",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

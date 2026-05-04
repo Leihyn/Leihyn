@@ -1,0 +1,21 @@
+{
+  "title": "Potential revert in earned() when checkpoint supply is zero",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Inside `ExternalBribe.earned`, the reward is calculated by multiplying the checkpoint balance of the `tokenId` by `tokenRewardsPerEpoch`, then dividing by the checkpoint's total supply.  ```solidity     function earned(address token, uint tokenId) public view returns (uint) {         uint _startTimestamp = lastEarn[token][tokenId];         if (numCheckpoints[tokenId] == 0) {             return 0;         }          uint _startIndex = getPriorBalanceIndex(tokenId, _startTimestamp);         uint _endIndex = numCheckpoints[tokenI",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

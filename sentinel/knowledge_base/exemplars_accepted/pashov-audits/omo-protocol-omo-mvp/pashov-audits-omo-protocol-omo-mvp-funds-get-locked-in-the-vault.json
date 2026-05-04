@@ -1,0 +1,23 @@
+{
+  "title": "Funds get locked in the vault",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  In case:  - User X requests to redeem shares for assets and set `receiver` for Y - Agent Z registered in the Dynamic Account of user X will remove liquidity from Uniswap V3 - Agent Z calls `OmoVault.sol#topOff()` function.  But the current implementation will revert in the above case. Because `topOff()` checks if agent is authorized in the `record.receiver` Dynamic Account.  ```solidity File: OmoVault.sol  427:         address userAccount = userToAccount[record.receiver]; 428:         require(userAccount != address(0), \"NO_RE",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

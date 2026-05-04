@@ -1,0 +1,22 @@
+{
+  "title": "Vesting contract can lead to frequent reverts",
+  "platform": "pashov-audits",
+  "program": "subsquid-subsquid-network-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: Medium, temporary DOS of funds  **Likelihood**: Medium, occurs when funds are staked / used in the protocol  ## Description  The `Vesting` is used to lock funds on behalf of a user while giving them the ability to participate in the protocol. The idea behind the contract is that the amount of funds in the contract will gradually be unlocked over time, while giving the owner the ability to use those tokens to stake or register workers and gateways with. This allows the users to use the tokens in the ecosystem, without having the option to withdraw them all at once.  The",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Subsquid-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

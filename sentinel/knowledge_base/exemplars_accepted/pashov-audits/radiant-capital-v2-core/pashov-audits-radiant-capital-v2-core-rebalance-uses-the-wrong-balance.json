@@ -1,0 +1,22 @@
+{
+  "title": "`rebalance` uses the wrong balance",
+  "platform": "pashov-audits",
+  "program": "radiant-capital-v2-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  If the `swapQuantity` parameter is `0`, the `rebalance` function will perform the swap first. After the swap, the balances of `token0` and `token1` in the contract will change. However, `_liquidityForAmounts` still uses the balances before the swap.  ```solidity \tfunction rebalance(int24 _baseLower, int24 _baseUpper, int256 swapQuantity) public nonReentrant isRebalancer { \t\tif (_baseLower >= _baseUpper || _baseLower % tickSpacing != 0 || _baseUpper % tickSpacing != 0) { \t\t\trevert UniV3TokenizedLp_BasePositionInvalid();",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Radiant-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

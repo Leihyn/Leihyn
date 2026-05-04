@@ -1,0 +1,21 @@
+{
+  "title": "Malicious token creator can block the token `buy/sells`",
+  "platform": "pashov-audits",
+  "program": "Project-Aegis-xyz-tokenFactory",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When a token is created, the creator can specify the `creatorFeeRecipient`, which will be used for sending the corresponding fees. Then in the `TokenFactory` contract, the functions `buyWithReferral`, `buyWithReferralWithExactEth`, and `sellWithReferral` use the `_sendFees` function to handle the transfer of fees:  ```solidity File: TokenFactory.sol 490:     function sellWithReferral( 491:         address erc20Address, 492:         uint256 tokenAmountToSell, 493:         uint256 minEthReceivedAfterFees, 494:         address r",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Aburra-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

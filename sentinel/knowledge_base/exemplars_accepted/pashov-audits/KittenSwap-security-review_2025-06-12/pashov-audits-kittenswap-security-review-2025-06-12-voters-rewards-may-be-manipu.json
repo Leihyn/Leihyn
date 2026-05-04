@@ -1,0 +1,23 @@
+{
+  "title": "Voters' rewards may be manipulated",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-06-12",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  In voter contract, voters vote for different gauges. Voters can gain some rewards from the rebaseReward and votingReward contract according to the actual voting weight. If the voting weight is higher, the voter may gain more rewards.  The problem here is that veToken's voting power will decrease over time. When the voter finishes voting at the start of the new voting period. Malicious users can trigger `poke` function when we are near to the end of the voting period to update voting weight. Then users may get fewer rewards tha",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-06-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

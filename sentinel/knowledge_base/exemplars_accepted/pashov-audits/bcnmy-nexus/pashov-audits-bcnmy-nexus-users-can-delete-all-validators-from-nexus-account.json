@@ -1,0 +1,19 @@
+{
+  "title": "Users can delete all validators from `Nexus` account",
+  "platform": "pashov-audits",
+  "program": "bcnmy-nexus",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In the Nexus smart account system, validators are essential for authorizing transactions through the `validateUserOp` function. The `_uninstallValidator` function allows users to remove validators from their account. If a user removes all validators, the account falls back to a `_DEFAULT_VALIDATOR`. However, if this default validator is not initialized\u2014possible if the user did not configure it during account setup\u2014the account becomes unusable. Specifically, the `validateUserOp` function will fail due to the absence of any acti",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BiconomyNexus-security-review_2025-03-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

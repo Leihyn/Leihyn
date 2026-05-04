@@ -1,0 +1,21 @@
+{
+  "title": "More rewards than it should be when MONT price is low",
+  "platform": "pashov-audits",
+  "program": "dumontgg-dumont-contract-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The MONT rewards are calculated given this formula:  ```solidity function transferPlayerRewards(...) external returns (uint256 reward) {     ...     uint256 price = getMontPrice();     uint256 houseFeeFixedPoint = houseFee * 1e18;     reward = ((houseFeeFixedPoint * 8) / 10) / price;     ... }  function getMontPrice() private returns (uint256 price) {     price = quoter.quoteExactInputSingle(address(mont), address(usdt), poolFee, 1e18, 0); } ```  The problem is that MONT tokens have 18 decimals of precision, while USDT ha",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dumont-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

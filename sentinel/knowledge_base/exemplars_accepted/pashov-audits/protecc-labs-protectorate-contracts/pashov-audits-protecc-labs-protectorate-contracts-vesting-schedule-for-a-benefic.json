@@ -1,0 +1,19 @@
+{
+  "title": "Vesting schedule for a beneficiary can be overwritten",
+  "platform": "pashov-audits",
+  "program": "protecc-labs-protectorate-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the amount left to be vested will be stuck in the contract forever  **Likelihood:** Medium, as it requires more than 1 vesting schedule for the same beneficiary  ## Description  The vesting schedules in `Vesting` are saved in `schedules` mapping, which uses the `_beneficiary` address as the key. The problem is that if a beneficiary has a scheduled vesting already, if a second schedule is set to it, then the first one will be overwritten but the `schedulesTotalAmount` will still hold the first scheduled funds to vest. This means they will be stuck in the `Vesti",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Protectorate-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

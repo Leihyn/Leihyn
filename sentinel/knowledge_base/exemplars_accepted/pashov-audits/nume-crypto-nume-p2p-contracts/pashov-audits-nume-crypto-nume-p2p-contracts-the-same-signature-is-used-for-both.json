@@ -1,0 +1,22 @@
+{
+  "title": "The same signature is used for both withdrawal request and subscription cancelling",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium. User can't specify what action to perform when gives signature. As a result, user can't use signatures in trustless manner because tx sender can perform different action on behalf of user.  **Likelihood:** Medium. Usage of signature is impacted, however user can send transaction on his own to avoid problems.  ## Description  Here you can see that signature in both methods contains the same parameters:  ```solidity     function submitWithdrawalRequest(         WithdrawalRequestArgs calldata _args     ) external payable nonReentrant {         AppStorage.enforceEx",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

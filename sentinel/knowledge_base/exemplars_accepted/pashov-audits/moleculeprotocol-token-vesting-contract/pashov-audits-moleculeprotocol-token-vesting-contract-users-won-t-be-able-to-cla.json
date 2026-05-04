@@ -1,0 +1,19 @@
+{
+  "title": "Users won't be able to claim vested tokens when contract is paused",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-token-vesting-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as owner has the power to make it so that users can't claim any vested tokens  **Likelihood:** Low, as it requires a malicious or a compromised owner  ## Description  The owner can currently execute the following attack:  1. Call `setPaused` with `paused == true`, so pause the contract 2. Now all user calls to `releaseAvailableTokensForHolder` will fail, since it has the `whenNotPaused` modifier 3. He can not unpause the contract forever or even renounce ownership  This is a common centralization problem which means the contract owner can \"rug\" users.  ## Recomme",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/MoleculeVesting-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

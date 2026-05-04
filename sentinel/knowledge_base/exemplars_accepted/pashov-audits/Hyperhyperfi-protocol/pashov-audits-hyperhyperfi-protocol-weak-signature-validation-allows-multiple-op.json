@@ -1,0 +1,21 @@
+{
+  "title": "Weak signature validation allows multiple option mispricing vectors",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The protocol's signature validation mechanism enables option mispricing through period manipulation and stale signatures:  1. **Period and Maturity Mismatch**  ```solidity function _hash(...) internal pure returns (bytes32) { @>  return keccak256(abi.encode(iv, uAsset, oType, maturityDate, relativeStrike)); }  function iv(uint48 period, OptionType oType, uint256 strikePrice) external view returns (uint256 value) { @>  value = _ivValues[period][oType][strikePrice]; // IV is queried based on `period`, `oType` and `strikePri",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

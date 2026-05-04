@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect stake limit check",
+  "platform": "pashov-audits",
+  "program": "resolv-im-resolv-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `LidoTreasuryConnector.deposit()` function is designed to submit ETH into the Lido pool, with the amount being bounded by the current stake limit:  ```solidity         if (lidoCurrentStakeLimit <= amount) {             revert StakeLimit(lidoCurrentStakeLimit, amount);         } ```  However, this logic is flawed. The function will incorrectly revert when `lidoCurrentStakeLimit == amount`. For example, if `lidoCurrentStakeLimit` is 1000 and the treasury attempts to deposit 1000 ETH, the function will revert, even though the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Resolv-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

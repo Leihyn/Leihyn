@@ -1,0 +1,19 @@
+{
+  "title": "Lack of signature cancellation functionality",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `SessionOrderModule.sol` contract allows users to execute orders by signing messages using the `executeSessionOrdersBySig` function. However, no functionality is provided to cancel a previously signed message. This omission poses a security risk, as users may want to revoke or cancel their signed orders in case of a change in intention or if they suspect their private key might have been compromised.  Currently, the only way to cancel the execution of an order is to revoke a user's permissions, but this only addresses s",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

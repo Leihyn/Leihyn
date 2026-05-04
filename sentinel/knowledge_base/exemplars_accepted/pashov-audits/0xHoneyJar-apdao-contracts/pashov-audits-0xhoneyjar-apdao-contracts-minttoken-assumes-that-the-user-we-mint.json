@@ -1,0 +1,22 @@
+{
+  "title": "`mintToken()` assumes that the user we mint to is not an admin",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** Medium  ## Description  Upon `ERC20DAO::mintToken()` is called, we have this piece of code:  ```solidity         Emitter(emitterContractAddress).newUser(             address(this),             to,             Factory(factoryAddress).getDAOdetails(address(this)).depositTokenAddress,             0,             block.timestamp,             amount,             false         ); ```  The last variable is whether the user is an admin. As seen, it always assumes that the user is not an admin. However, that is an incorrect assumption as there are multiple s",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

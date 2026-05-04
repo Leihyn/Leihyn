@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect `maxRedeemPerBlock` check",
+  "platform": "pashov-audits",
+  "program": "Level-Money-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `maxRedeemPerBlock` is intended to limit the maximum redemption per block. However, it is currently being checked against `pendingRedemption`.  ```solidity     function initiateRedeem(address asset, uint256 lvlUsdAmount, uint256 expectedAmount)         external         requiresAuth         notPaused         returns (uint256, uint256)     {         if (!redeemableAssets[asset]) revert UnsupportedAsset();         if (!isBaseCollateral[asset]) revert RedemptionAssetMustBeBaseCollateral();         if (lvlUsdAmount == 0) rever",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Level-security-review_2025-04-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

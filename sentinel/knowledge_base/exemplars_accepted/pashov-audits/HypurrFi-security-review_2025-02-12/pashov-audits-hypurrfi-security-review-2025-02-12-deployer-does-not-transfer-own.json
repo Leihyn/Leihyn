@@ -1,0 +1,21 @@
+{
+  "title": "Deployer does not transfer ownership of `CapAutomator` to admin",
+  "platform": "pashov-audits",
+  "program": "HypurrFi-security-review_2025-02-12",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The function `DeployCapAutomator.run` deploys an instance of `CapAutomator`, assigning `msg.sender` (the `deployer`) as the initial owner. But it does not transfer the ownership to the designated `admin`.  ```solidity     function run() external {         --snip--         poolAddressesProvider = IPoolAddressesProvider(deployedContracts.readAddress(\".poolAddressesProvider\"));          vm.startBroadcast(vm.envUint(\"PRIVATE_KEY\"));          capAutomator = new CapAutomator(address(poolAddressesProvider));          vm.stopBroadc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HypurrFi-security-review_2025-02-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

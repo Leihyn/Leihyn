@@ -1,0 +1,21 @@
+{
+  "title": "BTC transactions can have multiple inputs and outputs",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-onramp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  BTC txs can have multiple inputs and outputs and the relayer chooses the `reciever` and `onramp` contract based on the BTC transaction after users make the BTC transactions. The issue is that it's not clear which input address would be chosen as a token receiver and which output address is going to be chosen as an onramp contract. Funds may go to a different receiver address or the relayer may use the wrong onramp contract. If the relayer handles only specific BTC txs users should be informed about relayer limitations.  #",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Onramp-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

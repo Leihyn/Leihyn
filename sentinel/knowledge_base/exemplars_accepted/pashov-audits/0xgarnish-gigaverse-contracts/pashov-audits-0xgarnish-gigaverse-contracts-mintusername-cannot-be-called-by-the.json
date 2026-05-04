@@ -1,0 +1,19 @@
+{
+  "title": "`mintUsername()` cannot be called by the minter role only",
+  "platform": "pashov-audits",
+  "program": "0xgarnish-gigaverse-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `GigaNameNFT.mintUsername()` function is meant to be called by the `MINTER_ROLE` (as checked by the `confirmMint()`) to mint a `GigaNameNFT` for a player, however, the call will fail if the caller doesn't hold `GAME_LOGIC_CONTRACT_ROLE` as the `_initializeTraits()` is only accessible o addresses with that role, and by knowing that `GAME_LOGIC_CONTRACT_ROLE` is only granted for the system contracts; this will result in the `mintUsername()` function being by EOAs:  ```javascript   function mintUsername(address to, strin",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gigaverse-security-review_2025-01-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

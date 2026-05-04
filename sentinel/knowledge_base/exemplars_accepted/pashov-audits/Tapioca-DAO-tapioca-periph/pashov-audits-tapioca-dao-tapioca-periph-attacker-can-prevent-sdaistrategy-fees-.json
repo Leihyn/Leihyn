@@ -1,0 +1,23 @@
+{
+  "title": "Attacker can prevent `sDaiStrategy` fees from ever being collected",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, since zero fees will be captured by the strategy  **Likelihood:** High, since this attack can be easily performed and persisted by a single attacker  ## Description  In the `sDaiStrategy`, when a user deposits assets into the strategy, the deposited assets are only placed into the underlying pool when the `depositThreshold` (which is set by the owner) is reached:  ```solidity function _deposited(uint256 amount) internal override nonReentrant {         if (paused) revert Paused();          // Assume that YieldBox already transferred the tokens to this address",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review-february.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

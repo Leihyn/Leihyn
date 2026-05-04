@@ -1,0 +1,21 @@
+{
+  "title": "Parameter change skews getters",
+  "platform": "pashov-audits",
+  "program": "RegnumAurumAcquisitionCorp-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  Interest accrual is always calculated using the last calculated variables for updating reserve state. For instance, if interest was 5% lastly and after 1 hour we call `deposit` function, it will use this 5% interest for the last 1 hour. However, `getNormalizedIncome` and `getNormalizedDebt` functions calculate these rates again return value according to that.  This will cause incorrect value to be returned in these functions. It's very critical because `getNormalizedIncome` and `getNormalizedDebt` are used in ma",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RegnumAurum-security-review_2025-08-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

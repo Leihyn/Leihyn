@@ -1,0 +1,21 @@
+{
+  "title": "Bias in random token selection due to modulo operator",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-apdao-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The function `_createAuctionWithRandomNumber` uses a modulo operation to select a random index from the `auctionQueue`:  ```solidity File: ApiologyDAOAuctionHouse.sol 378:     function _createAuctionWithRandomNumber(bytes32 randomNumber) internal { ... 390:         if (auctionQueue.length > 0) { 391:>>>          uint256 randomIndex = uint256(randomNumber) % auctionQueue.length; 392:             apdaoId = auctionQueue[randomIndex]; 393: 394:             // Remove the selected token from the queue 395:             auctionQu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/apDAO-security-review_2024-10-03.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

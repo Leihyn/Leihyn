@@ -1,0 +1,22 @@
+{
+  "title": "Unbounded loops can lead to out-of-gas errors in contracts",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  1. The `totalAssets()` function in `OmoVault.sol` contains an unbounded loop that iterates through all registered accounts: 2. `OmoRouter.registerAccount` loops through all accounts, making it susceptible to a DoS attack via createAccount(). 3. `OmoVaulFactory.getVaultId` loops through all vaults... 4. `OmoAgent.topOffToAgent` has unbounded loop when tries to remove `positionId` 5. `OmoAgent._removeTokenAddress` loops through all token addresses 6. `AgentSetter.removeAgent` loops through all `whitelistedAgents` which is u",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

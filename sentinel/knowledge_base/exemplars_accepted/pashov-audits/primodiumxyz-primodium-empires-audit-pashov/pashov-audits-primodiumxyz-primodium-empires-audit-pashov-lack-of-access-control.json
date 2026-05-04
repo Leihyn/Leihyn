@@ -1,0 +1,21 @@
+{
+  "title": "Lack of access control in `ResetSystem::resetGame()`",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "access-control",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `resetGame` function in the `ResetSystem` contract does not implement any form of access control, allowing anyone to call it. This creates a severe vulnerability, as any unauthorized user can reset the entire game state, leading to potential loss of progress and disruption of gameplay.  Additionally, in the configuration file `mud.config.ts`, the `openAccess` flag for several subsystems, including `ResetClearLoopSubsystem`, is correctly set to `false`, but this access control has not been applied to the `ResetSystem` cont",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

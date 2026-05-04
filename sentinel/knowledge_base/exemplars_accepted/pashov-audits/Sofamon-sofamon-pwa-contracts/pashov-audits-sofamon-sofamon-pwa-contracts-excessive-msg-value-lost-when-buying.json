@@ -1,0 +1,21 @@
+{
+  "title": "Excessive msg.value lost when buying",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-pwa-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, funds lost forever  **Likelihood:** Low, requires a mistake from a user  ## Description  `msg.value` is considered incorrect only in this equation:  ``` msg.value < price + protocolFee + creatorFee ```  As a result, `msg.value` above price+fees will pass, but never return and thus lost.  It can happen in case of a mistake from users if they provide the wrong `msg.value`.  This mistake can be either from fee calculations, or it can be some sell operations before the user, so the total price is less than expected.  ## Recommendations  Consider either having a stric",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

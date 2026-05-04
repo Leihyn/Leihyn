@@ -1,0 +1,21 @@
+{
+  "title": "Wrong fee share calculations in `_takeFee()`",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium    **Likelihood:** Medium    ## Description In the `HyperEvmVault` contract, the `_takeFee()` function is used to calculate and collect management fees from the vault. The function calculates the fee amount and mints corresponding shares to the `feeRecipient` to deduct the fee from **depositors**.   ```solidity function _takeFee(V1Storage storage $, uint256 grossAssets) private returns (uint256) {     uint256 feeTake_ = _calculateFee($, grossAssets);      // Only update state if there's a fee to take     if (feeTake_ > 0) {         $.lastFeeCollectionTimestamp =",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

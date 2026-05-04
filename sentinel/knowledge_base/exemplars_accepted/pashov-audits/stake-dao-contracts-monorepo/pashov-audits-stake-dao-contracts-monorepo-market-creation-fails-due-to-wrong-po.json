@@ -1,0 +1,23 @@
+{
+  "title": "Market creation fails due to wrong pool address in `oracle` deployment",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `CurveLendingMarketFactory` contract `deploy()` functions, the `_curvePool` parameter passed during the deployment of the oracle (`CurveCryptoswapOracle` or `CurveStableswapOracle`) is incorrectly set to `rewardVault.asset()`. However, `_curvePool` is expected to be the address of the actual Curve pool used for fetching the LP token price.  Using the `rewardVault.asset()` address instead of the proper Curve pool address results in failed oracle price fetching. Consequently, any attempt to create a marke",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

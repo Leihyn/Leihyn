@@ -1,0 +1,24 @@
+{
+  "title": "`withdraw` does not reduce `staked` data when staker is caller",
+  "platform": "pashov-audits",
+  "program": "yield-basis-yb-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When` withdraw` is called, it updates `liquidity.total` based on the amount of shares burned, but it doesn't check if the caller is the `staker`. If the `staker` calls the `withdraw` operation, it should also update and decrease the `staked` value.  ```python @external @nonreentrant def withdraw(shares: uint256, min_assets: uint256, receiver: address = msg.sender) -> uint256:     \"\"\"     @notice Method to withdraw assets (e.g. like BTC) by spending shares (e.g. like yield-bearing BTC)     @param shares Shares to wi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YieldBasis-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

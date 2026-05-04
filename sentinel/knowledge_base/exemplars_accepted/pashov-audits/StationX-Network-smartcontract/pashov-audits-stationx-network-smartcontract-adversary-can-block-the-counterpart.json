@@ -1,0 +1,22 @@
+{
+  "title": "Adversary can block the counterpart deployment of cross-chain DAOs",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `deploySAFE()` function in `Deployer` attempts to create a Safe for the DAO via `SafeProxyFactory::createProxyWithNonce()`. It uses a `try/catch` pattern, but it will always revert if another Safe with the same `nonce` was created beforehand on that chain.  Notice how a `revert` inside a `catch` block will make the whole transaction revert:  ```solidity uint256 nonce = getNonce(_daoAddress); do {     try ISafe(safe).createProxyWithNonce(singleton, _initializer, nonce) returns (address _deployedSafe) {         SAFE = _de",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

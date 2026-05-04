@@ -1,0 +1,22 @@
+{
+  "title": "F-24 txpool admin RPC ungated",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "High",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "other",
+  "surface_tags": [
+    "l2-client",
+    "proxy"
+  ],
+  "bug_class": "trust-boundary",
+  "mental_operation": "trust_mapper",
+  "language": "rust",
+  "file_paths": [],
+  "summary": "merge_configured registers txpool admin RPC unconditionally; should be gated by admin module.",
+  "key_lesson": "DRAFTED 2026-04-25, dismissed 2026-05-02 incorrectly invoking 'documented design'; PR #2497 opened 2026-05-03 patches exactly this. Filing window 04-25 to 05-03 was the slot. Counter-rule: documented-design rule needs an active-iteration counterweight.",
+  "contest_url": null,
+  "submission_url": null,
+  "captured_at": "2026-05-04T03:26:32"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "New `subGauge`s can't be used by the protocol",
+  "platform": "pashov-audits",
+  "program": "tenet-org-veTenet-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as important protocol functionality is not working  **Likelihood:** High, as the bug will happen every time  ## Description  The `createSubGauge` method in `GaugeFactory` creates a new `subGauge` but does not actually add the `subGauge` to the `GaugeProxy` as it is done in `createGaugeProxyAndSubGauges`. Even though the `GaugeProxy` contract has an `addSubGauge` method, it is only callable by the `gaugeFactory` or by the `TLSDFactory`. Neither contracts have an actual way to directly call the `addSubGauge` method, which means that even though you can create new `",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/veTenet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "`matchOrders` affected if withdrawals exceed the global limit",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Within the `AccountCollateral::updateBalance` function, a validation was added to check that withdrawals do not exceed a global percentage for each X period of time (code line 120):  ```solidity File: AccountCollateral.sol 107:     function updateBalance(Account.Data storage account, address collateral, int256 assets) internal { 108:         // Convert assets to shares 109:         int256 shares = GlobalCollateralConfiguration.convertToShares(collateral, assets); 110: 111:         // check withdrawal limits, globally and per c",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-April.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

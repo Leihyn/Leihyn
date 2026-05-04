@@ -1,0 +1,21 @@
+{
+  "title": "Potential loss of LP Fees",
+  "platform": "pashov-audits",
+  "program": "Project-Aegis-xyz-tokenFactory",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When a token sale completes, the corresponding `curvePool` is set to `paused`. Subsequently, the owner can invoke `TokenFactory::moveToAMM` to create a pool on Uniswap and add liquidity (TokenFactory#L888-905). This action mints a Uniswap position NFT and stores its ID (TokenFactory#L858) for fee collection later. However, Uniswap may return ETH if the full amount isn't used for liquidity, which can incorrectly leave the curve's ETH balance non-zero (`curve.ethBalance`) (TokenFactory#L917-931):  ```solidity File: TokenFactory.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Aburra-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

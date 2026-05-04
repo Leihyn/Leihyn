@@ -1,0 +1,22 @@
+{
+  "title": "Mint decimal manipulation",
+  "platform": "pashov-audits",
+  "program": "LayerZero-security-review-September",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `ld2sd_rate` (local-to-shared decimal rate) can be manipulated by the initializer through the exploitation of the `MintCloseAuthority` extension in the Solana program. This manipulation is possible because the initializer has control over the mint\u2019s decimal value, which can be changed after the mint\u2019s creation, leading to critical discrepancies in token accounting and potential financial exploits.  The process to execute this exploit is as follows:  1. The admin creates a mint with an initial decimal value of 18 using the",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LayerZero-security-review-September.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

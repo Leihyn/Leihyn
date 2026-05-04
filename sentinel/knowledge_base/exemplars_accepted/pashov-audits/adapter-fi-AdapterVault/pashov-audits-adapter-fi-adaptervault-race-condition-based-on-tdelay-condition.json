@@ -1,0 +1,22 @@
+{
+  "title": "Race condition based on `TDelay` condition",
+  "platform": "pashov-audits",
+  "program": "adapter-fi-AdapterVault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a strategy is not rejected or endorsed by the guards, it can be activated after the `TDelay` period.  ```python @external def activateStrategy(Nonce: uint256, vault: address):     ...     #Confirm strategy is approved by guards     assert (len(pending_strat.VotesEndorse) >= (len(self.LGov)/2)+1) or \\            ((pending_strat.TSubmitted + self.TDelay) < block.timestamp), \"Premature activation with insufficience endorsements.\"     ... ```  However, a strategy can also be replaced by a new one after the `TDelay` perio",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AdapterFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

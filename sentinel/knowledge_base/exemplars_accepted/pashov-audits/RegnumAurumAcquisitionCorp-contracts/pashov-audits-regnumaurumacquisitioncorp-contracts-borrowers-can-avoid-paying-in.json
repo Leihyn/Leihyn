@@ -1,0 +1,21 @@
+{
+  "title": "Borrowers can avoid paying interest for lenders",
+  "platform": "pashov-audits",
+  "program": "RegnumAurumAcquisitionCorp-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When we check the borrowers total debt value, we use `_positionScaledDebt` internal function. It uses following formula:  `rawDebtBalance * usageIndex / positionIndex`  However, it doesn't increase rawDebtBalance correctly in `borrow` function while it updates positionIndex to a new value.  ```solidity (, uint256 underlyingAmount, , ) = IDebtToken(reserve.reserveDebtTokenAddress).mint(msg.sender, msg.sender, amount, reserve.usageIndex, abi.encode(adapter, data));          // We need to update the position index",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RegnumAurum-security-review_2025-08-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

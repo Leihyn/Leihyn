@@ -1,0 +1,23 @@
+{
+  "title": "Anyone can cancel another user's scheduled recovery",
+  "platform": "pashov-audits",
+  "program": "AmbireTech-ambire-common",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "governance",
+    "bridge",
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as important protocol feature can be permanently blocked for a victim user  **Likelihood:** High, as it has no preconditions and can be exploited by anyone  ## Description  A wallet recovery mechanism in Ambire allows a pre-set account (usually the relayer) to set a new main signer after the initial one was stolen/lost. It works by calling `execute` with a `SIGMODE_RECOVER` signature. This will store the request in the contract like this, scheduling it for the future:  ```solidity scheduledRecoveries[hash] = block.timestamp + recoveryInfo.timelock; emit LogRecove",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Ambire-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

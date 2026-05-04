@@ -1,0 +1,21 @@
+{
+  "title": "Wrong supply accounting in merge function",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "invariant-violation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The `supply` state variable shows total amount of KITTEN locked in the VotingEscrow contract.  When merging two NFTs in the VotingEscrow contract, the `from` NFT's tokens (`value0`) are transferred to the `to` NFT. However, while the NFT is burnt, the `supply` isn't reduced before calling `_deposit_for`. Then, inside `_deposit_for`, the `supply` is increased again by `value0`.  The `supply` variable will be artificially inflated by `value0` each time a merge operation occurs. This overstatement is permanent as there's no corre",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

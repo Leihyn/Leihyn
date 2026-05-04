@@ -1,0 +1,22 @@
+{
+  "title": "Improper use of locked funds as liquidity in `PositionInteractionFacet`",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When someone exercises a Call option, they receive their profit (`pnl`) in the `buyToken`. The contract should only use available (not locked) tokens for this payout, or swap assets if needed. The `_payout()` function attempts to use unclaimed LP rewards (premiums) to cover option payouts:  ```solidity     function _payout(Position memory pos, PositionClose memory close) internal returns (uint256 pnl) {         --snip--         uint256 availablePayoutToken = strg.ledger.state.rewardsByToken[pos.buyToken].totalRewards;",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

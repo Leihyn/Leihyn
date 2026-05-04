@@ -1,0 +1,19 @@
+{
+  "title": "`lzReceive()` call for `releaseOnEid()` results in OOG error",
+  "platform": "pashov-audits",
+  "program": "yuga-labs-NFTMIrror",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The release of a shadow NFT on a different chain is initiated in the `NFTShadow.releaseOnEid()` function. This function calculates the `options` parameter for the LayerZero message as follows:  ```solidity     uint128 private constant _BASE_OWNERSHIP_UPDATE_COST = 80_000;     (...)     uint128 private constant _INCREMENTAL_OWNERSHIP_UPDATE_COST = 20_000;     (...)     function getSendOptions(uint256[] calldata tokenIds) public pure returns (bytes memory) {         uint128 totalGasRequired =             _BASE_OWNERSHIP_UPDAT",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/NFTMirror-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

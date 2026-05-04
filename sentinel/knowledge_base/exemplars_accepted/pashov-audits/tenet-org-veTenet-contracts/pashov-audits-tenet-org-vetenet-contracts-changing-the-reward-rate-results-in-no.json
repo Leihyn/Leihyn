@@ -1,0 +1,21 @@
+{
+  "title": "Changing the reward rate results in non-claimable yield",
+  "platform": "pashov-audits",
+  "program": "tenet-org-veTenet-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as accrued rewards won't be distributed to validators  **Likelihood:** Medium, as it requires method to be called in a specific order  ## Description  The `setDailyRewardRate` in `RewardVault` resets the `lastReward` storage variable to the current day. This means that now when `RewardVault::distributeRewards` is called, only the duration since the latest `setDailyRewardRate` call and the current moment will be used to calculate the accrued rewards. The problem with this approach is if that before calling `setDailyRewardRate` there were accrued but unclaimed rewa",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/veTenet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

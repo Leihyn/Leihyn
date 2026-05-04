@@ -1,0 +1,21 @@
+{
+  "title": "Gas griefing/theft is possible on unsafe external call",
+  "platform": "pashov-audits",
+  "program": "hananbeer-zerem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "bridge"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  This comment `// TODO: send relayer fees here` in the `unlockFor` method and its design show that it is possible that `unlockFor` is usually called by relayers. This opens up a new attack-vector in the contract and it is gas griefing on the ETH transfer  ```solidity (bool success,) = payable(receiver).call{gas: 3000, value: amount}(hex\"\"); ```  Now `(bool success, )` is actually the same as writing `(bool success, bytes memory data)` which basically means that even though the `data` is omitted it doesn\u2019t mean that the contract does not handle it. Actually, the way it works",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Zerem-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

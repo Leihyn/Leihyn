@@ -1,0 +1,21 @@
+{
+  "title": "The system is not fully usable with the Uniswap Widget",
+  "platform": "pashov-audits",
+  "program": "g8keep-audit",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  One of the requirements for the protocol is that `the system must be fully usable with the Uniswap Widget`. However, the following incompatible features have been found:  1. During the snipe protection period, quotes on buys of the g8keep token might not return the correct amount, and `maxSnipeProtectionBuyWithoutPenalty` is expected to be used to calculate the maximum amount of tokens that can be bought without penalty. This flow is not supported by the Uniswap Widget.  2. There is no mention in the [documentation](https://do",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/g8keep-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "The fee mechanism is not enforced",
+  "platform": "pashov-audits",
+  "program": "nitolabs-pino-contract",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the protocol can lose potential yield in the form of fees  **Likelihood:** High, as users can craft such transactions in a permissionless way  ## Description  The codebase is using a fee mechanism where the users pay a fee for using some functionality. An example where this is done is the `Compound::depositETHV2` method, as we can see here:  ```solidity     function depositETHV2(address _recipient, uint256 _proxyFeeInWei) external payable nonETHReuse {         address _cEther = address(cEther);          ICEther(_cEther).mint{value: msg.value - _proxyFeeInWei}(",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Pino-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

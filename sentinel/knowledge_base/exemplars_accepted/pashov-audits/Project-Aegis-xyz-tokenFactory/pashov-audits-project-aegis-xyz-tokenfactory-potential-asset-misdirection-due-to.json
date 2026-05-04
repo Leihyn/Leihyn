@@ -1,0 +1,22 @@
+{
+  "title": "Potential asset misdirection due to race condition in token transfer",
+  "platform": "pashov-audits",
+  "program": "Project-Aegis-xyz-tokenFactory",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When a token has sold all of its tokens, the token is paused and marked as \"completed\" (TokenFactory#L388-393). This allows the assets to be moved to a `Uniswap Pool` using the `TokenFactory::moveToAMM` function:  ```solidity File: TokenFactory.sol 371:     function buyWithReferral(address erc20Address, uint256 tokenAmountToBuy, address referral) 372:         public 373:         payable 374:         nonReentrant 375:         validToken(erc20Address) 376:     { ... ... 387:         uint256 tokenAmountLeft = getTokenAmountLeft(e",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Aburra-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

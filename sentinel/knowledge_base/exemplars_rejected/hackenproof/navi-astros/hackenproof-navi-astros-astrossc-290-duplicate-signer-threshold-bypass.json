@@ -1,0 +1,23 @@
+{
+  "title": "ASTROSSC-290 duplicate signer threshold bypass",
+  "platform": "hackenproof",
+  "program": "navi-astros",
+  "severity_filed": "High",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "out-of-scope",
+  "surface_tags": [
+    "multisig",
+    "signature",
+    "vault"
+  ],
+  "bug_class": "trust-boundary",
+  "mental_operation": "invariant_inferrer",
+  "language": "move",
+  "file_paths": [],
+  "summary": "reset_signers accepts duplicate PKs; one private key compromise satisfies multi-sig threshold. Triager confirmed technically valid; closed Informative citing 'reset_signers protected by OwnerCap; signer management performed by protocol team through controlled processes \u2014 trusted role misconfiguration outside threat model'.",
+  "key_lesson": "Trusted-role-misconfiguration class always closes Informative on HackenProof regardless of (a) Gnosis Safe precedent, (b) AVA-1 distinction, (c) bombshell evidence (project's own commented-out test). Triagers anchor on threat model, not technical merit.",
+  "contest_url": "https://hackenproof.com/audits/navi-astros",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:44:35"
+}

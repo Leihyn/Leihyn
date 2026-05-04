@@ -1,0 +1,22 @@
+{
+  "title": "`swapIntoFromRouter` missing the `checkPoolCap` modifier",
+  "platform": "pashov-audits",
+  "program": "NablaFinance-contracts-audit-07-2024",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When depositing into the pools, the pool cap is enforced. This is done through the `checkPoolCap` modifier. The modifier tracks the pool's asset's balance, with the amount being deposited, and compares them against the pool cap.  ```solidity     modifier checkPoolCap(uint256 _additionalDeposit) {         require(poolAsset.balanceOf(address(this)) + _additionalDeposit <= poolCap, \"deposit: CAP_EXCEEDED\");         _;     } ```  This means that any tokens entering the pool potentially add up to the cap, regardless of whether",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nabla-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

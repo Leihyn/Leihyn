@@ -1,0 +1,22 @@
+{
+  "title": "Function `rebase()` apply wrong APR in RivusTAO",
+  "platform": "pashov-audits",
+  "program": "cryptoLteam-rivus-contract-audit",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The function `rebase()` is supposed to apply daily APR to the share price by decreasing the total share amount. The issue is that the code uses `totalSharesAmount * apr` to calculate `burnAmount` so the burned amount would be bigger than what it should be. This is the POC:  1. Suppose there are 100 shares and 100 tokens. 2. Admin wants to apply a 20% increase for one day. 3. Code would calculate the burn amount as `100 * 20% = 20` and the new total share would be 80. 4. Now the token to share price would be `100/80 = 1.25` an",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Rivus-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

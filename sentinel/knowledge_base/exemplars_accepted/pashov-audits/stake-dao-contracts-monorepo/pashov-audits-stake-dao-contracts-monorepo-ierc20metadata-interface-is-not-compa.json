@@ -1,0 +1,21 @@
+{
+  "title": "`IERC20Metadata` interface is not compatible with `USDT`",
+  "platform": "pashov-audits",
+  "program": "stake-dao-contracts-monorepo",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `MorphoMarketFactory.create()` approves the Morpho protocol to transfer the loan token. However, the `IERC20Metadata` interface is not compatible with `USDT` and other non-compliant ERC20 tokens that do not return a value on `approve()`, making the transaction revert.  ```solidity         // Feed the market with exactly 1 token so that there is available liquidity for the subsequent borrow.         uint256 loanToSupply = 10 ** loan.decimals();         loan.safeTransferFrom(msg.sender, address(this), loanToSupp",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StakeDAO-security-review_2025-07-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

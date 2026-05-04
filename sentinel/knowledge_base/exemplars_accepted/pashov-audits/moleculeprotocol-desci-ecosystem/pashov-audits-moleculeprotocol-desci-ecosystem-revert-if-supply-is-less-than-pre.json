@@ -1,0 +1,21 @@
+{
+  "title": "Revert if supply is less than premint parameter",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-desci-ecosystem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `getTokensNeededToAddEthValue` function reverts if the `supply` is less than the `curve`'s `premint` parameter.  ``` function getTokensNeededToAddEthValue(uint256 supply, uint256 ethAmount, bytes32 curveParameters) external pure returns (uint256 tokenAmount) {     (uint256 m, uint256 p) = decodeParameters(curveParameters);     UD60x18 pmins = ud(supply - p); } ```  I will describe the scenario where the `supply` is smaller than the `curve`'s `premint` parameter.  The `premint` parameter of `Market Parameters` can be l",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Catalyst-security-review-april.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

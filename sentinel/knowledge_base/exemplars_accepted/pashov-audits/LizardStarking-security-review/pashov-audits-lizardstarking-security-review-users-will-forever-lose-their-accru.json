@@ -1,0 +1,22 @@
+{
+  "title": "Users will forever lose their accrued rewards if they call `withdrawStake` before calling `claimReward` first",
+  "platform": "pashov-audits",
+  "program": "LizardStarking-security-review",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as this will lead to a monetary loss for users  **Likelihood:** Medium, as even though the front-end will enforce the right sequence of calls, the Gitbook docs falsely claims re-staking will re-gain user's access to their rewards  ## Description  The contract is implemented so that if a user calls `withdrawStake` without first calling `claimReward` for each reward pool then the staker will lose all of his unclaimed rewards forever, they will be locked into the staking contract. While the front-end will enforce the right sequence of calls, the Gitbook docs state t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/LizardStarking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

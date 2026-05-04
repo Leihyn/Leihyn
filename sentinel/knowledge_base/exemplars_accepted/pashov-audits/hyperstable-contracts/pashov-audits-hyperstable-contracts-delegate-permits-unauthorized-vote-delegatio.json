@@ -1,0 +1,19 @@
+{
+  "title": "`delegate()` permits unauthorized vote delegation",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `delegate()` function in the `vePeg` contract is intended to delegate votes from an NFT (lock) to another NFT/lock (delegatee). However, the issue is that this function allows anyone to delegate on behalf of any lock (NFT) owner, which should not be the case. Delegation should only be allowed from the owner or operator of the lock:  ```solidity function delegate(uint256 _from, uint256 _to) public {         return _delegate(_from, _to);     } ```  This results in the following risks:  - Malicious actors can delegate votes",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-03-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

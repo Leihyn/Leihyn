@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect initial `tradeFee` in `marketPrice`",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description In marketPrice contract, when users trade their NFTs via function `executeTrade`, the protocol will charge some trade fees from this trade.  When we initialize the marketPrice contract, we will initialize the `tradeFee`. According to the comment, the initial trade fee is 1 USDC. The problem here is that we use the incorrect value `10e6` here. `10e6` USDC means 10 USDC. So traders have to pay 10X trade fees than expected.  ```solidity     function initialize(         address _rbac,         uint256 _marketplaceMa",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

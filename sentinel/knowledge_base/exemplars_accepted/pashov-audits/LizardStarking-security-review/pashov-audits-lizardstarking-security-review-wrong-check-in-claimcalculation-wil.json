@@ -1,0 +1,21 @@
+{
+  "title": "Wrong check in `claimCalculation` will result in less rewards received for users",
+  "platform": "pashov-audits",
+  "program": "LizardStarking-security-review",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as this will lead to a monetary loss for users  **Likelihood:** Medium, as it happens only for the pool with an ID of 1  ## Description  The first `if` statement in `claimCalculation` checks `if (_poolNumber == 1)` and does not factor in any inflation for that particular pool. The problem is that (it is also explained in the comment above the `if` statement) the intention was to check if there was only 1 pool (or if it was the first pool) then there is no need to do inflation calculations, which result in a higher reward. But when you have `_poolNumber == 1` this",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/LizardStarking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

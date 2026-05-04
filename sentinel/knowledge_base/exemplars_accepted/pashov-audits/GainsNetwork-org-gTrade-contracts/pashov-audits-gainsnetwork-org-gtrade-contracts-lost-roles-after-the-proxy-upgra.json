@@ -1,0 +1,21 @@
+{
+  "title": "Lost roles after the proxy upgrade",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "initializer-upgrade",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the current implementation of the `GNSMultiCollatDiamond` contract, the `accessControl` mapping takes slot `2` in the proxy storage: [Link](https://arbiscan.io/address/0x1b7aeaeab4ffd6b3070ae601a038146b80c6ea8a#code#F20#L20)  The first two slots are taken by variables from the `Initializable` contract and by struct `Addresses` which currently holds only one address - `gns`.  But in the new version of the `GNSMultiCollatDiamond` contract, struct `Addresses` would take 2 more storage slots:  ```solidity File: IAddressStore",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

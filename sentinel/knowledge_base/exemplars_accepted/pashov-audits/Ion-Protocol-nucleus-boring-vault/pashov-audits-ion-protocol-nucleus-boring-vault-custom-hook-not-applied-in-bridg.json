@@ -1,0 +1,22 @@
+{
+  "title": "Custom hook not applied in `_bridge()` and `_quote()`",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-nucleus-boring-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "bridge"
+  ],
+  "bug_class": "bridge",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `_bridge()` and `_quote()` in the `MultiChainHyperlaneTellerWithMultiAssetSupport` contract fail to apply a custom post-dispatch hook set via the `setHook()`. Instead, they rely on the overloaded `Mailbox.dispatch()`, which defaults to using the Mailbox contract's defaultHook.  ```solidity function _bridge(uint256 shareAmount, BridgeData calldata data) internal override returns (bytes32 messageId) { --- SNIPPED ---     mailbox.dispatch{ value: msg.value }(         data.chainSelector, // must be `destinationDomain` on hyper",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nucleus-security-review_2024-12-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

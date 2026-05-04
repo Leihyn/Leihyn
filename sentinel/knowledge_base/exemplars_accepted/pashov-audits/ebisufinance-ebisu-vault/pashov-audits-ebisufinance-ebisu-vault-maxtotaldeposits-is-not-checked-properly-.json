@@ -1,0 +1,22 @@
+{
+  "title": "`maxTotalDeposits` is not checked properly inside `_beforeDeposit`.",
+  "platform": "pashov-audits",
+  "program": "ebisufinance-ebisu-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, Because it will allow user to deposit more than `maxTotalDeposits`.  **Likelihood:** Medium, Because it doesn't require a specific scenario, the `deposit`/`mint` action at some point can deposit more than `maxTotalDeposits`.  ## Description  Ebisu vault implements a `_beforeDeposit` check before users `deposit`/`mint` to ensure it does not exceed the configured `maxPerDeposit` and `maxTotalDeposits`.  ```solidity     function deposit(uint256 assets, address receiver) public virtual override returns (uint256) {         // require(assets <= maxDeposit(receiver),",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ebisu-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

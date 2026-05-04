@@ -1,0 +1,19 @@
+{
+  "title": "Asymmetry in the cost and points of overrides",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The cost of overrides and the number of points received from purchasing them are dependent on the number of empires in the game. However, for regress overrides the defeated empires are not taken into account, while for progress overrides all empires are considered. This creates an asymmetry in the cost and points received for the two types of overrides.  If for example there are only two undefeated empires left in the game, and assuming constant point prices, the cost of a regress override will only be 5 times lower than the c",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

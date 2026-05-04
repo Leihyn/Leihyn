@@ -1,0 +1,22 @@
+{
+  "title": "Orphaned rewards captured by first staker",
+  "platform": "pashov-audits",
+  "program": "ElixirProtocol-move-contracts-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In contract `sdeusd.move` func `transfer_in_rewards()` and `convert_to_shares()` when rewards are distributed while no sdeUSD holders exist, the first subsequent staker captures all orphaned rewards at 1:1 conversion rate.  If you check the **vulnerable logic** it doesn't check if there are active stakers. ```move // transfer_in_rewards() - No check for active stakers public fun transfer_in_rewards(...) {     // Missing: assert!(total_supply(management) > 0, ENoActiveStakers);     update_vesting_amount(management,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elixir-security-review_2025-08-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect `ERC20` transfer in `withdrawFee` prevents fee withdrawal",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `AdminOperationalTreasury.withdrawFee()` function uses `safeTransferFrom()` instead of `safeTransfer()` when withdrawing protocol fees. This is incorrect because:  1. `safeTransferFrom()` requires the spender to have an allowance from the owner. 2. The contract is trying to transfer from itself (`address(this)`) to the recipient. 3. The contract has not approved itself to spend its own tokens.  ```solidity function withdrawFee(address token_, address recipient_) external {     OperationalTreasuryStorage.Layout storage",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

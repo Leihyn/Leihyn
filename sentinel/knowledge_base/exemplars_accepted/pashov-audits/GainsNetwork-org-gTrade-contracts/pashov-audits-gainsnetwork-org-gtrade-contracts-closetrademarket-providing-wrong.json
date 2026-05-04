@@ -1,0 +1,23 @@
+{
+  "title": "`closeTradeMarket` providing wrong value when triggering `getPrice`",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When `getPrice` is triggered, it will construct a Chainlink request, providing information based on the processed order type and data. Then, it calculates the `linkFeePerNode` using the provided `positionSizeCollateral` and eventually sends the request to the oracles, including the link request and `linkFeePerNode`. When calculating `linkFeePerNode`, it uses the `getLinkFee` function, expecting `_positionSizeCollateral` in its collateral precision.  ```solidity     function getLinkFee(         uint8 _collateralIndex,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

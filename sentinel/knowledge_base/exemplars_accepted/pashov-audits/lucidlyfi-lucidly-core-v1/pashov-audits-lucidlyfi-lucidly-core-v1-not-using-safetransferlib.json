@@ -1,0 +1,24 @@
+{
+  "title": "Not using `SafeTransferLib`",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Most of the token transfer operations within the `Pool` already utilize `SafeTransferLib`. However, several operations, including those in `removeLiquidity`, `rescue`, and `skim`, still use the unsafe transfer method. Consider adjusting these transfer operations to also utilize `SafeTransferLib`.  The rescue function is designed to withdraw all tokens mistakenly sent to the contract, excluding the supported tokens listed in the tokens array. However, the function fails for non-standard ERC20 tokens that do not return a bo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

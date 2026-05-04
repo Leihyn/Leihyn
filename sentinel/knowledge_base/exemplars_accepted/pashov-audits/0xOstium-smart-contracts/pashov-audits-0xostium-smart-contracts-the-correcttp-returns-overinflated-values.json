@@ -1,0 +1,21 @@
+{
+  "title": "The `correctTp()` returns overinflated values",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a user adds collateral to their position, the `leverage` parameter is updated and becomes lower than the `initialLeverage` parameter. Due to the requirement that maximum profits must not exceed 900% of the initial collateral from which position was create, the maximum profit percentage value returned from `_currentPercentProfit()` is scaled down when new collateral is added:  ```solidity         p = p * leverage / leverageToUse; ```  This creates a situation where, after additional collateral is added, the maximum pe",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-01-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

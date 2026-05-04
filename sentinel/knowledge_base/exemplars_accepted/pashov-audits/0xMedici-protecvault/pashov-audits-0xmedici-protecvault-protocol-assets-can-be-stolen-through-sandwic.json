@@ -1,0 +1,22 @@
+{
+  "title": "Protocol assets can be stolen through sandwich attacks",
+  "platform": "pashov-audits",
+  "program": "0xMedici-protecvault",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as protocol assets will be lost  **Likelihood:** High, as sandwich attacks are very common and easy to execute  ## Description  The `Capsule` contract is currently vulnerable to sandwich attack in many places. Every place which does a swap or provides/removes liquidity is done in a manner that is vulnerable. While the code has slippage checks, they are flawed. Take for example the `tradeCRVtoWETH` method, here is how a swap is done:  ```solidity uint256 expectedAmount = curvePoolWETHCRV.get_dy(2, 1, crvBal); // Estimate WETH received for CRV:WETH exchange // Exch",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/NFTCapsule-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Improper order of operations in `cancelLock` expose funds to theft",
+  "platform": "pashov-audits",
+  "program": "reserve-protocol-reserve-governor",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium   ## Description  Function `cancelLock()` does not follow the CEI pattern; it first makes the external call and then deletes the `locks[]` variable. If the execution reaches an attacker-controlled address during the external call, then it would be possible to perform the same operation multiple times and steal other users\u2019 funds.  ```solidity         SafeERC20.forceApprove(targetToken, address(vault), lock.amount);         vault.deposit(lock.amount, lock.user);          emit LockCancelled(lockId);          delete locks[lockId]",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Reserve-security-review_2026-02-27.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

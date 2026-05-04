@@ -1,0 +1,22 @@
+{
+  "title": "Lack of `receive()` function",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `BunniZapIn` contract should be able to receive native ETH as a result of the `unwrapEthOutput` function execution and refunded amounts from deposits and swaps. In order to receive this ETH there should be either `fallback` or `receive` method in the contract. However, this contract has neither.  ```solidity     function unwrapEthOutput() external nonReentrant {         weth.withdraw(weth.balanceOf(address(this)));     } ```  ## Recommendations  Consider implementing the `receive()` function:  ```solidity receive() exte",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

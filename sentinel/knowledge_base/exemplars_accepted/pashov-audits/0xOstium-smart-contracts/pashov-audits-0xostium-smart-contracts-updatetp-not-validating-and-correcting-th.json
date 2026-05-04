@@ -1,0 +1,21 @@
+{
+  "title": "`updateTp` not validating and correcting the TP",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When `updateTp` is called, the provided TP value is not validated to ensure it is appropriate relative to the `openPrice` and the trade position (`buy`). Additionally, the TP is not adjusted to ensure it does not exceed the allowed maximum gain.  ```solidity     function updateTp(uint16 pairIndex, uint8 index, uint192 newTp) external notDone {         address sender = _msgSender();         IOstiumTradingStorage storageT = IOstiumTradingStorage(registry.getContractAddress('tradingStorage'));          if (!checkNoPendingTrigger(",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-01-21.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

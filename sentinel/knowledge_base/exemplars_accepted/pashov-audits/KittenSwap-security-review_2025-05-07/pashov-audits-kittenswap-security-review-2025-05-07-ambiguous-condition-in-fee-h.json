@@ -1,0 +1,22 @@
+{
+  "title": "Ambiguous condition in fee handling for bribe rewards",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The condition requiring `_fees0`/`_fee1` to be greater than the amount returned by `IBribe(internal_bribe).left(_token0)`/`IBribe(internal_bribe).left(_token1)` in the `Gauge `contract is unclear and potentially misleading. This condition does not establish a necessary relationship between the fees being processed and the remaining rewards available for distribution.  In the `Gauge` contract, the following code snippet checks the relationship between `_fees0` and the amount left in the bribe contract:  ```solidity if (",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

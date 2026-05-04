@@ -1,0 +1,22 @@
+{
+  "title": "`whitelistUpdate()` not called on several operations",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Several operations in `FraxlendPairCore` access `_totalAssetAvailable`, which returns the total assets available in the pair, including assets in the `externalAssetVault` / `LendingAssetVault`, if configured.  ```solidity     function _totalAssetAvailable(VaultAccount memory _totalAsset, VaultAccount memory _totalBorrow, bool _includeVault)         internal         view         returns (uint256)     {         if (_includeVault) {             return _totalAsset.totalAmount(address(externalAssetVault)) - _totalBorrow.amount",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

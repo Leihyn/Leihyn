@@ -1,0 +1,19 @@
+{
+  "title": "`submitStrategy()` DOS",
+  "platform": "pashov-audits",
+  "program": "adapter-fi-AdapterVault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `Governance.submitStrategy()` is strict to have only one pending strategy per vault. Moreover, no new strategy can be accepted for voting. It can only be accepted either after accepting or rejecting a pending strategy or after 6 hours after submission.  In addition, this function is public, so anyone can submit.  As a result, the simplest attack vector is spamming any new strategy as soon as submission is available. New submissions will have to wait 6 hours or governance step in. But after that the same spam attack is pos",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AdapterFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Allocator can bypass supply cap",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-ion-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The owner of the Vault specifies a supply cap for the pool list of the vault and the allocator will distribute funds into those pools based on those supply caps. The owner can specify the IDLE pool to allow for some of the tokens to stay in the vault. The issue is that the allocator can bypass the supply cap of the IDLE pool and keep all the tokens in the vault and it bypasses limits set by the owner and the user would receive less interest. The root cause is that in the function `reallocate()` the value of the `currentIdleDep",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/IonProtocol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

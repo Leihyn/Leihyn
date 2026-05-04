@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect swapping path in `processWithdrawals()`",
+  "platform": "pashov-audits",
+  "program": "gammaswap-v1-vaults",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When the `GammaVault` manager calls the `processWithdrawals()` , the `withdrawVault` transfers its `GammaVault` token holdings to the `GammaVault`, then the `GammaVault` calculates the corresponding liquidity to withdraw from Uniswap V3, adjusts the GammaSwap hedge proportionally to maintain the hedge ratio, and converts all funds (including any profits or losses) back into the `assetToken` , then these resulting funds are transferred to the `withdrawVault`.  The `withdrawVault` is expected to receive the `assetToken` (sinc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GammaSwap-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

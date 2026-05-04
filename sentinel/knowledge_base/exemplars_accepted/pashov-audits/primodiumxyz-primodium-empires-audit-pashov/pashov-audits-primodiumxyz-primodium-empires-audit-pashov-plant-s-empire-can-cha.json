@@ -1,0 +1,19 @@
+{
+  "title": "Plant's empire can change by front-running in purchase transactions",
+  "platform": "pashov-audits",
+  "program": "primodiumxyz-primodium-empires-audit-pashov",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In functions `createShip()`, `placeAcid()` and `chargeShield()` user defines `planetId` and the code performs the action for that planet and its empire but the code doesn't verify the empire of the plant:  ```solidity   function createShip(bytes32 _planetId, uint256 _overrideCount) public payable _onlyNotGameOver {     PlanetData memory planetData = Planet.get(_planetId);     require(planetData.isPlanet, \"[OverrideSystem] Planet not found\");     require(planetData.empireId != EEmpire.NULL, \"[OverrideSystem] Planet is not",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Primodium-security-review_2024-10-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

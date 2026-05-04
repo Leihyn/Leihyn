@@ -1,0 +1,21 @@
+{
+  "title": "Strategy allocation tracking errors affect TVL calculations",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The Elytra protocol tracks strategy allocations using a static variable `assetsAllocatedToStrategies[asset]`, which is manually updated during asset allocation and deallocation. However, this tracking mechanism fails to account for:  1. **Real-time yield growth inside strategies**. 2. **Realized profits or losses during deallocation**. 3. **Slashing events incurred by restaking operations**.  As a result, the `getTotalAssetTVL()` function under- or overstates actual holdings in strategies, leading to:  * Mispric",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

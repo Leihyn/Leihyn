@@ -1,0 +1,23 @@
+{
+  "title": "Dead gauges are not handled correctly in `Voter._vote()` function",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `Voter` contract, the `_vote()` function is called when a user casts a vote via `vote()` or when they update their votes using `poke()`. However, the function currently does not include a check to verify whether the gauge is alive or not.  This missing check will result in:  1. Stuck rewards: when the function processes voting on a dead gauge, the accrued rewards (shares) of the dead gauge via `_updateFor()` function will be **stuck** in the contract because they will not be assigned to the dead gauge as there's a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

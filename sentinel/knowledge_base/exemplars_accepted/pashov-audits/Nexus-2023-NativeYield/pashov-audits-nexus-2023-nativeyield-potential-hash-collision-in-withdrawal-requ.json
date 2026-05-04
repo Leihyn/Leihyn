@@ -1,0 +1,21 @@
+{
+  "title": "Potential hash collision in withdrawal request generation",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `_withdrawFunds` function in both `DepositETH` and `DepositUSD` contracts generates a withdrawal hash that could potentially collide if multiple withdrawal requests are made by the same user in the same block. The hash is generated using only the receiver address, withdrawal amount, and block timestamp:  ```solidity     function _withdrawFunds(address _receiver, uint256 _value) internal {         bytes32 withdrawalHash = keccak256(abi.encodePacked(_receiver,_value,block.timestamp)); // @audit same hash if two withdrawals a",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

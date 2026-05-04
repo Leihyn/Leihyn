@@ -1,0 +1,24 @@
+{
+  "title": "Incorrect LINK fee is charged for the `PNL_WITHDRAWAL` order type",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault",
+    "oracle"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `TradingInteractionsUtils.withdrawPositivePnl` function uses a half of `TradingCommonUtils.getMinPositionSizeCollateral(t.collateralIndex, t.pairIndex)` (minimum position size in collateral tokens for a pair) value as a `GetPriceInput.positionSizeCollateral` parameter. This parameter is used for the LINK fee calculation in the `PriceAggregatorUtils.getLinkFee` function. But the `getLinkFee` function always uses the maximum between the `_positionSizeCollateral` and the minimum position size in collateral tokens for a p",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review_2025-05-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

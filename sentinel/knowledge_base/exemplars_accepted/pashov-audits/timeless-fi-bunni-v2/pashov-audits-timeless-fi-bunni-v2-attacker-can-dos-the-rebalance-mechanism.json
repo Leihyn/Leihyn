@@ -1,0 +1,21 @@
+{
+  "title": "Attacker can DOS the rebalance mechanism",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When the code tries to perform the rebalance in the `rebalanceOrderPreHook()` function code checks that the token balance BunniHook is equal to `amount` which is the order amount.  ```solidity         // ensure we have exactly args.amount tokens         if (args.currency.balanceOfSelf() != args.amount) {             revert BunniHook__PrehookPostConditionFailed();         } ```  The issue is that BunniHook contract may contain the manager's fees when am-AMM is enabled and also an attacker can donate a small amount of tokens",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

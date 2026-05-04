@@ -1,0 +1,23 @@
+{
+  "title": "Permissionless `sendCurrentOperatorsKeys()`",
+  "platform": "pashov-audits",
+  "program": "moondance-labs-tanssi-symbiotic",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "amm"
+  ],
+  "bug_class": "access-control",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  ### The First impact  The `Middleware.sendCurrentOperatorsKeys()` function is permissionless, meaning any external actor can call it. This function triggers the `Gateway.sendOperatorsData()` function on the Ethereum side of our bridge, which: - Emits an OutboundMessageAccepted event. - Increments the outboundNonce of the channel. - Submits a message to the outbound channel of the bridge infrastructure.  ```solidity // Middleware.sol     function sendCurrentOperatorsKeys() external returns (bytes32[] memory sortedKeys) {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tanssi-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

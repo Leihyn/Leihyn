@@ -1,0 +1,22 @@
+{
+  "title": "Anyone can re-initialize the `swapProxy`",
+  "platform": "pashov-audits",
+  "program": "Sofamon-wishwish-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description The `SwapImpl::initialize` function lacks access control and can be successfully invoked more than once, allowing arbitrary reinitialization of the proxy. This enables an attacker to update critical state variables, such as the `router` and `permit2` addresses, with custom malicious contracts. Doing so can allow an attacker to steal all `ETH` and `WETH` that gets sent to the `RoyaltyManager`.   After the `SwapImpl` and `SwapProxy` are deployed, an attacker can call `SwapProxy::initialize` again and specify a custom",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/WishWish-security-review_2025-11-04.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Potential gas griefing attack from malicious payer",
+  "platform": "pashov-audits",
+  "program": "itos-finance-Commons",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `RFTLib` provides a series of functions which allow caller to request token payment from a RFT payer by calling [`IRFTPayer(payer).tokenRequestCB()`](https://github.com/itos-finance/Commons/blob/cba52b0e2fbd57746869d15ee48bbd83667dc38a/src/Util/RFT.sol#L117).    When executing [`RFTLib#settle()`](https://github.com/itos-finance/Commons/blob/cba52b0e2fbd57746869d15ee48bbd83667dc38a/src/Util/RFT.sol#L82-L133) or [`RFTLib#reentrantSettle()`](https://github.com/itos-finance/Commons/blob/cba52b0e2fbd57746869d15ee48bbd83667dc38",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Itos-security-review_2025-05-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

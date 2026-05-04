@@ -1,0 +1,23 @@
+{
+  "title": "DOS Attack in joinRushPool",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `joinRushPool` function in MasterBunni allows users to stake tokens up to a maximum cap. However, the lack of time restrictions between joining and exiting a pool creates a vulnerability where malicious actors can execute sandwich attacks to prevent legitimate users from staking.  ```solidity     function joinRushPool(RushPoolKey[] calldata keys) external nonReentrant {         ...             {                 uint256 balance = ERC20(address(keys[i].stakeToken)).balanceOf(msgSender);                 stakeAmountUpdated = r",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "`EmissionScheduler` and `Minter` contracts can't be initialized due to an incorrect `startTime` check",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `EmissionScheduler` contract, the `initialize()` function is intended to initialize the contract and is invoked via `Minter.initialize()` function. However, the function incorrectly reverts if the `startTime` equals zero. Since the `startTime` should be zero to initialize the contract first; the check made to prevent **reinitialization will incorrectly prevent the contract from being initialized** , where this consequently blocks the initialization of the `Minter` contract as well:  ```solidity     function initial",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-02-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

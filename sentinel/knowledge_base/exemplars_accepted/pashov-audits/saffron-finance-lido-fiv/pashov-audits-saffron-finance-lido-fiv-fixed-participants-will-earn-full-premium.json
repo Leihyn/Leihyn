@@ -1,0 +1,21 @@
+{
+  "title": "Fixed participants will earn full premium even when vault ends early from debt settlement",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, premium can be stolen from variable participants  **Likelihood:** Medium, occurs when admin settles debt  ## Description  When `adminSettleDebt()` is called before the full vault duration, it will end the vault early, allowing all participants to withdraw their deposits.  In that scenario, the debt will be settled with a positive staking earnings, to ensure that variable participants can withdraw both earnings and part of the fixed premium based on the early vault end time.  The problem is, fixed participants do not pay back the partial premium based on remaining",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

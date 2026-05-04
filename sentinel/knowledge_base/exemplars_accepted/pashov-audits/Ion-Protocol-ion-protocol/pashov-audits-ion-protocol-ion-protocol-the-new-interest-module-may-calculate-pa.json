@@ -1,0 +1,22 @@
+{
+  "title": "The new interest module may calculate past interest",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-ion-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  `updateInterestRateModule` can be called by Ion Protocol to change `interestRateModule` that will be used when calculating interest for lenders and borrowers.  ```solidity     function updateInterestRateModule(InterestRate _interestRateModule) external onlyRole(ION) {         // @audit - should trigger accrueInterest here? or at least must update timestamp last         if (address(_interestRateModule) == address(0)) revert InvalidInterestRateModule(_interestRateModule);          IonPoolStorage storage $ = _getIonPoolStorage();",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/IonProtocol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

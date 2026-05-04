@@ -1,0 +1,23 @@
+{
+  "title": "Tokens can be launched to Uniswap v3 anytime, allowing to drain ETH",
+  "platform": "pashov-audits",
+  "program": "ControlCplusControlV-groupcoin",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  In `GroupcoinFactory`, we intend to gate launching to Uniswap v3 with a two-step approach. First, the user calls `enableUniswapV3Launch`, which only succeeds if the current buy price for one token is at least the `config.thresholdPrice`. Then, it should only be possible to execute `launchGroupCoinToUniswapV3` if we had successfully executed the previous step. However, due to a logical error, it's possible to execute `launchGroupCoinToUniswapV3` without first executing `enableUniswapV3Launch`.  In `launchGroupCoinToUniswapV3`,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Groupcoin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

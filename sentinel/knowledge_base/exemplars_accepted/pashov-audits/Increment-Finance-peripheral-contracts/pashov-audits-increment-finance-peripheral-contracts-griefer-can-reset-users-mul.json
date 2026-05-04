@@ -1,0 +1,21 @@
+{
+  "title": "Griefer can reset users' multiplier to 1",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, multiplier of a certain user can be permanently kept at 1 at the will of an attacker, which lowers the user's reward multiple times  **Likelihood:** Medium, there is no direct benefit for the attacker to perform it, however, there are no preconditions  ## Description  Multiplier must be reset in several situations in `SMRewardDistributor.sol`:  ```solidity         if (prevPosition == 0 || newPosition <= prevPosition) {             // Removed stake, started cooldown or staked for the first time - need to reset reward multiplier             if (newPosition != 0) {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Constraining approvals only partially limits the NFTs from being sold",
+  "platform": "pashov-audits",
+  "program": "LizardStarking-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can lead to scams and bugs when integrating with other games/protocols  **Likelihood:** Low, as such sales or integrations are not currently expected to happen and because information about this is present in the docs  ## Description  Constraints on approvals (the `onlyApprovedContracts` modifier) were added so that the `Locked Lizards` NFTs can't be sold in marketplaces like OpenSea, Blur etc. This only partially limits selling the NFTs because users can always do OTC trades. Those trades will be scams though, since the original NFT owner can call `retract",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/LizardStarking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

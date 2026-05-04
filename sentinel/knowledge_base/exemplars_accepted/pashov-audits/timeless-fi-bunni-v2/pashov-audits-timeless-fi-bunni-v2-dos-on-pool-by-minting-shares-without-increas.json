@@ -1,0 +1,24 @@
+{
+  "title": "DoS on pool by minting shares without increasing balance",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "oracle",
+    "amm"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a deposit is made to a pool using rehypothecation, a portion of the tokens are sent to the vault. However, it is not checked if the deposit to the vault increases the balance on the pool.  This allows the first depositor to mint shares without increasing the balance of the pool, rendering the pool unusable, as future swaps or deposits will revert because the balance of both tokens is zero.  Another way of exploiting this vulnerability would be leaving just one token with a balance in the pool, allowing the following",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

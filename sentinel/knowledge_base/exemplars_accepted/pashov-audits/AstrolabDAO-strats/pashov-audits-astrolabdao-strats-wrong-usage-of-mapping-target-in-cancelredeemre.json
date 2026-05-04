@@ -1,0 +1,22 @@
+{
+  "title": "Wrong usage of mapping target in `cancelRedeemRequest``",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, one can burn others' tokens  **Likelihood:** High, it can be done permissionless  ## Description  Users can call `cancelRedeemRequest()` can cancel their redeem requests and code would burn the excess shares from the loss incurred while not farming with the idle funds (opportunity cost). The issue is that code doesn't check that operator have allowance over owner's funds and one can call this function and burn others tokens.  also the second mistake is that code uses `req.byOperator[operator]` instead of the `req.byOperator[owner]`.  This is the POC:  1. attacker",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

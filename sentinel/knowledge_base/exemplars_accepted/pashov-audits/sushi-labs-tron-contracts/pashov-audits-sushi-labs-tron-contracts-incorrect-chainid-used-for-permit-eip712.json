@@ -1,0 +1,21 @@
+{
+  "title": "Incorrect `chainId` used for permit EIP712 domain separator",
+  "platform": "pashov-audits",
+  "program": "sushi-labs-tron-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `SushiSwapV2ERC20` implements the EIP-712 `DOMAIN_SEPARATOR` that is used for `permit()`.  ```Solidity     constructor() public {         uint chainId;         assembly {         //@audit this should not be hardcoded >>>         chainId := 1         }         DOMAIN_SEPARATOR = keccak256(             abi.encode(                 keccak256(                     \"EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)\"                 ),                 keccak256(bytes(name)),                 keccak",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SushiSwap-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

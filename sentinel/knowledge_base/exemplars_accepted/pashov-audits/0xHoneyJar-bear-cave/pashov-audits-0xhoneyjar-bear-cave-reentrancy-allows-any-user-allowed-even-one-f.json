@@ -1,0 +1,19 @@
+{
+  "title": "Reentrancy allows any user allowed even one free `HoneyJar` mint to mint the max supply for himself for free",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "reentrancy",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as the user will steal all `HoneyJar` NFTs, paying nothing  **Likelihood:** High, as reentrancy is a very common attack vector and easily exploitable  ## Description  The `claim` method in `HoneyBox` (from its NatSpec) \"Allows a player to claim free HoneyJar based on eligibility\". Let's look at this part of its code:  ```solidity _canMintHoneyJar(bundleId_, numClaim); // Validating here because numClaims can change  // If for some reason this fails, GG no honeyJar for you _mintHoneyJarForBear(msg.sender, bundleId_, numClaim);  claimed[bundleId_] += numClaim; // C",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

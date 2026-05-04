@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect use of \"memory-safe\" assembly blocks in `HookletLib.sol`",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In `HookletLib.sol`, the `callHooklet` and `staticcallHooklet` functions do not follow the [Solidity guidelines](https://docs.soliditylang.org/en/v0.8.26/assembly.html#memory-safety) for the use of \"memory-safe\" assembly blocks, as the return data in case of a revert might exceed 64 bytes.  According to the Solidity documentation, \"these restrictions still need to be followed, even if the assembly block reverts or terminates\".  ```solidity File: Hooks.sol      function callHooklet(IHooklet self, bytes4 selector, bytes mem",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

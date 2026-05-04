@@ -1,0 +1,21 @@
+{
+  "title": "Fees in the AutoCompoundingPodLp can be lost",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the `AutoCompoundingPodLp`, when rewards are being processed, a protocol fee is taken:  ```solidity uint256 _pairedFee = (_pairedOut * protocolFee) / 1000; if (_pairedFee > 0) {     _protocolFees += _pairedFee;     _pairedOut -= _pairedFee; } ```  The fee tokens are not sent out of the contract, they are stored in the contract. However, this means that when the rewarded token is the paired LP token, these fees will be autocompounded to the users, since the reward amount is calculated by checking the contract's balance:",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

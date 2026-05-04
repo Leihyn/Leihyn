@@ -1,0 +1,23 @@
+{
+  "title": "Protocol does not support fee-on-transfer and rebasing tokens",
+  "platform": "pashov-audits",
+  "program": "bull-haus-lumin-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as this can leave tokens stuck in the protocol  **Likelihood:** Low, as a small portion of the commonly used tokens have such mechanisms  ## Description  The `_depositWithdraw` method in `AssetManager` has the following implementation:  ```solidity function _depositWithdraw(address assetAddress, bool deposit, address sender, uint256 amount) private {     if (deposit) {         IERC20(assetAddress).safeTransferFrom(sender, address(this), amount);     } else {         IERC20(assetAddress).safeTransfer(sender, amount);     } } ```  Also before/after it is called we",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Lumin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

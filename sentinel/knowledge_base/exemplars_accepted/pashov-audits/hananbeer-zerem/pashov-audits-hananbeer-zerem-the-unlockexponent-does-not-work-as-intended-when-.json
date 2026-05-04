@@ -1,0 +1,21 @@
+{
+  "title": "The `unlockExponent` does not work as intended when it is \u2260 1",
+  "platform": "pashov-audits",
+  "program": "hananbeer-zerem",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  The documentation and the chart in `README.md` shows that it is expected that when `unlockExponent == 0` then immediately after funds `unlockDelaySec` the user can claim his whole locked amount. This is actually not working as intended, let\u2019s look at the `_getWithdrawableAmount` function:  1. To calculate the amount to unlock, we have the following: `uint256 totalUnlockedAmount = (record.totalAmount * factor) / precision;` 2. `record.totalAmount` is the total locked amount, `precision` is a constant with a value of `1e8` and `factor` is calculated by this:  ```solidity uin",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Zerem-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

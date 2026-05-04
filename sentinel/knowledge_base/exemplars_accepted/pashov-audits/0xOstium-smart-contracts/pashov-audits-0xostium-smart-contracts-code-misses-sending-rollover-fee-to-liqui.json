@@ -1,0 +1,21 @@
+{
+  "title": "Code misses sending rollover fee to liquidity buffer",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  According to the doc, the rollover fee should be accumulated in the liquidity buffer, and it should be used to settle traders profit and loss. But in the current code, code keeps the rollover fee as dev fee in the storage contract. In function `getTradeValue()` code calculates the rollover fee and in function `getTradeValuePure()` code reduces the rollover fee from trade value and later code sends the `tradeValue` to the user in the `unregisterTrade()` function and rollover fee stays in the storage contract.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Share price manipulation",
+  "platform": "pashov-audits",
+  "program": "Nexus-2023-NativeYield",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The protocol is vulnerable to a share price manipulation attack that can result in permanent loss of user deposits. An attacker can exploit the share price calculation mechanism in both the ETH and USD vaults by manipulating the initial state through a small \"donation\" of rewards.  The attack can be executed through the following steps:  1. When the vault is newly deployed (`nETHMinted` = 0), an attacker deposits a minimal amount (e.g. 100 wei) of stETH to the `DepositETH` contract 2. The attacker triggers `updateRewards`,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nexus-security-review_2024-11-29.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

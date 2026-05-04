@@ -1,0 +1,24 @@
+{
+  "title": "DoS in `cancelNextBid()` due to insufficient `topBid` deposit",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy",
+    "auction"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The current implementation only checks if `(topBid.deposit / topBid.rent) < K(id)`, and if this condition is true, it reverts with `AmAmm__BidLocked`. This validation can be exploited by a malicious `topBid` bidder to prevent the `nextBid` bidder from canceling their bid.  ```solidity File: AmAmm.sol 292:     function cancelNextBid(PoolId id, address recipient) external virtual override returns (uint256 refund) { 293:         /// ----------------------------------------------------------------------- 294:         /// Vali",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

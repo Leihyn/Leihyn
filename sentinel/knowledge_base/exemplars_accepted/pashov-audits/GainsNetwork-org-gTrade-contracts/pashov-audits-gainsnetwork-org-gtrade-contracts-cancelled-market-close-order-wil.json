@@ -1,0 +1,22 @@
+{
+  "title": "Cancelled `MARKET_CLOSE` order will affect TP/SL trigger",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When the TP / SL are set in a trade, `tpLastUpdatedBlock` / `slLastUpdatedBlock` will be set to the current block number. This is to ensure that triggering of the TP and SL will be guaranteed as the callback handling will process the TP_CLOSE / SL_CLOSE order based on the TP/SL last updated block number.  However, a canceled `MARKET_CLOSE` will incorrectly reset both `tpLastUpdatedBlock` and `slLastUpdatedBlock` to the current block number, even when the TP / SL were set in the past.  That will occur when a `MARKET_CLOSE` o",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

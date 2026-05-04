@@ -1,0 +1,19 @@
+{
+  "title": "Insufficient input validation",
+  "platform": "pashov-audits",
+  "program": "AmbireTech-ambire-common",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can result in forever blocked recoveries or wallet access loss  **Likelihood:** Low, as it requires user error when configuring their recovery  ## Description  The `DKIMRecoverySigValidator` contract uses the `AccInfo` struct that has fields which values are not validated. Here are the fields that are problematic:  - `secondaryKey` can be the zero address, which can result in a loss of access to the `AmbireAccount` wallet - `waitUntilAcceptAdded` is a time value and can be too big, resulting in inability to add DKIM keys - `waitUntilAcceptRemoved` is a time",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Ambire-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

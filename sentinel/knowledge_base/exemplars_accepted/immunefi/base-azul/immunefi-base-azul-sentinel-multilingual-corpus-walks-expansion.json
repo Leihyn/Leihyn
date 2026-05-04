@@ -1,0 +1,22 @@
+{
+  "title": "Sentinel multilingual + corpus + walks expansion",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multi-language",
+    "proxy"
+  ],
+  "bug_class": "meta-pipeline",
+  "mental_operation": "value_flow",
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "All-tiers run: (S) F-22 status check no fix PR yet. (A) Move thinker fires on Sui/Aptos (83 hyps on mmt-v3-core); Cairo thinker fires on StarkNet (3 hyps on DarkSTARK); sentinel diff + auto-walk CLI commands shipped; Rust impl-struct gluing fixed; cargo-test runner added to auto_poc_validator; bulk-imported 1425 Pashov audit exemplars (corpus 12 to 1437). (B) skipped LLM specialist invocations on exhausted surface. (C) walked OwnableManagedUpgradeable + EIP-2935 boundary + CWIA layout + Verifier.nullify chain + storage slot inheritance: all clean.",
+  "key_lesson": "After 7+ verification passes the Base Azul surface is genuinely exhausted. Compounding tooling work (multilingual thinkers, exemplar bulk-seed, diff/auto-walk CLI) produced multi-contest leverage instead of squeezing 5% novelty out of one exhausted contest. The 1425 Pashov exemplars alone make every future Solidity contest's few-shot ~100x richer.",
+  "contest_url": "https://immunefi.com/audit-competition/audit-comp-base-azul",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:29:12"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Missing cleanup of certain registered data when burning an NFT",
+  "platform": "pashov-audits",
+  "program": "0xgarnish-gigaverse-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  For `GigaNameNFT`, when minting, `IS_GIGA_NAME_CID`, `NAME_CID`, and `INITIALIZED_CID` are set. However, these data entries are not removed upon burning the NFT.  ```solidity     function _initializeTraits(uint256 tokenId, string memory username) internal nonReentrant onlyRole(GAME_LOGIC_CONTRACT_ROLE) {         require(validateUsername(username), \"Invalid username\");         require(tokenId == uint256(keccak256(abi.encodePacked(username))), \"Token ID does not match name\");          _setDocBoolValue(tokenId, IS_GIGA_NAME_",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Gigaverse-security-review_2025-01-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

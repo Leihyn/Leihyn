@@ -1,0 +1,21 @@
+{
+  "title": "Direct SOL transfers to bonding curve escrow can break protocol invariant",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-pump-science-contract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "invariant-violation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The bonding curve protocol maintains an invariant that the `real_sol_reserves` state variable must exactly match the SOL balance (lamports) in the `bonding_curve_sol_escrow` account. This invariant is checked at the end of every swap operation:  ```rust if sol_escrow_lamports != bonding_curve.real_sol_reserves {     msg!(         \"real_sol_r:{}, bonding_lamps:{}\",         bonding_curve.real_sol_reserves,         sol_escrow_lamports     );     msg!(\"Invariant failed: real_sol_reserves != bonding_curve_pool_lamports\");     re",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/PumpScience-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

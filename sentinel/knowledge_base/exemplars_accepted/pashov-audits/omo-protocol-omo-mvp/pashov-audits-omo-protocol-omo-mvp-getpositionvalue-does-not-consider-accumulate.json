@@ -1,0 +1,21 @@
+{
+  "title": "`getPositionValue()` does not consider accumulated fees",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The function `getPositionValue()` only retrieves the liquidity token amounts using `getLiquidityAmounts()` and converts them into the quote token value. But it does not account for accumulated fees.  ```solidity      function getPositionValue(         address positionManager,         uint256 tokenId,         address quoteToken     ) external view override returns (uint256) {         // Get position details         (,, address token0, address token1,,,, uint128 liquidity,,,,) = INonfungiblePositionManager(positionManager).po",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

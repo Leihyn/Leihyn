@@ -1,0 +1,23 @@
+{
+  "title": "ASTROSSC-289 cross-vault replay",
+  "platform": "hackenproof",
+  "program": "navi-astros",
+  "severity_filed": "Critical",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "out-of-scope",
+  "surface_tags": [
+    "signature",
+    "multisig",
+    "vault"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": "spec_skeptic",
+  "language": "move",
+  "file_paths": [],
+  "summary": "Same signed message replays across multiple ActiveVault<T>. Triager confirmed technically valid; closed Informative citing 'single vault per coin type, maintained operationally \u2014 precondition does not exist under current deployment model'. Pre-staged upgrade-overlap rebuttal not engaged with.",
+  "key_lesson": "HackenProof + threat-model-deferential program + operationally-maintained precondition = Informative closure regardless of severity. Pre-staged rebuttals do not engage triager. Skip platform OR reframe to fire under default deployment.",
+  "contest_url": "https://hackenproof.com/audits/navi-astros",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:44:34"
+}

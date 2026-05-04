@@ -1,0 +1,22 @@
+{
+  "title": "OracleModule assumes that all Chainlink feeds have a heartbeat of 24 hours",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "multisig"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  In `OracleModule.sol`, there is a function to set the stale period of the chainlink feed.  ```   function setStalePeriod(uint32 _stalePeriod) public onlyOwner {     stalePeriod = _stalePeriod;   } ```  This stale period will check whether the `updatedAt` variable returned from the `latestRoundData()` call is up to date.  ```   function _isStale(uint256 timestamp) internal view returns (bool) {     return block.timestamp - timestamp <= stalePeriod ? false : true;   } ```  The `stalePeriod` is set at 90000 seconds (25 hours). Or",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

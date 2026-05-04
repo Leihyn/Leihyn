@@ -1,0 +1,21 @@
+{
+  "title": "Various use of \"transfer\" opcode to send ETH",
+  "platform": "pashov-audits",
+  "program": "ControlCplusControlV-groupcoin",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In GroupcoinFactory.sol, when buying and selling tokens, the `.transfer` opcode is used to handle ETH transfer, it does this by forwarding a fixed amount of 2300 gas. This is dangerous for two reasons:  1. Gas costs of EVM instructions may change significantly during hard forks which may previously assumed fixed gas costs. EIP 1884 as an example, broke several existing smart contracts due to a cost increase of the SLOAD instruction. 2. If the recipient is a contract or a multisig safe, with a `receive`/`fallback` function",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Groupcoin-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

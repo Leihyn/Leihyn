@@ -1,0 +1,21 @@
+{
+  "title": "Rewards can possibly be left stuck in contract",
+  "platform": "pashov-audits",
+  "program": "Topia-Game-token-lp-staking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it is a value loss for the protocol/its users  **Likelihood:** Low, as it needs a special scenario to be present  ## Description  Currently in `TopliaLpStaking::setRewards` we have this comment:  > // This must be called AFTER some LP are staked (or ensure at least 1 LP position is staked before the start timestamp)  While the issue is pointed out here, it is not enforced in a smart contract native manner and the code is still vulnerable. The problem is that if the `rewardsPeriod.start` timestamp has passed and no one has staked, the rewards accumulated until",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/TopiaStaking-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "NFTs can get locked after the call to `releaseOnEid`",
+  "platform": "pashov-audits",
+  "program": "yuga-labs-NFTMIrror",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Users can call `Beacon.releaseOnEid()` to lock tokens in the source chain and unlock them in the target chain. If the amount of tokens released is too high, it is possible that all the gas of the block is consumed in the target chain when unlocking the tokens. This would cause the tokens to be locked forever.  ## Recommendations  Limit the number of tokens that can be released at once.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/NFTMirror-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "`finalizeVaultEndedWithdrawals()` will fail when last withdrawal request is less than 100 wei",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, the issue will prevent withdrawal of stETH  **Likelihood:** Medium, when last withdrawal request is < 100 wei  ## Description  When LidoVault ends, `LidoVault.finalizeVaultEndedWithdrawals()` can be called to withdraw its entire stETH balance from Lido. That will trigger `LidoAdapter.requestEntireBalanceWithdraw()`, which will then calls `_requestWithdraw()` to perform the withdrawals. As the max withdrawal is 1000 stETH (MAX_STETH_WITHDRAWAL_AMOUNT), the withdrawal will be splitted into multiple withdrawal requests of 1000 stETH as shown in the code below. Note",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

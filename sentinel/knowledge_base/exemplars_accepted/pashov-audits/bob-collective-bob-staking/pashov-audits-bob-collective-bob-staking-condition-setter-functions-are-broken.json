@@ -1,0 +1,19 @@
+{
+  "title": "Condition setter functions are broken",
+  "platform": "pashov-audits",
+  "program": "bob-collective-bob-staking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `BobStaking::_setStakingCondition` allows the admin to alter the staking conditions via `setRewardRatios()`,`setWhitelistedDelegatees()`, and `setWhitelistedHybridNodeDelegateesViaController()`. However, if we carefully observe the `_setStakingCondition()`, it rightfully persists values for the staking conditions when passed as a parameter via the functions above: ```solidity     /// @dev Additional entry point for the hybrid node controller to set the whitelisted hybrid node delegatees without going throu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/BOB-Staking-security-review_2025-10-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "First Tranche depositor can withdraw all the previously earned interest",
+  "platform": "pashov-audits",
+  "program": "Arcadia-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, because it only affects the initially earned interest of the tranche.  **Likelihood:** Medium, because the issue is only present if there's a larger gap between the time in which the tranche starts to earn interest and time of the first deposit.  ## Description  When a Tranche is added to the LendingPool it's eligible to earn interest:  ```solidity     /**      * @notice Syncs interest payments to the liquidity providers and the treasury.      * @param assets The total amount of underlying assets to be paid out as interests.      * @dev The interest weight of e",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Arcadia-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

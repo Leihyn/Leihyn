@@ -1,0 +1,22 @@
+{
+  "title": "`updateAccPnlPerTokenUsed()` only applies positive unrealized PnL",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When an epoch ends and a new epoch starts, the function `updateAccPnlPerTokenUsed()` is executed, and it updates the share price. This function is called by function `startNewEpoch()`, which sends unrealized accumulated profit, and loss at the start of the epoch and at the end of the epoch as input for function `updateAccPnlPerTokenUsed()`: ```solidity         uint256 currentEpochPositiveOpenPnl = vault.currentEpochPositiveOpenPnl();          uint256 finalNewEpochPositiveOpenPnl = vault.updateAccPnlPerToke",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

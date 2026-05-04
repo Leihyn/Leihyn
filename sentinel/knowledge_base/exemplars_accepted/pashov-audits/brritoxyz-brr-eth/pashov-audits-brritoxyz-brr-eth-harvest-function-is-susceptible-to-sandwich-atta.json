@@ -1,0 +1,22 @@
+{
+  "title": "`harvest` function is susceptible to sandwich attacks and any unexpected market events",
+  "platform": "pashov-audits",
+  "program": "brritoxyz-brr-eth",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, Because attackers can sandwich the operation and steal `swap` value, or in unexpected market events, the `swap` could result in an unexpectedly low value.  **Likelihood:** Medium, Because the attack vector is quite common and well-known, and price volatility is typical for non-stable coin tokens.  ## Description  While acknowledged by the protocol team, using `getSwapOutput` to calculate the minimum output of the swap on-chain is still not recommended under any circumstance or assumption. This method is not only vulnerable to sandwich attacks but also susceptible",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Brrito-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

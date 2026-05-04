@@ -1,0 +1,22 @@
+{
+  "title": "Potential swap failure in `UniswapModule`",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  During the liquidation process, all assets in a `MarginAccount` are converted to the `baseToken` (USDC), and debts in each `LiquidityPool` are cleared with the help of the `_clearDebtsWithPools` function in `MarginAccount`. If sufficient funds are available (`MarginAccount#L294-L296`), `modularSwapRouter.swapOutput` is used to convert USDC to the exact amount of `poolToken` needed to repay the liquidity pool:  ```solidity File: MarginAccount.sol 217:     function liquidate(uint marginAccountID, address baseToken, address ma",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

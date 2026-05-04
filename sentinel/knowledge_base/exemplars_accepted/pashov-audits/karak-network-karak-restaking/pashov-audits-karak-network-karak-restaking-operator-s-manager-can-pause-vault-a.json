@@ -1,0 +1,22 @@
+{
+  "title": "Operator's manager can pause vault actions",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "auction"
+  ],
+  "bug_class": "vault",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When NativeVault is created, its manager is granted a role that allows him to pause different actions. With such power, the manager can break some functionality of the protocol. An example of such actions is slashing. The manager can pause it and then Core contract will not be able to slash funds from the operator. Another example: the manager can forbid users to withdraw.  ## Recommendations  Think about removing the manager role, as the operator is not a fully trusted entity.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Successful bidders can lose significant value due to division rounding",
+  "platform": "pashov-audits",
+  "program": "deomaius-rolling-dutch-auction",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as possibly significant value will be lost  **Likelihood:** High, as it will happen with most bids  ## Description  The `fulfillWindow` method calculates the auction reserves and proceeds after a successful bid in a window. Here is how it accounts it in both the `auctions` and `claims` storage mappings:  ```solidity _auctions[auctionId].reserves -= volume / price; _auctions[auctionId].proceeds += volume;  _claims[bidder][auctionId] = abi.encode(refund - volume, claim + (volume / price)); ```  The problem is in the `volume / price` division and the way Solidity wo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/RollingDutchAuction-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

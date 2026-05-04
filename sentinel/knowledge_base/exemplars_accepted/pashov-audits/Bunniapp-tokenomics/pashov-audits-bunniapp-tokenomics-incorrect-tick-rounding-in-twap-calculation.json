@@ -1,0 +1,23 @@
+{
+  "title": "Incorrect tick rounding in TWAP calculation",
+  "platform": "pashov-audits",
+  "program": "Bunniapp-tokenomics",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "oracle",
+    "amm"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  In `BunniHookOracle._queryTwap()`, the arithmetic mean tick is calculated by dividing `tickCumulativesDelta` by the window size. However when `tickCumulativesDelta` is negative, Solidity's integer division rounds towards zero (upward). It can lead to tick values being off by 1, affecting price calculations. It should consistently round down towards negative infinity.  ```solidity     function _queryTwap(PoolKey memory poolKey, uint32 twapSecondsAgoStart, uint32 twapSecondsAgoEnd)         internal         view         returns (",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

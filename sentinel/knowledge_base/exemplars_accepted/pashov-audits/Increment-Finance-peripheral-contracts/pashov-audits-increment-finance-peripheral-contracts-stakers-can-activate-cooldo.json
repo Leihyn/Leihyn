@@ -1,0 +1,21 @@
+{
+  "title": "Stakers can activate cooldown during the pause and try to evade slashing",
+  "platform": "pashov-audits",
+  "program": "Increment-Finance-peripheral-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as staker can possibly evade the slash event and cause remaining stakers to pay more for the slashing  **Likelihood:** Low, when the protocol is paused, followed by slash event  ## Description  `StakedToken.cooldown()` is missing the `whenNotPaused` modifier. That means stakers can activate cooldown when the protocol is paused.  Stakers could be aware of or anticipate an upcoming slash event due to the pause and attempt to stay within unstake window by activating cooldown when the protocol is paused. As a pause event is an emergency action to mitigate certain ris",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Increment-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "DoS on last user claiming collateral gains in `StabilityPool`",
+  "platform": "pashov-audits",
+  "program": "roots-fi-roots-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When a sunset collateral is overwritten in the `StabilityPool` contract, the value of `lastCollateralError_Offset` is not reset, which means that the new collateral will inherit the value of the previous one. This can provoke the value of `collateralGainPerUnitStaked` to be higher than it should be:  ```solidity     function _computeRewardsPerUnitStaked( (...)         uint256 collateralNumerator = (_collToAdd * DECIMAL_PRECISION) + lastCollateralError_Offset[idx]; (...)         collateralGainPerUnitStaked = collateralNumerator",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Roots-security-review_2025-02-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

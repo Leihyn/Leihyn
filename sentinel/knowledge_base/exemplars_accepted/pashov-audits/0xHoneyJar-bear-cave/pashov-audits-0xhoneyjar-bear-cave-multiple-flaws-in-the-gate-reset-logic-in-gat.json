@@ -1,0 +1,19 @@
+{
+  "title": "Multiple flaws in the gate reset logic in `Gatekeeper`",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as no value will be lost but the contract state will be incorrect  **Likelihood:** Medium, as it is not expected to happen every time, but there are multiple attack paths here  ## Description  The `resetAllGates` method is iterating over unbounded arrays - both `tokenToGates[tokenId]` and `consumedProofsList[gateId]` arrays are unbounded. This might result in a state of DoS for the `resetAllGates` method, since it might take too much gas to iterate over the arrays (more than the block gas limit).  Another, bigger problem in the method, is that it does not do `d",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

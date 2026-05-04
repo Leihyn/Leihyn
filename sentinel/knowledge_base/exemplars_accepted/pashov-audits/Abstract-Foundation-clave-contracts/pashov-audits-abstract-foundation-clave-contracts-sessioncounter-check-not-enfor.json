@@ -1,0 +1,19 @@
+{
+  "title": "`sessionCounter` check not enforced when removing `SessionKeyValidator`",
+  "platform": "pashov-audits",
+  "program": "Abstract-Foundation-clave-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When users remove `SessionKeyValidator`, it will ensure that `sessionCounter` is 0 before triggering `removeModuleValidator` and `removeHook` to complete the module removal. The `sessionCounter` check is necessary to prevent the use of active session keys from the past if the module is installed again later.  ```solidity   function disable() external {     if (_isInitialized(msg.sender)) {       // Here we have to revoke all keys, so that if the module       // is installed again later, there will be no active sessions fr",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Clave-security-review_2024-12-23.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

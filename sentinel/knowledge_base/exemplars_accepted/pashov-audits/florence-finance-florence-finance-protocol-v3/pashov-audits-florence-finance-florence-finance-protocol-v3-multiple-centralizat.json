@@ -1,0 +1,22 @@
+{
+  "title": "Multiple centralization attack vectors are present in the protocol",
+  "platform": "pashov-audits",
+  "program": "florence-finance-florence-finance-protocol-v3",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can result in a rug from the protocol owner  **Likelihood:** Low, as it requires a compromised or a malicious owner  ## Description  The protocol owner has privileges to control the funds in the protocol or the flow of them.  The `mint` function in `FlorinToken` is callable by the contract owner, which is `FlorinTreasury`, but `FloriNTreasury` has the `transferFlorinTokenOwnership` method. This makes it possible that the `FlorinTreasury` deployer to mint as many `FlorinToken` tokens to himself as he wants, on demand.  The `withdraw` method in `FlorinStaking",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/FlorenceFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

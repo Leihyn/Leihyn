@@ -1,0 +1,21 @@
+{
+  "title": "The Owner should be able to change the Liquidity Provider",
+  "platform": "pashov-audits",
+  "program": "Sageterminal-Sage-Contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Liquidity providers have the ability to remove reserves which will drain the contracts balance. Only tokens with a trusted liquidity provider are likely to be active - if the liquidity provider account is compromised:  - Private key leaked - Seized  In such cases, the `owner` should be able to replace the liquidity provider before the liquidity lock is reached. However, the `owner` cannot replace the liquidity provider because `setLiquidityProvider` can only be called by the liquidity provider  ```solidity     function setLiqu",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/EVTerminal-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

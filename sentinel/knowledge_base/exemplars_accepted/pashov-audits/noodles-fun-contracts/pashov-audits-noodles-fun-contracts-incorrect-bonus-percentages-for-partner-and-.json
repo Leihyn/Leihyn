@@ -1,0 +1,19 @@
+{
+  "title": "Incorrect bonus percentages for partner and referrer",
+  "platform": "pashov-audits",
+  "program": "noodles-fun-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  In the `VisibilityCredits` contract, the `PARTNER_FEE` and `PARTNER_REFERRER_BONUS` are incorrectly set to 250 ppm, which represents 0.025%. However, as per the comment in the contract, these values should be set to 0.25%. This misconfiguration will result in the partner and referrer receiving a less bonus from the total cost of the bought credits than intended.  ```solidity uint16 public constant PARTNER_FEE = 250;  // 0.25% bonus for the partner/marketing agency  // if linked to a referrer (deduced from protocol fee) uint16",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Noodles-security-review_2025-03-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

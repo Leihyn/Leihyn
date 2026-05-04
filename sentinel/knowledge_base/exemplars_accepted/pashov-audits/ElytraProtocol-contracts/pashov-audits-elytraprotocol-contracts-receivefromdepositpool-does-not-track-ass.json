@@ -1,0 +1,22 @@
+{
+  "title": "`receiveFromDepositPool()` does not track assets transferred",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `receiveFromDepositPool()` function in `ElytraUnstakingVaultV1` contains a flaw where it attempts to calculate received assets by comparing the vault's balance before and after a transfer operation. However, this approach fails completely for all tokens because the balance comparison will always result in identical values, causing the function to calculate a received amount of 0.  ```solidity     function receiveFromDepositPool(address asset) external onlyDepositPool {         // All assets are now ERC20 token",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

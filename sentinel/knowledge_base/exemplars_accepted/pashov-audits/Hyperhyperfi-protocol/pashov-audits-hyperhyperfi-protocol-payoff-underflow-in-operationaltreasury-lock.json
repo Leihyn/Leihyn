@@ -1,0 +1,19 @@
+{
+  "title": "`payOff()` underflow in `OperationalTreasury` locks assets permanently",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "arithmetic",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `payOff()` function in the `OperationalTreasury` contract calculates `feesUSD` based on the full position size and current price, without considering the actual profit (`pnl`). Specifically:  - `feesUSD = positionAmount \u00d7 FeePercentage \u00d7 CurrentPrice` - `pnl = positionAmount \u00d7 (CurrentPrice - StrikePrice)`  This means that for positions where `CurrentPrice` is only slightly above `StrikePrice`, the calculated `feesUSD` may exceed the `pnl`. In such cases,the `netAmount = pnl - feesUSD` line will **underflow**:  ```solid",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

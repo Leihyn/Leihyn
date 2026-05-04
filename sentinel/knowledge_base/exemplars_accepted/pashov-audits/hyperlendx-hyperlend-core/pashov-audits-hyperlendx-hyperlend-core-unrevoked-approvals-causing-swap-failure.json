@@ -1,0 +1,22 @@
+{
+  "title": "Unrevoked approvals causing swap failures in `UniswapV3Swapper.swap()`",
+  "platform": "pashov-audits",
+  "program": "hyperlendx-hyperlend-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `UniswapV3Swapper.swap()` function has an issue where it does not revoke tokens approvals from the router after the swap, leading to a potential DoS with tokens like `USDT`, where this issue arises due to the fact that approvals are not reset after swaps, and if a token like `USDT` is used, modifying an allowance from a non-zero value to another non-zero value will revert if the allowance of the previous swap is not fully consumed by the router, which will result in reverting the swap transaction.  Similar issue was f",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperlend-security-review_2025-01-11.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

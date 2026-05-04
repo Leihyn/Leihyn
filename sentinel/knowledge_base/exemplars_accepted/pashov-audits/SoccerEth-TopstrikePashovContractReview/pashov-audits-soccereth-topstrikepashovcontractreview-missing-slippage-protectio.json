@@ -1,0 +1,21 @@
+{
+  "title": "Missing slippage protection in sell functions",
+  "platform": "pashov-audits",
+  "program": "SoccerEth-TopstrikePashovContractReview",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `sellSharesByLots` and `sellSharesByUnits` functions lack slippage protection, exposing users to receiving significantly less ETH than expected when selling shares.   When a user submits a sell transaction, the payout is calculated based on the current supply at execution time. If other transactions execute first (either from natural market activity or frontrunning), the payout can change. If the supply decreases before execution, the user receives less than expected. This is particularly problematic because: -",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TopStrike-security-review_2025-12-18.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

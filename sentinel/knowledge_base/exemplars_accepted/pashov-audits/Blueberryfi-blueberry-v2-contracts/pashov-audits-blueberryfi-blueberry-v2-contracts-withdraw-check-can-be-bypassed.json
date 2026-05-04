@@ -1,0 +1,21 @@
+{
+  "title": "Withdraw check can be bypassed",
+  "platform": "pashov-audits",
+  "program": "Blueberryfi-blueberry-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In VaultEscrow, we will withdraw assets from the Vault in the core chain via function withdraw(). In withdraw() function, we have one security sanity check. This will make sure that we will not withdraw more asset than what we deposit in the vault.  But this security check can be bypassed. We get the vault's equity based on the `VAULT_EQUITY_PRECOMPILE_ADDRESS`.  Based on the [HyperLiquid doc](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/hyperevm/interacting-with-hypercore), the testnet EVM provides precom",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Blueberry-security-review_2025-03-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

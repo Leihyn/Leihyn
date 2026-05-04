@@ -1,0 +1,22 @@
+{
+  "title": "New MarketConfigurationData causes existing orders to fail",
+  "platform": "pashov-audits",
+  "program": "Reya-Labs-reya-network",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  There are three new storage variables (`depthFactor`, `maxExposureFactor`, `maxPSlippage`) in `MarketConfigurationData` that are used to perform slippage and exposure checks in `Market.getPSlippage()`.  The issue that that these new storage variables will be initialized to zero for the existing `Market` as they were previously un-used before this upgrade.  When `maxExposureFactor == 0`, it will cause `getPSlippage()` to incorrectly revert even when net exposure is valid.  ```Solidity     function getPSlippage(         Dat",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ReyaNetwork-security-review-April.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

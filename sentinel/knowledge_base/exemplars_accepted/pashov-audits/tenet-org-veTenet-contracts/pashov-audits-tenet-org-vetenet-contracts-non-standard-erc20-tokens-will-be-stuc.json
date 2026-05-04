@@ -1,0 +1,19 @@
+{
+  "title": "Non-standard ERC20 tokens will be stuck in contracts",
+  "platform": "pashov-audits",
+  "program": "tenet-org-veTenet-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it will result in stuck funds  **Likelihood:** Low, as only some tokens that might not actually be used will be problematic  ## Description  Tokens like `USDT` do not return a `bool` on `ERC20::transfer` call, while others do not revert on a failed transfer but just return `false`. Those types of tokens are not properly supported in `VestRewardReceiver::sendTokens` and `TenetVesting::rescueFunds`, as the code in those methods uses the normal `ERC20::transfer` method without accounting for them. This can result in inability to call `rescueFunds` for `USDT` for",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/veTenet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "State not updated when staker address changes",
+  "platform": "pashov-audits",
+  "program": "yield-basis-yb-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When changing the staker address via the `set_staker` function in the LT contract, the code fails to update important accounting variables `liquidity.staked` and `liquidity.ideal_staked`. This creates an accounting mismatch in the protocol.  ```python     @external     @nonreentrant     def set_staker(staker: address):         self._check_admin()         self.staker = staker         log SetStaker(staker=staker) ```  This creates a mismatch between:  - The staker address (`self.staker`) which points to the new stake",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YieldBasis-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

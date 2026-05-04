@@ -1,0 +1,21 @@
+{
+  "title": "`giveReward()` does not update the stake balances",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  In the `Staking` contract, the `giveReward()` function can be called by the owner or the manager to distribute the profit of a staker. However, this function does not update the stake balance of the staker and the total staked amount. As a result, a portion of other stakers' rewards will be distributed to the staker whose reward is being given.  ## Recommendations  Update the stake balance of the staker and the total staked amount in the `giveReward()` function.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

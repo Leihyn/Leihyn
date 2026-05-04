@@ -1,0 +1,21 @@
+{
+  "title": "Rounding error in put option price reduces safety margin",
+  "platform": "pashov-audits",
+  "program": "Hyperhyperfi-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The protocol applies the same strike price rounding logic to both `CALL` and `PUT` options. While this works in favor of the protocol for `CALL` options, it reduces safety for `PUT` options.  Specifically, the strike price is first computed by applying a relative discount to the current price (for PUTs), and then passed to `_roundPrice()`, which rounds **upward** if the remainder exceeds the midpoint. This pushes the strike **closer to or into the money**, reducing the out-of-the-money (OTM) buffer intended for PUT option",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperhyper-security-review_2025-03-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

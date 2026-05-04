@@ -1,0 +1,23 @@
+{
+  "title": "Price impact overcharges using final instead of delta imbalance",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "multisig",
+    "auction"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The proposal states traders should \u201cpay spreads\u201d only to the extent their trade increases the imbalance (i.e., they pay for the change in imbalance, not the absolute imbalance). The `_priceImpactFunction` is also designed so that traders pay only for the imbalance they introduce. The logic correctly returns zero when a trade decreases the imbalance (@1).  ```solidity  function _priceImpactFunction(         uint256 netVolThreshold,         uint256 priceImpactK,         bool buy,         bool isOpen,         uin",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-08-22.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

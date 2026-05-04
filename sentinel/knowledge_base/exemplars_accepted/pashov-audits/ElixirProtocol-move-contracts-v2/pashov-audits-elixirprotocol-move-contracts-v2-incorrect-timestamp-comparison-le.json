@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect timestamp comparison leads to cooldown bypass",
+  "platform": "pashov-audits",
+  "program": "ElixirProtocol-move-contracts-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** High  ## Description In `sdeusd.move`, unstake uses `clock::timestamp_ms(clock)` (milliseconds) to compare against `cooldown_end`, which is set using `clock_utils::timestamp_seconds(clock)` (seconds). As a result, the check:  ```rust assert!(current_time >= cooldown.cooldown_end || management.cooldown_duration == 0, EInvalidCooldown); ``` always passes, since current_time (ms) is ~1000\u00d7 larger than cooldown_end (s).  Code in `update_user_cooldown`:  ```rust fun update_user_cooldown(     management: &mut SdeUSDManagement,     user: ad",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elixir-security-review_2025-08-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

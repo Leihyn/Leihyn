@@ -1,0 +1,22 @@
+{
+  "title": "Debt-free margin accounts can be liquidated",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "multisig"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `liquidate` method of the `MarginTrading` contract allows anyone to liquidate an unhealthy account, i.e. when its margin ratio is below the `redCoeff` threshold. However, in the case of a debt-free account, e.g. new account and freshly funded, the margin ratio will be zero. Consequently, the `0 <= redCoeff` check will pass and an adversary can grief debt-free accounts by liquidating them.  During liquidation, all the margin account's assets, e.g. tokens and options, will be converted to the base token (usually `USDC`).",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

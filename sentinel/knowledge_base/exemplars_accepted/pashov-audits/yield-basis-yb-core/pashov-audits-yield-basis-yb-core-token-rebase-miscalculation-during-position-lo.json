@@ -1,0 +1,21 @@
+{
+  "title": "Token rebase miscalculation during position losses",
+  "platform": "pashov-audits",
+  "program": "yield-basis-yb-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When the position is at a loss (dv_use < 0), the token reduction should theoretically be zero:  ```python @internal @view def _calculate_values(p_o: uint256) -> LiquidityValuesOut:     ...     token_reduction: int256 = unsafe_div(staked * new_total_value - new_staked_value * supply, new_total_value - new_staked_value)     ... ``` We have the numerator of the calculation should evaluate to zero:  ```   staked * new_total_value - new_staked_value * supply  = staked * (prev_value + dv_use) - (v_st + dv_s) * supply = s",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YieldBasis-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

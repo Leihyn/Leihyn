@@ -1,0 +1,21 @@
+{
+  "title": "Option NFTs can be exercised by any account",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `exercise` function flow does not check if the margin account owns the token to be exercised. This allows any account to exercise the options of another account and get its profit.  ## Proof of concept  ```solidity function test_exerciseByNotOwner() public {     uint256 aliceAccountValue = marginTrading.calculateMarginAccountValue(marginAccountID[alice]);     uint256 bobAccountValue = marginTrading.calculateMarginAccountValue(marginAccountID[bob]);     uint256 aliceOptionID = optionID[alice];      vm.prank(alice);     mar",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

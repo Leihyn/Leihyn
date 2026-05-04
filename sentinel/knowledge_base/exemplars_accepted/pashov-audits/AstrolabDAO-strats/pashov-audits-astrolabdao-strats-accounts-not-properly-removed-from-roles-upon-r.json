@@ -1,0 +1,19 @@
+{
+  "title": "Accounts not properly removed from roles upon revoking",
+  "platform": "pashov-audits",
+  "program": "AstrolabDAO-strats",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High - Accounts that are removed from a role, particularly critical roles like the default admin, retain access to the role's privileges. This poses significant security risks.  **Likelihood:** Medium - The issue occurs consistently every time the `revokeRole` function is called.  ## Description  When an account is revoked from a role, `_revokeRole` function removes account from the members set.          function _revokeRole(bytes32 role, address account) internal virtual {             if (hasRole(role, account)) {                 _roles[role].members.remove(account.to",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Astrolab-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

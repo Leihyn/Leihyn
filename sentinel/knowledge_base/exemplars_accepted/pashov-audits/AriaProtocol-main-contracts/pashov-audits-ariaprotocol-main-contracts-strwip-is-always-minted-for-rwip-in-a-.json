@@ -1,0 +1,23 @@
+{
+  "title": "stRWIP is always minted for RWIP in a 1:1 ratio",
+  "platform": "pashov-audits",
+  "program": "AriaProtocol-main-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  For staking RWIP, users always receive stRWIP in a 1:1 ratio. For burning 1 stRWIP, they receive RWIP according to the current exchange rate, which is going to be above 1:1 because of rewards deposited into RWIPStaking. Therefore, the attacker can:  1. Call `stake` for 1000 RWIP. 2. Wait `minStakingHoldPeriod`. 3. Call `burnTicket`, receiving 1000 stRWIP. 4. Call `unstake` for 1000 stRWIP and receive >1000 RWIP (according to the current stRWIP/RWIP exchange rate).  The attack can be repeated for as long as there are any rew",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Aria-security-review_2025-05-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

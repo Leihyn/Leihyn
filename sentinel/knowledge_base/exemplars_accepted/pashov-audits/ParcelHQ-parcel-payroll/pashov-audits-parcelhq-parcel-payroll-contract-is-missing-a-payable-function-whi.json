@@ -1,0 +1,21 @@
+{
+  "title": "Contract is missing a `payable` function which makes it impossible to operate with native assets",
+  "platform": "pashov-audits",
+  "program": "ParcelHQ-parcel-payroll",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as all transactions that use native assets will revert  **Likelihood:** High, as it is well expected that native assets will be used as a `paymentToken` often  ## Description  The `PayrollManager` does not have a `receive` function that is marked as `payable` neither any `payable` function at all. This will make it impossible for the contract to work with native assets because all transfers from the Gnosis Safe multisig to him will revert.  ## Recommendations  Add a `payable` `fallback` or `receive` function in `PayrollManager` to allow for native assets transfer",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/ParcelPayroll-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

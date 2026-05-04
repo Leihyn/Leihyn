@@ -1,0 +1,22 @@
+{
+  "title": "Double counting of referral scores leading to over-claiming of tokens",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  An attacker can exploit the referral scoring system in `BunniToken.sol` by minting tokens using one referrer (`referrer1`), and then minting additional tokens using a different referrer (`referrer2`). This manipulation results in the score for the first referrer being transferred to the second referrer, leading to double counting of the score. Consequently, the second referrer can claim more tokens than they should be able to, effectively draining the rewards funds.  The following test demonstrates how initially both `deposit",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "`mintGTToAddress()` in ERC20DAO doesn't check `distributionAmount` limit",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  While `mintGTToAddress()` in ERC721 and Factory contract check for `distributionAmount` limit the ERC20DAO doesn't check for `distributionAmount` limit and it would be possible for admins to mint unlimited amount of tokens.  ## Recommendations  Check for `distributionAmount` in `mintGTToAddress()` in ERC20DAO.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

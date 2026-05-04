@@ -1,0 +1,19 @@
+{
+  "title": "Insufficient input validation opens up multiple attack vectors",
+  "platform": "pashov-audits",
+  "program": "metalabel-metalabel-contracts-v1_1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can overflow a balance and re-mint burned NFTs  **Likelihood:** Low, as it requires a malicious/compromised owner account or an owner input error  ## Description  The `adminTransferFrom` method does not validate that the `from` argument shouldn't have a value of `address(0)`. Now if `from == address(0)` multiple attack vectors open:  1. Burned NFTs can be \"re-minted\", and also that happens without changing `totalSupply` 2. If `from` balance is zero, this will underflow `_balanceOf[from]` 3. The 0 ID token (which shouldn't exist) can be \"minted\" with this me",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Metalabel-second-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

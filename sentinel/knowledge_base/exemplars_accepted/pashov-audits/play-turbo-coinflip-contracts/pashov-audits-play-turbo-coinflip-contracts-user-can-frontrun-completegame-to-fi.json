@@ -1,0 +1,22 @@
+{
+  "title": "User can frontrun `completeGame` to finalize stake or unstake request",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "frontrun",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Staking user can frontrun `Flip.completeGame()` and finalize his stake/unstake request (based on game result loss or win):  ```solidity     function finalizeUnstake(address token) external nonReentrant {         UnstakeRequest memory request = unstakeRequests[token][msg.sender];         uint256 sharesToRedeem = request.shares;         require(sharesToRedeem > 0, \"No unstake request found\");         require(block.timestamp >= request.requestTime + unstakeDelay, \"Unstake delay not passed\");         --snipp--     } ```  ```s",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

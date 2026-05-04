@@ -1,0 +1,21 @@
+{
+  "title": "Edge case in the next non fermented jar search",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-honeyjar-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  If the randomizer selects a jar that is already fermented, a collission occurs.  ```solidity     function _setFermentedJars(uint256[] memory randomNumbers) internal {         ---SNIP---         for (uint256 i = 0; i < numFermentedJars; i++) {             fermentedIndex = randomNumbers[i] % numHoneyJars;             uint256 fermentedJarId = honeyJarIds[fermentedIndex];             if (honeyJar.isFermented(fermentedJarId)) {                 // Special case in the event of a collision -- not optimized for gas >>",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HoneyJar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

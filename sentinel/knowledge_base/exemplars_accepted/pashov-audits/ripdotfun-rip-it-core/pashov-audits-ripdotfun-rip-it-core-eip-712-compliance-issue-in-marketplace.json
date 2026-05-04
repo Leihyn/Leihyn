@@ -1,0 +1,22 @@
+{
+  "title": "EIP-712 compliance Issue in `Marketplace`",
+  "platform": "pashov-audits",
+  "program": "ripdotfun-rip-it-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "signature-domain",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `TRADE_TYPEHASH` in the Marketplace contract is computed using a struct that references `TradeGive` and `TradeTake`. However, the current implementation does not include the definitions or type hashes for these referenced structs.  ```solidity     /**      * @notice The EIP-712 type hash for trade requests.      */     bytes32 public constant TRADE_TYPEHASH = keccak256(         \"TradeRequest(TradeGive[] give,TradeTake[] take,uint256 deadline,address requester,uint256 chainId)\"     ); ```  According to [EIP",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

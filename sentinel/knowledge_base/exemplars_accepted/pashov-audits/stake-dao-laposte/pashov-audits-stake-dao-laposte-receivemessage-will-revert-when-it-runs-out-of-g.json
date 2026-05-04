@@ -1,0 +1,19 @@
+{
+  "title": "`receiveMessage()` will revert when it runs out of gas",
+  "platform": "pashov-audits",
+  "program": "stake-dao-laposte",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Protocol uses CCIP messaging in a strict way. It means that further messages per lane can't be processed until the execution of previous messages succeeds. As soon as any action can revert in `LaPoste.receiveMessage()`, further messages can't be processed.  How an attacker can make his message revert. It uses `try catch` to execute a call to the attacker's contract:  ```solidity         /// 2. Execute the message.         bool success;         if (message.payload.length > 0) { @>          try IMessageReceiver(message.to).",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/LaPoste-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

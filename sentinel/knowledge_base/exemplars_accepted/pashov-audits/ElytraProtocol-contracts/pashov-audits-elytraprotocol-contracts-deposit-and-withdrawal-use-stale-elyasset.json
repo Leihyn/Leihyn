@@ -1,0 +1,21 @@
+{
+  "title": "Deposit and withdrawal use stale `elyAsset` prices leading to extraction",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `depositAsset()` and `withdrawAsset()` functions rely on the `elyAssetPrice` from the oracle without ensuring it's up-to-date. While the `updateElyAssetPrice()` function is publicly callable, there's no mechanism to guarantee it's called before price-dependent operations, allowing users to exploit stale prices for value extraction.  The issue occurs because:  1. The `getElyAssetAmountToMint()` and `getAssetAmountToReceive()` functions call `oracle.elyAssetPrice()` directly. 2. The `updateElyAssetPrice()` f",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

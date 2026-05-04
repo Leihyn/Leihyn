@@ -1,0 +1,23 @@
+{
+  "title": "`_withdrawToChain()` will refund excess gas for LZ call to the wrong address",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as refunded gas will be lost  **Likelihood:** Medium, happens for certain cases when performing cross chain withdrawals  ## Description  As `MagnetarMarketModule._withdrawToChain()` allows withdrawal to another chain, it requires `refundAddress` to be specified so that excess gas can be refunded to an address on the source chain. However, `refundAddress` is incorrectly set as it does not handle all cases.  ```Solidity         // build LZ params         bytes memory _adapterParams;         ICommonOFT.LzCallParams memory callParams = ICommonOFT.LzCallParams({",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

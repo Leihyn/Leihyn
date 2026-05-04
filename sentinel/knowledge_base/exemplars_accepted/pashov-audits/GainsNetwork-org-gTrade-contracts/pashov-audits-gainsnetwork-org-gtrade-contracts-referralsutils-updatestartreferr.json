@@ -1,0 +1,19 @@
+{
+  "title": "`ReferralsUtils.updateStartReferrerFeeP()` implements wrong check",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  At L64 in the `updateStartReferrerFeeP` function comparing sign is wrongly set to `<=`, while it should be `>`, resulting in an inability to set `startReferrerFeeP` to value in the correct range:  ```solidity File: ReferralsUtils.sol 63:     function updateStartReferrerFeeP(uint256 _value) internal { 64:         if (_value <= MAX_START_REFERRER_FEE_P) revert IGeneralErrors.AboveMax(); 65: 66:         _getStorage().startReferrerFeeP = _value; 67: 68:         emit IReferralsUtils.UpdatedStartReferrerFeeP(_value); 69:     } ``",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

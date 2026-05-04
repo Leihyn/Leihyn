@@ -1,0 +1,22 @@
+{
+  "title": "Wrong index used when updating rates",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When updating the rates in the `_updateRates` function, the function takes in the input as an integer which contains a bunch of indices that represent the index in the actual token array.  ```solidity     /// @param tokens_ integer where each byte represents a token index offset by one ```  Next a loop with iterator `t` is used to take out the values.  ```solidity for (uint256 t = 0; t < MAX_NUM_TOKENS; t++) {             uint256 token = (tokens_ >> FixedPointMathLib.rawMul(8, t)) & 255; ```  Point to note, `t` is the iterato",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "amAMM manager can capture fees from the protocol and referrers",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The amAMM manager is allowed to set and adjust swap fees to maximize revenue. A percentage of the fees captured by the manager is distributed to the protocol and referrers.  However, the manager can retain all the fees by acting as a proxy between the swapper and the Bunni protocol. By setting the swap fee in the Bunni protocol to the maximum and offering a lower fee in swaps executed through his proxy contract, users might be incentivized to always interact with the manager contract.  The flow for swaps in the manager cont",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

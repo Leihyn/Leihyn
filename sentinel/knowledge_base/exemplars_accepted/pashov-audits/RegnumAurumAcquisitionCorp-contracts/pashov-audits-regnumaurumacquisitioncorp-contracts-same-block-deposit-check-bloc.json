@@ -1,0 +1,23 @@
+{
+  "title": "Same block deposit check blocks `StabilityPool` withdrawals during liquidation",
+  "platform": "pashov-audits",
+  "program": "RegnumAurumAcquisitionCorp-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When the `StabilityPool` liquidates user positions, it may lack enough `crvUSDToken` to cover the liquidation. In such cases, it withdraws the shortfall from the `LendingPool`, which burns the corresponding `rToken` and transfers the underlying `crvUSD` to the `StabilityPool`:  ```solidity // LiquidationStrategyProxy contract: function liquidateBorrower(address poolAdapter, address vaultAdapter, address user, bytes calldata data, uint256 minSharesOut) external onlyProxy {         //...          uint256 scaledP",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RegnumAurum-security-review_2025-08-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

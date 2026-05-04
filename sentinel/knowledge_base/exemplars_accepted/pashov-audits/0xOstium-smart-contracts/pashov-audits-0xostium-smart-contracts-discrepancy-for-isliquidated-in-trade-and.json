@@ -1,0 +1,23 @@
+{
+  "title": "Discrepancy for `isLiquidated` in trade and automation callbacks",
+  "platform": "pashov-audits",
+  "program": "0xOstium-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "proxy"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Acknowledged_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  According to the docs, the liquidation trigger should be calculated based on the market price and executed with price after impact. The `closeTradeMarketCallback()` follows this behavior: ```solidity                 (                     TradingCallbacksLib.TradeValueResult memory tvResult,                     TradingCallbacksLib.PriceImpactResult memory piResult                 ) = TradingCallbacksLib.getTradeAndPriceData(                     a,                     t,                     pairInfos,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Ostium-security-review_2025-09-14.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

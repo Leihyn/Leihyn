@@ -1,0 +1,21 @@
+{
+  "title": "`delegateBySig()` wrongly limits delegation",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `delegateBySig()` function in the `vePeg` contract is intended to allow anyone with a valid signature to delegate votes on behalf of a delegator. However, the issue is that this function includes a check requiring the caller to be the owner or operator (approved address) of the lock (NFT) to access it. This makes the function effectively useless for delegation by signature, as it should be callable by anyone with a valid signature, regardless of the caller status:  ```solidity function delegateBySig(uint256 from, uint",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-03-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

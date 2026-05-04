@@ -1,0 +1,21 @@
+{
+  "title": "(Out of scope) Missing unchecked block in TickMath library",
+  "platform": "pashov-audits",
+  "program": "ulti-org-ulti-protocol-contract",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Uniswap math libraries rely on wrapping behavior for conducting arithmetic operations. Solidity version 0.8.0 introduced checked arithmetic by default where operations that cause an overflow would revert.  Since the `lib/uniswap/TickMath.sol` library was adapted from Uniswap and written in Solidity version 0.8.24, these arithmetic operations should be wrapped in an unchecked block.  ## Recommendations  In `getSqrtRatioAtTick` and `getTickAtSqrtRatio`, wrap the arithmetic operations in unchecked blocks to maintain compatibility",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/ULTI-security-review-November.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

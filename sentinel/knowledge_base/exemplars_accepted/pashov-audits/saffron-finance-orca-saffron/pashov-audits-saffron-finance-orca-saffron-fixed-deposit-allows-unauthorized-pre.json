@@ -1,0 +1,22 @@
+{
+  "title": "Fixed deposit allows unauthorized premium capture and tolerance bypass",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-orca-saffron",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium   ## Description  The vault is initialized with fixed-side economic commitments, but `deposit_fixed` does not enforce those commitments. A fixed depositor can submit any same-Whirlpool position with `liquidity > 0`, overwrite vault terms, trigger start, and then claim the full premium.  The unused tolerance field also creates a false sense of protection for integrators, frontends, and off-chain pricing logic, since the contract stores a tolerance value but never enforces it in the production deposit path.  The existing `validate",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review_2026-03-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

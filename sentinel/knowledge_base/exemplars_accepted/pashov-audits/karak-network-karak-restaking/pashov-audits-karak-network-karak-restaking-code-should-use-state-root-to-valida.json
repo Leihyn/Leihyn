@@ -1,0 +1,21 @@
+{
+  "title": "Code should use state root to validate withdraw credentials",
+  "platform": "pashov-audits",
+  "program": "karak-network-karak-restaking",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the function `validateWithdrawalCredentials()` code validates the state root's proof but then it uses the block's root to verify the validator's information:  ```solidity             totalRestakedWei += self.validateWithdrawalCredentials(                 nodeOwner,                 beaconStateRootProof.timestamp,                 _getParentBlockRoot(beaconStateRootProof.timestamp),                 validatorFieldsProofs[i]             ); ```  Because of this issue, no validator can be added to the system.  ## Recommendation",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Karak-security-review-June.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Anyone can use or steal `ArbitrumSwaps` native asset balance",
+  "platform": "pashov-audits",
+  "program": "Mugen-Finance-Products",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Likelihood:** High, because this can easily be noticed and exploited  **Impact:** Medium, because value can be stolen, but it should be limited to gas refunds  ## Description  An attacker can steal the `ArbitrumSwaps` native asset balance by doing a call to the `arbitrumSwaps` method with steps `WETH_DEPOSIT` and `WETH_WITHDRAW` - this will send over the whole contract balance to a caller-supplied address. This shouldn't be a problem, because the contract is a \"swap router\" and is not expected to hold any native asset balance at any time. Well this assumption does not hold, beca",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Mugen-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

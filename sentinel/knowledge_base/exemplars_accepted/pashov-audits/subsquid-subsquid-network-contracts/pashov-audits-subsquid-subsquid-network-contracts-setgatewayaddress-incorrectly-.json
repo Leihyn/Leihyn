@@ -1,0 +1,21 @@
+{
+  "title": "`setGatewayAddress` incorrectly updates address of the gateway",
+  "platform": "pashov-audits",
+  "program": "subsquid-subsquid-network-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, gateway will still has it's old address  **Likelihood:** Medium, only occurs if the user decides to set a new address for his gateway  ## Description  The gateway owner can set a new address for it using `setGatewayAddress` function. Unfortunately, this function only updates `gatewayByAddress` mapping, leaving `Gateway` struct intact  ```solidity   function setGatewayAddress(bytes calldata peerId, address newAddress) public {     (Gateway storage gateway, bytes32 peerIdHash) = _getGateway(peerId);     _requireOperator(gateway);      if (gateway.ownAddress != ad",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Subsquid-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Low-level call is not checked in `swapOn1INCH`",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-veFyde",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When calling `YieldStrategy.swapOn1INCH()`, the low-level success call is unchecked. The swap may fail without the caller even noticing it. The impact is mitigated by `_minAmountOut`, but if `_minAmountOut` is set to zero, then the unchecked return call value may cause unwarranted issues.  ```    function swapOn1INCH(     address _assetIn,     uint256 _amountIn,     address _assetOut,     uint256 _minAmountOut,     bytes calldata _swapData   ) external {     IERC20(_assetIn).approve(ONEINCH_AGGREGATION_ROUTER, _amountIn); >",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

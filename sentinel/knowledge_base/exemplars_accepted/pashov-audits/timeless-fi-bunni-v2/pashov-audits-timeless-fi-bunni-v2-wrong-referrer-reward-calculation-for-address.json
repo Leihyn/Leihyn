@@ -1,0 +1,21 @@
+{
+  "title": "Wrong referrer reward calculation for `address(0)` can cause fund loss",
+  "platform": "pashov-audits",
+  "program": "timeless-fi-bunni-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When users transfer their Bunni token, code calls `_beforeTokenTransfer(from, to, amount)` to update `from` and `to` referrers claim states. Code doesn't update the claim state for `to` address if `to` is zero to avoid updating the zero address claim state when users burn their tokens (which code calls `_beforeTokenTransfer(from, 0, amount)`):  ```solidity  function _beforeTokenTransfer(address from, address to, uint256) internal override { --snip--         if (from != address(0)) { --snip--         }         if (to != ad",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Bunni-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Attacker can DoS lockers from unstaking from Kodiak",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking",
+    "governance",
+    "proxy"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When staking in the `HoneyLocker` contract, the fields `totalLPStaked` and `vaultLPStaked` are increased by the amount of tokens being staked. When unstaking, these fields are decreased by the amount of tokens being unstaked. However, an attacker can exploit this mechanism by donating one wei of the token to the adapter, leading to arithmetic underflow when unstaking from the Kodiak adapter. This would cause the unstake function to always fail and make the staked tokens unwithdrawable. The following unit test proves the i",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Tokens with a fee-on-transfer mechanism will break the protocol",
+  "platform": "pashov-audits",
+  "program": "Bloom-security-review",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as some users will lose value  **Likelihood:** Low, as such tokens are not common  ## Description  The ERC20 logic in `BloomPool` is incompatible with tokens that have a fee-on-transfer mechanism. Such tokens for example is `PAXG`, while `USDT` has a built-in fee-on-transfer mechanism that is currently switched off. One example of this `BloomPool::depositBorrower` where the following code:  ```solidity UNDERLYING_TOKEN.safeTransferFrom(msg.sender, address(this), amount); ```  This will work incorrectly if the token has a fee-on-transfer mechanism - the contract w",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Bloom-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

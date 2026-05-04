@@ -1,0 +1,23 @@
+{
+  "title": "`_removeLeverage` uses an incorrect amount when redeeming lending pair shares",
+  "platform": "pashov-audits",
+  "program": "peapodsfinance-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When users remove or decrease leverage from their positions if the `_pairedAmtReceived` is lower than `_repayAmount`, it will try to get the remaining token from `_userProvidedDebtAmtMax`, or if `_userProvidedDebtAmtMax` is not provided, it will swap the `_podAmtReceived` to repay token until it enough to cover the `_repayAmount`.  ```solidity     function _acquireBorrowTokenForRepayment(         LeverageFlashProps memory _props,         address _pod,         address _borrowToken,         uint256 _repayAmount,         uint256",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Peapods-security-review_2024-11-16.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

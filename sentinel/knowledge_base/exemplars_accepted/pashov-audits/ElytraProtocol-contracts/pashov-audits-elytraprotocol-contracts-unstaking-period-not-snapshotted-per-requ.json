@@ -1,0 +1,22 @@
+{
+  "title": "Unstaking period not snapshotted per request causing inconsistencies",
+  "platform": "pashov-audits",
+  "program": "ElytraProtocol-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The vault stores a single `unstakingPeriods[asset]` that applies to all withdrawal requests. If an admin updates the period after a user\u2019s request, that change retroactively affects both pending and future requests. For example, a user who requested a 10-day unstake could be forced to wait 20 days if the period is increased, or could withdraw early if it\u2019s decreased, leading to inconsistent and unfair unlock timings.  ```solidity     function completeWithdrawal(uint256 requestId) external nonReentrant {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Elytra-security-review_2025-07-10.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

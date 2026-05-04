@@ -1,0 +1,19 @@
+{
+  "title": "Anyone can steal all `HoneyJar` NFTs in `HoneyJarPortal` and exploit its allowances",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-bear-cave",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it is a value loss for users  **Likelihood:** High, as it is a common vulnerability and requires no preconditions  ## Description  The `_debitFrom` function in `HoneyJarPortal` is exploitable, as it looks like this:  ```solidity function _debitFrom(address _from, uint16, bytes memory, uint _tokenId) internal override {     honeyJar.safeTransferFrom(_from, address(this), _tokenId); // Performs the owner & approval checks } ```  Since there is no check for the `_from` argument, anyone can call the function (through the `sendFrom` method in `ONFT721Core`) and pas",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/BearCave-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

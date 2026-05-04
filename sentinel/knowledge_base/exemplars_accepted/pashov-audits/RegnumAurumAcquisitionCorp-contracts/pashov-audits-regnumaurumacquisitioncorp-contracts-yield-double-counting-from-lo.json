@@ -1,0 +1,22 @@
+{
+  "title": "Yield double counting from lowered share price baseline on withdrawals",
+  "platform": "pashov-audits",
+  "program": "RegnumAurumAcquisitionCorp-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "oracle"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `VaultStrategy` contract, yield is calculated in `_harvestYield()` as follows, where the `lastSharePrice` is only updated if the `currentSharePrice` is greater than the last recorded `lastSharePrice` :  ```solidity function _harvestYield() internal {         uint256 currentSharePrice = _getPricePerShare();          if (vaultRewards.lastSharePrice == 0 || currentSharePrice < vaultRewards.lastSharePrice) {             // Initialize on first deposit             if (vaultRewards.lastSharePrice == 0) {",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/RegnumAurum-security-review_2025-08-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

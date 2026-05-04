@@ -1,0 +1,19 @@
+{
+  "title": "Possible financial loss if the duration of validity is low",
+  "platform": "pashov-audits",
+  "program": "0xPolycode-klaster-smart-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Simulation might succeed but may fail in the actual on-chain execution. This results in financial losses for the Bundler (the node). Therefore, maintaining consistency between simulation and actual on-chain submission outcomes is very important.  For example, consider a UserOp in the verification stage that only passes if the timestamp value of the block is below 2000. During simulation, conditions like this might be met, but if the timestamp of the transaction when included in a block is higher than 2000, the transaction",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Klaster-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Iterating the loop length below MAXLENGTH",
+  "platform": "pashov-audits",
+  "program": "lucidlyfi-lucidly-core-v1",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  During the pool deployment, the transaction reverts for a pool with the length of tokens below `MAXLENGHT` which is `32`:  - [link](https://github.com/lucidlyfi/lucidly-core-v1/blob/f00c45bbadc836b9eaa94717a0b3aa017e792588/src/Pool.sol#L160)  It reverts with the out-of-bound error, so it is required to provide a long length of token of 32, which is not always the case.  ## Recommendations  The loop should iterate up to `_numTokens`. Or the loop should use this pattern from other functions when the loop reaches the final ite",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Lucidly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

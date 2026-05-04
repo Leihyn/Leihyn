@@ -1,0 +1,21 @@
+{
+  "title": "Stuck tokens during the Exodus Mode",
+  "platform": "pashov-audits",
+  "program": "nume-crypto-nume-p2p-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, tokens stuck  **Likelihood:** Medium, it must be pending withdrawals, and the Exodus Mode enabled  ## Description  During the Exodus Mode users can prove their Nume balance and call `withdrawExodus()` to withdraw NFTs not yet withdrawn and that have not received approval in `notarizeSettlement()` yet. Also, users can have some funds already approved. In this case, they have to call `withdrawNFT()` manually, which is the final step to finalize the approved withdrawals. But this function has the following line:  ``` AppStorage.enforceExodusMode(); ```  It means tha",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Nume-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

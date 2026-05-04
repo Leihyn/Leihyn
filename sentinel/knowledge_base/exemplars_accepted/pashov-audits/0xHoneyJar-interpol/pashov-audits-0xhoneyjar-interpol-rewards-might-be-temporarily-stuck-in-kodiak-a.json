@@ -1,0 +1,22 @@
+{
+  "title": "Rewards might be temporarily stuck in Kodiak adapter",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When unstaking tokens from Kodiak, the rewards are claimed, as we can observe in the code snippet below:  ```Solidity     function withdrawLocked(bytes32 kek_id) nonReentrant withdrawalsNotPaused public {         _withdrawLocked(msg.sender, msg.sender, kek_id, true);     }      function _withdrawLocked(address staker_address, address destination_address, bytes32 kek_id, bool collectRewards) internal  {         // Collect rewards first and then update the balances         if(collectRewards) {             _getReward(staker_",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review_2024-12-24.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

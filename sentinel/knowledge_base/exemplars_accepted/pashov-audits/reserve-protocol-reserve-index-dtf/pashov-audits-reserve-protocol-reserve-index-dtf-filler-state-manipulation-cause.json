@@ -1,0 +1,22 @@
+{
+  "title": "Filler state manipulation causes denial-of-service across Folio operations",
+  "platform": "pashov-audits",
+  "program": "reserve-protocol-reserve-index-dtf",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  As the `sync()` modifier, which reverts if `swapActive()` returns `true`, is used in many crucial functions in `Folio` and also the `FolioDAOFeeRegistry`, this can be exploited to cause a DoS on protocol operations including:  1. `mint()` and `redeem()` functions, blocking users from entering or exiting positions. 2. Auction functions, preventing the protocol from executing trades. 3. Fee distribution functions, disrupt the protocol's economic model. 4. Parameter updates: `removeFromBasket()` and `FolioDAOFeeRegistry()` f",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Reserve-security-review_2025-06-02.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

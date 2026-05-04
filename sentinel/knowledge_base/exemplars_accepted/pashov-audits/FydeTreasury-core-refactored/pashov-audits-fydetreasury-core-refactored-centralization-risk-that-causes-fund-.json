@@ -1,0 +1,21 @@
+{
+  "title": "Centralization risk that causes fund loss or lock",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-core-refactored",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  There are multiple roles that are crucial for the protocol to work properly like the off-chain bot that updates AUM and the price setter role. If these roles comprised or work expectedly then contract crucial features would not work and users may lose funds. For example:  1. If an off-chain AUM updater bot is comprised then the attacker can increase/decrease AUM by 2% in each block, so after 10min can increase AUM by 150% and practically withdraw all of the contract funds. To avoid this, the code should add more limits for AUM",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

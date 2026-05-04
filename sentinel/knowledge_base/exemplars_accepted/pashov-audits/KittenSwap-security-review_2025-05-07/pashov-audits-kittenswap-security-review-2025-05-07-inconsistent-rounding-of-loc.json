@@ -1,0 +1,21 @@
+{
+  "title": "Inconsistent rounding of lock time causes voting power errors",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "precision-loss",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  In the VotingEscrow contract, lock end times are consistently rounded down to week boundaries (Thursday 00:00 UTC) in all functions except for `split`. This inconsistency disrupts the checkpoint system and causes incorrect voting power calculations.  In `_create_lock` and `increase_unlock_time`, lock end time is explicitly rounded to weekly boundaries. However, in the `split` function, this rounding is missing:  ```solidity     function split(         uint _from,         uint _amount     ) external returns (uint _tokenId1,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

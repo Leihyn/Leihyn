@@ -1,0 +1,22 @@
+{
+  "title": "`AddLiquidityETH` DoS by directly depositing WETH",
+  "platform": "pashov-audits",
+  "program": "Daydream-Labs-stardusts-v1-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When 16ETH is accumulated in the protocol, the protocol will call `_graduate()` to add 16ETH and 200M Stardust Tokens as liquidity. The minOut amount of Stardust Token is the same as the desired amount, which means the protocol doesn't expect anyone to provide liquidity before the protocol does.  ```  function _graduate() internal {         tokenState = TokenState.Trading;          uint256 ethLiquidity = address(this).balance;          // Mint the secondary market supply to this contract         _mint(address(this), X1);",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Stardusts-security-review_2024-12-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

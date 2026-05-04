@@ -1,0 +1,22 @@
+{
+  "title": "Protocol will not be compatible with commonly used ERC20 tokens",
+  "platform": "pashov-audits",
+  "program": "pump-fun-pump-v1",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy",
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as it most probably won't result in value loss but it limits the protocol usability  **Likelihood:** Medium, as it will not work with some commonly used tokens, but will work with others  ## Description  Here is a code snippet from `PumpV1::fulfill`:  ```solidity if (order.isBuy) {     ERC20(order.baseToken).transferFrom(order.maker, msg.sender, baseTokenAmount - fee);     ERC20(order.baseToken).transferFrom(order.maker, owner(), fee);     Token(order.assetToken).transferFrom(msg.sender, order.recipient, amount); } else {     ERC20(order.baseToken).transferFrom",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Pump-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

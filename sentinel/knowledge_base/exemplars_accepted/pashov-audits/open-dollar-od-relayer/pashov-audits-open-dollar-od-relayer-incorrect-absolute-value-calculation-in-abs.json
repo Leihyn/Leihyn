@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect Absolute Value Calculation in `_abs` Function Leads To DoS on Tokens with More Than 18 Decimals",
+  "platform": "pashov-audits",
+  "program": "open-dollar-od-relayer",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "bridge"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The function `_abs(int256 x)` is designed to return the absolute value of the input `x`. However, due to an error in how the ternary operation `x >= 0 ? x : -x` is handled, the result is not assigned back to `x`. This results in the function simply casting `x` to `uint256` without changing its sign. This leads to incorrect behavior when `x` is negative, as the cast of a negative `int256` to `uint256` results in very large numbers, for example `uint256(-1`) returns the maximum value of `uint256`.  ```solidity   // @notice Retur",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/OpenDollar-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "The borrower can be instantly liquidated",
+  "platform": "pashov-audits",
+  "program": "Ion-Protocol-ion-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `IonPool.sol` allows the creation of unsafe positions that can be liquidated instantly. When a user creates a position only basic position checks are performed:  ```solidity function _modifyPosition(              ---SNIP---             uint256 newTotalDebtInVault = ilkRate * _vault.normalizedDebt;              uint256 ilkSpot = $.ilks[ilkIndex].spot.getSpot();             // vault is either less risky than before, or it is safe             if (                 both(                     either(changeInNormalizedDebt > 0, ch",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/IonProtocol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Attacker can DOS `privateMint()`",
+  "platform": "pashov-audits",
+  "program": "dinaricrypto-usdplus-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature"
+  ],
+  "bug_class": "dos",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Function `privateMint()` calls `permit()` to set the allowance before token transfer:  ```solidity         IERC20Permit(address(paymentToken)).permit(permit.owner, address(this), permit.value, permit.deadline, v, r, s);         usdPlusAmount = permit.value;          _issue(paymentToken, permit.value, permit.value, permit.owner, permit.owner); ```  The issue is that the attacker can watch the mempool and use the signature to call permit and it would cause the original transaction to revert because of the used nonce. As a r",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Dinari-security-review_2024-12-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

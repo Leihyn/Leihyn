@@ -1,0 +1,23 @@
+{
+  "title": "`_calculateStakingOut` works incorrectly with stRWIP rewards",
+  "platform": "pashov-audits",
+  "program": "AriaProtocol-main-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  If stRWIP is sent to the staking contract as staking rewards, _calculateStakingOut will calculate stRWIP/RWIP exchange rate incorrectly.  Consider the following scenario:  1. Alice stakes 1000 RWIP and receives 1000 stRWIP. 2. Bob stakes 1000 RWIP and receives 1000 stRWIP. 3. 100 stRWIP is later bought from the market (that were minted by Alice/Bob), and these 100 stRWIP are sent to RWIPStaking as rewards.  Now there are 2000 RWIP and 100 stRWIP in the contract, stRWIP's totalSupply is 2000.  `ratio` in _calculateStakingOut wo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Aria-security-review_2025-05-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

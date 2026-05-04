@@ -1,0 +1,22 @@
+{
+  "title": "Stale `swapProxy` reference in `RoyaltyManager` contracts",
+  "platform": "pashov-audits",
+  "program": "Sofamon-wishwish-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `WishWishManager` contract allows the owner to update the `swapProxy` address via the `setSwapProxy` function. However, `RoyaltyManager` contracts are deployed once per creator in the `getRoyaltyManager` function and store the `swapProxy` as an immutable variable in their constructor. Once a creator launches their first collection, subsequent collections reuse the same `RoyaltyManager` instance, which retains the old proxy address even after updates. Consider the next scenario:  1. **CreatorA launches firs",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/WishWish-security-review_2025-11-04.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

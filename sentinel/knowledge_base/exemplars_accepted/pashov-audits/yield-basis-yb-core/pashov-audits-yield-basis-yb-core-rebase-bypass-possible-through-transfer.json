@@ -1,0 +1,23 @@
+{
+  "title": "Rebase bypass possible through `_transfer()`",
+  "platform": "pashov-audits",
+  "program": "yield-basis-yb-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The token reduction mechanism, which is critical for maintaining accurate staked liquidity accounting, is applied only during direct deposits to the staker.  ```python # File: LT.vy ... 238:     token_reduction: int256 = unsafe_div(staked * new_total_value - new_staked_value * supply, new_total_value - new_staked_value) ... 246:     return LiquidityValuesOut( 247:         admin=prev.admin, 248:         total=convert(new_total_value, uint256), 249:         ideal_staked=prev.ideal_staked, 250:         staked=convert(",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/YieldBasis-security-review_2025-03-26.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "NFT stolen due to wrong approval validation (Project self-injected exploit)",
+  "platform": "pashov-audits",
+  "program": "CypherLabz-SFT418V2",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When calling `approve()`, some checks are performed under the hood via `_FB721Approve()` to validate approval permissions.  Note that the check regarding `_isApprovedForAll` is flawed. It can be bypassed for any `id` if the caller approved a spender previously.  ```solidity     function _FB721Approve(address spender_, uint256 id_, address msgSender_) internal virtual {         address _owner = _chunkToOwners[id_].owner;          require(             _owner == msgSender_ || // the owner of the token is the msg.sender @>",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SFT-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

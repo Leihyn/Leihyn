@@ -1,0 +1,22 @@
+{
+  "title": "Losing voting power in rewards distribution",
+  "platform": "pashov-audits",
+  "program": "hyperstable-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Both `RewardsDistributor` and `TokenRewardsDistributor` contracts lack of properly account for perpetual locks in their voting power and rewards calculations. The contracts calculate voting power using the linear decay formula (`bias - slope * time`), which incorrectly handle the perpetual locks as that perpetual locks should maintain constant voting power over time.  This issue affects the following functions in both contracts:  - `ve_for_at()` - `_checkpoint_total_supply()` - `_claim()` - `_claimable()`  Since perpetual l",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Hyperstable-security-review_2025-03-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Signatures can be replayed using different addresses",
+  "platform": "pashov-audits",
+  "program": "Sofamon-sofamon-v2-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature",
+    "amm"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  The `commitToMint` function in the contract allows signatures signed by the `signer` to be replayed using different addresses. Anyone can see the signatures on-chain and then replay them with different accounts that have the same nonce. An attacker can start inputting previous signatures submitted by a user starting from a nonce of 0 until the current one.  ```solidity /// @param _collectionId The Id of the collection you wish to roll for /// @param spins The amount of spins you wish to roll /// @param signature A signature",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Sofamon-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

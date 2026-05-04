@@ -1,0 +1,23 @@
+{
+  "title": "Accrued interest is not accounted for when withdrawing",
+  "platform": "pashov-audits",
+  "program": "SharwaFinance-MarginTrading",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  When a user provides liquidity to `LiquidityPool` the interests of the debt accrued by the borrowers are taken into account for the calculation of the user's share of the pool. However, when a user withdraws from the pool, the accrued interest is not accounted for.  ```solidity File: LiquidityPool.sol  097:     function provide(uint amount) external nonReentrant { 098:  @>     uint totalLiquidity = getTotalLiquidity(); 099:         require( 100:             totalLiquidity + amount <= maximumPoolCapacity, 101:             \"M",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SharwaFinance-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

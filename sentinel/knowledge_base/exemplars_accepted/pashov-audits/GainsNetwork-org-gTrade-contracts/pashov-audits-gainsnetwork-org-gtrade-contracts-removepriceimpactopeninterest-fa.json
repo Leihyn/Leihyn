@@ -1,0 +1,21 @@
+{
+  "title": "`removePriceImpactOpenInterest()` fails to account for expired OI",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  `removePriceImpactOpenInterest()` will ensure that it does not remove more OI than required by deducting the actual removed OI from `expiredOiUsd` when closing a trade.  However, it fails to account for `expiredOiUsd` when removing OI for partial position size reduction. That will cause the reduced OI to be higher than required, causing a lower price impact on subsequent trades.  Suppose the scenario,  - existing position size = 1000 (in the outdated window) - active OI for trade = 0 (as it's outdated)  And the trader inc",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

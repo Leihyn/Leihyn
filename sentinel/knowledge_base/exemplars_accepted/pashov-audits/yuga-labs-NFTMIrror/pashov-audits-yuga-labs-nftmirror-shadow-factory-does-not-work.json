@@ -1,0 +1,19 @@
+{
+  "title": "Shadow factory does not work",
+  "platform": "pashov-audits",
+  "program": "yuga-labs-NFTMIrror",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  `onlyOwner` check in ShadowFactory is not initialized and thus has no owner set.  Solady's `Ownable` does not set the owner automatically on the deployment and requires calling `_initializeOwner()`, the way it is done in NFTShadow, for instance. As a result, any call of `deployAndRegister()` will always revert to checking the owner against `msg.sender`.  So the deployment flow is not centalized (is not going through the single source) and owners will have to deploy Shadow instances manually, which can be vulnerable to `initiai",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/NFTMirror-security-review_2024-12-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

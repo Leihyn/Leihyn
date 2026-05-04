@@ -1,0 +1,22 @@
+{
+  "title": "`withdraw_tokens` fails to adjust `claimed_supply` locking tokens permanently",
+  "platform": "pashov-audits",
+  "program": "merklelabshq-desci-launchpad",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  The `withdraw_tokens` function allows users to reclaim their payment tokens if the `min_threshold` is not met. However, the function does not update `claimed_supply` or transfer `tokens_purchased` back to the authority to reflect the refunded amounts.  Since the user\u2019s stats are marked as claimed, the corresponding `tokens_purchased` remain locked indefinitely.  For example, if a user has `tokens_purchased = 1000` and the `claimed_supply = 5000`, after withdrawal, and then he call the `withdraw_tokens` function and get his",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/DesciLaunchpad-security-review_2025-02-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

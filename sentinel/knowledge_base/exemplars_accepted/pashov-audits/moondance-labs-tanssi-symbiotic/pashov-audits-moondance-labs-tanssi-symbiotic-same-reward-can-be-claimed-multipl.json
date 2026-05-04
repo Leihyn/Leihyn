@@ -1,0 +1,21 @@
+{
+  "title": "Same reward can be claimed multiple times in certain cases",
+  "platform": "pashov-audits",
+  "program": "moondance-labs-tanssi-symbiotic",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  The `ODefaultOperatorRewards` contract distributes rewards to operators based on their active stake. To prevent multiple claims, the contract tracks claimed amounts via: ```solidity claimed[eraIndex][recipient] ``` However, the recipient is derived from the `operatorKey` using: ```solidity address recipient = IOBaseMiddlewareReader(middlewareAddress).operatorByKey(abi.encode(input.operatorKey)); ``` The issue arises because operator keys can be reassigned over time by the middleware. If a key that was previously associated wit",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tanssi-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

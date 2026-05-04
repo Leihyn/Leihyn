@@ -1,0 +1,21 @@
+{
+  "title": "Entry point contract cannot interact with `OmoAgent.sol` functions",
+  "platform": "pashov-audits",
+  "program": "omo-protocol-omo-mvp",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Most of the functions in `OmoAgent.sol` contract will be triggered by the entry point contract e.g.`borrowAsset()`, `repayAsset()`, `topOffToAgent()` and more. But they have an `onlyAgent` modifier  ```solidity     modifier onlyAgent(uint256 _id) {         require(msg.sender == OmoAgentStorage.data().agents[_id], \"Only agent\");         _;     } ```  This will prevent the standard\u2019s intended behavior of ERC4337 (limiting interactions with the EntryPoint).  ## Recommendations  The struct `Data` in the library `OmoAgentStora",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Omo-security-review_2025-01-25.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

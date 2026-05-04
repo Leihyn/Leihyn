@@ -1,0 +1,22 @@
+{
+  "title": "Protocol will miss part of it's fee",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-lido-fiv",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, part of the protocol fee would missed  **Likelihood:** High, each user that will claim his earnings in ongoing vault more than ones would pay less fees  ## Description  Vault allows variable stakers to claim earnings during the ongoing stage using the `withdraw` function:  ```solidity File: LidoVault.sol 458:   function withdraw(uint256 side) external nonReentrant { ... 516:       // Vault started and in progress 517:     } else if (!isEnded()) { 518:       if (side == FIXED) { ... 559:       } else { 560:         require(variableToVaultOngoingWithdrawalRequest",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

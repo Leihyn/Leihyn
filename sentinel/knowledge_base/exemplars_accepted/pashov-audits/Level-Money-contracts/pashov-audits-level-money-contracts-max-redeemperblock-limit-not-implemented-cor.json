@@ -1,0 +1,22 @@
+{
+  "title": "Max `redeemPerBlock` limit not implemented correctly",
+  "platform": "pashov-audits",
+  "program": "Level-Money-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The `LevelMintingV2` contract is designed to control the total amount of assets that can be redeemed in a single block using the `maxRedeemPerBlock` parameter. This mechanism aims to maintain system stability and prevent liquidity shortages. However, the current implementation fails to enforce this limit correctly.  The issue lies in how the `initiateRedeem()` and `completeRedeem()` functions handle redemptions. While `initiateRedeem()` checks if a user's requested redemption exceeds `maxRedeemPerBlock`, this check is app",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Level-security-review_2025-04-09.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

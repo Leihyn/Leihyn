@@ -1,0 +1,19 @@
+{
+  "title": "Liquidity shortfall during failed migration",
+  "platform": "pashov-audits",
+  "program": "g8keep-audit-v2",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When `reserves0` or the native token reaches the value of `MIGRATION_MINIMUM_LIQUIDITY` and the volume is met, it is possible to execute `_migrateToken`:  ```solidity File: g8keepBondingCurve.sol 509:         if (curveLiquidityMet && curveVolumeMet && !migrationFailed) { 510:             _migrateToken(0); 511:         } ```  The problem is that if the migration fails, buying and selling remain available. If the `_curveSell` function is called with `curveLiquidityMet` set to true, it could utilize the `bReserve` for processing",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/g8keep-security-review_2024-12-12.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

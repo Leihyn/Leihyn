@@ -1,0 +1,19 @@
+{
+  "title": "Circuit breakers are not considered when processing Chainlink's answer",
+  "platform": "pashov-audits",
+  "program": "cryptexfinance-tcapv2.0",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  Every Chainlink feed has a minimum and maximum price. However, due to the circuit breaker, if an asset's price moves outside these limits, the provided answer will still be capped.  This can lead to an incorrect price if the actual price falls below the aggregator's `minAnswer`, as Chainlink will continue providing the capped value instead of the true one.  The Chainlink documentation notes that \"On most data feeds, these values are no longer used and they do not prevent your application from reading the most recent answer.\".",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Cryptex-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

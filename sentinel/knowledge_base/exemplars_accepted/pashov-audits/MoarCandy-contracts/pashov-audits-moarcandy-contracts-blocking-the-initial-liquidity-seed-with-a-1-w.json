@@ -1,0 +1,22 @@
+{
+  "title": "Blocking the initial liquidity seed with a 1 wei donation",
+  "platform": "pashov-audits",
+  "program": "MoarCandy-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  Consider the following scenario:  1. While the bonding token (TOK) is still in the initial sale phase, the attacker creates an empty TOK/WETH pair on the Uniswap 2. He then donates 1 wei of WETH to the pair and calls the `sync` function:  ```solidity /// https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2Pair.sol#L198     function sync() external lock {         _update(IERC20(token0).balanceOf(address(this)), IERC20(token1).balanceOf(address(this)), reserve0, reserve1);     } ```  As a result, one of the reserv",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/MoarCandy-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Winner's payout is incorrectly calculated",
+  "platform": "pashov-audits",
+  "program": "curio-research-flagship-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  When a winner wins money, the function incorrectly calculates the payout for the winner, resulting in much more payout for the winner than intended.  When the admin calls `endGame()`, if the player wins the game, his total withdraw amount will be updated with his payout.  ```             if (playerPayout.payout > playerPayout.stake) {                 // Player won money case                  // update player revenue/in-game balance >               balance[player] += playerPayout.payout;             } else { ```  However, this",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Curio-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

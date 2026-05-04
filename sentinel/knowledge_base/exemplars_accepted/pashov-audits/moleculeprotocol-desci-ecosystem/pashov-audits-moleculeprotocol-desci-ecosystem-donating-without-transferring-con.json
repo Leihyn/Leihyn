@@ -1,0 +1,19 @@
+{
+  "title": "Donating without transferring contribution",
+  "platform": "pashov-audits",
+  "program": "moleculeprotocol-desci-ecosystem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When the project reaches at least the `FUNDED` state, seed tokens become transferable by anyone, and the amount of contribution will be transferred proportionally to the amount of tokens transferred.  ```solidity   function _update(address from, address to, uint256[] memory ids, uint256[] memory values)     internal     virtual     override   {     if (from != address(0) && to != address(0)) {       uint256 transferLength = ids.length;       for (uint256 i; i < transferLength; ++i) {         MarketData memory market = markets[",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Catalyst-security-review-april.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Traders can avoid the new liquidation configuration",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "multisig"
+  ],
+  "bug_class": "liquidation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  The new update introduces group liquidation parameters, where liquidation thresholds are now configurable and depend on leverage. Higher leverage results in lower liquidation thresholds, making positions more sensitive to price changes and more prone to liquidation.  ```solidity     function getLiqPnlThresholdP(         IPairsStorage.GroupLiquidationParams memory _params,         uint256 _leverage     ) public pure returns (uint256) {         // For trades opened before v9.2, use legacy liquidation threshold         // LE",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-July2.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

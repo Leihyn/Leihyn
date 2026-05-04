@@ -1,0 +1,22 @@
+{
+  "title": "Double reward claim in `ExternalBribe`",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the `ExternalBribe` contract, a malicious user can claim rewards twice for the same `tokenId` in the same epoch due to flawed logic in the `ExternalBribe::earned()` function. This issue allows a user to receive rewards multiple times from a single epoch, which can result in other users being unable to claim their rightful rewards due to reward depletion.  The problem lies in the update of the `prevRewards.timestamp` field inside the loop. The contract updates `prevRewards.timestamp` **unconditionally**, even when `_nex",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

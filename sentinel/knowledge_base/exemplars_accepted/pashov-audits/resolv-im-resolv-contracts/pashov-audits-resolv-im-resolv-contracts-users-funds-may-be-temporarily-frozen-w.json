@@ -1,0 +1,21 @@
+{
+  "title": "Users' funds may be temporarily frozen when the treasury lacks funds",
+  "platform": "pashov-audits",
+  "program": "resolv-im-resolv-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In the LPExternalRequestsManager contract, when users request burns, the requests are first processed and then confirmed by the SERVICE_ROLE:  ```solidity     function processBurns(         bytes32 _idempotencyKey,         uint256[] calldata _ids     ) external onlyRole(SERVICE_ROLE) idempotentProcessBurn(_idempotencyKey) {      function completeBurns(         bytes32 _idempotencyKey,         CompleteBurnItem[] calldata _items,         address[] calldata _withdrawalTokens     ) external onlyRole(SERVICE_ROLE) idempotentCo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Resolv-security-review-August.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

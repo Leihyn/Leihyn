@@ -1,0 +1,23 @@
+{
+  "title": "Operators can cast an extra vote to get voting majority",
+  "platform": "pashov-audits",
+  "program": "Smoothly-Protocol-contracts",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault",
+    "governance"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it breaks the `votingRatio` invariant  **Likelihood:** High, as operators can cast an extra vote at any time  ## Description  In `PoolGovernance::proposeEpoch`, operators can cast an extra vote when this is needed to get to `votingRatio`. Exploiting this, a single operator in a group of three can execute any proposal he decides on. Also if there are more operators in the group and one extra vote is needed for a proposal, anyone who has already voted can execute the proposal by sending his vote again. This is due to how the mechanism for removing previous votes",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Smoothly-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

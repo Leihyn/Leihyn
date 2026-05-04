@@ -1,0 +1,21 @@
+{
+  "title": "Lack of `instantRedeemWithPxEth` support",
+  "platform": "pashov-audits",
+  "program": "resolv-im-resolv-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Pirex ETH's redemption process using upxETH (via `initiateRedemption` and `redeemWithUpxEth`) requires some time and depends on multiple factors:  - The number of users wanting to withdraw: if `pendingWithdrawal` has not reached `DEPOSIT_SIZE`, need to wait more users need to withdraw until `pendingWithdrawal` reaches `DEPOSIT_SIZE`. - To withdraw the full balance of a validator, it must first exit entirely. The exiting process takes a variable amount of time, depending on how many others are exiting at the same time. The",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Resolv-security-review-October.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

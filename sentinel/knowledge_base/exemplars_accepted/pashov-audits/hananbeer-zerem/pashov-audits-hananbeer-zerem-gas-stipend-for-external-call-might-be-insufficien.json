@@ -1,0 +1,21 @@
+{
+  "title": "Gas stipend for external call might be insufficient and lead to stuck ETH",
+  "platform": "pashov-audits",
+  "program": "hananbeer-zerem",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "proxy"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  The way the Zerem protocol transfers out ETH looks like this  ```solidity payable(receiver).call{gas: 3000, value: amount}(hex\"\") ```  As you see, there is a gas stipend of 3000, but this might not be enough in some cases as some smart contract recipients need more than 3000 gas to receive ETH.  Examples of problematic recipients:  1. Recipient is a smart contract that has a payable fallback method which uses more than 3000 gas 2. Recipient is a smart contract that has a payable fallback function that needs less than 3000 gas but is called through a proxy, raising the call",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Zerem-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

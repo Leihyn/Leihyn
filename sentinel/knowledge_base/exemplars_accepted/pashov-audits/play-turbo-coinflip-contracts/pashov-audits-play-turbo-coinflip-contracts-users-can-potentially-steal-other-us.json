@@ -1,0 +1,22 @@
+{
+  "title": "Users can potentially steal other user's staking rewards",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "staking",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  When a user calls `Staking.stake()`, `stakedBalance` of the user is equal to the amount deposited.  ``` function stake(address token, uint256 amount) external nonReentrant {         require(acceptedTokens[token], \"Token not supported\");         require(amount > 0, \"Cannot stake 0\");          TokenInfo storage info = tokenInfo[token];         info.totalStaked += amount; >       stakedBalances[token][msg.sender] += amount;         lastStakeTime[token][msg.sender] = block.timestamp; >       require(IERC20(token).transferFrom(m",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-05.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

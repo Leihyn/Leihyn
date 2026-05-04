@@ -1,0 +1,23 @@
+{
+  "title": "Inaccurate calculation of referral fees for referrers and allies",
+  "platform": "pashov-audits",
+  "program": "GainsNetwork-org-gTrade-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "lending",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When calculating the referral reward, the fee tiers are applied immediately to the `positionSizeCollateral`, so the position size is already adjusted by the `feeMultiplierCache` of the trader.          function _registerTrade(             ITradingStorage.Trade memory _trade,             ITradingStorage.PendingOrder memory _pendingOrder         ) internal returns (ITradingStorage.Trade memory, uint256) {             ...                 v.reward1 = _distributeReferralReward(                     _trade.collateralIndex,",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/GainsNetwork-security-review-February.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Disabling collateral with `setCollateralToOracle()` blocks reward claims",
+  "platform": "pashov-audits",
+  "program": "moondance-labs-tanssi-symbiotic",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "lending",
+    "staking"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High    **Likelihood:** Low  ## Description  Calling `setCollateralToOracle(collateral, address(0))` on `Middleware` disables the collateral by removing its associated oracle. It introduces a critical issue: **vaults that used this collateral prevent their operators from claiming rewards**. ```solidity     function claimRewards(         ClaimRewardsInput calldata input     ) external nonReentrant returns (uint256 amount) {         --Snipped--         _distributeRewardsToStakers(             eraRoot_.epoch, input.eraIndex, stakerAmount, recipient, middlewareAddress, tok",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Tanssi-security-review_2025-04-30.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

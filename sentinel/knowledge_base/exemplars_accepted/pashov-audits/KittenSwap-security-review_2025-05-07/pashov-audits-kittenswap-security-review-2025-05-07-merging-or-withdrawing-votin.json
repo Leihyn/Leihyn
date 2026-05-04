@@ -1,0 +1,22 @@
+{
+  "title": "Merging or withdrawing VotingEscrow burns tokens without rewards",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  VotingEscrow merge(), split(), and withdraw() functions burn the user's NFT without claiming pending rewards from the bribe system (via getReward). Since claiming bribe rewards requires ownership of the NFT (isApprovedOrOwner check), burning the NFT makes it impossible to access unclaimed rewards afterward.  In the merge() function:  ``` locked[_from] = LockedBalance(0, 0); _checkpoint(_from, _locked0, LockedBalance(0, 0)); _burn(_from); ```  The getReward() function that users must call to claim bribe rewards checks owne",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

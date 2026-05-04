@@ -1,0 +1,19 @@
+{
+  "title": "If address is a smart contract that can't handle ERC721 tokens they will be stuck after a whitelisted mint",
+  "platform": "pashov-audits",
+  "program": "Prominence-Games-arcana-foundry-erc721a",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Proof of Concept  The `mintPublic` method has a check that allows only EOAs to call it ```solidity if (tx.origin != msg.sender) revert ContractsNotAllowed(); ``` but it is missing in the whitelisted mint methods (`mintArcanaList`, `mintAspirantList`, `mintAllianceList`). This means that if the address that is whitelisted is a contract and it calls those functions but it can't handle ERC721 tokens correctly, they will be stuck. This problem is usually handled by using `_safeMint` instead of `_mint` but all `mint` functionality in `ArcanaPrime` uses `_mint`.  ## Impact  This can result in a u",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/Arcana-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

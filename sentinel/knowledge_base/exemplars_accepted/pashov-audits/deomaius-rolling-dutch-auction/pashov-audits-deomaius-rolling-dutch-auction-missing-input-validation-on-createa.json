@@ -1,0 +1,21 @@
+{
+  "title": "Missing input validation on `createAuction` function parameters can lead to loss of value",
+  "platform": "pashov-audits",
+  "program": "deomaius-rolling-dutch-auction",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "auction"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, as it can lead to stuck funds  **Likelihood:** Low, as it requires user error/misconfiguration  ## Description  There are some problems with the input validation in `createAuction`, more specifically related to the timestamp values.  1. `endTimestamp` can be equal to `startTimestamp`, so `duration` will be 0 2. `endTimestamp` can be much further in the future than `startTimestamp`, so `duration` will be a huge number and the auction may never end 3. Both `startTimestamp` and `endTimestamp` can be much further in the future, so auction might never start  Those pos",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/solo/md/RollingDutchAuction-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

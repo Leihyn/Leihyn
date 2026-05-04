@@ -1,0 +1,22 @@
+{
+  "title": "Latest tokens bought in the market are more expensive than in the pool",
+  "platform": "pashov-audits",
+  "program": "serious-market-serious-core",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  The price of the tokens bought in the market increases as the number of `tokensSold` approaches `tradeableSupply`. This means that the last tokens bought in the market are ~1% more expensive than the first tokens bought in the pool.  Given that the pool is created once all the `tradeableSupply` is bought, there is an incentive to wait until other users buy the last tokens in the market and buy them in the pool at a lower price.  ### Proof of concept  Test:  ```solidity function testBuyMarketVsPool() public {     vm.deal(ownerA",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Serious-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

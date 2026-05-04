@@ -1,0 +1,22 @@
+{
+  "title": "Incorrect check inside `CLGauge.claimFees`",
+  "platform": "pashov-audits",
+  "program": "KittenSwap-security-review_2025-05-07",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  Inside `CLGauge.claimFees`, it will call `pool.collectFees` and if returned `claimed0` and `claimed1` is greater than 0, it will consider it as fees.  ```solidity     function _claimFees() internal returns (uint claimed0, uint claimed1) {         if (!isForPair) return (0, 0);         (claimed0, claimed1) = pool.collectFees(); >>>     if (claimed0 > 0 || claimed1 > 0) {             uint _fees0 = fees0 + claimed0;             uint _fees1 = fees1 + claimed1;              if (                 _fees0 > IBribe(internal_bribe).",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-05-07.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

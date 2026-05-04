@@ -1,0 +1,19 @@
+{
+  "title": "FeeTaker is incompatible with fee-on-transfer tokens",
+  "platform": "pashov-audits",
+  "program": "1inch-limit-order-protocol",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  When a fee-on-transfer token is used as a taker asset, the `FeeTaker.sol` contract receives `takingAmount - tokenFee`. This can cause the contract to revert because it assumes that the entire `takingAmount` is available on its balance.  ```solidity     function postInteraction(         IOrderMixin.Order calldata order,         bytes calldata /* extension */,         bytes32 /* orderHash */,         address /* taker */,         uint256 /* makingAmount */,         uint256 takingAmount,         uint256 /* remainingMakingAmou",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/1inch-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

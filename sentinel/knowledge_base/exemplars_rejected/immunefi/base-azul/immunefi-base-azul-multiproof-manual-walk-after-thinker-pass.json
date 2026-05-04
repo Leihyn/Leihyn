@@ -1,0 +1,23 @@
+{
+  "title": "Multiproof manual walk after thinker pass",
+  "platform": "immunefi",
+  "program": "base-azul",
+  "severity_filed": "Informational",
+  "severity_awarded": null,
+  "status": "rejected",
+  "rejection_reason": "out-of-scope",
+  "surface_tags": [
+    "bridge",
+    "proxy",
+    "vault"
+  ],
+  "bug_class": "meta-process",
+  "mental_operation": "value_flow",
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "Manual walk of AggregateVerifier + TEEProverRegistry + TEEVerifier + ZKVerifier + NitroEnclaveVerifier guided by 46 thinker hypotheses. Walked claimCredit, resolve, challenge, nullify, _verifyTeeProof, _verifyZkProof, _verifyL1Origin (EIP-2935 + blockhash), _verifyJournal (cert chain validation). All hypotheses dispositioned: trust_mapper false alarms (caller-class doesn't see inline guards), value_flow claimCredit checked, invariant_inferrer proofCount maintained. Already-known TEEProverRegistry init/setGameType asymmetry confirmed OOS.",
+  "key_lesson": "After thinker pass, manually walk each top-confidence hypothesis to its disposition. Capture the hypothesis-disposition table - it's the calibration data for tuning thinkers and the proof that the surface is exhausted.",
+  "contest_url": null,
+  "submission_url": null,
+  "captured_at": "2026-05-04T17:10:56"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "No slippage check when depositing to Pendle",
+  "platform": "pashov-audits",
+  "program": "FydeTreasury-veFyde",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "vault"
+  ],
+  "bug_class": "slippage",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Low  **Likelihood:** High  ## Description  When calling `YieldStrategy.depositToPendle()`, the slippage is set at zero when `router.swapExactTokenForPt()` is called.  ``` function depositToPendle(address _underlying, address _market, uint256 _amount)     external     returns (uint256)   {     (uint256 netPtOut,,) = router.swapExactTokenForPt(       address(this),       _market, >     0,       defaultApprox(),       createTokenInputStruct(_underlying, _amount),       emptyLimit()     );     return netPtOut;   } ```  This is the `swapExactTokenForPt` on the Pendle IPActi",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Fyde-security-review-May.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

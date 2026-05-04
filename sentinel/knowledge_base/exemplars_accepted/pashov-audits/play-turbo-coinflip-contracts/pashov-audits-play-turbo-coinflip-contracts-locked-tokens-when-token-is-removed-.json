@@ -1,0 +1,22 @@
+{
+  "title": "Locked tokens when token is removed during `depositDelay` period",
+  "platform": "pashov-audits",
+  "program": "play-turbo-coinflip-contracts",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description:  The `Staking.finalizeStake()` function allows staking to be completed even if the intended token is removed from the `acceptedTokens` list **during the `depositDelay`** (if between a `requestStake()` and `finalizeStake()` calls, the intended token is removed). This results in locking the user's tokens for at least the duration of `depositDelay` + `unstakeDelay` (currently locking for at least a total of **49 hours**) until the user can withdraw their non-accepted tokens. Furthermore, if the contract\u2019s liquidity is insuff",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Coinflip-security-review_2025-02-19.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

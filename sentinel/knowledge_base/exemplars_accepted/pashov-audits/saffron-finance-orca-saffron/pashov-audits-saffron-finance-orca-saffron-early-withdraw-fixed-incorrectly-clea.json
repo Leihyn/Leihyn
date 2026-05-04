@@ -1,0 +1,22 @@
+{
+  "title": "Early_withdraw_fixed incorrectly clears `fixed_side_capacity` and tick value",
+  "platform": "pashov-audits",
+  "program": "saffron-finance-orca-saffron",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "amm"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** Medium  **Likelihood:** Medium   ## Description  `early_withdraw_fixed` clears all of the following vault fields in its cleanup block:  ``` //early_withdraw.rs      // 3. Clear vault position state (all fields set by deposit_fixed)     {         let mut vault = ctx.accounts.vault.load_mut()?;         vault.set_position_mint(None);         vault.liquidity = 0;         vault.fixed_side_capacity = 0;         vault.fixed_depositor = Pubkey::default();         vault.tick_lower = 0;         vault.tick_upper = 0;     } ```  However, `fixed_side_capacity`, `tick_lo",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Saffron-security-review_2026-03-06.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

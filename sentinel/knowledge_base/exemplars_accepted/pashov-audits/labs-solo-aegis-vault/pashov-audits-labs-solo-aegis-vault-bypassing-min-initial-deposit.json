@@ -1,0 +1,21 @@
+{
+  "title": "Bypassing `MIN_INITIAL_DEPOSIT`",
+  "platform": "pashov-audits",
+  "program": "labs-solo-aegis-vault",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  When users first deposit into the Aegis vault (`aegisTotalSupply` is 0), the operation will check if `aegisShares` minted is greater than `MIN_INITIAL_DEPOSIT`. This is designed to prevent attacks from first depositors.  ```solidity     function __deposit(         uint256 depositSharesAmount,         uint256 aegisTotalSupply,         uint256 depositSpotPrice,         uint256 targetSpotPrice     )         private         returns (uint256 aegisShares)     {         // ...         if (aegisTotalSupply == 0) {             // bette",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/AegisVault-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:27:59"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "`FETCH_TIME` is too large and this can lead to a stale price",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact**: High, because it might return an stale price  **Likelihood**: Low, it can happen in highly volatile markets  ## Description  The `FETCH_TIME` value in the `TapOracle.sol` contract is set to 4 hours, which determines the minimum interval between updates of the oracle price.  ```solidity uint32 public FETCH_TIME = 4 hours; ```  But this interval is too large and can lead to an outdated price. In highly volatile markets, price data can become outdated quickly. A 4-hour interval may not be sufficient to capture important market movements, potentially leading to the oracle",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

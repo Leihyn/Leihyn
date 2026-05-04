@@ -1,0 +1,22 @@
+{
+  "title": "Accepting duplicate signatures from one signer",
+  "platform": "pashov-audits",
+  "program": "spaceandtimelabs-sxt-token",
+  "severity_filed": "Critical",
+  "severity_awarded": "Critical",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "signature-replay",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** High  ## Description  The `validateMessage` function in `SubstrateSignatureValidator` is designed to verify that a message has been signed by a threshold of attestors. However, the function does not account for duplicate signatures from the same attestor. It simply counts how many times a signature maps to a known attestor, regardless of whether the signer has already been counted. Since the function lacks deduplication logic, it is possible to replay the same valid signature multiple times to artificially inflate the count of valid signatures.  `",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/SXT-security-review_2025-03-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

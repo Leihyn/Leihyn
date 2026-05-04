@@ -1,0 +1,21 @@
+{
+  "title": "Excess ETH from deposits",
+  "platform": "pashov-audits",
+  "program": "overload-labs-farm",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Low  ## Description  A user can deposit WETH into the farm by calling `deposit` in `Router.sol` with `msg.value > 0` and `token = WETH`; the ether provided with the call is wrapped to WETH. The amount that is wrapped and deposited in the farm is controlled by the user input `amount`.  However, there is no validation that the ether provided by the user is actually equal to the `amount` argument that is used to control the deposit. As a result, it is possible for a user to provide more ether than `amount`, yet only `amount` of WETH will be deposited",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Overload-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

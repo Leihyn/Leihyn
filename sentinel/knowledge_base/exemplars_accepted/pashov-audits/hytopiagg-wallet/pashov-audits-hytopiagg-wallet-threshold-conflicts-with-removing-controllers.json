@@ -1,0 +1,22 @@
+{
+  "title": "Threshold conflicts with removing controllers",
+  "platform": "pashov-audits",
+  "program": "hytopiagg-wallet",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "signature",
+    "multisig"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High, attack vector to capture the wallet  **Likelihood:** Medium, relevant not for all sets of controllers  ## Description  There is a drawback to using absolute weights - sometimes we should decrease the Threshold before removing a controller. Decreasing Threshold is a strong voting rules adjustment, and can be maliciously used by any controller.  Imagine we have a set of controllers A=50, B=50. TotalWeight=100, Threshold=100. Then, imagine user B asks to exit.  ```     function _removeController(address _controller) internal {         ControllersStorage.layout().tot",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/HYTOPIAWallet-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

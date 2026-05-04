@@ -1,0 +1,19 @@
+{
+  "title": "It is possible to override DAO details",
+  "platform": "pashov-audits",
+  "program": "StationX-Network-smartcontract",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  Code uses `create` to deploy DAO token in Deployer contract, so the DAO address only depends on Deployer contract addresses and its deployment nonce. If two chains have the same Deployer contract address then DAO created in those chains would have the same addresses. This would cause congestion when some DAOs deploy on both of those chains. An attacker can use this to override the DAO's details in the other chain. So when a DAO uses multi-chain deployments it would be possible to deploy the same DAO in the cross-chain and t",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/StationX-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

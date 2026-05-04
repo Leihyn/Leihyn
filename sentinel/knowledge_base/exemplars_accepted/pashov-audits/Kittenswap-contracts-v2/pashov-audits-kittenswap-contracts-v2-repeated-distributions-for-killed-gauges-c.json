@@ -1,0 +1,23 @@
+{
+  "title": "Repeated distributions for killed gauges can block valid distributions",
+  "platform": "pashov-audits",
+  "program": "Kittenswap-contracts-v2",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex",
+    "staking",
+    "veToken"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "_Resolved_  ## Severity  **Impact:** High  **Likelihood:** Medium  ## Description  **Note: Distributions for killed (standard) gauges will currently fail, so this report assumes that the killed gauge referred to is an AlgebraGauge**.  When a gauge is killed, the pending emissions for that gauge, for the current period, are re-routed back to the `minter` contract. Additionally, the `es.distributed` flag is *not* set to `true`. This is done so that, when the gauge is revived, we are able to re-distribute these missed emissions:  ```solidity     function _distribute(uint256 _period, address _gaug",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/KittenSwap-security-review_2025-07-31.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

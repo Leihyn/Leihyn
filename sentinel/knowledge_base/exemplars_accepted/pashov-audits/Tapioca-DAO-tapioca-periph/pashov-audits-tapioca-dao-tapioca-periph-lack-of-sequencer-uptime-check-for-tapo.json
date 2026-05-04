@@ -1,0 +1,21 @@
+{
+  "title": "Lack of sequencer uptime check for `TapOracle` can cause stale prices",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "oracle-manipulation",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, oracle price will be stale **Likelihood:** Medium, occurs during period of sequencer downtime  ## Description  `TapOracle` takes an average of 3 TWAP prices from UniswapV3 pool with an interval of at least 4 hours (based on `FETCH_TIME`). The 3 TWAP prices are stored in `lastPrices[]` and updated when `get()` is called to retrieve TAP price.  The issue is that when the L2 sequencer is down for an extended period, there will be no interaction with the oracle via `get()`, preventing `lastPrices[]` from being updated with the latest prices. This will cause `TapOra",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

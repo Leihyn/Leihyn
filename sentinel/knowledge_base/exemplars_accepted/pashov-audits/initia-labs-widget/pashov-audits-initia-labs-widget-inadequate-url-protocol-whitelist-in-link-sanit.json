@@ -1,0 +1,19 @@
+{
+  "title": "Inadequate URL protocol whitelist in link sanitization",
+  "platform": "pashov-audits",
+  "program": "initia-labs-widget",
+  "severity_filed": "Medium",
+  "severity_awarded": "Medium",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** Medium  ## Description  In `ExplorerLink.tsx` and `ManageChainsItem.tsx`, user-controlled URLs (e.g. the txPage template or the chain\u2019s website field) are passed directly through xss() and rendered into an `<a href=\"\u2026\">` without validating the URL scheme. While the xss library escapes dangerous characters, it does not enforce a protocol whitelist by default.  An attacker who can manipulate the link template can supply a javascript: URI (for example, `\"javascript:alert(document.cookie)\"`), resulting in DOM-based XSS when a user clicks the link.",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Initia-security-review_2025-06-17.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

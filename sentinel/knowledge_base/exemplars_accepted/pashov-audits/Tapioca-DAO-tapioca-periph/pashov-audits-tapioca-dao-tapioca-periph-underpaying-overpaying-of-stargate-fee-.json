@@ -1,0 +1,21 @@
+{
+  "title": "Underpaying/Overpaying of Stargate fee will occur in `StargateLbpHelper.participate()`",
+  "platform": "pashov-audits",
+  "program": "Tapioca-DAO-tapioca-periph",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "dex"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium, as it will underpay/overpay Stargate fee  **Likelihood:** High, it will always occur  ## Description  `StargateLbpHelper.participate()` uses Stargate `router.swap()` to send tokens to host chain for LBP swap.  However, the `_lzTxParams` parameters are hardcoded to zero, which will cause Stargate to undercharge/overcharge for the cross chain swap fee. That will occur as Stargate uses LayerZero for the cross chain messaging, which will compute the underlying LZ fee based on the `dstGasForCall`. When `dstGasForCall == 0`, it will charge the fee based on a default",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/TapiocaDAO-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}

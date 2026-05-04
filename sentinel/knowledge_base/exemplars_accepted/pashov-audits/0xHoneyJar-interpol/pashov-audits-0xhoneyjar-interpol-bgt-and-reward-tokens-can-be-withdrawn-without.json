@@ -1,0 +1,22 @@
+{
+  "title": "BGT and reward tokens can be withdrawn without paying fees",
+  "platform": "pashov-audits",
+  "program": "0xHoneyJar-interpol",
+  "severity_filed": "High",
+  "severity_awarded": "High",
+  "status": "accepted",
+  "rejection_reason": null,
+  "surface_tags": [
+    "vault",
+    "staking"
+  ],
+  "bug_class": "logic-error",
+  "mental_operation": null,
+  "language": "solidity",
+  "file_paths": [],
+  "summary": "## Severity  **Impact:** Medium  **Likelihood:** High  ## Description  Some tokens are expected to be held by the `HoneyLocker` contract and are expected to pay fees when withdrawn. Such is the case of the BGT token, and other reward tokens.  To do that, a fee is implemented on the `withdrawBERA()` and `withdrawERC20()` tokens.  The issue lies in that it is possible to withdraw those ERC20 tokens via the `withdrawLPToken()` function:  ```solidity function withdrawLPToken(address _LPToken, uint256 _amount) external onlyOwner {     if (expirations[_LPToken] == 0) revert HasToBeLPToken();     if",
+  "key_lesson": "From Pashov Audit Group report",
+  "contest_url": "https://github.com/pashov/audits/blob/master/team/md/Interpol-security-review.md",
+  "submission_url": null,
+  "captured_at": "2026-05-04T19:28:00"
+}
