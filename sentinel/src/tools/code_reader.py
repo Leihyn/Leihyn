@@ -14,10 +14,47 @@ def read_solidity_file(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
+_SKIP_DIR_NAMES = {
+    "out",            # Foundry build artifacts (Name.sol/ is a DIR, not a file)
+    "cache",          # Foundry cache + Hardhat cache
+    "artifacts",      # Hardhat build artifacts
+    "node_modules",   # JS deps
+    "lib",            # Foundry installed deps
+    "x-ray",          # x-ray skill output
+    ".git",
+    ".forge-snapshots",
+    "broadcast",      # Foundry deployment logs
+    "coverage",       # coverage reports
+    "deployments",    # hardhat-deploy artifacts
+    "mocks",          # test mocks (not in audit scope)
+    "test",           # test files
+    "tests",          # test files (alt naming)
+    "others",         # vendored multicall/create3 etc
+}
+
+
 def find_solidity_files(directory: Path, recursive: bool = True) -> list[Path]:
-    """Find all Solidity files in a directory."""
+    """Find all Solidity files in a directory.
+
+    Excludes build artifacts, dependency dirs, and skill outputs. Also
+    filters out paths matched by the glob that are directories rather
+    than files (Foundry's `out/Name.sol/` layout would otherwise be
+    treated as parseable .sol entries).
+    """
     pattern = "**/*.sol" if recursive else "*.sol"
-    return list(directory.glob(pattern))
+    results = []
+    for p in directory.glob(pattern):
+        if not p.is_file():
+            continue
+        # Drop anything inside a skipped directory (any depth).
+        try:
+            rel_parts = set(p.relative_to(directory).parts)
+        except ValueError:
+            rel_parts = set(p.parts)
+        if rel_parts & _SKIP_DIR_NAMES:
+            continue
+        results.append(p)
+    return results
 
 
 def extract_contract_info(source: str, file_path: Path) -> list[ContractInfo]:
@@ -103,12 +140,15 @@ def extract_functions(body: str) -> list[FunctionInfo]:
     """Extract function information from contract body."""
     functions = []
 
-    # Function pattern
+    # Function pattern. Anchored quantifiers are bounded to prevent catastrophic
+    # backtracking on large files (TradePairs.sol 1500+ lines) where a long
+    # modifier sequence used to hang re.finditer indefinitely. Modifier list is
+    # captured greedily but with a 256-char ceiling.
     func_pattern = r"""
         function\s+(\w+)\s*\(([^)]*)\)\s*
-        ((?:public|external|internal|private)\s*)?
-        ((?:view|pure|payable)\s*)?
-        ((?:\w+\s*)*)?  # modifiers
+        ((?:public|external|internal|private)\s+)?
+        ((?:view|pure|payable)\s+)?
+        ([^{;()]{0,256})  # modifiers (no braces/semis/parens; bounded)
         (?:returns\s*\(([^)]*)\))?\s*
         (\{|;)
     """
@@ -147,16 +187,25 @@ def extract_functions(body: str) -> list[FunctionInfo]:
         modifiers = [m.strip() for m in modifiers_str.split() if m.strip()]
 
         # Find function body for deeper analysis
+        func_body = ""
+        line_start = body.count("\n", 0, match.start()) + 1
+        line_end = line_start
         if match.group(7) == "{":
             func_start = match.end() - 1
             func_end = find_matching_brace(body, func_start)
             if func_end > func_start:
                 func_body = body[func_start:func_end + 1]
+                line_end = body.count("\n", 0, func_end + 1) + 1
                 external_calls = extract_external_calls(func_body, name)
             else:
                 external_calls = []
         else:
             external_calls = []
+
+        # NatSpec extraction: capture comment lines immediately preceding the
+        # function signature. Walk back from match.start() over `///` and
+        # `/** ... */` blocks. Stop on the first non-comment line.
+        doc = _extract_natspec_above(body, match.start())
 
         functions.append(
             FunctionInfo(
@@ -167,31 +216,104 @@ def extract_functions(body: str) -> list[FunctionInfo]:
                 returns=returns,
                 modifiers=modifiers,
                 external_calls=external_calls,
+                source_lines=(line_start, line_end),
+                line_start=line_start,
+                line_end=line_end,
+                body=func_body,
+                documentation=doc,
             )
         )
 
     return functions
 
 
-def extract_state_variables(body: str) -> list[StateVariable]:
-    """Extract state variable information from contract body."""
-    variables = []
+def _extract_natspec_above(body: str, match_start: int) -> str:
+    """Return the NatSpec block (`///` or `/** */`) immediately preceding `match_start`.
 
-    # State variable pattern (simplified)
+    Empty string if there is none. Used to feed the spec_skeptic thinker.
+    """
+    if match_start <= 0:
+        return ""
+    # Walk backwards over whitespace lines
+    i = match_start
+    # skip whitespace before the function
+    while i > 0 and body[i - 1] in " \t":
+        i -= 1
+    if i == 0 or body[i - 1] != "\n":
+        # function may start mid-line (rare); look for the line start
+        line_start = body.rfind("\n", 0, match_start) + 1
+    else:
+        line_start = i
+    # Now read lines upward until we leave the comment block
+    pos = line_start
+    lines: list[str] = []
+    while pos > 0:
+        prev_nl = body.rfind("\n", 0, pos - 1)
+        line = body[prev_nl + 1: pos - 1]
+        stripped = line.strip()
+        if not stripped:
+            # blank line inside doc continues; outside breaks
+            if lines:
+                pos = prev_nl + 1
+                continue
+            break
+        if stripped.startswith("///") or stripped.startswith("*") or stripped.startswith("/**") or stripped.startswith("//"):
+            lines.append(stripped)
+            pos = prev_nl + 1
+            continue
+        if stripped.endswith("*/"):
+            lines.append(stripped)
+            pos = prev_nl + 1
+            continue
+        break
+    if not lines:
+        return ""
+    return "\n".join(reversed(lines))
+
+
+def extract_state_variables(body: str) -> list[StateVariable]:
+    """Extract state variable information from contract body.
+
+    Strips function/modifier/constructor bodies before scanning so local
+    variable declarations like `uint256 expiry = ...;` inside functions are
+    not misclassified as state variables. Without this strip, local-name
+    pollution downstream (trust_mapper, invariant_inferrer) emits false
+    hypotheses on stack temporaries. Verified against
+    contracts/src/multiproof/tee/NitroEnclaveVerifier.sol on 2026-05-04.
+    """
+    stripped = _strip_function_bodies(body)
+
+    # Type slot supports nested mapping declarations like
+    # `mapping(K1 => mapping(K2 => V))` up to two nesting levels (covers the
+    # bulk of Solidity-in-the-wild without needing a real parser).
     var_pattern = r"""
         ^\s*
-        (mapping\s*\([^)]+\)|[\w\[\]]+)\s+  # type
-        (public|private|internal)?\s*        # visibility
-        (constant|immutable)?\s*             # modifiers
-        (\w+)\s*                             # name
-        (?:=|;)                              # assignment or end
+        (
+            mapping\s*\(
+                (?:[^()]|\([^()]*\))*               # one level of nested parens
+            \)
+          | [\w\[\]]+                                # plain type
+        )\s+
+        (public|private|internal)?\s*                # visibility
+        (constant|immutable|transient)?\s*           # modifiers
+        (\w+)\s*                                     # name
+        (?:=|;)                                      # assignment or end
     """
 
-    for match in re.finditer(var_pattern, body, re.VERBOSE | re.MULTILINE):
+    seen: set[str] = set()
+    variables: list[StateVariable] = []
+    for match in re.finditer(var_pattern, stripped, re.VERBOSE | re.MULTILINE):
         var_type = match.group(1).strip()
         visibility = match.group(2) or "internal"
         modifier = match.group(3)
         name = match.group(4)
+
+        # Skip pseudo-keywords picked up by the type slot.
+        if var_type in ("function", "modifier", "constructor", "event", "error", "struct", "enum"):
+            continue
+        if name in seen:
+            continue
+        seen.add(name)
 
         variables.append(
             StateVariable(
@@ -204,6 +326,33 @@ def extract_state_variables(body: str) -> list[StateVariable]:
         )
 
     return variables
+
+
+def _strip_function_bodies(contract_body: str) -> str:
+    """Replace each `function/modifier/constructor ... { ... }` block with
+    a same-length whitespace blob so line numbers are preserved but
+    local declarations no longer match the state-var regex.
+    """
+    out_chars = list(contract_body)
+    pos = 0
+    pat = re.compile(r"\b(function|modifier|constructor)\b")
+    while True:
+        m = pat.search(contract_body, pos)
+        if not m:
+            break
+        # Find the opening brace after this declaration's signature.
+        brace = contract_body.find("{", m.end())
+        if brace == -1:
+            break
+        end = find_matching_brace(contract_body, brace)
+        if end == -1 or end <= brace:
+            pos = brace + 1
+            continue
+        # Wipe the body (keep newlines so line counting survives).
+        for i in range(brace, end + 1):
+            out_chars[i] = "\n" if contract_body[i] == "\n" else " "
+        pos = end + 1
+    return "".join(out_chars)
 
 
 def extract_modifiers(body: str) -> list[str]:
