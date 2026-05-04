@@ -190,6 +190,10 @@ class ContractInfo:
     uses_delegatecall: bool = False
     has_external_calls: bool = False
 
+    # 2026-05-04: NatSpec / contract-level doc-comment block, fed to the
+    # spec_skeptic thinker.
+    documentation: str = ""
+
 
 @dataclass
 class FunctionInfo:
@@ -206,6 +210,15 @@ class FunctionInfo:
     state_reads: list[str] = field(default_factory=list)
     state_writes: list[str] = field(default_factory=list)
     source_lines: tuple[int, int] = (0, 0)
+
+    # 2026-05-04: thinker-agent inputs. body is the brace-balanced function
+    # body verbatim. line_start / line_end are 1-indexed line numbers in the
+    # owning contract source. documentation is the NatSpec block immediately
+    # preceding the function declaration. All optional; default empty.
+    body: str = ""
+    line_start: int = 0
+    line_end: int = 0
+    documentation: str = ""
 
 
 @dataclass
@@ -262,6 +275,13 @@ class Finding:
     # Related
     related_findings: list[str] = field(default_factory=list)
     references: list[str] = field(default_factory=list)
+
+    # Pre-DevilsAdvocate static prefilter signals (intent_check,
+    # default_value_check, dupe_check). Populated by src/agents/intent_checker.py,
+    # default_value_pruner.py, dupe_scrubber.py. DevilsAdvocate reads these
+    # to soften / reinforce its severity calibration without re-running the
+    # static analysis. Kept out of the report-facing fields above.
+    metadata: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -396,6 +416,16 @@ class AuditState:
     audit_dir: Optional[Path] = None
     known_findings: list[KnownFinding] = field(default_factory=list)
     priority_files: list[str] = field(default_factory=list)  # post-audit-changed files
+    # X-ray prior context: stated invariants extracted from the x-ray.md
+    # report. Consumed by DevilsAdvocate (divergence-confidence boost) and
+    # PoC generator (test seeding from documented protocol claims).
+    xray_invariants: list[str] = field(default_factory=list)
+    # 2026-05 addition: PR-level diff against the audited commit.
+    # audit_baseline_commit is the SHA of the commit Pashov/etc. reviewed.
+    # pr_diffs maps PR-label to list of changed files in that PR.
+    # Used by Scope.POST_AUDIT and Scope.PR scope iterators in scoping.py.
+    audit_baseline_commit: Optional[str] = None
+    pr_diffs: dict = field(default_factory=dict)
 
     # Invariants
     invariants: list[Invariant] = field(default_factory=list)
@@ -418,6 +448,13 @@ class AuditState:
     # Audit depth
     depth: str = "standard"  # "fast", "standard", "deep"
 
+    # No-LLM mode: when set, orchestrator runs only zero-cost phases
+    # (audit-intel, recon file scan, slither, audit-diff) and dumps the
+    # checkpoint for an external driver to consume. Used by the
+    # `sentinel-hunt` Claude Code skill to avoid burning Anthropic credits
+    # while still leveraging Sentinel's static-analysis pipeline.
+    no_llm: bool = False
+
     # Metadata
     start_time: datetime = field(default_factory=datetime.now)
     end_time: Optional[datetime] = None
@@ -432,6 +469,26 @@ class AuditState:
     # thinking_tokens, cost, findings, findings_post_validation,
     # findings_matched_corpus, runtime_seconds}.
     hunter_telemetry: dict = field(default_factory=dict)
+
+    # Thinker hypotheses (Point 1). Hypotheses are NOT findings — they are
+    # "what-if" prompts emitted by the mental-operation thinkers in
+    # src/agents/thinkers/. The confirmer / FP gate phase decides which ones
+    # are promoted to Findings.
+    hypotheses: list = field(default_factory=list)
+
+    # Surface tag profile (Point 3). Populated by src/core/surface_tags.py.
+    # Drives specialist dispatch: tag-gated specialists are skipped if their
+    # required tags are absent, freeing subagent budget for the surface that
+    # actually exists.
+    surface_profile: dict = field(default_factory=dict)
+
+    # FP gate reports (Point 2). Per-finding deterministic-check verdicts.
+    # Schema: list[GateReport.to_dict()].
+    fp_gate_reports: list = field(default_factory=list)
+
+    # Auto-PoC validator results (Point 4). Per-finding forge test outcomes.
+    # Schema: list[ValidationOutcome.to_dict()].
+    auto_poc_results: list = field(default_factory=list)
 
     def add_log(self, message: str) -> None:
         """Add a timestamped log entry."""
@@ -501,6 +558,57 @@ class AuditState:
                 lines.append(f"- {pf}")
         lines.append("")
         return "\n".join(lines)
+
+    def get_few_shot_prompt(self, k_pos: int = 5, k_neg: int = 5) -> str:
+        """Render the cross-contest exemplar few-shot block, scoped to this
+        codebase's surface tags. Empty string if no exemplars match.
+
+        Reads from sentinel/knowledge_base/exemplars_{accepted,rejected}/.
+        Positive examples are prior wins on the same surface; negative
+        examples are prior dismissals (with structured rejection reasons)
+        that LOOKED filable. Both are useful: positive teaches the shape,
+        negative teaches the FP shape.
+        """
+        try:
+            from .exemplar_loop import build_few_shot_for
+        except Exception:
+            return ""
+        tags = list((self.surface_profile or {}).get("tags", []) or [])
+        if not tags:
+            return ""
+        # Best-effort language mapping based on detected files.
+        lang = "solidity"
+        for c in self.contracts:
+            path = str(getattr(c, "path", "")).lower()
+            if path.endswith((".rs",)):
+                lang = "rust"; break
+            if path.endswith((".move",)):
+                lang = "move"; break
+            if path.endswith((".cairo",)):
+                lang = "cairo"; break
+        try:
+            block = build_few_shot_for(target_tags=tags, target_lang=lang, k_pos=k_pos, k_neg=k_neg)
+        except Exception:
+            return ""
+        return block.strip()
+
+    def get_hunter_prefix(self) -> str:
+        """Concatenated prompt prefix for hunters: known-findings dedupe block
+        + cross-contest few-shot exemplars. Empty string if neither applies.
+
+        This is the single entry point hunters should call instead of
+        `get_known_findings_prompt()` directly. Hunters that already call
+        the older method continue to work; new hunters and the post-2026-05
+        upgrade should use this one.
+        """
+        parts: list[str] = []
+        kf = self.get_known_findings_prompt()
+        if kf:
+            parts.append(kf)
+        fs = self.get_few_shot_prompt()
+        if fs:
+            parts.append(fs)
+        return ("\n\n---\n\n").join(parts)
 
     def save_checkpoint(self, path: Path) -> None:
         """Serialize state to JSON for resume after credit exhaustion."""
