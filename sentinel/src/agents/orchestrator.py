@@ -67,6 +67,8 @@ class Orchestrator:
         max_concurrent_hunters: int = 3,
         eval_mode: bool = False,
         audits_dir: Optional[Path] = None,
+        prior_context_path: Optional[Path] = None,
+        no_llm: bool = False,
     ):
         self.target_path = target_path
         self.docs_path = docs_path
@@ -84,12 +86,34 @@ class Orchestrator:
         # state.findings with full hunter attribution, which is all the
         # eval runner needs for recall scoring.
         self.eval_mode = bool(eval_mode)
+        # no_llm runs only zero-cost phases (audit-intel, recon scan,
+        # slither, audit-diff) and dumps the checkpoint for an external
+        # driver. Used by the sentinel-hunt Claude Code skill.
+        self.no_llm = bool(no_llm)
+
+        # Load x-ray prior context if provided or auto-detected. Drives
+        # hunter pruning in run_phase_deep_analysis and (later) file
+        # ordering in HunterSwarm. Failure to load is non-fatal.
+        from ..core.xray_context import parse_xray, XRayContext
+        resolved_xray: Optional[Path] = None
+        if prior_context_path and prior_context_path.exists():
+            resolved_xray = prior_context_path
+        else:
+            for candidate in (
+                target_path / "x-ray" / "x-ray.md",
+                target_path / "x-ray.md",
+            ):
+                if candidate.exists():
+                    resolved_xray = candidate
+                    break
+        self.xray_context: XRayContext = parse_xray(resolved_xray) if resolved_xray else XRayContext()
 
         # Initialize state
         self.state = AuditState(
             target_path=target_path,
             target_name=target_path.name,
             depth=depth,
+            no_llm=self.no_llm,
         )
 
         # Detect project language
@@ -141,6 +165,11 @@ class Orchestrator:
             self.log(f"Blockchain: {self.blockchain.value}")
         if self.framework:
             self.log(f"Framework: {self.framework}")
+        if self.xray_context.raw_path:
+            self.log(
+                f"Loaded prior context from {self.xray_context.raw_path}: {self.xray_context.summary()}",
+                style="cyan",
+            )
 
         # Use multi-language recon agent
         if self.language != Language.SOLIDITY:
@@ -188,6 +217,91 @@ class Orchestrator:
         self.state.audit_dir = audit_dir
         self.state.known_findings = findings
         self.state.priority_files = priority
+
+        # X-ray prior context: merge hotspot files into priority_files (front
+        # of list, dedupe) so the existing per-hunter file iteration weights
+        # them. Also populate state.xray_invariants for downstream stages
+        # (DevilsAdvocate confidence boost, PoC seed generation).
+        if self.xray_context.raw_path:
+            xray_paths = [hs.path for hs in self.xray_context.hotspot_files]
+            xray_paths += list(self.xray_context.recent_files)
+            seen = set(self.state.priority_files)
+            xray_added = []
+            for p in xray_paths:
+                if p in seen:
+                    continue
+                seen.add(p)
+                xray_added.append(p)
+            if xray_added:
+                self.state.priority_files = xray_added + list(self.state.priority_files)
+                self.log(
+                    f"  x-ray: merged {len(xray_added)} hotspot/recent file(s) "
+                    f"into priority_files",
+                    style="cyan",
+                )
+            if self.xray_context.stated_invariants:
+                self.state.xray_invariants = list(self.xray_context.stated_invariants)
+                self.log(
+                    f"  x-ray: loaded {len(self.state.xray_invariants)} stated "
+                    f"invariants for downstream stages",
+                    style="cyan",
+                )
+            # Emit a structured JSON dump for the spec-to-code-compliance
+            # skill to consume independently. Trail of Bits' skill expects
+            # the user to provide both spec and code; this gives them a
+            # ready-to-use spec-side input.
+            try:
+                import json as _json
+                xray_dir = self.target_path / "x-ray"
+                xray_dir.mkdir(exist_ok=True)
+                spec_input = {
+                    "primary_type": self.xray_context.primary_type,
+                    "secondary_types": self.xray_context.secondary_types,
+                    "invariants": self.xray_context.stated_invariants,
+                    "hotspots": [
+                        {"path": hs.path, "modifications": hs.modifications}
+                        for hs in self.xray_context.hotspot_files
+                    ],
+                    "recent_files": self.xray_context.recent_files,
+                    "source_xray": str(self.xray_context.raw_path),
+                }
+                spec_path = xray_dir / "invariants.json"
+                spec_path.write_text(_json.dumps(spec_input, indent=2))
+                self.log(
+                    f"  x-ray: wrote {spec_path} (use with /spec-to-code-compliance)",
+                    style="cyan",
+                )
+            except Exception as _e:
+                self.log(f"  x-ray: failed to write invariants.json: {_e}", style="yellow")
+
+        # 2026-05 addition: extract audited commit + populate PR-level diffs.
+        # This activates Scope.POST_AUDIT and Scope.PR for the hunter swarm,
+        # which is the highest-EV signal for finding bugs in unaudited code.
+        if audit_dir is not None:
+            try:
+                from ..core.audit_diff import populate_audit_diff
+                # Concatenate report text for commit-hash extraction
+                report_text = ""
+                for ext in ("*.pdf", "*.md", "*.markdown"):
+                    for rp in sorted(Path(audit_dir).rglob(ext)):
+                        try:
+                            if rp.suffix.lower() == ".pdf":
+                                from ..core.audit_intel import _pdf_to_text
+                                report_text += _pdf_to_text(rp) + "\n"
+                            else:
+                                report_text += rp.read_text(errors="ignore") + "\n"
+                        except Exception:
+                            continue
+                summary = populate_audit_diff(self.state, self.target_path, report_text)
+                if summary.get("audited_commit"):
+                    self.log(
+                        f"  audited commit: {summary['audited_commit'][:12]}; "
+                        f"{len(summary.get('post_audit_files', []))} files changed since; "
+                        f"{len(summary.get('prs', []))} post-audit PRs",
+                        style="cyan",
+                    )
+            except Exception as e:
+                self.log(f"  audit-diff failed: {e}", style="yellow")
 
         if audit_dir:
             self.log(f"  audit dir: {audit_dir}")
@@ -355,7 +469,52 @@ class Orchestrator:
             self.log("Continuing without test plan")
 
     async def run_phase_deep_analysis(self) -> None:
-        """Phase 3: Deep Analysis with specialized hunters via HunterSwarm."""
+        """Phase 3: Deep Analysis with specialized hunters via HunterSwarm.
+
+        Multi-scope dispatch: when depth maps to more than one scope, this
+        method re-enters itself once per scope unit with self.state swapped
+        to a scoped view. The inner call sees _scope_unit set and falls
+        through to the original single-pass body unchanged.
+        """
+        if not getattr(self, "_scope_unit", None):
+            from ..core.scoping import Scope, iter_units, scopes_for_depth
+            scopes = scopes_for_depth(self.depth)
+            if scopes != [Scope.PROJECT]:
+                units = list(iter_units(
+                    self.state, scopes, module_only_high_risk=True,
+                ))
+                self.log(
+                    f"Multi-scope deep analysis: {len(units)} unit(s) "
+                    f"({[s.value for s in scopes]})",
+                    style="bold magenta",
+                )
+                orig_state = self.state
+                try:
+                    for unit in units:
+                        self.log(
+                            f"Scope pass [{unit.scope.value}] {unit.label} "
+                            f"({len(unit.contracts)} contract(s))",
+                            style="bold cyan",
+                        )
+                        self.state = unit.scoped_state(orig_state)
+                        self._scope_unit = unit
+                        pre = len(orig_state.findings)
+                        try:
+                            await self.run_phase_deep_analysis()
+                        finally:
+                            self._scope_unit = None
+                        tag = f"sentinel-scope:{unit.scope.value}:{unit.label}"
+                        for f in orig_state.findings[pre:]:
+                            if tag not in f.references:
+                                f.references.append(tag)
+                finally:
+                    self.state = orig_state
+                self.log(
+                    f"Multi-scope deep analysis complete: "
+                    f"{len(self.state.findings)} total findings"
+                )
+                return
+
         self.log("Phase 3: Deep Analysis (Vulnerability Hunting)", style="bold magenta")
 
         # Build list of hunters based on depth, language, and architecture
@@ -505,6 +664,26 @@ class Orchestrator:
                     )
                 )
 
+            # 2026-05 specialist hunters: F-1 to F-5 finding classes from
+            # Reserve Governor. Each has cheap regex/AST pre-filter before any
+            # LLM call. Only run on Solidity targets.
+            if self.language == Language.SOLIDITY:
+                from .hunters.spec_divergence import SpecDivergenceHunter
+                from .hunters.role_privilege_diff import RolePrivilegeDiffHunter
+                from .hunters.token_bucket import TokenBucketHunter
+                from .hunters.denominator_pool import DenominatorPoolHunter
+                from .hunters.governance_specialist import GovernanceSpecialistHunter
+                hunters.extend([
+                    SpecDivergenceHunter(state=self.state, llm_client=self.llm, verbose=self.verbose),
+                    RolePrivilegeDiffHunter(state=self.state, llm_client=self.llm, verbose=self.verbose),
+                    TokenBucketHunter(state=self.state, llm_client=self.llm, verbose=self.verbose),
+                    DenominatorPoolHunter(state=self.state, llm_client=self.llm, verbose=self.verbose),
+                    GovernanceSpecialistHunter(
+                        state=self.state, llm_client=self.llm, verbose=self.verbose,
+                        ultrathink=False, thinking_budget=12000,
+                    ),
+                ])
+
         # --- Deep: all hunters including algebraic verification, invariant fuzzer, sequence explorer ---
         else:  # depth == "deep"
             from .hunters.slippage import SlippageHunter
@@ -639,6 +818,25 @@ class Orchestrator:
                         language=self.language,
                     )
                 )
+
+            # 2026-05 specialist hunters at deep depth use full ultrathink budget.
+            # Same five as standard but with maximum reasoning depth.
+            if self.language == Language.SOLIDITY:
+                from .hunters.spec_divergence import SpecDivergenceHunter
+                from .hunters.role_privilege_diff import RolePrivilegeDiffHunter
+                from .hunters.token_bucket import TokenBucketHunter
+                from .hunters.denominator_pool import DenominatorPoolHunter
+                from .hunters.governance_specialist import GovernanceSpecialistHunter
+                hunters.extend([
+                    SpecDivergenceHunter(state=self.state, llm_client=self.llm, verbose=self.verbose),
+                    RolePrivilegeDiffHunter(state=self.state, llm_client=self.llm, verbose=self.verbose),
+                    TokenBucketHunter(state=self.state, llm_client=self.llm, verbose=self.verbose),
+                    DenominatorPoolHunter(state=self.state, llm_client=self.llm, verbose=self.verbose),
+                    GovernanceSpecialistHunter(
+                        state=self.state, llm_client=self.llm, verbose=self.verbose,
+                        ultrathink=True, thinking_budget=24000,
+                    ),
+                ])
 
         # --- Deep-only: DeepHunter and InvariantAgent ---
         if self.depth == "deep":
@@ -793,6 +991,23 @@ class Orchestrator:
                 self.log("Added SolanaHunter (Anchor/Native/Pinocchio specialist)", style="cyan")
             except Exception as e:
                 self.log(f"Could not load SolanaHunter: {e}", style="yellow")
+
+        # X-Ray prior context pruning: drop hunters whose pattern surface
+        # is excluded by the protocol type detected in x-ray.md (e.g. drop
+        # SlippageHunter on a pure governance protocol). Conservative: only
+        # disables when protocol type is known AND hunter's surface is
+        # definitively inapplicable. See core/xray_context.hunter_disable_set.
+        xray_disable = self.xray_context.hunter_disable_set() if self.xray_context.primary_type else set()
+        if xray_disable:
+            before_xray = len(hunters)
+            hunters = [h for h in hunters if type(h).__name__ not in xray_disable]
+            xray_dropped = before_xray - len(hunters)
+            if xray_dropped:
+                self.log(
+                    f"X-Ray pruning ({self.xray_context.summary()}): "
+                    f"dropped {xray_dropped} hunter(s) [{', '.join(sorted(xray_disable))}]",
+                    style="cyan",
+                )
 
         self.log(f"Running {len(hunters)} hunters for {self.language.value} (depth={self.depth})...")
 
@@ -1165,6 +1380,31 @@ class Orchestrator:
                 self.log("All findings dropped by triage — skipping DevilsAdvocate")
                 return
 
+            # Pre-DevilsAdvocate static prefilters: intent check, default-value
+            # pruner, dupe scrub. Each annotates finding.metadata so the
+            # validator can see the signals. Zero-cost (no LLM); catches the
+            # FP classes from feedback_submission_discipline rules 1, 6, 6b.
+            try:
+                from .intent_checker import annotate_findings_with_intent
+                from .default_value_pruner import annotate_findings_with_default_value
+                from .dupe_scrubber import annotate_findings_with_dupe
+
+                intent_results = annotate_findings_with_intent(survivors, self.target_path)
+                dv_results = annotate_findings_with_default_value(survivors, self.target_path)
+                dupe_results = annotate_findings_with_dupe(survivors, self.state)
+
+                intent_high = sum(1 for r in intent_results if r.intent_signal == "HIGH")
+                dv_non_zero = sum(1 for r in dv_results if r.has_non_zero_default)
+                dupe_high = sum(1 for r in dupe_results if r.dupe_signal == "HIGH")
+                if intent_high or dv_non_zero or dupe_high:
+                    self.log(
+                        f"Static prefilters annotated: {intent_high} likely-design-intent, "
+                        f"{dv_non_zero} non-zero-default, {dupe_high} likely-dupe",
+                        style="cyan",
+                    )
+            except Exception as e:
+                self.log(f"Static prefilters failed (non-fatal): {e}", style="yellow")
+
             from .devils_advocate import DevilsAdvocateAgent, DevilsAdvocateConfig
 
             config = DevilsAdvocateConfig(
@@ -1259,6 +1499,51 @@ class Orchestrator:
             if scores.get(i, 100) >= min_plausibility:
                 survivors.append(f)
         return survivors
+
+    async def run_phase_fresh_eyes(self) -> None:
+        """Phase 4.5: Fresh-Eyes Re-audit - independent second pass to find
+        new bugs the main pass missed and flag false positives in the prior set.
+
+        Runs AFTER validation and C4 gate but BEFORE attack synthesis and PoC.
+        This way the validation phase has already pruned obvious noise, and
+        the fresh-eyes pass operates on the curated finding set. Any new
+        findings it produces will then go through PoC generation in the
+        subsequent phase.
+
+        Skipped on --depth fast to keep cost bounded.
+        """
+        if self.depth == "fast":
+            return
+
+        self.log("Phase 4.5: Fresh-Eyes Re-audit", style="bold magenta")
+
+        try:
+            from .fresh_eyes import FreshEyesAuditor
+            auditor = FreshEyesAuditor(
+                state=self.state,
+                llm_client=self.llm,
+                verbose=self.verbose,
+                thinking_budget=24000 if self.depth == "deep" else 16000,
+            )
+            with self.llm.attribute("FreshEyesAuditor"):
+                new_findings = await auditor.run()
+
+            if new_findings:
+                self.log(
+                    f"  fresh-eyes added {len(new_findings)} new finding(s)",
+                    style="green",
+                )
+            else:
+                self.log("  fresh-eyes: no new findings", style="dim")
+
+            fps = sum(1 for f in self.state.findings if getattr(f, "false_positive", False))
+            if fps:
+                self.log(
+                    f"  fresh-eyes flagged {fps} prior finding(s) as false positives",
+                    style="yellow",
+                )
+        except Exception as e:
+            self.log(f"  fresh-eyes failed: {e}", style="red")
 
     async def run_phase_attack_synthesis(self) -> None:
         """Phase 5: Attack Synthesis - combine findings into attack chains."""
@@ -1837,8 +2122,29 @@ class Orchestrator:
                     language=self.language.value, depth=self.depth,
                 )
 
+                # Phase 1.6: Thinkers (Point 1) + surface tag profile (Point 3).
+                # Cheap, no LLM. Hypotheses + tags drive downstream dispatch.
+                self.run_phase_thinkers()
+
                 # Phase 2: Static Analysis
                 await self.run_phase_static_analysis()
+
+                # No-LLM early exit: dump the checkpoint and return so an
+                # external driver (sentinel-hunt skill) can run the LLM
+                # phases via Claude Code agents without burning API credits.
+                if self.no_llm:
+                    self._save_checkpoint("no_llm_handoff")
+                    handoff_path = self.target_path / "sentinel_no_llm_state.json"
+                    self.state.save_checkpoint(handoff_path)
+                    self.log(
+                        f"--no-llm: free phases complete. State dumped to {handoff_path}. "
+                        f"{len(self.state.contracts)} contracts, "
+                        f"{len(self.state.slither_results)} slither findings, "
+                        f"{len(self.state.known_findings)} known prior findings, "
+                        f"{len(self.state.priority_files)} post-audit files.",
+                        style="bold yellow",
+                    )
+                    return self.state
 
                 # Phase 2.5: Cross-Contract Analysis (standard+)
                 if self.depth in ("standard", "deep"):
@@ -1894,6 +2200,12 @@ class Orchestrator:
                     await self.run_phase_c4_gate()
                     self._print_cost_status("C4 Gate")
 
+                # Phase 4.5: Fresh-Eyes Re-audit (standard+ only).
+                # Independent second pass: catches missed bugs + flags false positives.
+                if self.depth in ("standard", "deep") and not self.eval_mode:
+                    await self.run_phase_fresh_eyes()
+                    self._print_cost_status("Fresh-Eyes")
+
                 # Phase 5: Attack Synthesis (deep only)
                 if self.depth == "deep":
                     await self.run_phase_attack_synthesis()
@@ -1909,6 +2221,16 @@ class Orchestrator:
             ):
                 await self.run_phase_poc_generation()
                 self._print_cost_status("PoC Generation")
+
+                # Phase 6.5: Auto-PoC validator (Point 4) — runs the generated
+                # PoCs under forge and demotes failures. Foundry-only.
+                if self.fork_url:
+                    self.run_phase_auto_poc()
+
+            # Phase 6.7: Deterministic FP gate (Point 2). Runs unconditionally:
+            # cheap, no LLM, catches Reserve-M-02 / Dexalot-M-01 / F-12 patterns.
+            if not self.eval_mode and self.state.findings:
+                self.run_phase_fp_gate()
 
             # Save checkpoint before reporting — all expensive work is done
             self._save_checkpoint("pre_report")
@@ -1949,6 +2271,102 @@ class Orchestrator:
         return self.state
 
 
+    # ------------------------------------------------------------------
+    # 2026-05-04 additions: thinkers (Point 1), surface dispatch (Point 3),
+    # deterministic FP gate (Point 2), auto-PoC validator (Point 4),
+    # exemplar few-shot injection (Point 5).
+    #
+    # Each phase is wrapped so a failure cannot abort the audit; all data
+    # is persisted to AuditState for the report writer.
+    # ------------------------------------------------------------------
+    def run_phase_thinkers(self) -> None:
+        """Run the 5 mental-operation thinkers and stash hypotheses on state."""
+        try:
+            from .thinkers import run_all as run_thinkers
+            from ..core.surface_tags import classify_surface, render_dispatch_summary, select_specialists
+        except Exception as exc:
+            self.log(f"thinkers: import failed ({exc}); skipping", style="yellow")
+            return
+
+        try:
+            hypotheses = run_thinkers(self.state)
+            self.state.hypotheses = [h.__dict__ for h in hypotheses]
+            self.log(
+                f"thinkers: {len(hypotheses)} hypotheses across "
+                f"{len({h.thinker for h in hypotheses})} thinkers",
+                style="cyan",
+            )
+        except Exception as exc:
+            self.log(f"thinkers: walk failed ({exc}); continuing", style="yellow")
+            return
+
+        try:
+            profile = classify_surface(self.state)
+            self.state.surface_profile = {
+                "tags": sorted(profile.tags),
+                "evidence": {k: v[:3] for k, v in profile.evidence.items()},
+            }
+            self.log(
+                f"surface tags: {', '.join(sorted(profile.tags)) or '(none)'}",
+                style="cyan",
+            )
+        except Exception as exc:
+            self.log(f"surface classification failed ({exc})", style="yellow")
+
+    def run_phase_fp_gate(self) -> None:
+        """Deterministic FP gate (Point 2): doc-intent + active-iteration +
+        default-state + runnable-PoC checks. Mutates findings in-place."""
+        if not self.state.findings:
+            return
+        try:
+            from ..core.fp_gate import run_fp_gate, write_gate_summary
+        except Exception as exc:
+            self.log(f"fp_gate: import failed ({exc}); skipping", style="yellow")
+            return
+        try:
+            reports = run_fp_gate(self.state.findings, self.target_path)
+            self.state.fp_gate_reports = [r.to_dict() for r in reports]
+            dropped = sum(1 for r in reports if r.final_verdict == "DROP")
+            demoted = sum(1 for r in reports if r.final_verdict == "DEMOTE")
+            self.log(
+                f"fp_gate: {len(reports)} checked, {dropped} dropped, {demoted} demoted",
+                style="bold cyan",
+            )
+            try:
+                write_gate_summary(reports, self.target_path / "sentinel_fp_gate.jsonl")
+            except OSError:
+                pass
+        except Exception as exc:
+            self.log(f"fp_gate: run failed ({exc}); continuing", style="yellow")
+
+    def run_phase_auto_poc(self) -> None:
+        """Auto-PoC validator (Point 4). Runs forge test against any attached
+        PoC and demotes findings whose tests fail."""
+        if not self.state.findings:
+            return
+        try:
+            from .auto_poc_validator import validate_all
+            from ..core.types import Severity
+        except Exception as exc:
+            self.log(f"auto_poc: import failed ({exc}); skipping", style="yellow")
+            return
+        try:
+            outcomes = validate_all(
+                self.state, fork_url=self.fork_url, fork_block=self.fork_block,
+                promote_only_above=Severity.LOW,
+            )
+            self.state.auto_poc_results = [o.to_dict() for o in outcomes]
+            passed = sum(1 for o in outcomes if o.status == "PASS")
+            failed = sum(1 for o in outcomes if o.status == "FAIL")
+            need_human = sum(1 for o in outcomes if o.status == "NEEDS_HUMAN")
+            self.log(
+                f"auto_poc: {passed} pass, {failed} fail, {need_human} need-human",
+                style="bold cyan",
+            )
+        except Exception as exc:
+            self.log(f"auto_poc: run failed ({exc}); continuing", style="yellow")
+
+
 async def run_audit(
     target_path: Path,
     docs_path: Optional[Path] = None,
@@ -1962,6 +2380,8 @@ async def run_audit(
     batched_hunters: bool = False,
     eval_mode: bool = False,
     audits_dir: Optional[Path] = None,
+    prior_context_path: Optional[Path] = None,
+    no_llm: bool = False,
 ) -> AuditState:
     """
     Convenience function to run a full audit.
@@ -1990,5 +2410,7 @@ async def run_audit(
         batched_hunters=batched_hunters,
         eval_mode=eval_mode,
         audits_dir=audits_dir,
+        prior_context_path=prior_context_path,
+        no_llm=no_llm,
     )
     return await orchestrator.run(resume_from=resume_from, poc_only=poc_only)

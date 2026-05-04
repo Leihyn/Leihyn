@@ -100,6 +100,22 @@ def audit(
              "extracts known findings and tells hunters not to re-report them. "
              "If omitted, auto-detects audits/ audit/ audit-reports/ in the target.",
     ),
+    prior_context: Optional[Path] = typer.Option(
+        None,
+        "--prior-context",
+        help="Path to a pre-generated x-ray.md (from the pashov/skills x-ray skill). "
+             "Sentinel reads protocol-type, hotspot files, and stated invariants from "
+             "the report to prune irrelevant hunters and prioritize file ordering. "
+             "If omitted, auto-detects x-ray/x-ray.md or x-ray.md in the target.",
+    ),
+    no_llm: bool = typer.Option(
+        False,
+        "--no-llm",
+        help="Run only zero-cost phases (audit-intel, recon scan, slither, audit-diff) "
+             "and dump state to sentinel_no_llm_state.json. Used by the sentinel-hunt "
+             "Claude Code skill to drive the LLM phases via Claude Code agents instead "
+             "of burning Anthropic API credits.",
+    ),
 ):
     """
     Run a security audit on smart contracts.
@@ -145,6 +161,8 @@ def audit(
             include_pashov=pashov,
             batched_hunters=batched_hunters,
             audits_dir=audits_dir,
+            prior_context_path=prior_context,
+            no_llm=no_llm,
         ))
 
         # Print final stats
@@ -525,6 +543,657 @@ def version():
     """Show version information."""
     from . import __version__
     console.print(f"Sentinel v{__version__}")
+
+
+# ==============================================================================
+# 2026-05-04 additions: Sentinel improvement plan (5 points)
+# ==============================================================================
+
+
+def _static_parse(target: Path):
+    """Static-only contract parse for the no-LLM CLI commands (think, surface-tag).
+
+    Routes by extension: `.sol` -> Solidity reader, `.rs` -> Rust reader.
+    Both produce ContractInfo records the thinkers can walk; thinkers branch
+    on the `language` tag stamped onto each contract.
+    """
+    from .core.types import AuditState
+    from .tools.code_reader import find_solidity_files, read_solidity_file, extract_contract_info
+    from .tools.rust_reader import find_rust_files, read_rust_file, extract_rust_contract_info
+    from .tools.move_reader import find_move_files, read_move_file, extract_move_contract_info
+    from .tools.cairo_reader import find_cairo_files, read_cairo_file, extract_cairo_contract_info
+
+    state = AuditState(target_path=target, target_name=target.name)
+
+    # Solidity
+    sol_files = [target] if (target.is_file() and target.suffix == ".sol") else find_solidity_files(target)
+    for f in sol_files:
+        try:
+            src = read_solidity_file(f)
+        except OSError:
+            continue
+        try:
+            for c in extract_contract_info(src, f):
+                _stamp_language(c, "solidity")
+                state.contracts.append(c)
+        except Exception:
+            continue
+
+    # Rust
+    if target.is_file() and target.suffix == ".rs":
+        rs_files = [target]
+    elif target.is_dir():
+        rs_files = find_rust_files(target)
+    else:
+        rs_files = []
+    for f in rs_files:
+        src = read_rust_file(f)
+        if not src:
+            continue
+        try:
+            for c in extract_rust_contract_info(src, f):
+                _stamp_language(c, "rust")
+                state.contracts.append(c)
+        except Exception:
+            continue
+
+    # Move
+    if target.is_file() and target.suffix == ".move":
+        move_files = [target]
+    elif target.is_dir():
+        move_files = find_move_files(target)
+    else:
+        move_files = []
+    for f in move_files:
+        src = read_move_file(f)
+        if not src:
+            continue
+        try:
+            for c in extract_move_contract_info(src, f):
+                _stamp_language(c, "move")
+                state.contracts.append(c)
+        except Exception:
+            continue
+
+    # Cairo
+    if target.is_file() and target.suffix == ".cairo":
+        cairo_files = [target]
+    elif target.is_dir():
+        cairo_files = find_cairo_files(target)
+    else:
+        cairo_files = []
+    for f in cairo_files:
+        src = read_cairo_file(f)
+        if not src:
+            continue
+        try:
+            for c in extract_cairo_contract_info(src, f):
+                _stamp_language(c, "cairo")
+                state.contracts.append(c)
+        except Exception:
+            continue
+
+    return state
+
+
+def _stamp_language(contract, lang: str) -> None:
+    """Tag a ContractInfo with its source language so thinkers can branch."""
+    # ContractInfo is a dataclass; set attribute directly. Thinkers default
+    # to "solidity" when the attribute is absent.
+    setattr(contract, "language", lang)
+
+@app.command()
+def think(
+    target: Path = typer.Argument(..., exists=True, help="Path to project to walk"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o", help="Write hypotheses JSON here"),
+):
+    """
+    Run the 5 mental-operation thinkers (no LLM, no API cost) and emit
+    structured hypotheses.
+
+    Thinkers run a generic mental operation — value-flow walk, spec-skeptic,
+    boundary probe, trust-boundary mapping, invariant inference — instead of
+    detecting a specific bug class. Hypotheses are "what-if" prompts the
+    confirmer / FP gate phases promote into Findings.
+
+    Example:
+        sentinel think ./contracts -o hypotheses.json
+    """
+    import json
+    from .agents.thinkers import run_all as run_thinkers
+    from .core.surface_tags import classify_surface
+
+    state = _static_parse(target)
+
+    hypotheses = run_thinkers(state)
+    profile = classify_surface(state)
+
+    table = Table(title="Hypotheses by thinker")
+    table.add_column("Thinker", style="cyan")
+    table.add_column("Count", justify="right")
+    counts: dict[str, int] = {}
+    for h in hypotheses:
+        counts[h.thinker] = counts.get(h.thinker, 0) + 1
+    for name, n in sorted(counts.items(), key=lambda kv: -kv[1]):
+        table.add_row(name, str(n))
+    console.print(table)
+    console.print(f"\nSurface tags: [cyan]{', '.join(sorted(profile.tags)) or '(none)'}[/cyan]")
+
+    if output:
+        output.write_text(json.dumps(
+            {"hypotheses": [h.__dict__ for h in hypotheses],
+             "surface_tags": sorted(profile.tags),
+             "evidence": profile.evidence},
+            default=str, indent=2,
+        ))
+        console.print(f"[green]Wrote {len(hypotheses)} hypotheses to {output}[/green]")
+
+
+@app.command("surface-tag")
+def surface_tag(
+    target: Path = typer.Argument(..., exists=True, help="Project root"),
+    requested: str = typer.Option(
+        "fresh_eyes,spec_divergence,denominator_pool,token_bucket,slippage,math_verification,role_privilege_diff,parameter_validation",
+        "--specialists",
+        help="Comma-separated specialist list to filter against the surface profile.",
+    ),
+):
+    """
+    Classify the codebase's surface tags and show which specialists would
+    fire under the cap-of-5 dispatch rule.
+
+    This is the dry-run version of the orchestrator's specialist gating: run
+    it before dispatching hunters to confirm only the right specialists fire.
+
+    Example:
+        sentinel surface-tag ./contracts
+        sentinel surface-tag ./contracts --specialists slippage,math_verification
+    """
+    from .core.surface_tags import classify_surface, select_specialists, render_dispatch_summary
+
+    state = _static_parse(target)
+    profile = classify_surface(state)
+    selected, dropped = select_specialists(profile, [s.strip() for s in requested.split(",") if s.strip()])
+    console.print(render_dispatch_summary(profile, selected, dropped))
+
+
+@app.command("diff")
+def diff_cmd(
+    target: Path = typer.Argument(..., exists=True, help="Project root (must be a git repo)"),
+    base: str = typer.Option(..., "--base", help="Base ref (commit/tag/branch) representing audited state"),
+    head: str = typer.Option("HEAD", "--head", help="Head ref (default HEAD)"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o"),
+):
+    """
+    Walk only the files that changed between two refs.
+
+    Encodes the post-audit-PR primary-attack-surface lesson (Reserve M-02 / F-22):
+    the most-fileable surface in any contest is the diff between the audited
+    commit and the contest commit. This command runs `git diff --name-only`
+    then runs `sentinel think` on the changed files only, emitting per-file
+    hypotheses that focus your attention on the unaudited delta.
+    """
+    import json
+    import subprocess
+    from .agents.thinkers import run_all as run_thinkers
+    from .core.surface_tags import classify_surface
+
+    git_dir = target if (target / ".git").exists() else target.parent
+    try:
+        proc = subprocess.run(
+            ["git", "diff", "--name-only", f"{base}..{head}"],
+            cwd=str(git_dir), capture_output=True, text=True, check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        console.print(f"[red]git diff failed: {e}[/red]")
+        raise typer.Exit(1)
+    changed = [p.strip() for p in proc.stdout.splitlines() if p.strip()]
+    sol = [p for p in changed if p.endswith((".sol", ".rs", ".move", ".cairo"))]
+    console.print(f"Changed files (in-scope languages): [cyan]{len(sol)}[/cyan] of {len(changed)} total")
+    if not sol:
+        console.print("[yellow]No code-language file changes between refs[/yellow]")
+        return
+
+    results: dict[str, list[dict]] = {}
+    for path in sol:
+        full = target / path
+        if not full.exists():
+            continue
+        state = _static_parse(full)
+        hyps = run_thinkers(state)
+        if hyps:
+            results[path] = [h.__dict__ for h in hyps]
+
+    profile_state = _static_parse(target)
+    profile = classify_surface(profile_state)
+    out = {
+        "base": base, "head": head,
+        "changed_in_scope": len(sol),
+        "files_with_hypotheses": len(results),
+        "total_hypotheses": sum(len(v) for v in results.values()),
+        "surface_tags": sorted(profile.tags),
+        "by_file": results,
+    }
+    summary_path = output or (target / f"sentinel_diff_{base.replace('/', '_')}_to_{head.replace('/', '_')}.json")
+    summary_path.write_text(json.dumps(out, default=str, indent=2))
+    console.print(f"Total hypotheses on diff: [bold]{out['total_hypotheses']}[/bold]")
+    console.print(f"[green]Wrote {summary_path}[/green]")
+
+
+@app.command("auto-walk")
+def auto_walk_cmd(
+    target: Path = typer.Argument(..., exists=True, help="Project root"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o"),
+):
+    """
+    One-shot contest analysis: think + surface-tag + dispatch + emit human
+    walk template.
+
+    Replaces the typical four-command sequence (think + surface-tag +
+    dispatch + manual-walk-prep) with a single command that produces a
+    `sentinel_walk.md` template you can fill in by hand. Each thinker
+    hypothesis gets a checkbox and a slot for FP/REAL/KNOWN/UNCERTAIN
+    disposition labels feedable to `sentinel disposition`.
+    """
+    from .agents.thinkers import run_all as run_thinkers
+    from .core.surface_tags import classify_surface, select_specialists
+    from .core.hypothesis_dispatch import dispatch, group_by_specialist
+
+    state = _static_parse(target)
+    hyps = run_thinkers(state)
+    profile = classify_surface(state)
+    selected, _ = select_specialists(profile, [
+        "fresh_eyes", "spec_divergence", "denominator_pool", "token_bucket",
+        "slippage", "math_verification", "role_privilege_diff", "parameter_validation",
+        "reentrancy", "access_control", "oracle", "flash_loan", "signature_replay",
+        "governance_specialist",
+    ])
+    entries = dispatch([h.__dict__ for h in hyps], profile, selected)
+    grouped = group_by_specialist(entries)
+
+    lines = [
+        f"# sentinel auto-walk: {target.name}", "",
+        f"**Total hypotheses:** {len(hyps)}",
+        f"**Surface tags:** {', '.join(sorted(profile.tags)) or '(none)'}",
+        f"**Selected specialists:** {', '.join(selected) or '(none)'}",
+        f"**Dispatch entries:** {len(entries)}",
+        "",
+        "## Walk targets (specialist-shape matched)",
+        "",
+        "Each item is a hypothesis the dispatcher mapped to at least one specialist.",
+        "Disposition: FP | REAL | KNOWN | UNCERTAIN. Use `sentinel disposition` to record.",
+        "",
+    ]
+    if not entries:
+        lines.append("_No specialist-shape matches. Walk all hypotheses freehand._")
+    else:
+        for spec, items in sorted(grouped.items(), key=lambda kv: -len(kv[1])):
+            lines.append(f"### {spec} ({len(items)})\n")
+            for e in items:
+                lines.append(f"- [ ] **{e.contract}.{e.function or '?'}** `{e.hypothesis_id}` -> ____")
+            lines.append("")
+
+    lines.extend(["", "## All hypotheses (full list)", ""])
+    by_thinker: dict[str, list] = {}
+    for h in hyps:
+        by_thinker.setdefault(h.thinker, []).append(h)
+    for thinker, items in sorted(by_thinker.items(), key=lambda kv: -len(kv[1])):
+        lines.append(f"### {thinker} ({len(items)})\n")
+        for h in items[:20]:
+            lines.append(f"- [ ] {h.contract}.{h.function or '?'} L{h.line_numbers[0]} `{h.id}` -> ____")
+            lines.append(f"  Q: {h.question[:200]}")
+        if len(items) > 20:
+            lines.append(f"_... and {len(items) - 20} more_")
+        lines.append("")
+
+    out_path = output or (target / "sentinel_walk.md")
+    out_path.write_text("\n".join(lines))
+    console.print(f"Walk template: [green]{out_path}[/green]")
+    console.print(f"  hypotheses={len(hyps)}  specialists={len(selected)}  dispatch_entries={len(entries)}")
+
+
+@app.command("disposition")
+def disposition_cmd(
+    hypotheses: Path = typer.Argument(..., exists=True, help="Path to hypotheses JSON from `sentinel think`"),
+    label: list[str] = typer.Option(
+        [], "--label", "-l",
+        help="Apply a label: --label HYP_ID=verdict[:reason]. Example: --label tm-Token-15=FP:already-guarded. "
+             "Verdicts: FP|REAL|KNOWN|UNCERTAIN.",
+    ),
+    show: bool = typer.Option(False, "--show", help="Just print the current disposition table."),
+):
+    """
+    Persist hypothesis-disposition labels next to a `sentinel think` output.
+
+    Once you have manually walked the hypotheses, label each one. The labels
+    are saved to `<hypotheses>.dispositions.json` so future runs can A/B
+    test thinker tuning quantitatively (precision = REAL / (REAL+FP)).
+
+    Example:
+        sentinel disposition think.json -l tm-Token-15=FP:already-guarded -l vf-Token-30=REAL
+        sentinel disposition think.json --show
+    """
+    import json
+    disposition_path = hypotheses.with_suffix(hypotheses.suffix + ".dispositions.json")
+    existing: dict = {}
+    if disposition_path.exists():
+        existing = json.loads(disposition_path.read_text())
+    valid = {"FP", "REAL", "KNOWN", "UNCERTAIN"}
+    for spec in label:
+        if "=" not in spec:
+            console.print(f"[yellow]Skipping malformed label: {spec}[/yellow]")
+            continue
+        hid, rest = spec.split("=", 1)
+        if ":" in rest:
+            verdict, reason = rest.split(":", 1)
+        else:
+            verdict, reason = rest, ""
+        verdict = verdict.upper().strip()
+        if verdict not in valid:
+            console.print(f"[red]Invalid verdict {verdict!r} for {hid}; expected one of {valid}[/red]")
+            continue
+        existing[hid.strip()] = {"verdict": verdict, "reason": reason.strip()}
+    if label:
+        disposition_path.write_text(json.dumps(existing, indent=2))
+        console.print(f"[green]Wrote {len(existing)} dispositions to {disposition_path}[/green]")
+
+    if show or not label:
+        from collections import Counter
+        counts = Counter(d["verdict"] for d in existing.values())
+        if not counts:
+            console.print(f"[yellow]No dispositions yet at {disposition_path}[/yellow]")
+            return
+        total = sum(counts.values())
+        precision = (counts.get("REAL", 0) + counts.get("KNOWN", 0)) / total if total else 0
+        console.print(f"Total labeled: [cyan]{total}[/cyan]")
+        for k in ("REAL", "FP", "KNOWN", "UNCERTAIN"):
+            console.print(f"  {k:<10} {counts.get(k, 0)}")
+        console.print(f"Signal rate (REAL+KNOWN / total): [bold]{precision:.0%}[/bold]")
+
+
+@app.command("memory-status")
+def memory_status_cmd(
+    program: str = typer.Argument(..., help="Program/contest keyword to grep (e.g. 'astros', 'base-azul')"),
+    last_n: int = typer.Option(10, "--last", "-n", help="Show the last N matching lines"),
+):
+    """
+    Re-grep MEMORY.md for fresh state on a program.
+
+    Encodes Rule 9 (post-self-audit 2026-05-04): before any claim about a
+    program's state, this command must run and the result must be cited.
+    Banned without a fresh memory-status this turn: claims like
+    "WAITING for triager", "AWAITING SLA", "in escalation".
+    """
+    import re
+    import subprocess
+    memory_path = Path.home() / ".claude/projects/-Users-machine-Desktop-dev-github-repos-Leihyn/memory/MEMORY.md"
+    if not memory_path.exists():
+        console.print(f"[red]MEMORY.md not found at {memory_path}[/red]")
+        raise typer.Exit(1)
+    try:
+        proc = subprocess.run(
+            ["grep", "-niE", program, str(memory_path)],
+            capture_output=True, text=True, timeout=10,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        console.print("[red]grep failed[/red]")
+        raise typer.Exit(1)
+    lines = proc.stdout.splitlines()
+    if not lines:
+        console.print(f"[yellow]No matches for {program!r} in MEMORY.md[/yellow]")
+        return
+    console.print(f"[bold]Matches for {program!r} in MEMORY.md (last {last_n}):[/bold]")
+    # Sort by line number (newer entries appear later in the file)
+    for line in lines[-last_n:]:
+        m = re.match(r"^(\d+):(.*)$", line)
+        if m:
+            ln, text = m.group(1), m.group(2)
+            # Highlight closure/state keywords
+            if re.search(r"\b(CLOSED|ACCEPTED|REJECTED|DUPLICATE|ESCALATED|DROPPED|EXHAUSTED|FILED)\b", text):
+                console.print(f"  [bold cyan]L{ln:>4}[/bold cyan] [bold]{text[:300]}[/bold]")
+            else:
+                console.print(f"  [dim]L{ln:>4}[/dim] {text[:300]}")
+    console.print(f"\n[dim]Total matches: {len(lines)}. Newer entries appear later. Cite line number when making claims.[/dim]")
+
+
+@app.command("dispatch")
+def dispatch_cmd(
+    target: Path = typer.Argument(..., exists=True, help="Project root"),
+    requested: str = typer.Option(
+        "fresh_eyes,spec_divergence,denominator_pool,token_bucket,slippage,math_verification,role_privilege_diff,parameter_validation,reentrancy,access_control,oracle,flash_loan,signature_replay,governance_specialist",
+        "--specialists",
+        help="Comma-separated specialist list to filter against the surface profile + hypothesis shapes.",
+    ),
+):
+    """
+    Run thinkers + surface-tag + hypothesis dispatcher in one shot.
+
+    Shows which specialists should fire on which thinker hypotheses. This is
+    the new entry point that replaces "carpet-bomb every specialist": the
+    dispatcher only invokes specialists whose required tags AND hypothesis
+    shapes both match the codebase's actual surface.
+    """
+    from .agents.thinkers import run_all as run_thinkers
+    from .core.surface_tags import classify_surface, select_specialists
+    from .core.hypothesis_dispatch import dispatch, render_dispatch_table
+
+    state = _static_parse(target)
+    hypotheses = run_thinkers(state)
+    profile = classify_surface(state)
+    selected, dropped = select_specialists(profile, [s.strip() for s in requested.split(",") if s.strip()])
+    hyp_dicts = [h.__dict__ for h in hypotheses]
+    entries = dispatch(hyp_dicts, profile, selected)
+    console.print(f"Hypotheses: [cyan]{len(hyp_dicts)}[/cyan]   Selected specialists: [cyan]{', '.join(selected)}[/cyan]")
+    if dropped:
+        console.print(f"Dropped specialists: [dim]{', '.join(n for n,_ in dropped)}[/dim]")
+    console.print()
+    console.print(render_dispatch_table(entries, profile))
+
+
+@app.command("fp-gate")
+def fp_gate_cmd(
+    state_json: Path = typer.Argument(..., exists=True, help="Path to AuditState checkpoint JSON"),
+    target: Path = typer.Option(..., "--target", help="Project root for grep / git / gh"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o", help="Where to write the gate JSONL"),
+):
+    """
+    Run the deterministic FP gate against an existing checkpoint.
+
+    Four checks: documented-intent (Reserve-M-02), active-iteration (F-24),
+    default-state (Dexalot-M-01), runnable-PoC. Mutates the checkpoint
+    in-place: false_positive findings are flagged, severities demoted.
+
+    Example:
+        sentinel fp-gate ./checkpoints/hunters.json --target ./contracts
+    """
+    from .core.types import AuditState
+    from .core.fp_gate import run_fp_gate, write_gate_summary
+
+    state = AuditState.load_checkpoint(state_json)
+    reports = run_fp_gate(state.findings, target)
+    state.fp_gate_reports = [r.to_dict() for r in reports]
+
+    drop = sum(1 for r in reports if r.final_verdict == "DROP")
+    demote = sum(1 for r in reports if r.final_verdict == "DEMOTE")
+    pas = sum(1 for r in reports if r.final_verdict == "PASS")
+    console.print(f"FP gate: [green]{pas} pass[/green] / [yellow]{demote} demoted[/yellow] / [red]{drop} dropped[/red]")
+    state.save_checkpoint(state_json)
+    out = output or state_json.with_suffix(".fp_gate.jsonl")
+    write_gate_summary(reports, out)
+    console.print(f"[green]Wrote gate report to {out}[/green]")
+
+
+@app.command("auto-poc")
+def auto_poc_cmd(
+    state_json: Path = typer.Argument(..., exists=True, help="Path to AuditState checkpoint"),
+    fork_url: str = typer.Option(..., "--fork-url", help="RPC URL for fork"),
+    fork_block: Optional[int] = typer.Option(None, "--fork-block"),
+):
+    """
+    Run forge test against every finding's PoC. FAIL findings are demoted
+    one severity tier. NEEDS_HUMAN findings are flagged but not demoted.
+
+    Example:
+        sentinel auto-poc ./checkpoints/pre_report.json --fork-url https://...
+    """
+    from .core.types import AuditState, Severity
+    from .agents.auto_poc_validator import validate_all
+
+    state = AuditState.load_checkpoint(state_json)
+    outcomes = validate_all(state, fork_url=fork_url, fork_block=fork_block,
+                            promote_only_above=Severity.LOW)
+    state.auto_poc_results = [o.to_dict() for o in outcomes]
+    state.save_checkpoint(state_json)
+    pas = sum(1 for o in outcomes if o.status == "PASS")
+    fail = sum(1 for o in outcomes if o.status == "FAIL")
+    nh = sum(1 for o in outcomes if o.status == "NEEDS_HUMAN")
+    console.print(f"Auto-PoC: [green]{pas} pass[/green] / [red]{fail} fail[/red] / [yellow]{nh} needs-human[/yellow]")
+
+
+exemplar_app = typer.Typer(help="Exemplar capture loop (continual learning)")
+app.add_typer(exemplar_app, name="exemplar")
+
+
+@exemplar_app.command("add")
+def exemplar_add(
+    title: str = typer.Argument(...),
+    platform: str = typer.Option(..., "--platform", help="cantina|immunefi|sherlock|code4rena|hackenproof|remedy"),
+    program: str = typer.Option(..., "--program", help="protocol/program slug"),
+    severity_filed: str = typer.Option(..., "--severity-filed"),
+    status: str = typer.Option("accepted", "--status", help="accepted|rejected|duplicate|escalated"),
+    severity_awarded: Optional[str] = typer.Option(None, "--severity-awarded"),
+    rejection_reason: Optional[str] = typer.Option(None, "--rejection-reason"),
+    bug_class: Optional[str] = typer.Option(None, "--bug-class"),
+    mental_operation: Optional[str] = typer.Option(None, "--mental-operation",
+                                                    help="value_flow|spec_skeptic|boundary_prober|trust_mapper|invariant_inferrer"),
+    surface_tags: str = typer.Option("", "--surface-tags", help="comma-separated"),
+    language: str = typer.Option("solidity", "--language"),
+    summary: str = typer.Option("", "--summary"),
+    key_lesson: str = typer.Option("", "--key-lesson"),
+    contest_url: Optional[str] = typer.Option(None, "--contest-url"),
+    submission_url: Optional[str] = typer.Option(None, "--submission-url"),
+):
+    """Capture a submission outcome as a positive or negative few-shot exemplar."""
+    from .core.exemplar_loop import Exemplar, write_exemplar
+    ex = Exemplar(
+        title=title, platform=platform, program=program,
+        severity_filed=severity_filed, severity_awarded=severity_awarded,
+        status=status, rejection_reason=rejection_reason,
+        bug_class=bug_class, mental_operation=mental_operation,
+        surface_tags=[t.strip() for t in surface_tags.split(",") if t.strip()],
+        language=language, summary=summary, key_lesson=key_lesson,
+        contest_url=contest_url, submission_url=submission_url,
+    )
+    path = write_exemplar(ex)
+    console.print(f"[green]Captured: {path}[/green]")
+
+
+@exemplar_app.command("stats")
+def exemplar_stats():
+    """Show counts of accepted vs rejected exemplars and rejection-reason histogram."""
+    from .core.exemplar_loop import stats
+    s = stats()
+    console.print(f"Accepted: [green]{s['accepted_count']}[/green]")
+    console.print(f"Rejected: [red]{s['rejected_count']}[/red]")
+    if s["rejection_reasons"]:
+        table = Table(title="Rejection reasons")
+        table.add_column("Reason", style="cyan")
+        table.add_column("Count", justify="right")
+        for k, v in sorted(s["rejection_reasons"].items(), key=lambda kv: -kv[1]):
+            table.add_row(k, str(v))
+        console.print(table)
+    console.print(f"Platforms: {', '.join(s['platforms']) or '(none)'}")
+
+
+@exemplar_app.command("import")
+def exemplar_import(
+    source: Path = typer.Argument(..., exists=True, help="Directory of *.json exemplar files OR single JSON file"),
+    platform: str = typer.Option("imported", "--platform", help="Default platform if records lack one"),
+    program: str = typer.Option("imported", "--program", help="Default program if records lack one"),
+    status: str = typer.Option("accepted", "--status", help="Default status if records lack one"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Show what would be imported, don't write"),
+):
+    """
+    Bulk-import exemplar records from external sources into the corpus.
+
+    Supports two input shapes per JSON:
+    1. A list of records (each matching the Exemplar dataclass schema).
+    2. A single record dict (auto-converted, missing fields filled with the
+       --platform/--program/--status defaults).
+
+    Use to ingest scrape outputs (e.g. scripts/scrape_pashov_audits.py) or
+    a teammate's exported corpus. Records lacking a status field default to
+    accepted (positive few-shot). Provide --status rejected to import as
+    negative few-shot.
+
+    Example:
+        sentinel exemplar import ./pashov-scrape/ --platform pashov --status accepted
+        sentinel exemplar import ./teammate-corpus.json
+    """
+    import json
+    from .core.exemplar_loop import Exemplar, write_exemplar
+
+    if source.is_file():
+        files = [source]
+    else:
+        files = list(source.rglob("*.json"))
+    if not files:
+        console.print(f"[yellow]No JSON files at {source}[/yellow]")
+        raise typer.Exit(1)
+
+    imported = 0
+    skipped = 0
+    for f in files:
+        try:
+            data = json.loads(f.read_text())
+        except (OSError, json.JSONDecodeError) as e:
+            console.print(f"[red]skip {f}: {e}[/red]")
+            skipped += 1
+            continue
+        records = data if isinstance(data, list) else [data]
+        for rec in records:
+            if not isinstance(rec, dict):
+                skipped += 1
+                continue
+            rec.setdefault("platform", platform)
+            rec.setdefault("program", program)
+            rec.setdefault("status", status)
+            rec.setdefault("severity_filed", rec.get("severity") or "Medium")
+            # Normalize: Exemplar dataclass requires title; synthesize one if absent.
+            if not rec.get("title"):
+                rec["title"] = f"{rec['program']}-{rec.get('bug_class') or 'finding'}-{imported}"
+            try:
+                ex = Exemplar(**{k: v for k, v in rec.items() if k in Exemplar.__dataclass_fields__})
+            except Exception as e:
+                console.print(f"[red]skip {f}: {e}[/red]")
+                skipped += 1
+                continue
+            if dry_run:
+                console.print(f"  would import: {ex.platform}/{ex.program}/{ex.title[:60]}")
+            else:
+                write_exemplar(ex)
+            imported += 1
+    console.print(f"[green]Imported: {imported}, Skipped: {skipped}[/green]")
+
+
+@exemplar_app.command("few-shot")
+def exemplar_few_shot(
+    tags: str = typer.Argument(..., help="comma-separated surface tags"),
+    language: str = typer.Option("solidity", "--language"),
+    k: int = typer.Option(5, "--k", help="top-K from each side"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o"),
+):
+    """Render the few-shot block (positive + negative exemplars) for given tags."""
+    from .core.exemplar_loop import build_few_shot_for
+    block = build_few_shot_for(
+        target_tags=[t.strip() for t in tags.split(",") if t.strip()],
+        target_lang=language, k_pos=k, k_neg=k,
+    )
+    if output:
+        output.write_text(block)
+        console.print(f"[green]Wrote few-shot block to {output}[/green]")
+    else:
+        console.print(block)
 
 
 @app.command()

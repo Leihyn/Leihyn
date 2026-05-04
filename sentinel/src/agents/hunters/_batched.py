@@ -99,11 +99,18 @@ class BatchedLLMHunter(AnalysisAgent):
         bundle = build_source_bundle(
             self.state.contracts, self.config.max_source_chars, state=self.state,
         )
-        parts = [self.config.specialty_prompt]
+        parts: list[str] = []
+        try:
+            prefix = self.state.get_hunter_prefix()
+        except AttributeError:
+            prefix = ""
+        if prefix:
+            parts.append(prefix)
+        parts.append(self.config.specialty_prompt)
         for ref in self.config.extra_references:
-            parts.append(f"\n\n---\n\n{ref}")
-        parts.append(f"\n\n---\n\n# Source Bundle (all contracts under audit)\n\n{bundle}")
-        return "".join(parts) if len(parts) == 1 else "\n".join(parts)
+            parts.append(ref)
+        parts.append(f"# Source Bundle (all contracts under audit)\n\n{bundle}")
+        return "\n\n---\n\n".join(parts)
 
     def get_tools(self) -> list[Tool]:
         return []

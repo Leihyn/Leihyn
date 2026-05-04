@@ -119,13 +119,18 @@ class ReasoningHunter(AnalysisAgent):
 
     @property
     def system_prompt(self) -> str:
-        # Prepend known-findings dedupe block when audit_intel found prior reports.
-        # Hunters skip already-documented issues and focus on adjacent surface.
+        # Prepend (a) known-findings dedupe block from audit_intel and (b) the
+        # cross-contest few-shot exemplar block scoped to the surface tags.
+        # Hunters skip already-documented issues and use prior accepted/rejected
+        # outcomes as positive/negative few-shot.
         prefix = ""
         try:
-            prefix = self.state.get_known_findings_prompt()
+            prefix = self.state.get_hunter_prefix()
         except AttributeError:
-            pass
+            try:
+                prefix = self.state.get_known_findings_prompt()
+            except AttributeError:
+                pass
         if prefix:
             return prefix + "\n\n---\n\n" + SYSTEM_PROMPT
         return SYSTEM_PROMPT
