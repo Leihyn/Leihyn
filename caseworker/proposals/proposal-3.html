@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caseworker — Case File</title>
+  <!--
+    DESIGN PROPOSAL #3 — CASE FILE
+    DNA: DNA-F-H-S-M-E
+    Layout: Full-bleed
+    Navigation: Hidden
+    Hero / working area: Split
+    Color: Monochrome with one ochre accent
+    Typography: Editorial serif
+    Inspiration: Balenciaga (editorial restraint) + Vercel (extreme restraint)
+      + traditional legal case files (stamps, tabs, folio notation, evidence indexing)
+
+    UX ARCHITECTURE
+    1. CASE HEADER: compact identity, objective, status, and one hidden case index.
+    2. CORRESPONDENCE: chronological primary record; every assertion can point to a folio.
+    3. AGENT BRIEF: the current recommendation, bounded reasoning, evidence, and gate.
+    4. DORMANT STRIP: durable workflow checkpoint, wake trigger, and deadline.
+    5. STATE PROOF: an internal state selector exposes evidence, approval, loading,
+       empty, error, awaiting, and resolved without changing routes.
+  -->
+  <style>
+    :root {
+      --ink: #171714;
+      --paper: #f1eee6;
+      --paper-deep: #e5e0d4;
+      --paper-high: #faf8f1;
+      --line: #aaa498;
+      --muted: #666158;
+      --ochre: #a87618;
+      --ochre-dark: #77500a;
+      --focus: #171714;
+      --serif: Georgia, 'Times New Roman', Times, serif;
+      --mono: 'Courier New', Courier, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--ink); }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--serif);
+      font-size: 15px;
+      line-height: 1.38;
+    }
+
+    button, input, textarea { font: inherit; }
+
+    button {
+      color: inherit;
+      border: 0;
+    }
+
+    button:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .screen-reader {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .dna-badge {
+      position: fixed;
+      z-index: 60;
+      right: 11px;
+      top: 10px;
+      padding: 6px 9px 5px;
+      color: var(--paper-high);
+      background: var(--ink);
+      border: 1px solid #4c4a44;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+    }
+
+    .case-header {
+      min-height: 76px;
+      display: grid;
+      grid-template-columns: 76px minmax(230px, 1.15fr) minmax(180px, .72fr) minmax(210px, .74fr);
+      border-bottom: 1px solid var(--ink);
+      background: var(--paper-high);
+    }
+
+    .menu-trigger {
+      display: grid;
+      place-content: center;
+      align-content: center;
+      gap: 5px;
+      min-height: 75px;
+      background: var(--ink);
+      color: var(--paper);
+      cursor: pointer;
+    }
+
+    .menu-trigger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    .header-cell {
+      padding: 11px 18px 10px;
+      border-right: 1px solid var(--line);
+      min-width: 0;
+    }
+
+    .header-cell:last-child { border-right: 0; padding-right: 125px; }
+
+    .eyebrow,
+    .section-label,
+    .micro,
+    .state-tab,
+    .file-tab,
+    .action-button,
+    .menu-trigger small {
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .095em;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .case-header h1 {
+      margin: 0;
+      overflow: hidden;
+      font-size: clamp(18px, 1.7vw, 25px);
+      font-weight: 400;
+      line-height: 1.05;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .header-value {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .header-status {
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      font-style: italic;
+    }
+
+    .status-mark {
+      width: 8px;
+      height: 8px;
+      background: var(--ochre);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(168, 118, 24, .17);
+    }
+
+    .case-desk {
+      min-height: calc(100vh - 76px);
+      display: grid;
+      grid-template-columns: minmax(0, 59fr) minmax(390px, 41fr);
+      background: var(--paper);
+    }
+
+    .correspondence-pane,
+    .brief-pane {
+      min-width: 0;
+      min-height: 620px;
+    }
+
+    .correspondence-pane {
+      position: relative;
+      padding: 35px 8.5vw 160px 7.2vw;
+      border-right: 1px solid var(--ink);
+      background:
+        linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(23, 23, 20, .06) calc(100% - 1px)),
+        var(--paper-high);
+    }
+
+    .pane-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 34px;
+      padding-bottom: 9px;
+      border-bottom: 3px double var(--ink);
+    }
+
+    .pane-heading h2,
+    .brief-title,
+    .state-title {
+      margin: 0;
+      font-weight: 400;
+    }
+
+    .pane-heading h2 { font-size: 28px; }
+
+    .page-number {
+      color: var(--muted);
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    .letter {
+      position: relative;
+      max-width: 720px;
+      margin: 0 0 38px;
+      padding-left: 96px;
+    }
+
+    .letter-meta {
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 76px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1.55;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .letter-meta strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .letter blockquote {
+      margin: 0;
+      font-size: clamp(17px, 1.46vw, 21px);
+      line-height: 1.43;
+    }
+
+    .letter blockquote p { margin: 0 0 11px; }
+
+    .citation {
+      display: inline-block;
+      transform: translateY(-.08em);
+      margin-left: 2px;
+      padding: 1px 4px;
+      border-bottom: 1px solid var(--ochre-dark);
+      color: var(--ochre-dark);
+      font-family: var(--mono);
+      font-size: 9px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .system-note {
+      margin: 28px 0 36px 96px;
+      padding: 10px 0 10px 16px;
+      border-left: 4px solid var(--ochre);
+      color: var(--muted);
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .system-note strong {
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .brief-pane {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--paper-deep);
+    }
+
+    .file-tabs {
+      display: flex;
+      min-height: 37px;
+      border-bottom: 1px solid var(--ink);
+      background: var(--paper);
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .file-tab {
+      flex: 0 0 auto;
+      min-width: 92px;
+      padding: 9px 13px 8px;
+      border-right: 1px solid var(--ink);
+      background: transparent;
+      font-size: 9px;
+      cursor: pointer;
+    }
+
+    .file-tab:hover { background: var(--paper-high); }
+
+    .file-tab[aria-selected="true"] {
+      color: var(--paper-high);
+      background: var(--ink);
+    }
+
+    .brief-body {
+      flex: 1;
+      padding: 31px clamp(24px, 4vw, 58px) 155px;
+    }
+
+    .brief-topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .section-label {
+      margin: 0;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .confidence {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .06em;
+    }
+
+    .brief-title {
+      max-width: 620px;
+      font-size: clamp(30px, 3vw, 48px);
+      line-height: .99;
+      letter-spacing: -.035em;
+    }
+
+    .brief-deck {
+      max-width: 590px;
+      margin: 18px 0 25px;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .ledger {
+      margin: 0 0 27px;
+      border-top: 1px solid var(--ink);
+    }
+
+    .ledger-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ledger-row dt {
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1.45;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .ledger-row dd { margin: 0; font-size: 13px; }
+
+    .ledger-row .marked { color: var(--ochre-dark); font-weight: 700; }
+
+    .action-band {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: stretch;
+      margin-top: 28px;
+      border: 1px solid var(--ink);
+      background: var(--paper-high);
+    }
+
+    .action-copy { padding: 14px 16px; }
+
+    .action-copy p { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
+
+    .action-button {
+      min-width: 138px;
+      padding: 12px 18px;
+      border-left: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper-high);
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .action-button:hover { color: var(--ink); background: var(--ochre); }
+
+    .dormant-strip {
+      position: absolute;
+      z-index: 4;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr;
+      border-top: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .dormant-cell {
+      min-height: 91px;
+      padding: 13px 16px;
+      border-right: 1px solid #514e47;
+    }
+
+    .dormant-cell:last-child { border-right: 0; }
+
+    .dormant-cell .eyebrow { color: #aaa49b; }
+
+    .dormant-cell p { margin: 4px 0 0; font-size: 13px; line-height: 1.25; }
+
+    .dormant-state {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px !important;
+      font-style: italic;
+    }
+
+    .dormant-ring {
+      width: 13px;
+      height: 13px;
+      border: 1px solid var(--ochre);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .dormant-ring::after {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      left: 4px;
+      top: 4px;
+      background: var(--ochre);
+      border-radius: 50%;
+    }
+
+    /* Hidden navigation: case index / file drawer */
+    .scrim {
+      position: fixed;
+      z-index: 70;
+      inset: 0;
+      background: rgba(23, 23, 20, .54);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms linear;
+    }
+
+    .scrim.open { opacity: 1; pointer-events: auto; }
+
+    .case-index {
+      position: fixed;
+      z-index: 80;
+      inset: 0 auto 0 0;
+      width: min(440px, 92vw);
+      transform: translateX(-101%);
+      display: flex;
+      flex-direction: column;
+      background: var(--paper-high);
+      border-right: 1px solid var(--ink);
+      transition: transform 190ms cubic-bezier(.65, 0, .35, 1);
+    }
+
+    .case-index.open { transform: translateX(0); }
+
+    .index-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      padding: 0 20px;
+      color: var(--paper);
+      background: var(--ink);
+    }
+
+    .index-head h2 { margin: 0; font-size: 20px; font-weight: 400; }
+
+    .index-close {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      color: inherit;
+      background: transparent;
+      font-size: 27px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .case-list { list-style: none; margin: 0; padding: 0; }
+
+    .case-list button {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 54px 1fr auto;
+      gap: 13px;
+      padding: 18px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .case-list button:hover { background: var(--paper-deep); }
+
+    .case-list .selected { border-left: 7px solid var(--ochre); padding-left: 13px; }
+
+    .case-number { font-family: var(--mono); font-size: 9px; color: var(--muted); }
+    .case-name { font-size: 17px; }
+    .case-stage { font-style: italic; font-size: 12px; color: var(--muted); }
+
+    .index-foot {
+      margin-top: auto;
+      padding: 20px;
+      border-top: 3px double var(--ink);
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* State overlays are paper inserts, replacing the right-hand brief. */
+    .state-view { display: none; }
+    .state-view.active { display: block; }
+
+    .state-title {
+      max-width: 560px;
+      margin-top: 10px;
+      font-size: clamp(31px, 3.2vw, 49px);
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+
+    .state-text {
+      max-width: 570px;
+      margin: 18px 0 25px;
+      font-size: 16px;
+    }
+
+    .evidence-sheet {
+      display: grid;
+      grid-template-columns: 106px 1fr;
+      gap: 22px;
+      margin-top: 25px;
+      padding: 21px 0;
+      border-top: 3px double var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .evidence-stamp {
+      align-self: start;
+      padding: 9px 7px 7px;
+      border: 2px solid var(--ochre-dark);
+      color: var(--ochre-dark);
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.3;
+      text-align: center;
+      text-transform: uppercase;
+      transform: rotate(-2deg);
+    }
+
+    .evidence-sheet h4 { margin: 0 0 8px; font-size: 19px; font-weight: 400; }
+    .evidence-sheet p { margin: 0; font-size: 13px; }
+
+    .draft {
+      margin: 24px 0;
+      padding: 24px clamp(20px, 3vw, 38px);
+      background: var(--paper-high);
+      border: 1px solid var(--ink);
+      font-size: 15px;
+    }
+
+    .draft p { margin: 0 0 13px; }
+
+    .approval-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border: 1px solid var(--ink);
+      width: fit-content;
+    }
+
+    .approval-actions button {
+      padding: 11px 16px;
+      border-right: 1px solid var(--ink);
+      background: var(--paper-high);
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      cursor: pointer;
+    }
+
+    .approval-actions button:last-child { border-right: 0; }
+    .approval-actions button:hover { background: var(--ochre); }
+    .approval-actions .approve { color: var(--paper-high); background: var(--ink); }
+
+    .operation-list { list-style: none; margin: 27px 0 0; padding: 0; }
+
+    .operation-list li {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .operation-marker {
+      font-family: var(--mono);
+      color: var(--muted);
+    }
+
+    .operation-marker.working {
+      color: var(--ochre-dark);
+      animation: type 1.1s steps(2, end) infinite;
+    }
+
+    @keyframes type { 50% { opacity: .25; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+
+    .empty-mark {
+      width: min(210px, 58vw);
+      aspect-ratio: 1;
+      display: grid;
+      place-content: center;
+      margin: 12px auto 28px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--muted);
+      font-size: 76px;
+      font-weight: 400;
+    }
+
+    .error-rule { border-color: var(--ochre-dark); }
+
+    .error-code {
+      margin: 22px 0;
+      padding: 14px 0;
+      border-top: 1px solid var(--ochre-dark);
+      border-bottom: 1px solid var(--ochre-dark);
+      color: var(--ochre-dark);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .resolution-total {
+      margin: 24px 0 16px;
+      font-size: clamp(52px, 8vw, 94px);
+      line-height: .9;
+      letter-spacing: -.07em;
+    }
+
+    .resolution-total sup {
+      vertical-align: top;
+      font-size: .22em;
+      letter-spacing: 0;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 24px;
+      transform: translate(-50%, 20px);
+      min-width: min(420px, calc(100vw - 30px));
+      padding: 12px 17px;
+      color: var(--paper);
+      background: var(--ink);
+      border-top: 3px solid var(--ochre);
+      opacity: 0;
+      pointer-events: none;
+      font-style: italic;
+      transition: opacity 150ms linear, transform 150ms ease;
+    }
+
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .inspiration-footer {
+      position: absolute;
+      left: 18px;
+      bottom: 100px;
+      z-index: 3;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: .04em;
+    }
+
+    @media (max-width: 980px) {
+      .case-header {
+        grid-template-columns: 62px 1fr 220px;
+      }
+
+      .header-cell:nth-of-type(2) { display: none; }
+      .header-cell:last-child { padding-right: 105px; }
+      .menu-trigger { min-height: 75px; }
+      .case-desk { grid-template-columns: minmax(0, 54fr) minmax(350px, 46fr); }
+      .correspondence-pane { padding-left: 35px; padding-right: 35px; }
+      .letter { padding-left: 0; }
+      .letter-meta { position: static; width: auto; margin-bottom: 9px; }
+      .system-note { margin-left: 0; }
+      .dormant-strip { grid-template-columns: 1fr 1fr; }
+      .dormant-cell:nth-child(3) { display: none; }
+      .inspiration-footer { display: none; }
+    }
+
+    @media (max-width: 720px) {
+      .dna-badge { top: auto; bottom: 7px; right: 8px; }
+      .case-header { grid-template-columns: 56px 1fr; }
+      .header-cell { padding-left: 13px; padding-right: 13px; }
+      .header-cell:nth-of-type(3) { display: none; }
+      .header-cell:last-child { padding-right: 13px; }
+      .case-desk { display: block; }
+      .correspondence-pane {
+        min-height: auto;
+        padding: 27px 21px 32px;
+        border-right: 0;
+        border-bottom: 1px solid var(--ink);
+      }
+      .pane-heading { margin-bottom: 24px; }
+      .pane-heading h2 { font-size: 23px; }
+      .letter blockquote { font-size: 17px; }
+      .brief-pane { min-height: 700px; }
+      .brief-body { padding: 28px 21px 190px; }
+      .brief-title, .state-title { font-size: 37px; }
+      .dormant-strip { grid-template-columns: 1fr; }
+      .dormant-cell { min-height: 73px; }
+      .dormant-cell:nth-child(2) { display: none; }
+      .evidence-sheet { grid-template-columns: 84px 1fr; gap: 15px; }
+      .ledger-row { grid-template-columns: 91px 1fr; }
+      .action-band { grid-template-columns: 1fr; }
+      .action-button { min-height: 50px; border-left: 0; border-top: 1px solid var(--ink); }
+    }
+  </style>
+</head>
+<body>
+  <div class="dna-badge" aria-label="Design DNA">DNA-F-H-S-M-E</div>
+
+  <!-- HIDDEN NAVIGATION: deliberately absent from the main reading plane. -->
+  <div class="scrim" id="scrim" aria-hidden="true"></div>
+  <aside class="case-index" id="caseIndex" aria-hidden="true" aria-labelledby="indexTitle">
+    <div class="index-head">
+      <h2 id="indexTitle">Case index</h2>
+      <button class="index-close" id="closeIndex" aria-label="Close case index">&times;</button>
+    </div>
+    <ol class="case-list">
+      <li>
+        <button class="selected" type="button">
+          <span class="case-number">CW&ndash;0147</span>
+          <span class="case-name">Wrong-address delivery</span>
+          <span class="case-stage">Awaiting</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" data-demo-message="This prototype keeps the active demo case in view.">
+          <span class="case-number">CW&ndash;0142</span>
+          <span class="case-name">Duplicate charge</span>
+          <span class="case-stage">Resolved</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" data-demo-message="A new case would open a clean evidence intake.">
+          <span class="case-number">NEW</span>
+          <span class="case-name">Open a case file</span>
+          <span class="case-stage">Begin</span>
+        </button>
+      </li>
+    </ol>
+    <p class="index-foot">Caseworker pursues the record. You retain authority over every external action.</p>
+  </aside>
+
+  <!-- COMPACT CASE HEADER: identity, objective and durable state. -->
+  <header class="case-header">
+    <button class="menu-trigger" id="openIndex" aria-label="Open case index" aria-expanded="false" aria-controls="caseIndex">
+      <span></span><span></span>
+      <small>Files</small>
+    </button>
+    <div class="header-cell">
+      <p class="eyebrow">Case CW&ndash;0147 / Live file</p>
+      <h1>Wrong-address delivery</h1>
+    </div>
+    <div class="header-cell">
+      <p class="eyebrow">Resolution sought</p>
+      <p class="header-value">Refund &pound;84.00 and delivery-fee reversal</p>
+    </div>
+    <div class="header-cell">
+      <p class="eyebrow">Present state</p>
+      <p class="header-value header-status"><span class="status-mark"></span><span id="headerStatus">Awaiting merchant response</span></p>
+    </div>
+  </header>
+
+  <main class="case-desk">
+    <!-- PRIMARY RECORD: correspondence reads like an annotated legal file, not a chat. -->
+    <section class="correspondence-pane" aria-labelledby="recordTitle">
+      <div class="pane-heading">
+        <h2 id="recordTitle">Correspondence</h2>
+        <span class="page-number">Folio 8 of 8</span>
+      </div>
+
+      <article class="letter">
+        <div class="letter-meta"><strong>Merchant</strong>22 Aug<br>09:14</div>
+        <blockquote>
+          <p>Our courier confirms order #7741 was delivered. We cannot issue a refund for an order marked as received.</p>
+        </blockquote>
+        <button class="citation" type="button" data-state="evidence" aria-label="Open evidence folio E-04">E&ndash;04</button>
+      </article>
+
+      <article class="letter">
+        <div class="letter-meta"><strong>Courier</strong>22 Aug<br>16:02</div>
+        <blockquote>
+          <p>The delivery photograph is the proof available. Claims must be opened by the sender, not the recipient.</p>
+        </blockquote>
+        <button class="citation" type="button" data-state="evidence" aria-label="Open evidence folio E-05">E&ndash;05</button>
+      </article>
+
+      <aside class="system-note">
+        <strong>Caseworker verified a material contradiction.</strong> The photographed doorway has a black numeral 9 and tiled step; the order address is 17 Alder Row with a red-painted step. Confidence 94%. Sources E&ndash;01, E&ndash;03.
+      </aside>
+
+      <article class="letter">
+        <div class="letter-meta"><strong>Caseworker</strong>Yesterday<br>17:41</div>
+        <blockquote>
+          <p>I am requesting that North &amp; Finch open the courier claim available only to the sender. The delivery image does not depict 17 Alder Row. Please refund &pound;84.00 or provide the claim reference within two working days.</p>
+        </blockquote>
+        <button class="citation" type="button" data-state="approval" aria-label="Open approved action A-07">A&ndash;07</button>
+      </article>
+
+      <div class="inspiration-footer">
+        Inspired by Balenciaga editorial restraint + Vercel extreme restraint + traditional legal case files.
+      </div>
+    </section>
+
+    <!-- AGENT BRIEF: state tabs are a prototype proof surface, not product navigation. -->
+    <aside class="brief-pane" aria-labelledby="briefHeading">
+      <div class="file-tabs" role="tablist" aria-label="Prototype state selector">
+        <button class="file-tab" role="tab" aria-selected="true" data-state="evidence">Evidence</button>
+        <button class="file-tab" role="tab" aria-selected="false" data-state="approval">Approval</button>
+        <button class="file-tab" role="tab" aria-selected="false" data-state="loading">Loading</button>
+        <button class="file-tab" role="tab" aria-selected="false" data-state="empty">Empty</button>
+        <button class="file-tab" role="tab" aria-selected="false" data-state="error">Error</button>
+        <button class="file-tab" role="tab" aria-selected="false" data-state="awaiting">Awaiting</button>
+        <button class="file-tab" role="tab" aria-selected="false" data-state="resolved">Resolved</button>
+      </div>
+
+      <div class="brief-body">
+        <section class="state-view active" data-view="evidence" aria-labelledby="briefHeading">
+          <div class="brief-topline">
+            <p class="section-label">Agent brief / Material finding</p>
+            <span class="confidence">94% confidence</span>
+          </div>
+          <h2 class="brief-title" id="briefHeading">The photograph contradicts the delivery record.</h2>
+          <p class="brief-deck">The strongest next action is procedural, not legal: require the merchant to open the courier claim that the customer cannot open.</p>
+
+          <dl class="ledger">
+            <div class="ledger-row">
+              <dt>Verified</dt>
+              <dd>Order address is 17 Alder Row. <button class="citation" type="button" data-demo-message="Source E-01: order confirmation, captured 19 Aug.">E&ndash;01</button></dd>
+            </div>
+            <div class="ledger-row">
+              <dt>Contradicted</dt>
+              <dd><span class="marked">“Delivered to the order address.”</span> Door number and entrance details do not match. <button class="citation" type="button" data-demo-message="Source E-03: courier delivery photograph, original image hash preserved.">E&ndash;03</button></dd>
+            </div>
+            <div class="ledger-row">
+              <dt>Supported</dt>
+              <dd>The courier permits only the sender to open a delivery claim. <button class="citation" type="button" data-demo-message="Source P-02: courier claims policy, retrieved 22 Aug.">P&ndash;02</button></dd>
+            </div>
+            <div class="ledger-row">
+              <dt>Rejected</dt>
+              <dd>No legal entitlement has been asserted; no verified legal source is required for this first contact.</dd>
+            </div>
+          </dl>
+
+          <div class="action-band">
+            <div class="action-copy">
+              <p class="section-label">Next bounded action</p>
+              <p>Wait for merchant reply; evaluate against E&ndash;01, E&ndash;03 and P&ndash;02.</p>
+            </div>
+            <button class="action-button" type="button" data-state="awaiting">Inspect wait state</button>
+          </div>
+        </section>
+
+        <section class="state-view" data-view="approval" aria-labelledby="approvalTitle">
+          <p class="section-label">Approval gate / A&ndash;08</p>
+          <h2 class="state-title" id="approvalTitle">Nothing leaves this case without you.</h2>
+          <p class="state-text">Caseworker prepared a bounded escalation. The evidence references and exact payload below are the version your approval will authorize.</p>
+          <div class="draft">
+            <p>North &amp; Finch Support,</p>
+            <p>Your courier has confirmed that only the sender can open this claim [E&ndash;05]. The supplied photograph does not show the order address [E&ndash;01, E&ndash;03].</p>
+            <p>Please open the courier claim and provide its reference, or refund the &pound;84.00 order value within two working days.</p>
+            <p>Regards,<br>Faruq</p>
+          </div>
+          <dl class="ledger">
+            <div class="ledger-row"><dt>Recipient</dt><dd>support@northandfinch.example</dd></div>
+            <div class="ledger-row"><dt>Payload hash</dt><dd>6c19&hellip;f0a7 — changes invalidate approval</dd></div>
+          </dl>
+          <div class="approval-actions" aria-label="Approval actions">
+            <button class="approve" type="button" data-demo-message="Approved. The payload hash is locked and execution is queued.">Approve exact draft</button>
+            <button type="button" data-demo-message="Draft opened for editing; a changed payload will require fresh approval.">Edit first</button>
+            <button type="button" data-demo-message="Action rejected. The case remains unchanged.">Reject</button>
+          </div>
+        </section>
+
+        <section class="state-view" data-view="loading" aria-labelledby="loadingTitle" aria-live="polite">
+          <p class="section-label">Bounded operation / Run 26</p>
+          <h2 class="state-title" id="loadingTitle">Checking the denial against the record.</h2>
+          <p class="state-text">Completed work is already checkpointed. The verifier is testing only the material assertions in the new response.</p>
+          <ol class="operation-list">
+            <li><span class="operation-marker">01</span><span>Inbound message classified</span><span class="micro">Done</span></li>
+            <li><span class="operation-marker">02</span><span>Claims linked to actors and sources</span><span class="micro">Done</span></li>
+            <li><span class="operation-marker working">03</span><span>Attempting to disprove contradiction</span><span class="micro">Working</span></li>
+            <li><span class="operation-marker">04</span><span>Select bounded next action</span><span class="micro">Queued</span></li>
+          </ol>
+        </section>
+
+        <section class="state-view" data-view="empty" aria-labelledby="emptyTitle">
+          <div class="empty-mark" aria-hidden="true">&sect;</div>
+          <p class="section-label">New case / No record yet</p>
+          <h2 class="state-title" id="emptyTitle">Begin with what happened, in your own words.</h2>
+          <p class="state-text">Add a receipt, screenshot, photograph, email, or voice note. Caseworker will build the record and ask only for facts that could change the strategy.</p>
+          <div class="approval-actions">
+            <button class="approve" type="button" data-demo-message="Evidence picker would open here.">Add first evidence</button>
+            <button type="button" data-demo-message="The bundled wrong-address delivery case is ready.">Use demo file</button>
+          </div>
+        </section>
+
+        <section class="state-view" data-view="error" aria-labelledby="errorTitle">
+          <p class="section-label">Operation held / Record intact</p>
+          <h2 class="state-title" id="errorTitle">The policy lookup failed. Nothing was lost.</h2>
+          <p class="state-text">The valid checkpoint remains at run 25. Correspondence and verified evidence are unchanged; no external action was attempted.</p>
+          <p class="error-code">POLICY_CORPUS_TIMEOUT / attempt 2 of 3 / trace 8c10a27</p>
+          <dl class="ledger error-rule">
+            <div class="ledger-row"><dt>Preserved</dt><dd>8 evidence items, 11 events, 4 claims, 1 prior approval</dd></div>
+            <div class="ledger-row"><dt>Retry scope</dt><dd>Courier policy lookup only</dd></div>
+          </dl>
+          <div class="approval-actions">
+            <button class="approve" type="button" data-state="loading">Retry lookup</button>
+            <button type="button" data-demo-message="Trace 8c10a27 copied for inspection.">Copy trace ID</button>
+          </div>
+        </section>
+
+        <section class="state-view" data-view="awaiting" aria-labelledby="awaitingTitle">
+          <p class="section-label">Durable pause / Checkpoint 25</p>
+          <h2 class="state-title" id="awaitingTitle">The agent is dormant, not gone.</h2>
+          <p class="state-text">No model is running and no polling cost is accruing. The case will resume from its stored checkpoint when either condition below arrives.</p>
+          <dl class="ledger">
+            <div class="ledger-row"><dt>Wake event 01</dt><dd>Inbound merchant email matching case reference CW&ndash;0147</dd></div>
+            <div class="ledger-row"><dt>Wake event 02</dt><dd>Deadline event at 16:00 BST, Monday 31 August</dd></div>
+            <div class="ledger-row"><dt>On waking</dt><dd>Deduplicate message, evaluate claims, append audit event, propose next action</dd></div>
+            <div class="ledger-row"><dt>Authority</dt><dd>Draft only. External sends remain approval-gated.</dd></div>
+          </dl>
+          <div class="action-band">
+            <div class="action-copy"><p class="section-label">Demo event</p><p>Inject the merchant denial and resume from checkpoint 25.</p></div>
+            <button class="action-button" type="button" data-state="loading">Simulate reply</button>
+          </div>
+        </section>
+
+        <section class="state-view" data-view="resolved" aria-labelledby="resolvedTitle">
+          <p class="section-label">Case resolved / 29 Aug 2026</p>
+          <h2 class="state-title" id="resolvedTitle">Refund confirmed. Record preserved.</h2>
+          <p class="resolution-total"><sup>&pound;</sup>84.00</p>
+          <p class="state-text">North &amp; Finch confirmed the full order refund after opening the courier claim. Caseworker has stopped all deadlines and sealed the evidence export.</p>
+          <dl class="ledger">
+            <div class="ledger-row"><dt>Elapsed</dt><dd>7 days, 6 hours</dd></div>
+            <div class="ledger-row"><dt>Agent work</dt><dd>6 runs, 23 source-linked assertions, 2 approved sends</dd></div>
+            <div class="ledger-row"><dt>Resolution</dt><dd>Refund confirmed in merchant email R&ndash;01</dd></div>
+          </dl>
+          <div class="approval-actions">
+            <button class="approve" type="button" data-demo-message="The complete source-linked case record is ready to export.">Export case record</button>
+            <button type="button" data-demo-message="Closing a case requires confirmation because it stops future wake events.">Close file</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- DORMANT / WAKE DEADLINE: visible even while inspecting most states. -->
+      <footer class="dormant-strip" aria-label="Case runtime state">
+        <div class="dormant-cell">
+          <p class="eyebrow">Runtime</p>
+          <p class="dormant-state"><span class="dormant-ring"></span><span id="runtimeState">Dormant at checkpoint 25</span></p>
+        </div>
+        <div class="dormant-cell">
+          <p class="eyebrow">Wake condition</p>
+          <p id="wakeCondition">Merchant reply or deadline event</p>
+        </div>
+        <div class="dormant-cell">
+          <p class="eyebrow">Deadline</p>
+          <p id="deadlineValue">Monday, 16:00 BST<br>2 days 04 hours remaining</p>
+        </div>
+      </footer>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const tabs = [...document.querySelectorAll('[data-state]')];
+      const stateTabs = [...document.querySelectorAll('.file-tab')];
+      const views = [...document.querySelectorAll('.state-view')];
+      const status = document.getElementById('headerStatus');
+      const runtime = document.getElementById('runtimeState');
+      const wake = document.getElementById('wakeCondition');
+      const deadline = document.getElementById('deadlineValue');
+      const index = document.getElementById('caseIndex');
+      const scrim = document.getElementById('scrim');
+      const openIndex = document.getElementById('openIndex');
+      const closeIndex = document.getElementById('closeIndex');
+      const toast = document.getElementById('toast');
+      let lastFocus = null;
+      let toastTimer = null;
+
+      const stateCopy = {
+        evidence: ['Awaiting merchant response', 'Dormant at checkpoint 25', 'Merchant reply or deadline event', 'Monday, 16:00 BST<br>2 days 04 hours remaining'],
+        approval: ['Approval required', 'Paused at approval gate', 'Your approve, edit, or reject decision', 'No external deadline while held'],
+        loading: ['Evaluating incoming response', 'Run 26 active', 'Verification completes or retry limit reached', 'Bounded to 3 attempts'],
+        empty: ['Evidence intake', 'No workflow started', 'First evidence item added', 'No deadline scheduled'],
+        error: ['Policy lookup held', 'Restored to checkpoint 25', 'Manual retry or scheduled retry', 'Next retry in 02 minutes'],
+        awaiting: ['Awaiting merchant response', 'Dormant at checkpoint 25', 'Merchant reply or deadline event', 'Monday, 16:00 BST<br>2 days 04 hours remaining'],
+        resolved: ['Resolved — refund confirmed', 'Workflow complete', 'None — all deadlines cancelled', 'Record sealed 29 Aug 2026']
+      };
+
+      function showState(name, focusView = false) {
+        if (!stateCopy[name]) return;
+        views.forEach(view => view.classList.toggle('active', view.dataset.view === name));
+        stateTabs.forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.state === name)));
+        status.textContent = stateCopy[name][0];
+        runtime.textContent = stateCopy[name][1];
+        wake.textContent = stateCopy[name][2];
+        deadline.innerHTML = stateCopy[name][3];
+        if (focusView) {
+          const current = document.querySelector(`.state-view[data-view="${name}"]`);
+          current?.querySelector('h2')?.setAttribute('tabindex', '-1');
+          current?.querySelector('h2')?.focus();
+        }
+      }
+
+      tabs.forEach(tab => tab.addEventListener('click', () => showState(tab.dataset.state)));
+
+      stateTabs.forEach((tab, i) => {
+        tab.addEventListener('keydown', event => {
+          if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          let next = i;
+          if (event.key === 'ArrowRight') next = (i + 1) % stateTabs.length;
+          if (event.key === 'ArrowLeft') next = (i - 1 + stateTabs.length) % stateTabs.length;
+          if (event.key === 'Home') next = 0;
+          if (event.key === 'End') next = stateTabs.length - 1;
+          stateTabs[next].focus();
+          showState(stateTabs[next].dataset.state);
+        });
+      });
+
+      function setIndex(open) {
+        index.classList.toggle('open', open);
+        scrim.classList.toggle('open', open);
+        index.setAttribute('aria-hidden', String(!open));
+        scrim.setAttribute('aria-hidden', String(!open));
+        openIndex.setAttribute('aria-expanded', String(open));
+        if (open) {
+          lastFocus = document.activeElement;
+          closeIndex.focus();
+        } else if (lastFocus) {
+          lastFocus.focus();
+        }
+      }
+
+      openIndex.addEventListener('click', () => setIndex(true));
+      closeIndex.addEventListener('click', () => setIndex(false));
+      scrim.addEventListener('click', () => setIndex(false));
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && index.classList.contains('open')) setIndex(false);
+      });
+
+      function say(message) {
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.add('show');
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+      }
+
+      document.querySelectorAll('[data-demo-message]').forEach(control => {
+        control.addEventListener('click', () => say(control.dataset.demoMessage));
+      });
+    })();
+  </script>
+</body>
+</html>

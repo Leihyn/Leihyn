@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caseworker architecture</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { width: 1440px; height: 960px; margin: 0; overflow: hidden; color: #171714; background: #f2efe6; font-family: Georgia, serif; }
+    main { height: 100%; padding: 64px 72px; }
+    header { display: flex; align-items: end; justify-content: space-between; padding-bottom: 24px; border-bottom: 3px double #171714; }
+    h1 { margin: 0; font-size: 54px; font-weight: 400; letter-spacing: -.035em; }
+    header p { margin: 0 0 7px; font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .diagram { position: relative; height: 650px; margin-top: 42px; }
+    .box { position: absolute; display: grid; align-content: center; min-height: 110px; padding: 20px 24px; border: 1px solid #171714; background: #fbfaf5; box-shadow: 8px 8px 0 rgba(23,23,20,.08); }
+    .box strong { font-size: 25px; font-weight: 400; }
+    .box span { margin-top: 6px; color: #666258; font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+    .browser { left: 0; top: 204px; width: 230px; }
+    .run { left: 405px; top: 173px; width: 290px; min-height: 170px; color: #fbfaf5; background: #171714; }
+    .run span { color: #d7b45c; }
+    .gemini { right: 0; top: 0; width: 275px; border-color: #a16c00; }
+    .firestore { right: 0; top: 166px; width: 275px; }
+    .logging { right: 0; top: 332px; width: 275px; }
+    .pubsub { left: 405px; top: 0; width: 290px; border-color: #a16c00; }
+    .agents { position: absolute; right: 0; bottom: 0; left: 0; height: 170px; padding: 23px; border: 1px solid #171714; background: #e6e1d4; }
+    .agents > p { margin: 0 0 18px; font: 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .agent-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    .agent-row div { min-height: 83px; display: grid; place-content: center; padding: 10px; border: 1px solid #8b8679; background: #fbfaf5; text-align: center; font: 12px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+    .line { position: absolute; height: 1px; background: #171714; transform-origin: left center; }
+    .line::after { content: ''; position: absolute; right: -1px; top: -4px; width: 8px; height: 8px; border-top: 1px solid #171714; border-right: 1px solid #171714; transform: rotate(45deg); }
+    .browser-line { left: 230px; top: 258px; width: 175px; }
+    .pubsub-line { left: 550px; top: 110px; width: 63px; transform: rotate(90deg); }
+    .gemini-line { left: 695px; top: 214px; width: 275px; transform: rotate(-31deg); }
+    .firestore-line { left: 695px; top: 258px; width: 326px; }
+    .logging-line { left: 695px; top: 300px; width: 278px; transform: rotate(27deg); }
+    .agents-line { left: 550px; top: 343px; width: 123px; transform: rotate(90deg); }
+    .label { position: absolute; padding: 3px 7px; color: #666258; background: #f2efe6; font: 10px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .05em; text-transform: uppercase; }
+    .https { left: 275px; top: 239px; }
+    .oidc { left: 568px; top: 129px; }
+    .state { left: 820px; top: 242px; }
+    footer { display: flex; justify-content: space-between; margin-top: 29px; padding-top: 15px; border-top: 1px solid #aaa394; color: #666258; font: 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+  <main>
+    <header><h1>Caseworker system architecture</h1><p>Evidence → approval → checkpoint → wake → resolution</p></header>
+    <section class="diagram" aria-label="Caseworker architecture diagram">
+      <div class="box browser"><strong>React case file</strong><span>Evidence, approval, audit UI</span></div>
+      <div class="box run"><strong>Cloud Run</strong><span>FastAPI · state machine<br>Google ADK runtime</span></div>
+      <div class="box pubsub"><strong>Pub/Sub</strong><span>Reply and deadline wake events</span></div>
+      <div class="box gemini"><strong>Gemini 3.7 Flash</strong><span>Vertex AI · multimodal reasoning</span></div>
+      <div class="box firestore"><strong>Firestore</strong><span>Case graph · approvals · checkpoints</span></div>
+      <div class="box logging"><strong>Cloud Logging</strong><span>Runtime and agent execution proof</span></div>
+      <div class="line browser-line"></div><span class="label https">HTTPS</span>
+      <div class="line pubsub-line"></div><span class="label oidc">OIDC push</span>
+      <div class="line gemini-line"></div>
+      <div class="line firestore-line"></div><span class="label state">Durable state</span>
+      <div class="line logging-line"></div>
+      <div class="line agents-line"></div>
+      <div class="agents">
+        <p>Google ADK specialist topology</p>
+        <div class="agent-row"><div>Intake</div><div>Reconstruction</div><div>Verifier</div><div>Strategy</div><div>Correspondence</div><div>Response evaluator</div></div>
+      </div>
+    </section>
+    <footer><span>Human approval binds an immutable SHA-256 action payload</span><span>Duplicate wake events are ignored by event ID</span></footer>
+  </main>
+</body>
+</html>

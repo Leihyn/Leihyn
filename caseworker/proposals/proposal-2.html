@@ -1,0 +1,1086 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f0e6">
+  <title>Caseworker — Red Thread</title>
+  <!--
+    DESIGN PROPOSAL #2 — RED THREAD
+    DNA: DNA-A-B-I-D-R
+    Layout: Asymmetric
+    Navigation: Bottom
+    Hero: Immersive evidence / contradiction centre
+    Color: Duotone — paper/black + coral thread
+    Typography: Retro / typewriter
+    Inspiration: Lagos Street Art + functional brutalism / Bloomberg
+
+    UX ARCHITECTURE
+    Entry: A caseworker returns to an active wrong-address delivery dispute.
+    Exit: The user approves a source-linked message; the case enters a durable wait state.
+
+    Screens:
+    1. Evidence Board — reconstruct the blame loop and inspect source relationships — Review next action.
+    2. Action Review — see reasoning, exact draft, and cited evidence — Approve and send.
+    3. Live Case — understand dormant/wake state and correspondence — Monitor next deadline.
+    4. Record — inspect the append-only agent and approval trail — Export case record.
+
+    Happy path: Evidence Board > inspect contradiction > Action Review > approve > Awaiting response.
+
+    States:
+    - Empty: bundled demo invitation plus evidence intake action.
+    - Loading: bounded Reconstruction Agent operation and skeleton board.
+    - Error: last valid checkpoint preserved, named failed operation, explicit retry.
+    - Awaiting: dormant workflow, wake condition, deadline, sent message hash.
+    - Resolved: refund result, elapsed case time, exportable evidence record.
+
+    Kill-switch test:
+    - The central contradiction answers “why act?” without explanation.
+    - The only consequential primary action is visibly approval-gated.
+    - Every thread has a legend and expresses support, contradiction, or responsibility shift.
+  -->
+  <style>
+    :root {
+      --paper: #f4f0e6;
+      --paper-deep: #e7dfd0;
+      --ink: #15120f;
+      --ink-soft: #4b443c;
+      --thread: #ef4b3f;
+      --thread-dark: #b52b24;
+      --white: #fffdf7;
+      --focus: #15120f;
+      --line: rgba(21, 18, 15, 0.25);
+      --line-strong: rgba(21, 18, 15, 0.72);
+      --paper-grid: rgba(21, 18, 15, 0.055);
+      --overlay: rgba(21, 18, 15, 0.72);
+      --shadow: 5px 6px 0 rgba(21, 18, 15, 0.16);
+      --shadow-small: 3px 3px 0 rgba(21, 18, 15, 0.18);
+      --font-display: "American Typewriter", "Courier New", monospace;
+      --font-body: Georgia, "Times New Roman", serif;
+      --font-mono: "Courier New", monospace;
+      --text-xs: 0.68rem;
+      --text-sm: 0.78rem;
+      --text-md: 0.94rem;
+      --text-xl: clamp(1.55rem, 2.5vw, 2.7rem);
+      --leading-tight: 1.14;
+      --leading-body: 1.48;
+      --weight-regular: 400;
+      --weight-bold: 700;
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --radius-zero: 0;
+      --radius-pill: 999px;
+      --border-thin: 1px;
+      --border-thick: 2px;
+      --tap: 2.75rem;
+      --bottom-nav-height: 4.75rem;
+      --utility-height: 3.5rem;
+      --desk-max: 100rem;
+      --evidence-width: 19rem;
+      --decision-width: 22rem;
+      --z-thread: 2;
+      --z-content: 3;
+      --z-nav: 20;
+      --z-badge: 30;
+      --z-dialog: 40;
+      --duration-fast: 130ms;
+      --duration-normal: 230ms;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      min-width: 20rem;
+      min-height: 100vh;
+      margin: 0;
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(var(--paper-grid) var(--border-thin), transparent var(--border-thin)),
+        linear-gradient(90deg, var(--paper-grid) var(--border-thin), transparent var(--border-thin));
+      background-size: var(--space-6) var(--space-6);
+      font-size: var(--text-md);
+      line-height: var(--leading-body);
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button, select, textarea { font: inherit; color: inherit; }
+    button, select { min-height: var(--tap); }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: 0.5; }
+    svg { display: block; }
+
+    :focus-visible {
+      outline: var(--border-thick) solid var(--focus);
+      outline-offset: var(--space-1);
+      box-shadow: 0 0 0 var(--space-1) var(--thread);
+    }
+
+    .skip-link {
+      position: fixed;
+      left: var(--space-4);
+      top: var(--space-4);
+      z-index: var(--z-dialog);
+      padding: var(--space-3) var(--space-4);
+      background: var(--ink);
+      color: var(--paper);
+      transform: translateY(-180%);
+      transition: transform var(--duration-fast) var(--ease-out);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .dna-badge {
+      position: fixed;
+      top: var(--space-3);
+      right: var(--space-3);
+      z-index: var(--z-badge);
+      padding: var(--space-2) var(--space-3);
+      border: var(--border-thin) solid var(--paper);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.08em;
+      box-shadow: var(--shadow-small);
+    }
+
+    .utility-bar {
+      min-height: var(--utility-height);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-2) 11rem var(--space-2) var(--space-4);
+      border-bottom: var(--border-thick) solid var(--ink);
+      background: var(--thread);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+    }
+
+    .wordmark {
+      font-weight: var(--weight-bold);
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+    }
+
+    .case-code {
+      padding-left: var(--space-3);
+      border-left: var(--border-thick) solid var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .state-control {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-left: auto;
+    }
+
+    .state-control label {
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      text-transform: uppercase;
+    }
+
+    .state-control select {
+      max-width: 12rem;
+      padding: var(--space-2) var(--space-8) var(--space-2) var(--space-3);
+      border: var(--border-thick) solid var(--ink);
+      border-radius: var(--radius-zero);
+      background: var(--paper);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-bold);
+    }
+
+    .workspace {
+      width: min(100%, var(--desk-max));
+      min-height: calc(100vh - var(--utility-height));
+      margin: 0 auto;
+      padding-bottom: calc(var(--bottom-nav-height) + var(--space-8));
+    }
+
+    .screen { display: none; }
+    .screen.is-active { display: block; }
+
+    .case-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: var(--space-4);
+      padding: var(--space-5) var(--space-5) var(--space-3);
+    }
+
+    .eyebrow,
+    .section-label,
+    .artifact-meta,
+    .status-stamp,
+    .tag,
+    .microcopy,
+    .legend,
+    .metric-label,
+    .audit-time {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow { margin: 0 0 var(--space-1); font-weight: var(--weight-bold); }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { font-family: var(--font-display); line-height: var(--leading-tight); }
+    h1 { margin-bottom: 0; font-size: var(--text-xl); letter-spacing: -0.07em; text-transform: uppercase; }
+    h2 { font-size: var(--text-md); }
+    h3 { font-size: var(--text-sm); }
+
+    .case-summary {
+      max-width: 34rem;
+      margin: 0;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+
+    .status-stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border: var(--border-thick) solid var(--ink);
+      background: var(--white);
+      box-shadow: var(--shadow-small);
+      transform: rotate(1.2deg);
+      font-weight: var(--weight-bold);
+    }
+
+    .status-stamp svg { width: var(--space-4); height: var(--space-4); }
+
+    .board {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      grid-template-columns: var(--evidence-width) minmax(22rem, 1fr) var(--decision-width);
+      align-items: start;
+      gap: var(--space-5);
+      min-height: 39rem;
+      padding: var(--space-2) var(--space-5) var(--space-8);
+    }
+
+    .thread-layer {
+      position: absolute;
+      inset: 0;
+      z-index: var(--z-thread);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .thread {
+      fill: none;
+      vector-effect: non-scaling-stroke;
+      stroke-linecap: square;
+    }
+    .thread.supports { stroke: var(--ink); stroke-width: var(--border-thick); }
+    .thread.contradicts { stroke: var(--thread); stroke-width: 4px; }
+    .thread.redirects { stroke: var(--ink); stroke-width: var(--border-thick); stroke-dasharray: 7 6; }
+
+    .board-column { position: relative; z-index: var(--z-content); }
+    .evidence-column { padding-top: var(--space-4); }
+    .analysis-column { padding-top: var(--space-12); }
+    .decision-column { padding-top: 0; }
+
+    .column-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+      padding-bottom: var(--space-2);
+      border-bottom: var(--border-thick) solid var(--ink);
+    }
+    .column-heading h2 { margin: 0; text-transform: uppercase; }
+
+    .artifact {
+      position: relative;
+      width: 92%;
+      margin-bottom: var(--space-4);
+      padding: var(--space-3);
+      border: var(--border-thin) solid var(--ink);
+      border-radius: var(--radius-zero);
+      background: var(--white);
+      box-shadow: var(--shadow-small);
+      text-align: left;
+      transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+    }
+    .artifact:nth-of-type(even) { margin-left: 8%; transform: rotate(0.7deg); }
+    .artifact:nth-of-type(odd) { transform: rotate(-0.45deg); }
+    .artifact[aria-pressed="true"] { box-shadow: 5px 5px 0 var(--thread); }
+
+    .artifact-pin {
+      position: absolute;
+      top: calc(var(--space-2) * -1);
+      right: var(--space-4);
+      width: var(--space-4);
+      height: var(--space-4);
+      border: var(--border-thick) solid var(--ink);
+      border-radius: var(--radius-pill);
+      background: var(--thread);
+    }
+
+    .artifact-meta { display: flex; justify-content: space-between; gap: var(--space-2); }
+    .artifact strong { display: block; margin: var(--space-2) 0 var(--space-1); font-family: var(--font-display); }
+    .artifact p { margin: 0; font-size: var(--text-sm); line-height: var(--leading-body); }
+
+    .photo-proof {
+      position: relative;
+      height: 7.6rem;
+      margin: var(--space-2) 0;
+      border: var(--border-thin) solid var(--ink);
+      background:
+        linear-gradient(90deg, transparent 49%, var(--ink) 49%, var(--ink) 53%, transparent 53%),
+        linear-gradient(0deg, var(--paper-deep) 0 35%, transparent 35%),
+        var(--white);
+      overflow: hidden;
+    }
+    .photo-proof::before {
+      content: "17";
+      position: absolute;
+      top: var(--space-5);
+      left: 54%;
+      font: var(--weight-bold) var(--text-xl)/1 var(--font-display);
+      color: var(--thread);
+    }
+    .photo-proof::after {
+      content: "COURIER PHOTO · DOOR 17";
+      position: absolute;
+      bottom: var(--space-1);
+      left: var(--space-2);
+      font: var(--weight-bold) var(--text-xs)/1 var(--font-mono);
+    }
+
+    .contradiction-card {
+      position: relative;
+      min-height: 20rem;
+      padding: var(--space-6);
+      border: var(--border-thick) solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      box-shadow: 8px 9px 0 var(--thread);
+      transform: rotate(-0.5deg);
+    }
+
+    .contradiction-number {
+      position: absolute;
+      top: calc(var(--space-5) * -1);
+      right: var(--space-4);
+      display: grid;
+      place-items: center;
+      width: var(--space-12);
+      height: var(--space-12);
+      border: var(--border-thick) solid var(--ink);
+      border-radius: var(--radius-pill);
+      background: var(--thread);
+      color: var(--ink);
+      font: var(--weight-bold) var(--text-md)/1 var(--font-mono);
+    }
+
+    .contradiction-card .section-label { color: var(--thread); }
+    .contradiction-card h2 { max-width: 30rem; margin: var(--space-4) 0; font-size: var(--text-xl); text-transform: uppercase; }
+    .contradiction-card p { max-width: 38rem; }
+
+    .claim-versus {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
+      gap: var(--space-2);
+      margin-top: var(--space-6);
+    }
+    .claim-quote { padding: var(--space-3); border: var(--border-thin) solid var(--paper); font-size: var(--text-sm); }
+    .claim-quote cite { display: block; margin-top: var(--space-2); color: var(--thread); font: normal var(--text-xs)/1.3 var(--font-mono); text-transform: uppercase; }
+    .versus { align-self: center; color: var(--thread); font: var(--weight-bold) var(--text-sm)/1 var(--font-mono); }
+
+    .verifier-note {
+      width: 82%;
+      margin: var(--space-8) 0 0 12%;
+      padding: var(--space-3) var(--space-4);
+      border-left: 5px solid var(--thread);
+      background: var(--white);
+      box-shadow: var(--shadow-small);
+      transform: rotate(0.8deg);
+    }
+    .verifier-note p { margin-bottom: 0; font-size: var(--text-sm); }
+
+    .claim-card,
+    .action-card,
+    .reasoning-card,
+    .live-panel,
+    .record-panel,
+    .state-panel {
+      border: var(--border-thick) solid var(--ink);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .claim-card { margin-bottom: var(--space-4); padding: var(--space-4); }
+    .claim-card h3 { margin-bottom: var(--space-2); text-transform: uppercase; }
+    .claim-card p { margin-bottom: var(--space-3); font-size: var(--text-sm); }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-2);
+      border: var(--border-thin) solid var(--ink);
+      background: var(--paper);
+      font-weight: var(--weight-bold);
+    }
+    .tag.contradicted { background: var(--thread); }
+    .tag svg { width: var(--space-3); height: var(--space-3); }
+
+    .action-card { position: relative; padding: var(--space-5); background: var(--thread); }
+    .action-card::before {
+      content: "APPROVAL GATE";
+      position: absolute;
+      top: calc(var(--space-3) * -1);
+      right: var(--space-3);
+      padding: var(--space-1) var(--space-2);
+      border: var(--border-thin) solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      font: var(--weight-bold) var(--text-xs)/1.3 var(--font-mono);
+      letter-spacing: 0.06em;
+    }
+    .action-card h2 { margin-bottom: var(--space-2); text-transform: uppercase; }
+    .action-card p { font-size: var(--text-sm); }
+
+    .primary-action,
+    .secondary-action,
+    .text-action,
+    .nav-button,
+    .icon-button {
+      border: var(--border-thick) solid var(--ink);
+      border-radius: var(--radius-zero);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-bold);
+    }
+    .primary-action { width: 100%; padding: var(--space-3) var(--space-4); background: var(--ink); color: var(--paper); box-shadow: var(--shadow-small); }
+    .secondary-action { padding: var(--space-3) var(--space-4); background: var(--paper); }
+    .text-action { min-height: var(--tap); padding: var(--space-2); border-color: transparent; background: transparent; text-decoration: underline; text-underline-offset: var(--space-1); }
+    .icon-button { display: inline-grid; place-items: center; width: var(--tap); padding: 0; background: var(--paper); }
+    .icon-button svg { width: var(--space-5); height: var(--space-5); }
+
+    .action-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2);
+      margin: var(--space-4) 0;
+      padding: var(--space-3) 0;
+      border-top: var(--border-thin) solid var(--ink);
+      border-bottom: var(--border-thin) solid var(--ink);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin: var(--space-4) var(--space-5) 0;
+      padding-top: var(--space-3);
+      border-top: var(--border-thin) solid var(--line-strong);
+    }
+    .legend span { display: inline-flex; align-items: center; gap: var(--space-2); }
+    .legend-line { width: var(--space-8); border-top: var(--border-thick) solid var(--ink); }
+    .legend-line.coral { border-top-width: 4px; border-top-color: var(--thread); }
+    .legend-line.dashed { border-top-style: dashed; }
+
+    .detail-screen { padding: var(--space-6) clamp(var(--space-4), 5vw, var(--space-12)) var(--space-12); }
+    .detail-heading { max-width: 48rem; margin-bottom: var(--space-8); }
+    .detail-heading .eyebrow { color: var(--thread-dark); }
+    .detail-heading h2 { margin-bottom: var(--space-2); font-size: var(--text-xl); text-transform: uppercase; }
+
+    .action-review-grid {
+      display: grid;
+      grid-template-columns: minmax(18rem, 0.9fr) minmax(23rem, 1.4fr);
+      gap: var(--space-8);
+      align-items: start;
+    }
+    .reasoning-card { padding: var(--space-5); transform: rotate(-0.4deg); }
+    .reasoning-step { display: grid; grid-template-columns: var(--space-8) 1fr; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: var(--border-thin) solid var(--line); }
+    .reasoning-step:last-child { border-bottom: 0; }
+    .reasoning-index { color: var(--thread-dark); font: var(--weight-bold) var(--text-md)/1 var(--font-mono); }
+    .reasoning-step p { margin: 0; font-size: var(--text-sm); }
+
+    .draft-sheet { padding: var(--space-6); border: var(--border-thick) solid var(--ink); background: var(--paper); box-shadow: 9px 10px 0 var(--thread); }
+    .letter-routing { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: var(--border-thick) solid var(--ink); font-family: var(--font-mono); font-size: var(--text-xs); }
+    .draft-body { margin: var(--space-5) 0; font-size: var(--text-md); }
+    .draft-body mark { padding: 0 var(--space-1); background: var(--thread); color: var(--ink); }
+    .citations { padding: var(--space-3); border-left: 5px solid var(--ink); background: var(--white); font-family: var(--font-mono); font-size: var(--text-xs); }
+    .review-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-3); margin-top: var(--space-5); }
+    .review-actions .primary-action { width: auto; min-width: 14rem; }
+
+    .live-layout { display: grid; grid-template-columns: minmax(20rem, 1fr) minmax(18rem, 0.55fr); gap: var(--space-6); }
+    .live-panel, .record-panel { padding: var(--space-5); }
+    .wake-rule { margin: var(--space-5) 0; padding: var(--space-5); border: var(--border-thick) dashed var(--ink); background: var(--paper-deep); }
+    .wake-rule strong { display: block; margin-bottom: var(--space-2); font-family: var(--font-display); }
+    .timeline-row, .audit-row { display: grid; grid-template-columns: 7rem 1fr; gap: var(--space-4); padding: var(--space-3) 0; border-top: var(--border-thin) solid var(--line); }
+    .timeline-row p, .audit-row p { margin: 0; font-size: var(--text-sm); }
+    .timeline-row time, .audit-time { font-family: var(--font-mono); font-size: var(--text-xs); font-variant-numeric: tabular-nums; }
+    .metric { padding: var(--space-4); border: var(--border-thin) solid var(--ink); }
+    .metric strong { display: block; margin-top: var(--space-2); font: var(--weight-bold) var(--text-xl)/1 var(--font-display); }
+    .metric + .metric { margin-top: var(--space-3); }
+
+    .record-panel { max-width: 64rem; margin: 0 auto; }
+    .record-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-4); }
+
+    .state-stage { padding: var(--space-8) clamp(var(--space-4), 8vw, 8rem) var(--space-12); }
+    .state-panel { max-width: 52rem; margin: 6vh auto 0; padding: clamp(var(--space-6), 5vw, var(--space-12)); position: relative; }
+    .state-panel::after { content: attr(data-stamp); position: absolute; top: var(--space-4); right: calc(var(--space-6) * -1); padding: var(--space-2) var(--space-4); border: var(--border-thick) solid var(--ink); background: var(--thread); font: var(--weight-bold) var(--text-sm)/1 var(--font-mono); transform: rotate(7deg); }
+    .state-panel h2 { max-width: 36rem; margin: var(--space-4) 0; font-size: var(--text-xl); text-transform: uppercase; }
+    .state-panel p { max-width: 38rem; }
+    .state-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+    .state-actions .primary-action { width: auto; }
+
+    .skeleton-stack { margin-top: var(--space-6); }
+    .skeleton-line { height: var(--space-4); margin-bottom: var(--space-3); background: var(--paper-deep); transform-origin: left; animation: work 1.2s var(--ease-out) infinite alternate; }
+    .skeleton-line:nth-child(2) { width: 72%; animation-delay: 120ms; }
+    .skeleton-line:nth-child(3) { width: 88%; animation-delay: 220ms; }
+    @keyframes work { from { transform: scaleX(0.4); opacity: 0.55; } to { transform: scaleX(1); opacity: 1; } }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: var(--space-3);
+      z-index: var(--z-nav);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(5.5rem, 8rem));
+      border: var(--border-thick) solid var(--ink);
+      background: var(--paper);
+      box-shadow: 7px 8px 0 var(--ink);
+      transform: translateX(-50%);
+    }
+
+    .nav-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      min-height: var(--bottom-nav-height);
+      padding: var(--space-2) var(--space-3);
+      border: 0;
+      border-right: var(--border-thin) solid var(--ink);
+      background: var(--paper);
+    }
+    .nav-button:last-child { border-right: 0; }
+    .nav-button[aria-current="page"] { background: var(--thread); }
+    .nav-button svg { width: var(--space-5); height: var(--space-5); }
+
+    .proposal-footer {
+      padding: var(--space-6) var(--space-4) calc(var(--bottom-nav-height) + var(--space-8));
+      border-top: var(--border-thick) solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      text-align: center;
+    }
+
+    dialog {
+      width: min(calc(100% - var(--space-8)), 34rem);
+      padding: 0;
+      border: var(--border-thick) solid var(--ink);
+      border-radius: var(--radius-zero);
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 10px 12px 0 var(--thread);
+    }
+    dialog::backdrop { background: var(--overlay); }
+    .dialog-inner { padding: var(--space-6); }
+    .dialog-inner h2 { font-size: var(--text-xl); text-transform: uppercase; }
+    .dialog-check { padding: var(--space-3); border: var(--border-thin) solid var(--ink); background: var(--white); font-family: var(--font-mono); font-size: var(--text-xs); }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: var(--space-3); margin-top: var(--space-5); }
+    .dialog-actions .primary-action { width: auto; }
+
+    .toast {
+      position: fixed;
+      right: var(--space-4);
+      bottom: calc(var(--bottom-nav-height) + var(--space-8));
+      z-index: var(--z-dialog);
+      max-width: 22rem;
+      padding: var(--space-3) var(--space-4);
+      border: var(--border-thick) solid var(--paper);
+      background: var(--ink);
+      color: var(--paper);
+      box-shadow: 5px 6px 0 var(--thread);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(var(--space-3));
+      transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+    }
+    .toast.is-visible { opacity: 1; transform: translateY(0); }
+
+    @media (hover: hover) {
+      .artifact:hover { transform: translateY(calc(var(--space-1) * -1)) rotate(0); box-shadow: 5px 6px 0 var(--thread); }
+      .primary-action:hover { background: var(--white); color: var(--ink); }
+      .secondary-action:hover, .nav-button:hover, .icon-button:hover { background: var(--paper-deep); }
+      .nav-button[aria-current="page"]:hover { background: var(--thread); }
+    }
+
+    @media (max-width: 68rem) {
+      .board { grid-template-columns: minmax(15rem, 0.75fr) minmax(22rem, 1.25fr); }
+      .decision-column { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: var(--space-4); padding: 0 var(--space-8); }
+      .decision-column .column-heading { grid-column: 1 / -1; }
+      .action-card { grid-row: span 2; }
+      .thread-layer { display: none; }
+      .legend { display: none; }
+      .live-layout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 46rem) {
+      :root { --bottom-nav-height: 4rem; }
+      .dna-badge { position: absolute; top: var(--space-2); right: var(--space-2); }
+      .utility-bar { align-items: flex-start; flex-wrap: wrap; padding: var(--space-2); }
+      .wordmark { margin-right: 8rem; }
+      .case-code { display: none; }
+      .state-control { width: 100%; min-width: 0; margin-left: 0; }
+      .state-control select { width: 100%; min-width: 0; max-width: none; }
+      .evidence-column .artifact:nth-of-type(n) { margin-left: 0; transform: none; }
+      .case-header { grid-template-columns: 1fr; padding-inline: var(--space-4); }
+      .status-stamp { justify-self: start; }
+      .board { display: block; padding-inline: var(--space-4); }
+      .evidence-column, .analysis-column, .decision-column { display: block; padding: var(--space-4) 0 0; }
+      .artifact { width: 100%; margin-left: 0; transform: none; }
+      .contradiction-card { min-height: auto; padding: var(--space-5); transform: none; }
+      .claim-versus { grid-template-columns: 1fr; }
+      .versus { justify-self: center; }
+      .verifier-note { width: 94%; margin-left: 3%; }
+      .action-review-grid { grid-template-columns: 1fr; }
+      .draft-sheet { padding: var(--space-4); }
+      .letter-routing { grid-template-columns: 1fr; }
+      .review-actions { justify-content: stretch; }
+      .review-actions button { width: 100%; }
+      .timeline-row, .audit-row { grid-template-columns: 1fr; gap: var(--space-1); }
+      .record-header { align-items: flex-start; flex-direction: column; }
+      .state-panel::after { position: static; display: inline-block; margin-top: var(--space-3); transform: rotate(2deg); }
+      .bottom-nav { left: var(--space-2); right: var(--space-2); bottom: var(--space-2); grid-template-columns: repeat(4, 1fr); transform: none; }
+      .nav-button { min-width: 0; min-height: var(--bottom-nav-height); padding: var(--space-1); font-size: var(--text-xs); flex-direction: column; gap: var(--space-1); }
+      .nav-button svg { width: var(--space-4); height: var(--space-4); }
+      .toast { left: var(--space-3); right: var(--space-3); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 1ms; animation-iteration-count: 1; transition-duration: 1ms; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to case</a>
+  <div class="dna-badge" aria-label="Design DNA">DNA-A-B-I-D-R</div>
+
+  <header class="utility-bar">
+    <span class="wordmark">Caseworker</span>
+    <span class="case-code">CW–240817 · REV 07</span>
+    <div class="state-control">
+      <label for="state-view">Prototype state</label>
+      <select id="state-view" aria-controls="main">
+        <option value="active">Active case</option>
+        <option value="loading">Loading</option>
+        <option value="empty">Empty</option>
+        <option value="error">Error</option>
+        <option value="awaiting">Awaiting</option>
+        <option value="resolved">Resolved</option>
+      </select>
+    </div>
+  </header>
+
+  <main id="main" class="workspace" tabindex="-1">
+    <section class="screen is-active" data-screen="board" aria-labelledby="case-title">
+      <header class="case-header">
+        <div>
+          <p class="eyebrow">Active case / Wrong-address delivery</p>
+          <h1 id="case-title">Someone else’s doorway</h1>
+          <p class="case-summary">Order #4419 was marked delivered. The photograph is not the address on the order. Merchant and courier each redirect responsibility.</p>
+        </div>
+        <div class="status-stamp">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18"/></svg>
+          Ready for approval
+        </div>
+      </header>
+
+      <div class="legend" aria-label="Evidence relationship legend">
+        <span><i class="legend-line"></i> Supports claim</span>
+        <span><i class="legend-line coral"></i> Contradicts claim</span>
+        <span><i class="legend-line dashed"></i> Redirects responsibility</span>
+      </div>
+
+      <div class="board" id="evidence-board">
+        <svg class="thread-layer" id="thread-layer" aria-hidden="true"></svg>
+
+        <section class="board-column evidence-column" aria-labelledby="evidence-heading">
+          <div class="column-heading">
+            <h2 id="evidence-heading">Source artifacts</h2>
+            <span class="microcopy">4 verified</span>
+          </div>
+
+          <button class="artifact" type="button" id="node-order" aria-pressed="false" data-detail="Order confirmation records delivery address as 42 Arlo Street, Flat 3B. Captured 17 Aug at 09:12. SHA-256 verified.">
+            <i class="artifact-pin" aria-hidden="true"></i>
+            <span class="artifact-meta"><span>E–01 · Receipt</span><span>17 Aug</span></span>
+            <strong>Order confirmation</strong>
+            <p>Deliver to: 42 Arlo Street, Flat 3B. Order value: £84.20.</p>
+          </button>
+
+          <button class="artifact" type="button" id="node-photo" aria-pressed="true" data-detail="Courier image shows door number 17 and a black tile surround. User’s doorway is number 42 with a white painted surround. Image is original evidence.">
+            <i class="artifact-pin" aria-hidden="true"></i>
+            <span class="artifact-meta"><span>E–02 · Original image</span><span>18 Aug</span></span>
+            <strong>Delivery photograph</strong>
+            <div class="photo-proof" role="img" aria-label="Diagrammatic courier photograph showing a doorway marked number 17"></div>
+            <p>Visible door number does not match the order address.</p>
+          </button>
+
+          <button class="artifact" type="button" id="node-merchant" aria-pressed="false" data-detail="Merchant support states that tracking proves delivery, denies a refund, and directs the customer to ParcelNorth. The statement conflicts with image evidence.">
+            <i class="artifact-pin" aria-hidden="true"></i>
+            <span class="artifact-meta"><span>E–03 · Chat export</span><span>19 Aug</span></span>
+            <strong>Merchant refusal</strong>
+            <p>“Tracking confirms delivery. Please contact the courier.”</p>
+          </button>
+
+          <button class="artifact" type="button" id="node-courier" aria-pressed="false" data-detail="ParcelNorth support says the merchant is the contracting party and only the sender can raise a missing-delivery claim.">
+            <i class="artifact-pin" aria-hidden="true"></i>
+            <span class="artifact-meta"><span>E–04 · Email</span><span>20 Aug</span></span>
+            <strong>Courier redirect</strong>
+            <p>“Only the sender may open a claim. Contact the retailer.”</p>
+          </button>
+        </section>
+
+        <section class="board-column analysis-column" aria-labelledby="contradiction-heading">
+          <article class="contradiction-card" id="node-contradiction">
+            <span class="contradiction-number">C1</span>
+            <span class="section-label">Material contradiction · open</span>
+            <h2 id="contradiction-heading">Delivered is not the same as delivered here.</h2>
+            <p>The tracking event supports that a parcel was scanned. It does not establish delivery to the contracted address. The courier’s own photograph places it at door 17; the order specifies 42.</p>
+            <div class="claim-versus">
+              <blockquote class="claim-quote">“Tracking confirms delivery.”<cite>Merchant · E–03</cite></blockquote>
+              <span class="versus">VERSUS</span>
+              <blockquote class="claim-quote">Door 17 is visible in the delivery image.<cite>Courier photo · E–02</cite></blockquote>
+            </div>
+          </article>
+
+          <aside class="verifier-note" aria-live="polite">
+            <span class="section-label">Verifier Agent / current reasoning</span>
+            <p id="artifact-detail">Courier image shows door number 17 and a black tile surround. User’s doorway is number 42 with a white painted surround. Image is original evidence.</p>
+          </aside>
+        </section>
+
+        <aside class="board-column decision-column" aria-labelledby="claims-heading">
+          <div class="column-heading">
+            <h2 id="claims-heading">Claims ledger</h2>
+            <span class="microcopy">3 material</span>
+          </div>
+          <article class="claim-card" id="node-delivered">
+            <h3>Merchant: order fulfilled</h3>
+            <p>Tracking status is treated as proof of correct delivery.</p>
+            <span class="tag contradicted">
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="m4 4 12 12M16 4 4 16"/></svg>
+              Contradicted · 0.94
+            </span>
+          </article>
+          <article class="claim-card" id="node-sender">
+            <h3>Courier: sender must claim</h3>
+            <p>ParcelNorth says its contract and claims channel belong to the merchant.</p>
+            <span class="tag">
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="m4 10 4 4 8-9"/></svg>
+              Verified · E–04
+            </span>
+          </article>
+          <article class="action-card" id="node-action">
+            <span class="section-label">Next bounded action</span>
+            <h2>Ask merchant to open courier claim</h2>
+            <p>Send a concise correction with the order address, photo mismatch, and courier’s sender-only instruction. No legal claim is needed.</p>
+            <div class="action-meta">
+              <span>Target<br><strong>Kite Market</strong></span>
+              <span>Evidence<br><strong>E–01—04</strong></span>
+              <span>External effect<br><strong>Email</strong></span>
+              <span>Authority<br><strong>Approval required</strong></span>
+            </div>
+            <button class="primary-action" type="button" data-go="action">Review message →</button>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen detail-screen" data-screen="action" aria-labelledby="action-title">
+      <header class="detail-heading">
+        <p class="eyebrow">Action review / A–07</p>
+        <h2 id="action-title">The agent can prepare. You decide whether it leaves.</h2>
+        <p>Every material statement below is linked to the current record. Editing produces a new payload hash and requires fresh approval.</p>
+      </header>
+      <div class="action-review-grid">
+        <article class="reasoning-card">
+          <span class="section-label">Why this action</span>
+          <div class="reasoning-step"><span class="reasoning-index">01</span><p>The photograph materially weakens the merchant’s fulfillment claim.</p></div>
+          <div class="reasoning-step"><span class="reasoning-index">02</span><p>The courier identifies the merchant as the party able to open the operational claim.</p></div>
+          <div class="reasoning-step"><span class="reasoning-index">03</span><p>A factual correction is sufficient; no unverified law or policy is asserted.</p></div>
+          <div class="reasoning-step"><span class="reasoning-index">04</span><p>Requesting either refund or replacement preserves both resolution paths.</p></div>
+        </article>
+        <article class="draft-sheet">
+          <div class="letter-routing">
+            <span>TO<br><strong>Kite Market Support</strong></span>
+            <span>SUBJECT<br><strong>Order #4419 — wrong-address delivery</strong></span>
+          </div>
+          <div class="draft-body">
+            <p>Hello,</p>
+            <p>The delivery photograph for order #4419 shows <mark>door 17</mark>, while my confirmed delivery address is <mark>42 Arlo Street, Flat 3B</mark>. ParcelNorth has also confirmed that only the sender can open its missing-delivery claim.</p>
+            <p>Please open that claim and arrange a refund or replacement. I have attached the order confirmation, delivery image, and ParcelNorth’s response.</p>
+            <p>Regards,<br>Amara Okafor</p>
+          </div>
+          <div class="citations">Sources: E–01 order address · E–02 delivery photo · E–04 courier claims instruction<br>Excluded: unsupported statutory claim proposed in prior draft.</div>
+          <div class="review-actions">
+            <button class="text-action" type="button" id="edit-draft">Edit draft</button>
+            <button class="secondary-action" type="button" data-go="board">Return to evidence</button>
+            <button class="primary-action" type="button" id="approve-open">Approve &amp; send</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="screen detail-screen" data-screen="live" aria-labelledby="live-title">
+      <header class="detail-heading">
+        <p class="eyebrow">Live case / durable workflow</p>
+        <h2 id="live-title">Quiet until the case changes.</h2>
+        <p>The agent is not polling or improvising. It wakes on a verified inbound message or the scheduled response deadline.</p>
+      </header>
+      <div class="live-layout">
+        <article class="live-panel">
+          <span class="status-stamp">Dormant · checkpoint 07 saved</span>
+          <div class="wake-rule"><strong>Wake condition</strong>Inbound reply to case address, or deadline at 27 Aug · 17:00 WAT.</div>
+          <div class="timeline-row"><time>20 Aug · 14:32</time><p>Merchant message approved by owner. Payload hash matched approval AP–07.</p></div>
+          <div class="timeline-row"><time>20 Aug · 14:33</time><p>Message sent. External ID KM-889102 stored. Duplicate protection active.</p></div>
+          <div class="timeline-row"><time>20 Aug · 14:33</time><p>Deadline D–02 scheduled. Workflow checkpoint persisted.</p></div>
+        </article>
+        <aside>
+          <div class="metric"><span class="metric-label">Next deadline</span><strong>6d 02h</strong></div>
+          <div class="metric"><span class="metric-label">Current case confidence</span><strong>94%</strong></div>
+          <div class="metric"><span class="metric-label">Messages sent</span><strong>01</strong></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen detail-screen" data-screen="record" aria-labelledby="record-title">
+      <header class="detail-heading">
+        <p class="eyebrow">Append-only record</p>
+        <h2 id="record-title">What happened, who decided, what changed.</h2>
+      </header>
+      <article class="record-panel">
+        <div class="record-header">
+          <div><span class="section-label">Case revision 07</span><h2>Audit trail</h2></div>
+          <button class="secondary-action" type="button" id="export-record">Export record</button>
+        </div>
+        <div class="audit-row"><span class="audit-time">09:12:03<br>TRACE 8F3A</span><p><strong>Intake Agent</strong><br>Classified four source artifacts. Preserved originals and checksums.</p></div>
+        <div class="audit-row"><span class="audit-time">09:12:11<br>TRACE 8F3A</span><p><strong>Reconstruction Agent</strong><br>Built actor map, timeline, and three material claims from E–01—04.</p></div>
+        <div class="audit-row"><span class="audit-time">09:12:18<br>TRACE 910C</span><p><strong>Verifier Agent</strong><br>Contradicted fulfillment claim with image/address mismatch. Removed unsupported statutory wording.</p></div>
+        <div class="audit-row"><span class="audit-time">09:12:24<br>TRACE 1D77</span><p><strong>Strategy Agent</strong><br>Proposed A–07: factual merchant correction. External effect remains approval-gated.</p></div>
+      </article>
+    </section>
+
+    <section class="screen state-stage" data-screen="loading" aria-labelledby="loading-title">
+      <article class="state-panel" data-stamp="WORKING" aria-busy="true">
+        <span class="section-label">Reconstruction Agent · bounded operation</span>
+        <h2 id="loading-title">Linking four artifacts to the case timeline.</h2>
+        <p>Completed evidence and the last valid checkpoint remain available. This operation extracts actors, dates, claims, and candidate contradictions.</p>
+        <div class="skeleton-stack" aria-hidden="true"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+      </article>
+    </section>
+
+    <section class="screen state-stage" data-screen="empty" aria-labelledby="empty-title">
+      <article class="state-panel" data-stamp="NO CASE">
+        <span class="section-label">Evidence desk is clear</span>
+        <h2 id="empty-title">Start with the thing that proves what happened.</h2>
+        <p>Add a receipt, message, photograph, email, or voice note. Caseworker will preserve the original and show which facts still need your account.</p>
+        <div class="state-actions"><button class="primary-action" type="button" id="add-evidence">Add evidence</button><button class="secondary-action" type="button" id="load-demo">Load wrong-address demo</button></div>
+      </article>
+    </section>
+
+    <section class="screen state-stage" data-screen="error" aria-labelledby="error-title">
+      <article class="state-panel" data-stamp="HELD SAFELY">
+        <span class="section-label">Operation failed · image analysis</span>
+        <h2 id="error-title">The photograph could not be analysed. Nothing was discarded.</h2>
+        <p>Three text artifacts and checkpoint 06 are preserved. Retry only the failed image operation, or continue with the photograph marked unanalysed.</p>
+        <div class="state-actions"><button class="primary-action" type="button" id="retry-operation">Retry image analysis</button><button class="secondary-action" type="button" data-go="board">Open preserved case</button></div>
+      </article>
+    </section>
+
+    <section class="screen state-stage" data-screen="awaiting" aria-labelledby="awaiting-title">
+      <article class="state-panel" data-stamp="DORMANT">
+        <span class="section-label">Awaiting response · checkpoint 07</span>
+        <h2 id="awaiting-title">Message sent. The case will wake when Kite Market replies.</h2>
+        <p>Approved payload 7b2f…91cc was sent at 14:33 WAT. If no reply arrives, the deadline wakes the Strategy Agent on 27 Aug.</p>
+        <div class="state-actions"><button class="primary-action" type="button" data-go="live">Inspect wake conditions</button><button class="secondary-action" type="button" data-go="record">View audit trail</button></div>
+      </article>
+    </section>
+
+    <section class="screen state-stage" data-screen="resolved" aria-labelledby="resolved-title">
+      <article class="state-panel" data-stamp="RESOLVED">
+        <span class="section-label">Resolution received · owner confirmation required</span>
+        <h2 id="resolved-title">Kite Market issued the full £84.20 refund.</h2>
+        <p>Resolution received after 8 days. The agent has prepared a complete record containing four original artifacts, two approved messages, and the refund confirmation.</p>
+        <div class="state-actions"><button class="primary-action" type="button" id="confirm-resolution">Confirm &amp; close case</button><button class="secondary-action" type="button" id="download-record">Export evidence record</button></div>
+      </article>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Case sections">
+    <button class="nav-button" type="button" data-go="board" aria-current="page">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>
+      Board
+    </button>
+    <button class="nav-button" type="button" data-go="action">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h11l3 3v15H5zM8 11h8M8 15h8M8 7h4"/></svg>
+      Action
+    </button>
+    <button class="nav-button" type="button" data-go="live">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Live
+    </button>
+    <button class="nav-button" type="button" data-go="record">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18H6zM9 8h6M9 12h6M9 16h4"/></svg>
+      Record
+    </button>
+  </nav>
+
+  <footer class="proposal-footer">Inspired by Lagos Street Art — paper layering, vivid interruption, human imperfection — and Bloomberg — dense hierarchy, operational clarity, data as interface.</footer>
+
+  <dialog id="approval-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-inner">
+      <span class="section-label">Human approval · external effect</span>
+      <h2 id="dialog-title">Send this exact message?</h2>
+      <p>Caseworker will email Kite Market Support as Amara’s delegated case assistant. The approved content cannot change after this step.</p>
+      <div class="dialog-check">PAYLOAD HASH<br><strong>7b2f4a10…91cc</strong><br><br>SOURCES<br><strong>E–01 · E–02 · E–04</strong></div>
+      <div class="dialog-actions"><button class="secondary-action" type="button" id="approval-cancel">Cancel</button><button class="primary-action" type="button" id="approval-confirm">Confirm send</button></div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const screens = [...document.querySelectorAll('.screen')];
+      const navButtons = [...document.querySelectorAll('.nav-button')];
+      const stateView = document.querySelector('#state-view');
+      const board = document.querySelector('#evidence-board');
+      const threadLayer = document.querySelector('#thread-layer');
+      const dialog = document.querySelector('#approval-dialog');
+      const toast = document.querySelector('#toast');
+      const connections = [
+        ['node-order', 'node-contradiction', 'supports'],
+        ['node-photo', 'node-delivered', 'contradicts'],
+        ['node-merchant', 'node-delivered', 'supports'],
+        ['node-courier', 'node-sender', 'supports'],
+        ['node-delivered', 'node-sender', 'redirects'],
+        ['node-contradiction', 'node-action', 'contradicts']
+      ];
+
+      function showScreen(name, options = {}) {
+        screens.forEach((screen) => screen.classList.toggle('is-active', screen.dataset.screen === name));
+        navButtons.forEach((button) => {
+          const active = button.dataset.go === name;
+          if (active) button.setAttribute('aria-current', 'page');
+          else button.removeAttribute('aria-current');
+        });
+        if (['board', 'action', 'live', 'record'].includes(name)) stateView.value = 'active';
+        if (options.focus !== false) document.querySelector('#main').focus();
+        requestAnimationFrame(drawThreads);
+      }
+
+      function drawThreads() {
+        if (!document.querySelector('[data-screen="board"]').classList.contains('is-active') || window.innerWidth <= 1088) {
+          threadLayer.replaceChildren();
+          return;
+        }
+        const boardRect = board.getBoundingClientRect();
+        threadLayer.setAttribute('viewBox', `0 0 ${boardRect.width} ${boardRect.height}`);
+        threadLayer.replaceChildren();
+        connections.forEach(([fromId, toId, kind]) => {
+          const from = document.getElementById(fromId).getBoundingClientRect();
+          const to = document.getElementById(toId).getBoundingClientRect();
+          const fromCenter = from.left + from.width / 2;
+          const toCenter = to.left + to.width / 2;
+          const leftToRight = fromCenter < toCenter;
+          const x1 = (leftToRight ? from.right : from.left) - boardRect.left;
+          const y1 = from.top + from.height / 2 - boardRect.top;
+          const x2 = (leftToRight ? to.left : to.right) - boardRect.left;
+          const y2 = to.top + to.height / 2 - boardRect.top;
+          const bend = Math.max(28, Math.abs(x2 - x1) * 0.42);
+          const c1 = leftToRight ? x1 + bend : x1 - bend;
+          const c2 = leftToRight ? x2 - bend : x2 + bend;
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('d', `M ${x1} ${y1} C ${c1} ${y1}, ${c2} ${y2}, ${x2} ${y2}`);
+          path.setAttribute('class', `thread ${kind}`);
+          threadLayer.append(path);
+        });
+      }
+
+      function notify(message) {
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        window.setTimeout(() => toast.classList.remove('is-visible'), 2600);
+      }
+
+      document.querySelectorAll('[data-go]').forEach((button) => {
+        button.addEventListener('click', () => showScreen(button.dataset.go));
+      });
+
+      stateView.addEventListener('change', () => {
+        const target = stateView.value === 'active' ? 'board' : stateView.value;
+        showScreen(target, { focus: false });
+      });
+
+      document.querySelectorAll('.artifact').forEach((artifact) => {
+        artifact.addEventListener('click', () => {
+          document.querySelectorAll('.artifact').forEach((item) => item.setAttribute('aria-pressed', String(item === artifact)));
+          document.querySelector('#artifact-detail').textContent = artifact.dataset.detail;
+        });
+      });
+
+      document.querySelector('#approve-open').addEventListener('click', () => dialog.showModal());
+      document.querySelector('#approval-cancel').addEventListener('click', () => dialog.close());
+      document.querySelector('#approval-confirm').addEventListener('click', () => {
+        dialog.close();
+        stateView.value = 'awaiting';
+        showScreen('awaiting');
+        notify('Approved payload sent. Checkpoint 07 saved.');
+      });
+
+      document.querySelector('#edit-draft').addEventListener('click', () => notify('Draft editing would create a new approval payload.'));
+      document.querySelector('#export-record').addEventListener('click', () => notify('Audit record prepared for export.'));
+      document.querySelector('#download-record').addEventListener('click', () => notify('Evidence record prepared for export.'));
+      document.querySelector('#add-evidence').addEventListener('click', () => notify('Evidence picker opened in the production flow.'));
+      document.querySelector('#load-demo').addEventListener('click', () => { stateView.value = 'active'; showScreen('board'); notify('Bundled case loaded.'); });
+      document.querySelector('#retry-operation').addEventListener('click', () => { stateView.value = 'loading'; showScreen('loading'); window.setTimeout(() => { stateView.value = 'active'; showScreen('board'); notify('Image analysis recovered.'); }, 1200); });
+      document.querySelector('#confirm-resolution').addEventListener('click', () => notify('Resolution confirmation requires a final record hash.'));
+
+      window.addEventListener('resize', drawThreads);
+      requestAnimationFrame(drawThreads);
+    })();
+  </script>
+</body>
+</html>
